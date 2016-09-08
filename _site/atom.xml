@@ -4,13 +4,48 @@
  <title>The blog of Seungwan Jo</title>
  <link href="http://joswlv.github.io/atom.xml" rel="self"/>
  <link href="http://joswlv.github.io"/>
- <updated>2016-09-08T21:29:10+09:00</updated>
+ <updated>2016-09-09T01:23:46+09:00</updated>
  <id>http://joswlv.github.io</id>
  <author>
    <name>Seungwan Jo</name>
    <email>wh7923@gmail.com</email>
  </author>
 
+ 
+ <entry>
+   <title>웹어플리케이션의 이해</title>
+   <link href="http://joswlv.github.io/blog/2016/09/09/%E1%84%8B%E1%85%B0%E1%86%B8%E1%84%8B%E1%85%A5%E1%84%91%E1%85%B3%E1%86%AF%E1%84%85%E1%85%B5%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%89%E1%85%A7%E1%86%AB%E1%84%8B%E1%85%B4_%E1%84%8B%E1%85%B5%E1%84%92%E1%85%A2.html"/>
+   <updated>2016-09-09T00:00:00+09:00</updated>
+   <id>http://joswlv.github.io/blog/2016/09/09/웹어플리케이션의_이해</id>
+   <content type="html">&lt;h2 id=&quot;section&quot;&gt;1-1 웹 프로그래밍의 개요&lt;/h2&gt;
+&lt;p&gt;웹 프로그래밍은 기본적으로 &lt;code class=&quot;highlighter-rouge&quot;&gt;Client/Server&lt;/code&gt;방식으로 다음과 같은 형태를 갖게 된다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://joswlv.github.io/pic/webapplication/cs_structure.jpg&quot; alt=&quot;&quot; /&gt;
+[client/server 구조]&lt;/p&gt;
+
+&lt;h2 id=&quot;section-1&quot;&gt;1-2 웹프로그래밍과 웹 어플리케이션&lt;/h2&gt;
+
+&lt;p&gt;웹 어플리케이션이란 웹을 기반으로 실행되는 프로그램을 의미 한다. 따라서 웹 프로그래밍과 웹어플리케이션의 관계는 &lt;code class=&quot;highlighter-rouge&quot;&gt;웹 프로그래밍을 통한 웹 어플리케이션의 구현&lt;/code&gt;이라고 할 수 있다. 웹어플리케이션의 구조는 다음과 같다.&lt;/p&gt;
+
+&lt;p&gt;&lt;img src=&quot;http://joswlv.github.io/pic/webapplication/webapplication_structure.jpg&quot; alt=&quot;&quot; /&gt;&lt;/p&gt;
+
+&lt;p&gt;처리순서는&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;웹 브라우저가 웹 서버에 어떠한 페이지를 요청하게 되면&lt;/li&gt;
+  &lt;li&gt;해당 웹 서버는 웹 브라우저의 요청을 받아서 요청된 페이지의 로직 및 데이터베이스와의 연동을 위해 어플리케이션 서버에 이들의 처리를 요청한다.&lt;/li&gt;
+  &lt;li&gt;이때 웹 어플리케이션 서버는 데이터베이스와의 연동이 필요하면 데이터베이스와 데이터의 처리를 수행한다.&lt;/li&gt;
+  &lt;li&gt;로직 및 데이터베이스 작업 처리 결과를 웹서버에 돌려보낸다.&lt;/li&gt;
+  &lt;li&gt;웹서버는 결과를 다시 웹브라우저에 응답한다.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h3 id=&quot;reference&quot;&gt;Reference&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://knkky.tistory.com/28&quot;&gt;남깐느&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.yes24.com/24/Goods/13159413?Acode=101&quot;&gt;열혈강의 자바 웹 개발 워크북&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</content>
+ </entry>
  
  <entry>
    <title>AngularJS 조건문</title>
