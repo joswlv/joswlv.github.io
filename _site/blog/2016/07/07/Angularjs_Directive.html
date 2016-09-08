@@ -90,7 +90,8 @@
 <div id="post">
   <p>Directive는 템플릿 구조를 모듈화하는 기능이라고 생각하면 쉽다.
 간단한 예제를 통해서 Directive 맛만 보자.</p>
-<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;ul</span> <span class="na">ng-repeat=</span><span class="s">"todo in todos | filter:statusFilter"</span> <span class="na">class=</span><span class="s">"list-unstyled"</span><span class="nt">&gt;</span>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;ul</span> <span class="na">ng-repeat=</span><span class="s">"todo in todos | filter:statusFilter"</span> <span class="na">class=</span><span class="s">"list-unstyled"</span><span class="nt">&gt;</span>
   <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">"todo-item"</span><span class="nt">&gt;</span>
 
     <span class="c">&lt;!-- 1. 이 부분이 하나의 todo 를 출력하는 부분이다. --&gt;</span>
@@ -108,9 +109,12 @@
     <span class="nt">&lt;todo-item</span> <span class="na">todo=</span><span class="s">"todo"</span> <span class="na">remove=</span><span class="s">"remove(todo.id)"</span><span class="nt">&gt;&lt;/todo-item&gt;</span>
   <span class="nt">&lt;/li&gt;</span>
 <span class="nt">&lt;/ul&gt;</span>
-</code></pre></div>
-<p><code>&lt;todo-item&gt;</code> directive를 만들겠다.</p>
-<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">'todomvc'</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">&lt;todo-item&gt;</code> directive를 만들겠다.</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">'todomvc'</span><span class="p">)</span>
     <span class="p">.</span><span class="nx">directive</span><span class="p">(</span><span class="s1">'todoItem'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(){</span>
       <span class="k">return</span> <span class="p">{</span>
         <span class="na">restrict</span><span class="p">:</span> <span class="s1">'E'</span><span class="p">,</span>
@@ -131,36 +135,19 @@
         <span class="s1">'&lt;/div&gt;'</span>
       <span class="p">}</span>
     <span class="p">})</span>
-</code></pre></div>
-<p>Directive를 정의 할때 <code>$scope</code>객체에 사용할 스코프 변수를 설정할 수 있다. <code>todo</code>는 데이터인데 출력과 수정을 해야하므로 양방향 바인딩 <code>=</code>을 사용했다. <code>remove</code>는 이벤트 핸들러 함수이므로 ckarhdyd <code>&amp;</code>으로 사용했다.</p>
+</code></pre>
+</div>
+<p>Directive를 정의 할때 <code class="highlighter-rouge">$scope</code>객체에 사용할 스코프 변수를 설정할 수 있다. <code class="highlighter-rouge">todo</code>는 데이터인데 출력과 수정을 해야하므로 양방향 바인딩 <code class="highlighter-rouge">=</code>을 사용했다. <code class="highlighter-rouge">remove</code>는 이벤트 핸들러 함수이므로 ckarhdyd <code class="highlighter-rouge">&amp;</code>으로 사용했다.</p>
 
-<h2 id="toc_0">restrict 종류</h2>
+<h2 id="restrict-">restrict 종류</h2>
+<p>값 | 설명           |
+—|—————-|
+<code class="highlighter-rouge">E</code>| Element name   |
+<code class="highlighter-rouge">A</code>| Attrivute      |
+<code class="highlighter-rouge">C</code>| Class          |
+<code class="highlighter-rouge">M</code>| Comment(주석)  |</p>
 
-<table><thead>
-<tr>
-<th>값</th>
-<th>설명</th>
-</tr>
-</thead><tbody>
-<tr>
-<td><code>E</code></td>
-<td>Element name</td>
-</tr>
-<tr>
-<td><code>A</code></td>
-<td>Attrivute</td>
-</tr>
-<tr>
-<td><code>C</code></td>
-<td>Class</td>
-</tr>
-<tr>
-<td><code>M</code></td>
-<td>Comment(주석)</td>
-</tr>
-</tbody></table>
-
-<p>Default 값은 <code>EA</code>이다.</p>
+<p>Default 값은 <code class="highlighter-rouge">EA</code>이다.</p>
 
 </div>
 

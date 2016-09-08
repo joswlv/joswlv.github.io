@@ -88,8 +88,8 @@
 <h1 class="title">Sorting</h1>
 
 <div id="post">
-  <h2 id="toc_0">MergeSort</h2>
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">mergeSort</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+  <h2 id="mergesort">MergeSort</h2>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="nf">mergeSort</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">&lt;=</span><span class="mi">1</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">x</span>
     <span class="n">m</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span>
@@ -108,9 +108,11 @@
     <span class="n">result</span> <span class="o">+=</span><span class="n">L</span><span class="p">[</span><span class="n">i</span><span class="p">:]</span>
     <span class="n">result</span> <span class="o">+=</span><span class="n">R</span><span class="p">[</span><span class="n">j</span><span class="p">:]</span>
     <span class="k">return</span> <span class="n">result</span>
-</code></pre></div>
-<h2 id="toc_1">QuickSort</h2>
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">quickSort</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+</code></pre>
+</div>
+
+<h2 id="quicksort">QuickSort</h2>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="nf">quickSort</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">&lt;=</span><span class="mi">1</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">x</span>
     <span class="n">pivot</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="p">]</span>
@@ -125,27 +127,33 @@
         <span class="k">else</span> <span class="p">:</span>
             <span class="n">equal</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">quickSort</span><span class="p">(</span><span class="n">less</span><span class="p">)</span><span class="o">+</span><span class="n">equal</span><span class="o">+</span><span class="n">quickSort</span><span class="p">(</span><span class="n">more</span><span class="p">)</span>
-</code></pre></div>
-<h2 id="toc_2">BubbleSort</h2>
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">bubbleSort</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+</code></pre>
+</div>
+
+<h2 id="bubblesort">BubbleSort</h2>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="nf">bubbleSort</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="n">length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">length</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">length</span><span class="o">-</span><span class="n">i</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">&gt;</span><span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">]:</span>
                 <span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">x</span>
-</code></pre></div>
-<h2 id="toc_3">SelectionSort</h2>
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">selectionSort</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+</code></pre>
+</div>
+
+<h2 id="selectionsort">SelectionSort</h2>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="nf">selectionSort</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="n">length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">length</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
         <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">length</span><span class="p">):</span>
             <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&gt;</span><span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span>
                 <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">],</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
     <span class="k">return</span> <span class="n">x</span>
-</code></pre></div>
-<h2 id="toc_4">InsertSort</h2>
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">insertSort</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+</code></pre>
+</div>
+
+<h2 id="insertsort">InsertSort</h2>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="nf">insertSort</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
     <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)):</span>
         <span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="o">-</span><span class="mi">1</span>
         <span class="n">key</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
@@ -154,9 +162,11 @@
             <span class="n">j</span><span class="o">=</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span>
         <span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">key</span>
     <span class="k">return</span> <span class="n">x</span>
-</code></pre></div>
-<h2 id="toc_5">BinarySearch</h2>
-<div class="highlight"><pre><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">binarySearch</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+</code></pre>
+</div>
+
+<h2 id="binarysearch">BinarySearch</h2>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="nf">binarySearch</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
     <span class="n">arr</span> <span class="o">=</span> <span class="n">quickSort</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
     <span class="n">low</span> <span class="o">=</span><span class="mi">0</span>
     <span class="n">high</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
@@ -169,7 +179,9 @@
         <span class="k">else</span><span class="p">:</span>
             <span class="k">return</span> <span class="bp">True</span>
     <span class="k">return</span> <span class="bp">False</span>
-</code></pre></div>
+</code></pre>
+</div>
+
 </div>
 
 <div id="related">

@@ -88,25 +88,28 @@
 <h1 class="title">AngularJS_How to use filter & $watch</h1>
 
 <div id="post">
-  <p><code>ng-Repeat</code>는 기본적으로 필터기능을 지원한다. completed, active, all 세개 버튼을 만들어서 각각을 클릭할때 필터링 로직이 작동하도록 만들어 보자.</p>
-<div class="highlight"><pre><code class="language-html" data-lang="html"><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"btn-group"</span> <span class="na">role=</span><span class="s">"group"</span> <span class="na">aria-label=</span><span class="s">"..."</span><span class="nt">&gt;</span>
+  <p><code class="highlighter-rouge">ng-Repeat</code>는 기본적으로 필터기능을 지원한다. completed, active, all 세개 버튼을 만들어서 각각을 클릭할때 필터링 로직이 작동하도록 만들어 보자.</p>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"btn-group"</span> <span class="na">role=</span><span class="s">"group"</span> <span class="na">aria-label=</span><span class="s">"..."</span><span class="nt">&gt;</span>
   <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"button"</span> <span class="na">ng-click=</span><span class="s">"status='completed'"</span><span class="nt">&gt;</span>Completed<span class="nt">&lt;/button&gt;</span>
   <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"button"</span> <span class="na">ng-click=</span><span class="s">"status='active'"</span><span class="nt">&gt;</span>Active<span class="nt">&lt;/button&gt;</span>
   <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"button"</span> <span class="na">ng-click=</span><span class="s">"status=''"</span><span class="nt">&gt;</span>All<span class="nt">&lt;/button&gt;</span>
 <span class="nt">&lt;/div&gt;</span>
-</code></pre></div>
-<p>어떤 버튼을 클릭했는지 상태를 저장하는 스코프변수 <code>$scope.status</code>에 저장한다.</p>
+</code></pre>
+</div>
 
-<p>필터에 따라 동적으로 <code>ng-repeat</code>가 동작해야 한다.
-<code>html
-&lt;ul ng-repeat=&quot;todo in todos | filter:statusFilter&quot;
+<p>어떤 버튼을 클릭했는지 상태를 저장하는 스코프변수 <code class="highlighter-rouge">$scope.status</code>에 저장한다.</p>
+
+<p>필터에 따라 동적으로 <code class="highlighter-rouge">ng-repeat</code>가 동작해야 한다.
+<code class="highlighter-rouge">html
+&lt;ul ng-repeat="todo in todos | filter:statusFilter"
 </code>
-버튼을 누를 때 마다 <code>statusFilter</code>값이 변할 것이다.</p>
+버튼을 누를 때 마다 <code class="highlighter-rouge">statusFilter</code>값이 변할 것이다.</p>
 
-<h3 id="toc_0">$watch</h3>
-
+<h3 id="watch">$watch</h3>
 <p>이것은 스코프 변수의 변경을 감지하고 그때마다 사용자가 설정한 함수를 실행한다. (주의! 많이 사용하면 메모리 자원을 많이 먹는다.)</p>
-<div class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// 필터버튼을 클릭하고 status 값이 변경되면 $watch()에 등록한 함수가 동작한다.</span>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="c1">// 필터버튼을 클릭하고 status 값이 변경되면 $watch()에 등록한 함수가 동작한다.</span>
 <span class="nx">$scope</span><span class="p">.</span><span class="nx">$watch</span><span class="p">(</span><span class="s1">'status'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
   <span class="k">if</span> <span class="p">(</span><span class="nx">$scope</span><span class="p">.</span><span class="nx">status</span> <span class="o">===</span> <span class="s1">'completed'</span><span class="p">)</span> <span class="p">{</span>        <span class="c1">// Completed 클릭시</span>
     <span class="nx">$scope</span><span class="p">.</span><span class="nx">statusFilter</span> <span class="o">=</span> <span class="p">{</span><span class="na">completed</span><span class="p">:</span> <span class="kc">true</span><span class="p">};</span>  <span class="c1">// 필터를 설정한다.</span>
@@ -116,7 +119,9 @@
     <span class="nx">$scope</span><span class="p">.</span><span class="nx">statusFilter</span> <span class="o">=</span> <span class="p">{};</span>                 <span class="c1">// 필터를 해제한다.</span>
   <span class="p">}</span>
 <span class="p">})</span>
-</code></pre></div>
+</code></pre>
+</div>
+
 </div>
 
 <div id="related">
