@@ -1,5 +1,8 @@
 # General Jekyll Config
-highlighter: rouge
-url: http://example.com
+# highlighter: pygments
+url: http://joswlv.github.io
 lsi: false
 exclude: [LICENSE, CNAME, README.md, .gitignore, Gemfile, Gemfile.lock]
+markdown: redcarpet
+redcarpet:
+  extensions: ["no_intra_emphasis", "fenced_code_blocks", "autolink", "tables", "with_toc_data"]
