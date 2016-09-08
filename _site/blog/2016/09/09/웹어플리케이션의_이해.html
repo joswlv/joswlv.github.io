@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<!--[if lt IE 7 ]><html class="ie ie6" lang="en"> <![endif]-->
+<!--[if IE 7 ]><html class="ie ie7" lang="en"> <![endif]-->
+<!--[if IE 8 ]><html class="ie ie8" lang="en"> <![endif]-->
+<!--[if (gte IE 9)|!(IE)]><!--><html lang="en"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Seungwan Jo - 웹어플리케이션의 이해</title>
+  <meta name="author" content="Seungwan Jo" />
+  <meta name="description" content="The blog of Seungwan Jo" />
+  <link rel="canonical" href="http://joswlv.github.io/blog/2016/09/09/%E1%84%8B%E1%85%B0%E1%86%B8%E1%84%8B%E1%85%A5%E1%84%91%E1%85%B3%E1%86%AF%E1%84%85%E1%85%B5%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%89%E1%85%A7%E1%86%AB%E1%84%8B%E1%85%B4_%E1%84%8B%E1%85%B5%E1%84%92%E1%85%A2.html" />
+
+  <link href="//fonts.googleapis.com/css?family=Open+Sans:600,800" rel="stylesheet" type="text/css">
+  <link rel="shortcut icon" href="/favicon.png">
+  <link rel="alternate" type="application/atom+xml" title="Seungwan Jo" href="http://joswlv.github.io/atom.xml" />
+
+  <link rel="stylesheet" href="/assets/css/all.css">
+  <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css" rel="stylesheet" integrity="sha256-k2/8zcNbxVIh5mnQ52A0r3a6jAgMGxFJFE2707UxGCk= sha512-ZV9KawG2Legkwp3nAlxLIVFudTauWuBpC10uEafMHYL0Sarrz5A7G79kXh5+5+woxQ5HM559XX2UZjMJ36Wplg==" crossorigin="anonymous">
+</head>
+<body>
+  <div class="container">
+    <div class="four columns sidebar">
+      <nav>
+  <a href="/">
+    
+    <img src="/logo.png" id="logo" alt="Blog logo"/>
+    
+  </a>
+  <h2><a href="/">Seungwan Jo</a>.</h2>
+  <div id="bio">
+    <p>
+    </p>
+  </div>
+  <div id="social">
+    Follow me:
+<div id="stalker">
+  
+  <a title="joswlv on Github" href="https://github.com/joswlv">
+    <i class="fa fa-github-square"></i>
+  </a>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <a title="Seungwan Jo on Facebook" href="https://facebook.com/wsj7923">
+    <i class="fa fa-facebook-square"></i>
+  </a>
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+  <a title="Atom feed" id="atom" href="/atom.xml">
+    <i class="fa fa-rss-square"></i>
+  </a>
+  
+</div>
+
+  </div>
+</nav>
+
+    </div>
+
+    <div class="eleven columns content">
+      <p class="meta">
+  September 09, 2016 
+  <a href="/">
+    <i class="home fa fa-home"></i>
+  </a>
+</p>
+
+<h1 class="title">웹어플리케이션의 이해</h1>
+
+<div id="post">
+  <h2 id="section">1-1 웹 프로그래밍의 개요</h2>
+<p>웹 프로그래밍은 기본적으로 <code class="highlighter-rouge">Client/Server</code>방식으로 다음과 같은 형태를 갖게 된다.</p>
+
+<p><img src="../pic/webapplication/cs_structure.jpg" alt="c/s구조" />
+[client/server 구조]</p>
+
+<h2 id="section-1">1-2 웹프로그래밍과 웹 어플리케이션</h2>
+
+<p>웹 어플리케이션이란 웹을 기반으로 실행되는 프로그램을 의미 한다. 따라서 웹 프로그래밍과 웹어플리케이션의 관계는 <code class="highlighter-rouge">웹 프로그래밍을 통한 웹 어플리케이션의 구현</code>이라고 할 수 있다. 웹어플리케이션의 구조는 다음과 같다.</p>
+
+<p><img src="../pic/webapplication/webapplication_structure.jpg" alt="webapplication" /></p>
+
+<p>처리순서는</p>
+
+<ol>
+  <li>웹 브라우저가 웹 서버에 어떠한 페이지를 요청하게 되면</li>
+  <li>해당 웹 서버는 웹 브라우저의 요청을 받아서 요청된 페이지의 로직 및 데이터베이스와의 연동을 위해 어플리케이션 서버에 이들의 처리를 요청한다.</li>
+  <li>이때 웹 어플리케이션 서버는 데이터베이스와의 연동이 필요하면 데이터베이스와 데이터의 처리를 수행한다.</li>
+  <li>로직 및 데이터베이스 작업 처리 결과를 웹서버에 돌려보낸다.</li>
+  <li>웹서버는 결과를 다시 웹브라우저에 응답한다.</li>
+</ol>
+
+<h3 id="reference">Reference</h3>
+<ul>
+  <li><a href="http://knkky.tistory.com/28">남깐느</a></li>
+  <li><a href="http://www.yes24.com/24/Goods/13159413?Acode=101">열혈강의 자바 웹 개발 워크북</a></li>
+</ul>
+
+</div>
+
+<div id="related">
+  <h3>Related Posts</h3>
+  <ul class="posts">
+    
+    <li>
+      <span>08 Sep 2016 &raquo;</span> <a href="/blog/2016/09/08/ang.html">AngularJS 조건문</a>
+    </li>
+    
+    <li>
+      <span>08 Sep 2016 &raquo;</span> <a href="/blog/2016/09/08/Sorting-post.html">Sorting</a>
+    </li>
+    
+    <li>
+      <span>28 Aug 2016 &raquo;</span> <a href="/blog/2016/08/28/run_to_same_server.html">Apache2웹서버와 Node.js어플리케이션을 함께 사용하기!</a>
+    </li>
+    
+  </ul>
+</div>
+
+
+      <div class="footer">
+        <div class="disclaimer">
+  
+
+  <p>
+    © Seungwan Jo, 2016 </a>
+  </p>
+</div>
+
+      </div>
+    </div>
+  </div>
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-83868242-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+
+</body>
+</html>
