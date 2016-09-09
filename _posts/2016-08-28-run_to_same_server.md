@@ -1,8 +1,8 @@
 ---
 layout: post
 title: Apache2웹서버와 Node.js어플리케이션을 함께 사용하기!
-categories:
-- blog
+date: 2016-08-28
+categories: web
 ---
 
 ### 순서

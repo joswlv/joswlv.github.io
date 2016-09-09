@@ -1,8 +1,8 @@
 ---
 layout: post
 title: AngularJS_AngularJS_if
-categories:
-- blog
+date: 2016-08-07
+categories: js
 ---
 
 AngularJS의 조건문은 4가지가 존재한다.

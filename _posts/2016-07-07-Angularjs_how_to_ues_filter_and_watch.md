@@ -1,9 +1,10 @@
 ---
 layout: post
 title: AngularJS_How to use filter & $watch
-categories:
-- blog
+date: 2016-07-07
+categories: js
 ---
+
 
 `ng-Repeat`는 기본적으로 필터기능을 지원한다. completed, active, all 세개 버튼을 만들어서 각각을 클릭할때 필터링 로직이 작동하도록 만들어 보자.
 
