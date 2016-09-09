@@ -1,8 +1,8 @@
 ---
 layout: post
 title: AngularJS_Promise객체 와 $q서비스
-categories:
-- blog
+date: 2016-07-08
+categories: js
 ---
 
 ## Promise객체

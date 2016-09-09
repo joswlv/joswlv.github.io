@@ -1,8 +1,8 @@
 ---
 layout: post
 title: Sorting
-categories:
-- blog
+date: 2016-09-08
+categories: python
 ---
 
 ## MergeSort

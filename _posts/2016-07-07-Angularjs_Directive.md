@@ -1,8 +1,8 @@
 ---
 layout: post
 title: AngularJS_Directive
-categories:
-- blog
+date: 2016-07-07
+categories: js
 ---
 
 Directive는 템플릿 구조를 모듈화하는 기능이라고 생각하면 쉽다.
