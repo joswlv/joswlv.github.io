@@ -149,6 +149,7 @@ finally {
 `절대경로`는 웹 서버 루트를 기준으로 계산한다.
 
 예) 
+
 > 서버루트 --> http://localhost:8080
 > 
 최종경로 --> http://localhost:8080/web22/member/add
@@ -159,6 +160,7 @@ finally {
 `상대경로`는 현재 경로를 기준으로 계산한다. 
 
 예)
+
 >현재경로 --> http://localhost:8080/web/member/list
 >
 >최종경로 --> http://localhost:8080/web/member/add
