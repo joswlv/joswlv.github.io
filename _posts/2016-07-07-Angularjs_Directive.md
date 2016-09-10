@@ -58,11 +58,12 @@ Directive를 정의 할때 `$scope`객체에 사용할 스코프 변수를 설�
 
 
 ## restrict 종류
-값 | 설명           |
---- | ----------------|
-`E`| Element name   |
-`A`| Attrivute      |
-`C`| Class          |
-`M`| Comment(주석)  |
+
+|value|설명|
+|---|--------|
+|`E`|Element name|
+|`A`|Attrivute|
+|`C`|Class|
+|`M`|Comment(주석)|
 
 Default 값은 `EA`이다.
