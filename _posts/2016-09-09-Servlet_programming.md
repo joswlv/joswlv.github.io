@@ -6,6 +6,7 @@ categories: web
 ---
 
 # 1.CGI프로그램과 서블릿
+
 ## 1)CGI란?
 ![]({{ site.url }}/images/cgi.png)
 
@@ -22,6 +23,7 @@ CGI프로그램은 C나 C++, java와 같은 컴파일 언어와 스크립언어�
 ### 2-1)서블릿 컨테이너
 
 ![]({{ site.url }}/images/servlet.png)
+
 서블릿의 생성과 실행, 소멸 등 생명주기를 관리하는 프로그램을 `서블릿 컨테이너(Servlet Container)`라고 한다. 서블릿 컨테이너가 서블릿을 대신하여 CGI규칙에 따라 웹서버와 데이터를 주고 받는다. 더 이상 CGI규칙에 대해 알 필요가 없지만, 서블릿 컨테이너와 서블릿 사이의 규칙을 알아야한다.
 
 # 2. javax.servlet.Servlet 인터페이스
@@ -31,12 +33,12 @@ CGI프로그램은 C나 C++, java와 같은 컴파일 언어와 스크립언어�
 
 >서블릿 생명주기와 관련된 메소드
 >
->- init()
-- service()
-- destroy()
+>* init()
+* service()
+* destroy()
 
-- getServletInfo()
-- getServletConfig()
+* getServletInfo()
+* getServletConfig()
 
 
 여기서 `service()`는 클라이언트가 요청할 때 마다 호출되는 메서드이다. 즉 실질적으로 서비스 작업을 수행하는 메서드 이다. 이 메서드에 서블릿이 해야 할 일을 작성하면된다.
