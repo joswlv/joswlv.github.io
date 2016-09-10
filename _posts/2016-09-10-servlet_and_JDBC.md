@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Servlet_programming
+title: Servlet와 JDBC
 date: 2016-09-10 21:00:18
 categories: web
 ---
@@ -108,22 +108,22 @@ executeBatch()|addBatch()로 등록한 여러개의 SQL문을 한꺼번에 실�
 
 위의 예제에서 SQL문에서 `?`문자로 표시된 것을 입력 매개변수라고 한다. 입력 항목의 값은 SQL문을 실행하기 전에 `setXXX()`메서드를 호출하여 설정해야한다.
 
-비교항목|Statement|PreparedStatement|
----------|---------|-----------------|
-실행속도|질의 할때마다 SQL문을 컴파일한다.|SQL문을 미리 준비하여 컴파일 해둔다. 입력 매개변수 값만 추가하여 서버에 전송한다. 특히 여러번 반복하여 질의하는 경우, 실행속도가 바름|
-바이너리데이터전송|불가능|가능|
-프로그래밍 편의성|SQL문 안에 입력 매개변수 값이 포함되어 있어서 SQL문이 복잡하고 매개변수가 여러개인 경우 코드 관리가 힘들다.|SQL문과 입력 매개변수가 분리되어 있어 코드작성이 편리하다.|
+|비교항목|Statement|PreparedStatement|
+|---------|---------|-----------------|
+|실행속도|질의 할때마다 SQL문을 컴파일한다.|SQL문을 미리 준비하여 컴파일 해둔다. 입력 매개변수 값만 추가하여 서버에 전송한다. 특히 여러번 반복하여 질의하는 경우, 실행속도가 바름|
+|바이너리데이터전송|불가능|가능|
+|프로그래밍 편의성|SQL문 안에 입력 매개변수 값이 포함되어 있어서 SQL문이 복잡하고 매개변수가 여러개인 경우 코드 관리가 힘들다.|SQL문과 입력 매개변수가 분리되어 있어 코드작성이 편리하다.|
 
 #### java.sql.ResultSet 인터페이스의 구현체
-메서드|설명|
-------|----|
-first()|서버에서 첫번째 레코드를 가져온다.|
-last()|서버에서 마지막번째 레코드를 가져온다.|
-previous()|서버에서 이전 레코드를 가져온다.|
-next()|서버에서 다음 레코드를 가져온다.|
-getXXX()|레코드에서 특정 컬럼의 값을 꺼낸다. XXX는 칼럼의 타입이다.|
-updateXXX()|레코드에서 특정 칼럼의 값을 변경한다.|
-deleteRow()|현재 레코드를 지운다.|
+|메서드     |설명                                                      |
+|-----------|----------------------------------------------------------|
+|first()    |서버에서 첫번째 레코드를 가져온다.                        |
+|last()     |서버에서 마지막번째 레코드를 가져온다.                    |
+|previous() |서버에서 이전 레코드를 가져온다.                          |
+|next()     |서버에서 다음 레코드를 가져온다.                          |
+|getXXX()   |레코드에서 특정 컬럼의 값을 꺼낸다. XXX는 칼럼의 타입이다.|
+|updateXXX()|레코드에서 특정 칼럼의 값을 변경한다.                     |
+|deleteRow()|현재 레코드를 지운다.                                     |
 
 
 
@@ -263,15 +263,14 @@ ServletContext sc = this.getServletContext();	//HttpServlet으로 부터 상속�
 ```
 - `destroy()`서블릿 컨테이너는 웹 어플리케이션을 종료하기 전에 필터들에 대해 `destroy()`를 호출하여 마무리 작업을 할 수 있는 기회를 준다.
 
-####필터 배치
+#### 필터 배치
 
 필터의 배치 방법도 서블릿과 마친가지로 두가지 가 있다. DD파일에 기술하는 방법과 애노테이션을 기술하는 방법이 있다.
 
 DD파일에 작서한 예)
 
 ```xml
-<!-- 필터 선언 -->
-	<!--  
+<!-- 필터 선언 --> 
 	<filter>
 		<filter-name>CharacterEncodingFilter</filter-name>
 		<filter-class>spms.filters.CharacterEncodingFilter</filter-class>
@@ -280,15 +279,12 @@ DD파일에 작서한 예)
 			<param-value>UTF-8</param-value>
 		</init-param>
 	</filter>
-	-->
 	
 	<!-- 필터 URL 매핑 -->
-	<!--  
 	<filter-mapping>
 		<filter-name>CharacterEncodingFilter</filter-name>
 		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-	-->
 ```
 
 애노테이션을 이용한 필터 배치 예)
