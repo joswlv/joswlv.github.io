@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Servlet_programming
-date: 2016-09-09
+date: 2016-09-09 22:40:18
 categories: web
 ---
 
@@ -88,20 +88,20 @@ ex) `res.setContentType("text/plain;chartest=UTF-8");
 `Servlet 3.0` 사양부터는 애노테이션으로 서블릿 배치 정보를 설정할 수 있다. `web.xml`대신 애노테이션을 이용해 배치 정보를 작성해보자
 
 ```java
-@WebServlet("/calc")
+@WebServlet(
+  urlPatterns={"/member/update"},
+  initParams={
+	  @WebInitParam(name="driver",value="com.mysql.jdbc.Driver"),
+	  @WebInitParam(name="url",value="jdbc:mysql://localhost/studydb"),
+	  @WebInitParam(name="username",value="study"),
+	  @WebInitParam(name="password",value="study")
+  }
+)
 public class CalculatorServlet extends GenericServlet {
 	@Override
-	public void service(ServletRequest req, ServletResponse res) throws ServletException, IOException {
-		int a = Integer.parseInt(req.getParameter("a"));
-		int b = Integer.parseInt(req.getParameter("b"));
-		
-		res.setContentType("text/plain");
-		res.setCharacterEncoding("UTF-8");
-		PrintWriter writer = res.getWriter();
-		writer.println("a="+a+","+"b="+b+"의 계산결과입니다.");
-		writer.println("a+b="+(a+b));
+	public void service(ServletRequest req, ServletResponse res) throws ServletException, 
+		....
 	}
-}
 ```
 
 ### Reference
