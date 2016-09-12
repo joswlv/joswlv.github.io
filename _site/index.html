@@ -93,6 +93,401 @@
             
               <li>
                 <h2>
+                  <a class="post-link" href="/2016/09/12/view_and_jsp/">뷰 컴포넌트와 JSP</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-09-12
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#web" title="Category: web" rel="category">web</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="jspjava-server-pages">1. JSP(Java Server Pages)</h1>
+
+<p>JSP 기술의 가장 중요한 목적은 콘텐츠를 출력하는 코딩을 단순화 하는 것이다.</p>
+
+<h3 id="jsp-">JSP 구동원리</h3>
+
+<ol>
+  <li>개발자는 서버에 JSP 파일은 작성한다. 클라이언트가 JSP를 실행해 달라고 요청을 하면, 서블릿 컨테이너는 JSP파일에 대응하는 자바 서블릿을 찾아서 실행한다.</li>
+  <li>만약 JSP에 대응하는 서블릿이 없거나 JSP파일이 변경되었다면, <code class="highlighter-rouge">JSP엔진</code>을 통해서 JSP파일을 해석하여 서블릿 자바소스를 생성한다.</li>
+  <li>서블릿 자바 소스는 자바 컴파일러를 통해 서블릿 클래스 파일로 컴파일된다. JSP파일을 바꿀 때마다 이 과정을 반복한다.</li>
+  <li>JSP로부터 생성된 서블릿은 서블릿 구동 방식에 다라 실행된다. 즉 서블릿의 <code class="highlighter-rouge">service()</code>메서드가 호출되고, 출력 메서드를 통해 서블릿이 생성한 HTML 화면을 웹브라우저로 보낸다.</li>
+</ol>
+
+<blockquote>
+  <p>결론은 JSP가 직접 실행되는 것이 아니라 JSP로부터 만들어진 서블릿이 실행된다.</p>
+</blockquote>
+
+<h3 id="httpjsppage-">HttpJspPage 인터페이스</h3>
+
+<p>JSP엔진은 JSP 파일로 부터 서블릿 클래스를 생성할 때 <code class="highlighter-rouge">HttpJspPage</code> 인터페이스를 구현한 클래스를 만든다.</p>
+
+<p>상속관계는 다음과 같다.</p>
+
+<blockquote>
+  <ul>
+    <li>Servlet(Interface)
+      <ul>
+        <li>init()</li>
+        <li>service()</li>
+        <li>destory()</li>
+        <li>getServletConfig()</li>
+        <li>getServletInfo()</li>
+      </ul>
+    </li>
+    <li>JspPage(Interface)
+      <ul>
+        <li>jspInit()</li>
+        <li>jspDestory()</li>
+      </ul>
+    </li>
+    <li>HttpJspPage(Interface)
+      <ul>
+        <li>_jspSerivce()</li>
+      </ul>
+    </li>
+  </ul>
+
+</blockquote>
+
+<p><strong>결론적으로 HttpJspPage는 Servlet 인터페이스도 구현한다는 것이기 때문에 해당 클래스는 서블릿이 될 수 있다.</strong></p>
+
+<ul>
+  <li>
+    <p>jspInit()</p>
+
+    <ul>
+      <li>JspPage에 선언된 jspInit()는 JSP객체가 생성될 때 호출된다. 자동 생성된 서블릿 소스 코드에서 init()가 호출될 때 jspInit()를 호출하도록 코딩되어 있다. 그래서 JSP 페이지에서 init()를 오버라이딩 할 일이 있다면 init() 대신 jspInit()를 오버라이딩하면된다.</li>
+    </ul>
+  </li>
+  <li>
+    <p>jspDestory()</p>
+
+    <ul>
+      <li>jspInit()과 마찬가지로 JSP페이지에서 destory()를 오버라이딩 할 일이 있으면 jspDestory()를 오버라이딩 해서 사용하면된다.</li>
+    </ul>
+  </li>
+  <li>
+    <p>_jspService()</p>
+
+    <ul>
+      <li>HttpJspPage에 선언된 _jspService()는 JSP 페이지가 해야 할 작업이 들어 있는 메서드이다. 서블릿 컨테이너가 service()를 호출하면 service() 메서드 내부에서는 바로 이 메서드를 호출함으로써 JSP 페이지에 작성했던 코드가 실행된다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="jsp---">JSP의 주요 구성 요소</h3>
+
+<h4 id="section">지시자 태그</h4>
+
+<p><code class="highlighter-rouge">page</code>지시자는 JSP페이지와 관련된 속성을 정의할 때 사용하는 태그이다. JSP 지시자에는 <code class="highlighter-rouge">page</code>, <code class="highlighter-rouge">taglib</code>, <code class="highlighter-rouge">include</code>가 있다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="o">&lt;%</span><span class="nd">@page</span> <span class="kn">import</span><span class="err">="</span><span class="nn">spms.vo.Member</span><span class="s">"%&gt;
+&lt;%@page import="</span><span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">ArrayList</span><span class="s">"%&gt;
+&lt;%@ page 
+	language="</span><span class="n">java</span><span class="s">" 
+	contentType="</span><span class="n">text</span><span class="o">/</span><span class="n">html</span><span class="o">;</span> <span class="n">charset</span><span class="o">=</span><span class="n">UTF</span><span class="o">-</span><span class="mi">8</span><span class="s">"
+    pageEncoding="</span><span class="n">UTF</span><span class="o">-</span><span class="mi">8</span><span class="err">"</span><span class="o">%&gt;</span>
+</code></pre>
+</div>
+
+<ul>
+  <li><code class="highlighter-rouge">language속성</code>은 스크립트릿(Scriptlet)이나, 표현식(Expression element), 선언부(Declaration element)를 작성할때 사용한다.</li>
+  <li><code class="highlighter-rouge">contenttype속성</code>은 출력할 데이터의 MIME타입과 문자 집합을 지정한다.</li>
+  <li><code class="highlighter-rouge">pageEncoding속성</code>은 출력할 데이터의 문자 집합을 지정한다. 기본값은 <code class="highlighter-rouge">ISO-8859-1</code>이다. 만약 이속성을 생략하면 <code class="highlighter-rouge">contentType</code>에 설정된 값을 사용한다. <code class="highlighter-rouge">contentType속성</code>에도 없다면 기본값 <code class="highlighter-rouge">ISO-8859-1</code>을 사용한다.</li>
+</ul>
+
+<h4 id="section-1">스크립트릿 태그</h4>
+
+<p>JSP 페이지 안에서 자바코드를 넣을 때는 스크립트릿(Scriptlet Elements)태그 <code class="highlighter-rouge">&lt;% %&gt;</code>안에 작성한다. <code class="highlighter-rouge">&lt;% 자바 코드 %&gt;</code></p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="o">&lt;%</span>
+<span class="n">String</span> <span class="n">v1</span> <span class="o">=</span> <span class="s">""</span><span class="o">;</span>
+<span class="n">String</span> <span class="n">v2</span> <span class="o">=</span> <span class="s">""</span><span class="o">;</span>
+<span class="n">String</span> <span class="n">result</span> <span class="o">=</span> <span class="s">""</span><span class="o">;</span>
+<span class="n">String</span><span class="o">[]</span> <span class="n">selected</span> <span class="o">=</span> <span class="o">{</span><span class="s">""</span><span class="o">,</span> <span class="s">""</span><span class="o">,</span> <span class="s">""</span><span class="o">,</span> <span class="s">""</span><span class="o">};</span>
+
+<span class="c1">//값이 있을 때만 꺼낸다.</span>
+<span class="k">if</span> <span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"v1"</span><span class="o">)</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+	<span class="n">v1</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"v1"</span><span class="o">);</span>
+	<span class="n">v2</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"v2"</span><span class="o">);</span>
+	<span class="n">String</span> <span class="n">op</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"op"</span><span class="o">);</span>
+	
+	<span class="n">result</span> <span class="o">=</span> <span class="n">calculate</span><span class="o">(</span>
+				<span class="n">Integer</span><span class="o">.</span><span class="na">parseInt</span><span class="o">(</span><span class="n">v1</span><span class="o">),</span> 
+				<span class="n">Integer</span><span class="o">.</span><span class="na">parseInt</span><span class="o">(</span><span class="n">v2</span><span class="o">),</span> 
+				<span class="n">op</span><span class="o">);</span>
+	
+	<span class="k">if</span> <span class="o">(</span><span class="s">"+"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">op</span><span class="o">))</span> <span class="o">{</span>
+		<span class="n">selected</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="s">"selected"</span><span class="o">;</span>
+	<span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="s">"-"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">op</span><span class="o">))</span> <span class="o">{</span>
+		<span class="n">selected</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="s">"selected"</span><span class="o">;</span>
+	<span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="s">"*"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">op</span><span class="o">))</span> <span class="o">{</span>
+		<span class="n">selected</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span> <span class="o">=</span> <span class="s">"selected"</span><span class="o">;</span>
+	<span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="s">"/"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">op</span><span class="o">))</span> <span class="o">{</span>
+		<span class="n">selected</span><span class="o">[</span><span class="mi">3</span><span class="o">]</span> <span class="o">=</span> <span class="s">"selected"</span><span class="o">;</span>
+	<span class="o">}</span>
+<span class="o">}</span>
+<span class="o">%&gt;</span> 
+</code></pre>
+</div>
+
+<p>위 코드의 자바 서블릿 소스에서 _jspService() 메서드를 보면 스크립트릿 태그안의 자바소스가 그대로 입력된 것을 알 수 있다.</p>
+
+<h4 id="jsp--">JSP 내장 객체</h4>
+
+<p>JSP페이지에서 스크립트릿 <code class="highlighter-rouge">&lt;% %&gt;</code>이나 표현식 <code class="highlighter-rouge">&lt;%= %&gt;</code>을 작성할 때 별도의 선언 없이 사용하는 자바 객체를 JSP 내장객체(Implicit Objects)라 한다. <code class="highlighter-rouge">_jspService()</code>는 <code class="highlighter-rouge">javax.servlet.jsp.HttpJspPage</code> 인터페이스에 선언된 메서드이다. JSP페이지로 서블릿을 만들때 반드시 이 인터페이스를 구현하도록 정의 되어 있다.</p>
+
+<p>JSP 기술 사양서는 JSP페이지 작성자가 별도 선언 없이 즉시 이용할 수 있는 9개 객체를 정의 한다.</p>
+
+<p><code class="highlighter-rouge">request</code>, <code class="highlighter-rouge">response</code>, <code class="highlighter-rouge">pageContext</code>, <code class="highlighter-rouge">session</code>, <code class="highlighter-rouge">application</code>, <code class="highlighter-rouge">config</code>, <code class="highlighter-rouge">out</code>, <code class="highlighter-rouge">page</code>, <code class="highlighter-rouge">exception</code> 객체가 <code class="highlighter-rouge">_jspservice()</code>메서드에 선언되어 있어 별도의 선언 없이 스크립트릿과 표현식에 JSP내장객체를 사용할 수 있다.</p>
+
+<h4 id="section-2">선언문 태그</h4>
+
+<p>JSP 선언문(Declarations) <code class="highlighter-rouge">&lt;%! %&gt;</code>은 서블릿 클래스의 맴버(변수나 메서드)를 선언 할 때 사용하는 태그이다. JSP페이지에서 선언문 <code class="highlighter-rouge">&lt;%! %&gt;</code>을 작성하는 위치는 위, 아래, 가운데 어디든 상관 없다. 왜나햐면 선언문은 <code class="highlighter-rouge">_jspService()</code>메서드 안에 복사되는 것이 아니라, <code class="highlighter-rouge">_jspService()</code>밖의 클래스 블록 안에 복사 되기 때문이다.</p>
+
+<p><code class="highlighter-rouge">&lt;%! 맴버 변수 및 메서드 선언 %&gt;</code></p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="o">&lt;%!</span> 
+<span class="kd">private</span> <span class="n">String</span> <span class="nf">calculate</span><span class="o">(</span><span class="kt">int</span> <span class="n">a</span><span class="o">,</span> <span class="kt">int</span> <span class="n">b</span><span class="o">,</span> <span class="n">String</span> <span class="n">op</span><span class="o">)</span> <span class="o">{</span>
+	<span class="kt">int</span> <span class="n">r</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+		<span class="k">if</span> <span class="o">(</span><span class="s">"+"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">op</span><span class="o">))</span> <span class="o">{</span>
+		<span class="n">r</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="o">;</span>	
+	<span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="s">"-"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">op</span><span class="o">))</span> <span class="o">{</span>
+		<span class="n">r</span> <span class="o">=</span> <span class="n">a</span> <span class="o">-</span> <span class="n">b</span><span class="o">;</span>
+	<span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="s">"*"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">op</span><span class="o">))</span> <span class="o">{</span>
+		<span class="n">r</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span><span class="o">;</span>
+	<span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="s">"/"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">op</span><span class="o">))</span> <span class="o">{</span>
+		<span class="n">r</span> <span class="o">=</span> <span class="n">a</span> <span class="o">/</span> <span class="n">b</span><span class="o">;</span>
+	<span class="o">}</span>
+	<span class="k">return</span> <span class="n">Integer</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span><span class="n">r</span><span class="o">);</span>
+<span class="o">}</span>
+<span class="o">%&gt;</span>
+</code></pre>
+</div>
+
+<h4 id="section-3">표현식 태그</h4>
+
+<p>표현식(Expressions)태그는 문자열을 출력할 때 사용한다. <code class="highlighter-rouge">&lt;%= %&gt;</code>안에는 결과를 반환하는 자바코드가 와야한다. 표현식도 스크립트릿과 같이 <code class="highlighter-rouge">_jspService()</code>안에 순서대로 복사한다.</p>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;body&gt;</span>
+<span class="nt">&lt;h2&gt;</span>JSP 계산기<span class="nt">&lt;/h2&gt;</span>
+<span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"Calculator.jsp"</span> <span class="na">method=</span><span class="s">"get"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">name=</span><span class="s">"v1"</span> <span class="na">size=</span><span class="s">"4"</span> <span class="na">value=</span><span class="s">"&lt;%=v1%&gt;"</span><span class="nt">&gt;</span> 
+	<span class="nt">&lt;select</span> <span class="na">name=</span><span class="s">"op"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;option</span> <span class="na">value=</span><span class="s">"+"</span> <span class="err">&lt;%=</span><span class="na">selected</span><span class="err">[</span><span class="na">0</span><span class="err">]%</span><span class="nt">&gt;</span>&gt;+<span class="nt">&lt;/option&gt;</span>
+		<span class="nt">&lt;option</span> <span class="na">value=</span><span class="s">"-"</span> <span class="err">&lt;%=</span><span class="na">selected</span><span class="err">[</span><span class="na">1</span><span class="err">]%</span><span class="nt">&gt;</span>&gt;-<span class="nt">&lt;/option&gt;</span>
+		<span class="nt">&lt;option</span> <span class="na">value=</span><span class="s">"*"</span> <span class="err">&lt;%=</span><span class="na">selected</span><span class="err">[</span><span class="na">2</span><span class="err">]%</span><span class="nt">&gt;</span>&gt;*<span class="nt">&lt;/option&gt;</span>
+		<span class="nt">&lt;option</span> <span class="na">value=</span><span class="s">"/"</span> <span class="err">&lt;%=</span><span class="na">selected</span><span class="err">[</span><span class="na">3</span><span class="err">]%</span><span class="nt">&gt;</span>&gt;/<span class="nt">&lt;/option&gt;</span>
+	<span class="nt">&lt;/select&gt;</span> 
+	<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">name=</span><span class="s">"v2"</span> <span class="na">size=</span><span class="s">"4"</span> <span class="na">value=</span><span class="s">"&lt;%=v2%&gt;"</span><span class="nt">&gt;</span> 
+	<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"submit"</span> <span class="na">value=</span><span class="s">"="</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">size=</span><span class="s">"8"</span> <span class="na">value=</span><span class="s">"&lt;%=result%&gt;"</span><span class="nt">&gt;&lt;br&gt;</span>
+<span class="nt">&lt;/form&gt;</span> 
+<span class="nt">&lt;/body&gt;</span>
+</code></pre>
+</div>
+
+<p>표현식 태그에 작성한 자바코드가 서블릿 파일안에서는 <code class="highlighter-rouge">out.print()</code>출력의 인자값(argument)으로 복사된다. 출력문을 만들 때 <code class="highlighter-rouge">out.print()</code>만 사용하는 것은 아니다. <code class="highlighter-rouge">out.write()</code>도 가능하다 즉 JSP엔진에 따라 만들어지는 자바코드가 달라 질 수 있다. 톰켓에서는 JSP 표현식에 대해 <code class="highlighter-rouge">out.print()</code>메서드를 만든다.</p>
+
+<h1 id="view">2. 뷰(View)</h1>
+
+<h3 id="value-object">Value Object</h3>
+
+<p>데이터베이스에서 가져온 정보를 JSP페이지에 전달하려면 그 정보를 담을 객체가 필요하다. 이렇게 값을 담는 용도로 사용하는 객체를 <code class="highlighter-rouge">값 객체(value object)</code>라고한다. VO는 계층간 또는 객체 간에 데이터를 전달하는 데 용이하므로 <code class="highlighter-rouge">데이터 수송 객체(Data Transfer Object)</code>라고도 한다. 
+보통 데이터베이스 테이블에 대응하여 값 객체를 정의한다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">spms</span><span class="o">.</span><span class="na">vo</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.util.Date</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Member</span> <span class="o">{</span>
+	<span class="kd">protected</span> <span class="kt">int</span> 		<span class="n">no</span><span class="o">;</span>
+	<span class="kd">protected</span> <span class="n">String</span> 	<span class="n">name</span><span class="o">;</span>
+	<span class="kd">protected</span> <span class="n">String</span> 	<span class="n">email</span><span class="o">;</span>
+	<span class="kd">protected</span> <span class="n">String</span> 	<span class="n">password</span><span class="o">;</span>
+	<span class="kd">protected</span> <span class="n">Date</span>		<span class="n">createdDate</span><span class="o">;</span>
+	<span class="kd">protected</span> <span class="n">Date</span>		<span class="n">modifiedDate</span><span class="o">;</span>
+	
+	<span class="kd">public</span> <span class="kt">int</span> <span class="nf">getNo</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="n">no</span><span class="o">;</span>
+	<span class="o">}</span>
+	<span class="kd">public</span> <span class="n">Member</span> <span class="nf">setNo</span><span class="o">(</span><span class="kt">int</span> <span class="n">no</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">no</span> <span class="o">=</span> <span class="n">no</span><span class="o">;</span>
+		<span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+	<span class="o">}</span>
+	<span class="kd">public</span> <span class="n">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="n">name</span><span class="o">;</span>
+	<span class="o">}</span>
+	<span class="kd">public</span> <span class="n">Member</span> <span class="nf">setName</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+		<span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+	<span class="o">}</span>
+	<span class="kd">public</span> <span class="n">String</span> <span class="nf">getEmail</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="n">email</span><span class="o">;</span>
+	<span class="o">}</span>
+	<span class="kd">public</span> <span class="n">Member</span> <span class="nf">setEmail</span><span class="o">(</span><span class="n">String</span> <span class="n">email</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">email</span> <span class="o">=</span> <span class="n">email</span><span class="o">;</span>
+		<span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+	<span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">setXXX()</code>메소드의 return값을 this로 하는 이유는 다음과 같다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code>
+	<span class="c1">//return this를 사용한 경우</span>
+	<span class="k">while</span><span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="na">next</span><span class="o">())</span> <span class="o">{</span>
+		<span class="n">members</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">Member</span><span class="o">()</span>
+				<span class="o">.</span><span class="na">setNo</span><span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="na">getInt</span><span class="o">(</span><span class="s">"MNO"</span><span class="o">))</span>
+				<span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">"MNAME"</span><span class="o">))</span>
+	<span class="o">}</span>
+
+	<span class="c1">//set메서드 반환값이 없는 경우</span>
+	<span class="n">Member</span> <span class="n">member</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Member</span><span class="o">();</span>
+	<span class="n">member</span><span class="o">.</span><span class="na">setNo</span><span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="na">getInt</span><span class="o">(</span><span class="s">"MNO"</span><span class="o">));</span>
+	<span class="n">member</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">"MNAME"</span><span class="o">));</span>
+	<span class="n">member</span><span class="o">.</span><span class="na">setEmail</span><span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">"EMAIL"</span><span class="o">));</span>
+</code></pre>
+</div>
+
+<p>객체를 생성한 즉시, setter메서드를 연속으로 호출하여 값을 할당한다. 이런 코딩 방식은 스크립팅 언어에서 널리 사용되는 방식이다.</p>
+
+<h3 id="requestdispatcher-forward-include">RequestDispatcher, forward, include</h3>
+
+<p>화면생성을 위해 JSP로 작업을 위임해야한다. 이렇게 다른 서블릿이나 JSP로 작업을 위임할 때 사용하는 객체가 <code class="highlighter-rouge">RequestDispatcher</code>이다. 이 객체는 <code class="highlighter-rouge">HttpservletRequest</code>를 통해서 얻을 수 있다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">RequestDispatcher</span> <span class="n">rd</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getRequestDispatcher</span><span class="o">(</span>
+			<span class="s">"/member/MemberList.jsp"</span><span class="o">);</span>
+</code></pre>
+</div>
+
+<p>예)</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="c1">// request에 회원 목록 데이터 보관한다.</span>
+<span class="n">request</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="s">"members"</span><span class="o">,</span> <span class="n">members</span><span class="o">);</span>
+			
+<span class="c1">// JSP로 출력을 위임한다.</span>
+<span class="n">RequestDispatcher</span> <span class="n">rd</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getRequestDispatcher</span><span class="o">(</span>
+		<span class="s">"/member/MemberList.jsp"</span><span class="o">);</span>
+<span class="n">rd</span><span class="o">.</span><span class="na">include</span><span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">);</span>
+</code></pre>
+</div>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="err">&lt;</span>%@page import="spms.vo.Member"%&gt;
+<span class="err">&lt;</span>%@page import="java.util.ArrayList"%&gt;
+<span class="err">&lt;</span>%@ page 
+	language="java" 
+	contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%&gt;
+<span class="cp">&lt;!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+	"http://www.w3.org/TR/html4/loose.dtd"&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+<span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">"Content-Type"</span> <span class="na">content=</span><span class="s">"text/html; charset=UTF-8"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;title&gt;</span>회원 목록<span class="nt">&lt;/title&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+<span class="nt">&lt;h1&gt;</span>회원목록<span class="nt">&lt;/h1&gt;</span>
+<span class="nt">&lt;p&gt;&lt;a</span> <span class="na">href=</span><span class="s">'add'</span><span class="nt">&gt;</span>신규 회원<span class="nt">&lt;/a&gt;&lt;/p&gt;</span>
+<span class="err">&lt;</span>%
+ArrayList<span class="nt">&lt;Member&gt;</span> members = (ArrayList<span class="nt">&lt;Member&gt;</span>)request.getAttribute(
+								"members");
+for(Member member : members) {
+%&gt;
+<span class="err">&lt;</span>%=member.getNo()%&gt;,
+<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">'update?no=&lt;%=member.getNo()%&gt;'</span><span class="nt">&gt;</span><span class="err">&lt;</span>%=member.getName()%&gt;<span class="nt">&lt;/a&gt;</span>,
+<span class="err">&lt;</span>%=member.getEmail()%&gt;,
+<span class="err">&lt;</span>%=member.getCreatedDate()%&gt;
+<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">'delete?no=&lt;%=member.getNo()%&gt;'</span><span class="nt">&gt;</span>[삭제]<span class="nt">&lt;/a&gt;&lt;br&gt;</span>
+<span class="err">&lt;</span>%} %&gt;
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">page</code> 지시자로 <code class="highlighter-rouge">import</code>를 처리한다. 그리고 <code class="highlighter-rouge">setAttribute</code>로 넘겨준 값을 <code class="highlighter-rouge">getAttribute()</code>를 호출하여 사용한다.</p>
+
+<h4 id="forward">forward</h4>
+
+<p>포워드 방식은 작업을 한 번 위임하면 다시 이전 서블릿으로 제어권이 돌아오지 않는다.
+포워딩은 예외가 발생하면 화면 내용보다 좀 더 부드러운 안내 문구를 출력하는데 보통 사용한다.</p>
+
+<ul>
+  <li>포워딩(Servlet에서 사용하는 경우)</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">RequestDispatcher</span> <span class="n">rd</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getRequestDispatcher</span><span class="o">(</span><span class="s">"/error.jsp"</span><span class="o">);</span>
+<span class="n">rd</span><span class="o">.</span><span class="na">forward</span><span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">);</span>
+</code></pre>
+</div>
+
+<ul>
+  <li>포워딩(JSP에서 사용하는 경우)</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="o">&lt;</span><span class="nl">jsp:</span><span class="n">forward</span> <span class="n">page</span><span class="o">=</span><span class="s">"/header.jsp"</span><span class="o">/&gt;</span>
+</code></pre>
+</div>
+
+<h4 id="include">include</h4>
+
+<p>인클루드 방식은 다른 서블릿으로 작업을 위임한 후 , 그 서블릿의 실행이 끝나면 다시 이전 서블릿으로 제어권이 넘어온다. 한 jsp에 여러 페이지를 포함할 때 사용한다.</p>
+
+<ul>
+  <li>인클루딩(Servlet에서 사용하는 경우)</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">RequestDispatcher</span> <span class="n">rd</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getRequestDispatcher</span><span class="o">(</span><span class="s">"/Header.jsp"</span><span class="o">);</span>
+<span class="n">rd</span><span class="o">.</span><span class="na">include</span><span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">);</span>
+</code></pre>
+</div>
+
+<ul>
+  <li>인클루딩(JSP에서 사용하는 경우)</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="o">&lt;</span><span class="nl">jsp:</span><span class="n">include</span> <span class="n">page</span><span class="o">=</span><span class="s">"/header.jsp"</span><span class="o">/&gt;</span>
+</code></pre>
+</div>
+
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/09/12/view_and_jsp/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
                   <a class="post-link" href="/2016/09/12/MVC/">MVC 이해하기</a>
                 </h2>
                 <div class="label">
@@ -173,12 +568,16 @@
 <ol>
   <li>웹 브라우저가 웹어플리케이션을 실행을 요청하면, 웹서버가 그 요청을 받아서 서블릿 컨테이너에게 넘겨준다. 서블릿 컨테이너는 URL을 확인하여 그 요청을 처리할 서브릿을 찾아 실행한다.</li>
   <li>서블릿은 실제 업무를 처리하는 모델 자바 객체의 메서드를 호출한다. 만약 웹 브라우저가 보낸 데이터를 저장하거나 변경해야 한다면 그 데이터를 가공하여 VO(Value Object)를 생성하고, 모델 객체의 메서드를 호출할 때 인자값을 넘긴다.</li>
-  <li>모델 객체는 JDBC를 사용하여 매개변수로 넘어온 VO를 데이터베이스에 저장하거나, 데이터베이스로부터 질의 결과를 가져와 VO로 만들어 반환한다. 이렇게 VO는 객체와 객체 사이에 데이터를 전달하는 용도로 사용하기 때문에 `데이터 전송객체(DTO : Data Transfer Object)라고 한다.</li>
+  <li>모델 객체는 JDBC를 사용하여 매개변수로 넘어온 VO를 데이터베이스에 저장하거나, 데이터베이스로부터 질의 결과를 가져와 VO로 만들어 반환한다. 이렇게 VO는 객체와 객체 사이에 데이터를 전달하는 용도로 사용하기 때문에 <code class="highlighter-rouge">데이터 전송객체(DTO : Data Transfer Object)</code>라고 한다.</li>
   <li>서블릿은 모델 객체로부터 반환받은 값을 JSP에 전달한다.</li>
   <li>JSP는 서블릿으로부터 전달받은 VO를 참조하여 웹브라우저가 출력할 결과 화면을 만들고 웹브라우저에 출력함으로써 요청 처리를 완료한다.</li>
   <li>웹브라우저는 서버로부터 받은 응답 내용을 화면에 출력한다.</li>
 </ol>
 
+<h3 id="reference">Reference</h3>
+<ul>
+  <li><a href="http://www.yes24.com/24/Goods/13159413?Acode=101">열혈강의 자바 웹 개발 워크북</a></li>
+</ul>
 
                 </div>
                 <div class="read-all">
@@ -827,102 +1226,6 @@
                 <hr>
               </li>
             
-              <li>
-                <h2>
-                  <a class="post-link" href="/2016/08/28/run_to_same_server/">Apache2웹서버와 Node.js어플리케이션을 함께 사용하기!</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-08-28
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#web" title="Category: web" rel="category">web</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                </div>
-                <div class="excerpt">
-                    <h3 id="section">순서</h3>
-<ol>
-  <li>내부적으로 다른 포트에 nodejs기반의 서버를 실행한다.</li>
-  <li>apache의 VirtualHosts 설정에서 ProxyPass를 설정한다.</li>
-  <li>특정 url로 접근식 1번으로 갈 수 있게 설정한다.</li>
-</ol>
-
-<h3 id="section-1">과정</h3>
-<ol>
-  <li>mod_proxy, mod_proxy_http가 필요하다. (ubuntu apache서버는 기본적으로 설치되어있음. <code class="highlighter-rouge">/etc/apache2/mods-available</code>안에 있음 <code class="highlighter-rouge">a2enmod proxy</code>,<code class="highlighter-rouge">a2enmod proxy_http</code>로 설정함</li>
-  <li>가상호스트를 설정함 ./sites-available 내부에 기존파일 또는 신규파일을 추가한다.</li>
-</ol>
-
-<div class="language-powershell highlighter-rouge"><pre class="highlight"><code>&lt;VirtualHost <span class="k">*</span>:80&gt;
-	DocumentRoot /var/www/example.com/public_html
-	ServerName  www.example.com
-
-	<span class="c1"># Index file and Document Root (where the public files are located)</span>
-	DirectoryIndex index.html index.php
-
-	<span class="c1"># Log file locations</span>
-	LogLevel warn
-	ErrorLog  /var/www/amazeapp.com/log/error.log
-	CustomLog /var/www/amazeapp.com/log/access.log combined
-
-
-	<span class="c1"># 아래가 핵심이다.</span>
-
-	ProxyRequests off
-
-	&lt;Proxy <span class="k">*</span>&gt;
-	    Order deny,allow    <span class="c1"># 이부분의 경우, 콤마(,) 사이에 공백 없어야 함!</span>
-	    Allow <span class="k">from </span>all
-	&lt;/Proxy&gt;
-
-	&lt;Location /&gt; <span class="c1"># 내부적으로 접속 노드를 늘리고 싶다면 여기에 추가.</span>
-	    ProxyPass http://localhost:3000/
-	    ProxyPassReverse http://localhost:3000/
-	&lt;/Location&gt;
-
-&lt;/VirtualHost&gt;
-</code></pre>
-</div>
-
-<ol>
-  <li>아파치 재시작</li>
-</ol>
-
-<p>끝~</p>
-
-<h3 id="reference">Reference</h3>
-<p><a href="https://github.com/sindresorhus/guides/blob/master/run-node-server-alongside-apache.md">https://github.com/sindresorhus/guides/blob/master/run-node-server-alongside-apache.md</a></p>
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2016/08/28/run_to_same_server/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
         </ul>
 
 
@@ -965,7 +1268,7 @@
                             <span class="name">
                                 web
                             </span>
-                            <span class="badge">5</span>
+                            <span class="badge">6</span>
                         </a>
                     </li>
                     
@@ -987,6 +1290,8 @@
                 </div>
                 <ul class="content-ul" recent>
                     
+                        <li><a href="/2016/09/12/view_and_jsp/">뷰 컴포넌트와 JSP</a></li>
+                    
                         <li><a href="/2016/09/12/MVC/">MVC 이해하기</a></li>
                     
                         <li><a href="/2016/09/10/servlet_and_JDBC/">Servlet와 JDBC</a></li>
@@ -1004,8 +1309,6 @@
                         <li><a href="/2016/07/08/Angularjs_promise_and_q/">AngularJS_Promise객체 와 $q서비스</a></li>
                     
                         <li><a href="/2016/07/07/Angularjs_how_to_ues_filter_and_watch/">AngularJS_How to use filter & $watch</a></li>
-                    
-                        <li><a href="/2016/07/07/Angularjs_Directive/">AngularJS_Directive</a></li>
                     
                 </ul>
             </div>
