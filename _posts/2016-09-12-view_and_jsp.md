@@ -227,8 +227,8 @@ public class Member {
 	//return this를 사용한 경우
 	while(rs.next()) {
 		members.add(new Member()
-				.setNo(rs.getInt("MNO"))
-				.setName(rs.getString("MNAME"))
+			.setNo(rs.getInt("MNO"))
+			.setName(rs.getString("MNAME"))
 	}
 
 	//set메서드 반환값이 없는 경우
