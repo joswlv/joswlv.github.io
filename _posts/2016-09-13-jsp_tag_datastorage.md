@@ -1,12 +1,12 @@
 ---
 layout: post
-title: 데이터 보관소
+title: 서블릿 데이터 보관소
 date: 2016-09-13 01:10
 categories: web
 ---
 
 
-# 1. 서블릿의 데이터 보관소
+# 서블릿의 데이터 보관소
 
 ![]({{ site.url }}/images/servlet_storage.png)
 
@@ -51,7 +51,7 @@ categories: web
 ```
 
 
-AppInitServlet클래스를 만들어 init()과 destroy()에서 DB커넥션과 릴리즈를 할 수 있다. 이 때 클래스의 맵핑정보가 없는데, 이를 DD파일에서 다음과 같이 입력한다.
+AppInitServlet클래스를 만들어 init()과 destroy()에서 DB커넥션과 릴리즈를 할 수 있다. 이 때 클래스의 URL 맵핑정보가 없는데, 이를 DD파일에서 다음과 같이 입력한다.
 
 
 ```java
