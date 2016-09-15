@@ -280,89 +280,93 @@ DataSource를 사용하는 이유는 서버에서 관리하기 때문에 데이�
 >서버 제품에 따라 DataSource를 설정하는 방법이 다름
 
 
-1. 톰켓 실행 환경 폴더에서 context.xml 파일을 찾는다.
 
-	![]({{ site.url }}/images/contextxml.png)
+##### 1.톰켓 실행 환경 폴더에서 context.xml 파일을 찾는다.
 
-2. context.xml 파일을 열고 다음과 같이 편집을 한다.
 
-	```java
-	<?xml version="1.0" encoding="UTF-8"?>
-	<Context>
-    <WatchedResource>WEB-INF/web.xml</WatchedResource>
-	<Resource name="jdbc/studydb" auth="Container" type="javax.sql.DataSource"
-	    maxActive="10" maxIdle="3" maxWait="10000" 
-	    username="study"
-	    password="study" 
-	    driverClassName="com.mysql.jdbc.Driver"
-	    url="jdbc:mysql://localhost/studydb" 
-	    closeMethod="close"/>
+![]({{ site.url }}/images/contextxml.png)
 	
-	</Context>
-	```
 	
-	`<Context>`태그 안에 `<Resource>` 태그를 추가한다.
+##### 2.context.xml 파일을 열고 다음과 같이 편집을 한다.
+
+
+```java
+<?xml version="1.0" encoding="UTF-8"?>
+<Context>
+<WatchedResource>WEB-INF/web.xml</WatchedResource>
+<Resource name="jdbc/studydb" auth="Container" type="javax.sql.DataSource"
+	maxActive="10" maxIdle="3" maxWait="10000" 
+	username="study"
+	password="study" 
+	driverClassName="com.mysql.jdbc.Driver"
+	url="jdbc:mysql://localhost/studydb" 
+	closeMethod="close"/>
 	
-	**\<Resource\>태그의 속성들**
-
-
-	| 속성명 | 설명 |
-	|:---:|----|
-	| name | JNDI이름. Context의 lookup()를 사용하여 자원을 찾을 때 사용한다. `java:comp/env`디렉토리에서 찾을 수 있다. |
-	| auth | 자원 관리의 주체를 지정한다. 설정 가능한 값으로 Application 또는 Container가 가능하다. |
-	| type | 자원의 타입을 지정한다. 패키지 이름을 포함한 클래스 이름(fully-qualified Java class name)이어야 한다. |
-	| driverClassName | JDBC 드라이버 클래스의 이름. 패키지 이름을 포함해야한다. |
-	| url | 데이터베이스 커넥션 URL |
-	| username | 데이터베이스 사용자 이름 |
-	| password | 데이터베이스 사용자의 암호 |
-	| maxActive | DataSource로부터 꺼낼 수 있는 커넥션의 최대 개수. 기본값 8개 |
-	| maxIdle | DataSource에서 유지할 수 있는 사용되지 않는 커넥션의 최대 개수. 최대 유지개수를 넘어서 반납되는 커넥션은 닫아 버린다. 기본값 8개 |
-	| maxWait | 발급한 커넥션의 수가 최댓값에 도달한 상태에서 또다시 커넥션을 달라는 요청이 들어 왔을 때, 커넥션을 준비하기 위해 기다리는 최대 밀리초. 최대 밀리초가 지날 때까지 반납되는 커넥션이 없으면 예외를 던진다. 기본값은 -1. 즉 커넥션을 반납할 때까지 기다린다. |
-	| closeMethod | 톰켓 서버가 종료될 때, 자원을 해제하기 위해 호출되는 메서드의 이름이다.단 매개변수가 없는 메서드여야 한다. 톰캣 서버는 내부적으로 DataSource를 생성할 때 아파치 DBCP의 BasicDataSource 구현체를 사용한다. BasicDataSource의 자원 해제 메서드는 close()이기 때문에, 이 속성의 값으로 close를 지정하면 된다. |
-
-
-3. 웹어플리케이션의 DD파일을 열고 다음과 같이 편집한다.
+</Context>
+```
 	
-	```java
-	<?xml version="1.0" encoding="UTF-8"?>
-	<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xmlns="http://java.sun.com/xml/ns/javaee"
-		xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
-		http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" 
-		id="WebApp_ID" version="3.0">
-		<display-name>web05</display-name>
+`<Context>`태그 안에 `<Resource>` 태그를 추가한다.
+	
+**\<Resource\>태그의 속성들**
+
+
+| 속성명 | 설명 |
+|:---:|----|
+| name | JNDI이름. Context의 lookup()를 사용하여 자원을 찾을 때 사용한다. `java:comp/env`디렉토리에서 찾을 수 있다. |
+| auth | 자원 관리의 주체를 지정한다. 설정 가능한 값으로 Application 또는 Container가 가능하다. |
+| type | 자원의 타입을 지정한다. 패키지 이름을 포함한 클래스 이름(fully-qualified Java class name)이어야 한다. |
+| driverClassName | JDBC 드라이버 클래스의 이름. 패키지 이름을 포함해야한다. |
+| url | 데이터베이스 커넥션 URL |
+| username | 데이터베이스 사용자 이름 |
+| password | 데이터베이스 사용자의 암호 |
+| maxActive | DataSource로부터 꺼낼 수 있는 커넥션의 최대 개수. 기본값 8개 |
+| maxIdle | DataSource에서 유지할 수 있는 사용되지 않는 커넥션의 최대 개수. 최대 유지개수를 넘어서 반납되는 커넥션은 닫아 버린다. 기본값 8개 |
+| maxWait | 발급한 커넥션의 수가 최댓값에 도달한 상태에서 또다시 커넥션을 달라는 요청이 들어 왔을 때, 커넥션을 준비하기 위해 기다리는 최대 밀리초. 최대 밀리초가 지날 때까지 반납되는 커넥션이 없으면 예외를 던진다. 기본값은 -1. 즉 커넥션을 반납할 때까지 기다린다. |
+| closeMethod | 톰켓 서버가 종료될 때, 자원을 해제하기 위해 호출되는 메서드의 이름이다.단 매개변수가 없는 메서드여야 한다. 톰캣 서버는 내부적으로 DataSource를 생성할 때 아파치 DBCP의 BasicDataSource 구현체를 사용한다. BasicDataSource의 자원 해제 메서드는 close()이기 때문에, 이 속성의 값으로 close를 지정하면 된다. |
+
+
+##### 3.웹어플리케이션의 DD파일을 열고 다음과 같이 편집한다.
+	
+```java
+
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+	http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd" 
+	id="WebApp_ID" version="3.0">
+	<display-name>web05</display-name>
+	
+  	<resource-ref>
+      	<res-ref-name>jdbc/studydb</res-ref-name>
+      	<res-type>javax.sql.DataSource</res-type>
+      	<res-auth>Container</res-auth>
+  	</resource-ref>
+	
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.htm</welcome-file>
+		<welcome-file>index.jsp</welcome-file>
+	</welcome-file-list>
+</web-app>
 		
-  		<resource-ref>
-      		<res-ref-name>jdbc/studydb</res-ref-name>
-      		<res-type>javax.sql.DataSource</res-type>
-      		<res-auth>Container</res-auth>
-  		</resource-ref>
-		
-		<welcome-file-list>
-			<welcome-file>index.html</welcome-file>
-			<welcome-file>index.htm</welcome-file>
-			<welcome-file>index.jsp</welcome-file>
-		</welcome-file-list>
-	</web-app>	
-	```
+```
 	
+`<web-app>`태그 안에 `<resource-ref>`태그 문법은 다음과 같다.
 	
-	`<web-app>`태그 안에 `<resource-ref>`태그 문법은 다음과 같다.
-	
-	
-	
-	```
-	<resource-ref>
-		<res-ref-name>JNDI 이름</res-ref-naem>
-		<res-type>리턴될 자원의 클래스 이름(패키지명포함)</res-type>
-		<res-auth>자원 관리의 주체</res-auth>
-	</resource-ref>
-	```
 
-4. 클래스에 적용하기
+```
+<resource-ref>
+	<res-ref-name>JNDI 이름</res-ref-naem>
+	<res-type>리턴될 자원의 클래스 이름(패키지명포함)</res-type>
+	<res-auth>자원 관리의 주체</res-auth>
+</resource-ref>	
+```
+
+##### 4.클래스에 적용하기
 	
 	
-	```java
+```java
 	import javax.naming.InitialContext;
 	import javax.servlet.ServletContext;
 	import javax.servlet.ServletContextEvent;
@@ -396,10 +400,10 @@ DataSource를 사용하는 이유는 서버에서 관리하기 때문에 데이�
   	@Override
  	public void contextDestroyed(ServletContextEvent event) {}
 	}
-	```
+```
 	
 	
-	톰캣서버에서 자원을 찾기 위해 `InitialContext`객체를 생성햇다. `InitialContext`의 	`lookup()`메서드를 이용하면, JNDI 이름으로 등록되어 있는 서버 자원을 찾을 수 있다. 	`contextDestroyed()`메서드를 보면 자원을 해제하는 어떤 코드도 작성되어 있지 않다. 이는 톰	캣서버에 자동으로 해제하라고 설정되어 있기 때문dlek.
+톰캣서버에서 자원을 찾기 위해 `InitialContext`객체를 생성햇다. `InitialContext`의 `lookup()`메서드를 이용하면, JNDI 이름으로 등록되어 있는 서버 자원을 찾을 수 있다. `contextDestroyed()`메서드를 보면 자원을 해제하는 어떤 코드도 작성되어 있지 않다. 이는 톰캣서버에 자동으로 해제하라고 설정되어 있기 때문이다.
 	
 <br />
 
