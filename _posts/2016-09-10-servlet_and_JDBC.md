@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Servlet와 JDBC
+title: HttpServlet와 JDBC, Refresh,Filter
 date: 2016-09-10 22:10
 categories: web
 ---
