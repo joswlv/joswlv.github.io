@@ -1,0 +1,1438 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Joswlv</title>
+    <meta name="description" content="">
+
+    <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="stylesheet" href="/css/fontawesome/css/font-awesome.min.css ">
+    <link rel="stylesheet" href="/css/main.css ">
+    <link rel="canonical" href="http://joswlv.github.io/page3/">
+    <link rel="alternate" type="application/rss+xml" title="Joswlv" href="http://joswlv.github.io/feed.xml ">
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-83868242-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</head>
+
+
+  <body>
+
+    <header id="top">
+    <div class="wrapper">
+        <a href="/" class="brand">Joswlv</a>
+        <small></small>
+        <button id="headerMenu" class="menu"><i class="fa fa-bars"></i></button>
+        <nav id="headerNav">
+            <ul>
+                <li>
+                    
+                    <a href="/">
+                    
+                        <i class="fa fa-home"></i>Home
+                    </a>
+                </li>
+
+                
+                    
+                    <li>
+                        
+                        <a href="/archive/">
+                        
+                            <i class="fa fa-archive"></i>Archives
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/category/">
+                        
+                            <i class="fa fa-th-list"></i>Categories
+                        </a>
+                    </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        </nav>
+    </div>
+</header>
+
+
+        <div class="page clearfix" index>
+    <div class="left">
+        <!-- <h1>Welcome to SW's Blog!</h1>
+        <small></small> -->
+        <hr>
+        <ul>
+            
+              <li>
+                <h2>
+                  <a class="post-link" href="/2016/09/13/jsp_tag/">JSP 각종 태그들</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-09-13
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#web" title="Category: web" rel="category">web</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="jsp--">1. JSP 액션 태그</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>액션</th>
+      <th>설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>&lt;jsp:useBean&gt;</td>
+      <td>자바 인스턴스를 준비한다. 보관소에서 자바 인스턴스를 꺼내거나, 자바 인스턴스를 새로 만들어 보관소에 저장하는 코드를 생성한다. 자바인스턴스를 자바 빈(Java Bean)이라고 한다.</td>
+    </tr>
+    <tr>
+      <td>&lt;jsp:setProperty&gt;</td>
+      <td>자바빈의 프로퍼티 값을 설정합니다. 자바 객체의 셋터 메서드를 호출하는 코드를 생성한다.</td>
+    </tr>
+    <tr>
+      <td>&lt;jsp:getProperty&gt;</td>
+      <td>자바빈의 프로퍼티 값을 꺼낸다. 자바 객체의 겟터메서드를 호출하는 코드를 생성한다.</td>
+    </tr>
+    <tr>
+      <td>&lt;jsp:include&gt;</td>
+      <td>정적 또는 동적자원을 인클루딩 하는 자바 코드를 생성한다.</td>
+    </tr>
+    <tr>
+      <td>&lt;jsp:forward&gt;</td>
+      <td>현재 페이지의 실행을 멈추고 다른 정적자원이나 동적자원으로 포워딩하는 자바 코드를 생성한다.</td>
+    </tr>
+    <tr>
+      <td>&lt;jsp:param&gt;</td>
+      <td>jsp:include, jsp:forward, jsp:params의 자식 태그로 사용할 수 있다. ServletRequest 객체에 매게변수를 추가하는 코드를 생성한다.</td>
+    </tr>
+    <tr>
+      <td>&lt;jsp:plugin&gt;</td>
+      <td>Object 또는 Embed HTML태그를 생성한다.</td>
+    </tr>
+    <tr>
+      <td>&lt;jsp:element&gt;</td>
+      <td>임의의 xml태그나 html태그를 생성한다.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="jspusebean-">jsp:useBean 문법</h4>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="o">&lt;</span><span class="nl">jsp:</span><span class="n">useBean</span> <span class="n">id</span> <span class="o">=</span> <span class="err">'이름'</span> <span class="n">scope</span><span class="o">=</span><span class="s">"page|request|session|application"</span>
+			<span class="kd">class</span><span class="err">="클래스명"</span> <span class="nc">type</span><span class="o">=</span><span class="s">"타입명"</span> <span class="o">/&gt;</span>
+</code></pre>
+</div>
+
+<h4 id="jspusebean--1"><jsp:useBean> 사용예</jsp:useBean></h4>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="o">&lt;</span><span class="nl">jsp:</span><span class="n">useBean</span> <span class="n">id</span><span class="o">=</span><span class="s">"members"</span>
+			<span class="n">scope</span><span class="o">=</span><span class="s">"request"</span>
+			<span class="kd">class</span><span class="err">="</span><span class="nc">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">ArrayList</span><span class="s">"
+			type="</span><span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">ArrayList</span><span class="o">&lt;</span><span class="n">spms</span><span class="o">.</span><span class="na">vo</span><span class="o">.</span><span class="na">Member</span><span class="o">&gt;</span><span class="err">"</span><span class="o">/&gt;</span>
+</code></pre>
+</div>
+
+<ul>
+  <li>id 속성 - 객체이름을 설정한다. 이 이름을 사용하여 보관소로부터 값을 꺼낸다. 또 꺼낸 객체의 참조 변수이름으로 사용한다.</li>
+  <li>scope 속성 - 기존의 객체를 조회하거나 새로 만든 객체를 저장할 보관소를 지정한다.</li>
+  <li>class 속성 - 자바 객체를 생성할 때 사용할 클래스 이름을 지정한다. 클래스 이름은 반드시 패키지 이름을 포함해야하고, 인터페이스 이름은 안된다.</li>
+  <li>type 속성 - 참조 변수를 선언할 때 사용할 타입의 이름입니다. 클래스 이름 또는 인터페이스 이름이 올 수 있다.</li>
+</ul>
+
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/09/13/jsp_tag/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
+                  <a class="post-link" href="/2016/09/13/jsp_tag_datastorage/">서블릿 데이터 보관소</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-09-13
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#web" title="Category: web" rel="category">web</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="section">서블릿의 데이터 보관소</h1>
+
+<p><img src="http://joswlv.github.io/images/servlet_storage.png" alt="" /></p>
+
+<h3 id="servletcontext-">ServletContext 보관소</h3>
+
+<p>웹 애플리케이션이 시작 될 때 생성되어 웹 애플리케이션 종료될 때까지 유지된다. 이 보관소에 데이터를 보관하면 웹 애플리케이션이 실행되는 동안에는 모든 서블릿이 사용 할 수 있다. <code class="highlighter-rouge">application</code>변수를 통해 이 보관소를 참조할 수 있다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">init</span><span class="o">(</span><span class="n">ServletConfig</span> <span class="n">config</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">ServletException</span> <span class="o">{</span>
+		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"AppInitServlet 준비…"</span><span class="o">);</span>
+		<span class="kd">super</span><span class="o">.</span><span class="na">init</span><span class="o">(</span><span class="n">config</span><span class="o">);</span>
+		<span class="k">try</span> <span class="o">{</span>
+			<span class="n">ServletContext</span> <span class="n">sc</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">getServletContext</span><span class="o">();</span>
+			<span class="n">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="n">sc</span><span class="o">.</span><span class="na">getInitParameter</span><span class="o">(</span><span class="s">"driver"</span><span class="o">));</span>
+			<span class="n">Connection</span> <span class="n">conn</span> <span class="o">=</span> <span class="n">DriverManager</span><span class="o">.</span><span class="na">getConnection</span><span class="o">(</span>
+						<span class="n">sc</span><span class="o">.</span><span class="na">getInitParameter</span><span class="o">(</span><span class="s">"url"</span><span class="o">),</span>
+						<span class="n">sc</span><span class="o">.</span><span class="na">getInitParameter</span><span class="o">(</span><span class="s">"username"</span><span class="o">),</span>
+						<span class="n">sc</span><span class="o">.</span><span class="na">getInitParameter</span><span class="o">(</span><span class="s">"password"</span><span class="o">));</span>
+			
+			<span class="n">sc</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="s">"conn"</span><span class="o">,</span> <span class="n">conn</span><span class="o">);</span>
+		<span class="o">}</span> <span class="k">catch</span><span class="o">(</span><span class="n">Throwable</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">throw</span> <span class="k">new</span> <span class="nf">ServletException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">destroy</span><span class="o">()</span> <span class="o">{</span>
+		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"AppInitServlet 마무리..."</span><span class="o">);</span>
+		<span class="kd">super</span><span class="o">.</span><span class="na">destroy</span><span class="o">();</span>
+		<span class="n">Connection</span> <span class="n">conn</span> <span class="o">=</span> 
+				<span class="o">(</span><span class="n">Connection</span><span class="o">)</span><span class="k">this</span><span class="o">.</span><span class="na">getServletContext</span><span class="o">().</span><span class="na">getAttribute</span><span class="o">(</span><span class="s">"conn"</span><span class="o">);</span> 
+		<span class="k">try</span> <span class="o">{</span>
+			<span class="k">if</span> <span class="o">(</span><span class="n">conn</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">conn</span><span class="o">.</span><span class="na">isClosed</span><span class="o">()</span> <span class="o">==</span> <span class="kc">false</span><span class="o">)</span> <span class="o">{</span>
+				<span class="n">conn</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+			<span class="o">}</span>
+		<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{}</span>
+		
+	<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>AppInitServlet클래스를 만들어 init()과 destroy()에서 DB커넥션과 릴리즈를 할 수 있다. 이 때 클래스의 URL 맵핑정보가 없는데, 이를 DD파일에서 다음과 같이 입력한다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="o">&lt;</span><span class="n">servlet</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="n">servlet</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span><span class="n">AppInitServlet</span><span class="o">&lt;/</span><span class="n">servlet</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="n">servlet</span><span class="o">-</span><span class="kd">class</span><span class="err">&gt;</span><span class="nc">spms</span><span class="o">.</span><span class="na">servlets</span><span class="o">.</span><span class="na">AppInitServlet</span><span class="o">&lt;/</span><span class="n">servlet</span><span class="o">-</span><span class="kd">class</span><span class="err">&gt;</span>
+    <span class="err">&lt;</span><span class="nc">load</span><span class="o">-</span><span class="n">on</span><span class="o">-</span><span class="n">startup</span><span class="o">&gt;</span><span class="mi">1</span><span class="o">&lt;/</span><span class="n">load</span><span class="o">-</span><span class="n">on</span><span class="o">-</span><span class="n">startup</span><span class="o">&gt;</span>
+<span class="o">&lt;/</span><span class="n">servlet</span><span class="o">&gt;</span>
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">&lt;load-on-startup&gt; &lt;/load-on-startup&gt;</code>태그를 사용해 클라이언트 요청이 없어도 해당 서블릿이 웹어플리케이션이 시작 될 때 자동으로 생성된다. 이 태그의 값은 생성 순서를 의미한다.</p>
+
+<h3 id="httpsession-">HttpSession 보관소</h3>
+
+<p>클라이언트의 최초 요청 시 생성되어 브라우저를 닫을 때까지 유지된다. 보통 로그인 할 때 이 보관소를 초기화하고, 로그아웃하면 이 보관소에 저장된 값들을 비운다. 이 보관소에 값을 보관하면 서블릿이나 JSP 페이지에 상관없이 로그아웃 하기 전까지 계속 값을 유지 가능하다. <code class="highlighter-rouge">session</code>변수를 통해서 이 보관소에 참조할 수 있다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="c1">// HttpSession변수에 값을 저장한다.</span>
+<span class="n">HttpSession</span> <span class="n">session</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getSession</span><span class="o">();</span>
+<span class="n">session</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="s">"member"</span><span class="o">,</span> <span class="n">member</span><span class="o">);</span>
+
+<span class="c1">// HttpSession변수에 저장된 값을 가져다 사용한다.</span>
+<span class="n">Member</span> <span class="n">member</span> <span class="o">=</span> <span class="o">(</span><span class="n">Member</span><span class="o">)</span><span class="n">session</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="s">"member"</span><span class="o">);</span>
+
+<span class="c1">// HttpSession 객체를 제거한다.</span>
+<span class="n">session</span><span class="o">.</span><span class="na">invalidate</span><span class="o">();</span>
+</code></pre>
+</div>
+
+<h3 id="servletrequest">ServletRequest보관소</h3>
+
+<p>클라이언트의 요청이 들어올 때 생성되어, 클라이언트에게 응답 할 때까지 유지된다. 이 보관소는 포워딩이나 인클루딩하는 서블릿들 사이에서 값을 공유 할 때 유용하다. <code class="highlighter-rouge">request</code>변수를 통해 이 보관소에 참조할 수 있다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="c1">// JSP로 출력을 위임한다.</span>
+<span class="n">RequestDispatcher</span> <span class="n">rd</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getRequestDispatcher</span><span class="o">(</span><span class="s">"/member/MemberList.jsp"</span><span class="o">);</span>
+<span class="n">rd</span><span class="o">.</span><span class="na">include</span><span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">);</span>
+</code></pre>
+</div>
+
+<h3 id="jspcontext">JspContext보관소</h3>
+
+<p>JSP 페이지를 실행하는 동안만 유지. 실제로 잘 쓸 일이 없다. <code class="highlighter-rouge">pageContext</code>변수를 통해서 이 보관소를 참조할 수 있다.</p>
+
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/09/13/jsp_tag_datastorage/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
+                  <a class="post-link" href="/2016/09/12/view_and_jsp/">뷰 컴포넌트와 JSP</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-09-12
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#web" title="Category: web" rel="category">web</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="jspjava-server-pages">1. JSP(Java Server Pages)</h1>
+
+<p>JSP 기술의 가장 중요한 목적은 콘텐츠를 출력하는 코딩을 단순화 하는 것이다.</p>
+
+<h3 id="jsp-">JSP 구동원리</h3>
+
+<ol>
+  <li>개발자는 서버에 JSP 파일은 작성한다. 클라이언트가 JSP를 실행해 달라고 요청을 하면, 서블릿 컨테이너는 JSP파일에 대응하는 자바 서블릿을 찾아서 실행한다.</li>
+  <li>만약 JSP에 대응하는 서블릿이 없거나 JSP파일이 변경되었다면, <code class="highlighter-rouge">JSP엔진</code>을 통해서 JSP파일을 해석하여 서블릿 자바소스를 생성한다.</li>
+  <li>서블릿 자바 소스는 자바 컴파일러를 통해 서블릿 클래스 파일로 컴파일된다. JSP파일을 바꿀 때마다 이 과정을 반복한다.</li>
+  <li>JSP로부터 생성된 서블릿은 서블릿 구동 방식에 다라 실행된다. 즉 서블릿의 <code class="highlighter-rouge">service()</code>메서드가 호출되고, 출력 메서드를 통해 서블릿이 생성한 HTML 화면을 웹브라우저로 보낸다.</li>
+</ol>
+
+<blockquote>
+  <p>결론은 JSP가 직접 실행되는 것이 아니라 JSP로부터 만들어진 서블릿이 실행된다.</p>
+</blockquote>
+
+<h3 id="httpjsppage-">HttpJspPage 인터페이스</h3>
+
+<p>JSP엔진은 JSP 파일로 부터 서블릿 클래스를 생성할 때 <code class="highlighter-rouge">HttpJspPage</code> 인터페이스를 구현한 클래스를 만든다.</p>
+
+<p>상속관계는 다음과 같다.</p>
+
+<blockquote>
+  <ul>
+    <li>Servlet(Interface)
+      <ul>
+        <li>init()</li>
+        <li>service()</li>
+        <li>destory()</li>
+        <li>getServletConfig()</li>
+        <li>getServletInfo()</li>
+      </ul>
+    </li>
+    <li>JspPage(Interface)
+      <ul>
+        <li>jspInit()</li>
+        <li>jspDestory()</li>
+      </ul>
+    </li>
+    <li>HttpJspPage(Interface)
+      <ul>
+        <li>_jspSerivce()</li>
+      </ul>
+    </li>
+  </ul>
+
+</blockquote>
+
+<p><strong>결론적으로 HttpJspPage는 Servlet 인터페이스도 구현한다는 것이기 때문에 해당 클래스는 서블릿이 될 수 있다.</strong></p>
+
+<ul>
+  <li>
+    <p>jspInit()</p>
+
+    <ul>
+      <li>JspPage에 선언된 jspInit()는 JSP객체가 생성될 때 호출된다. 자동 생성된 서블릿 소스 코드에서 init()가 호출될 때 jspInit()를 호출하도록 코딩되어 있다. 그래서 JSP 페이지에서 init()를 오버라이딩 할 일이 있다면 init() 대신 jspInit()를 오버라이딩하면된다.</li>
+    </ul>
+  </li>
+  <li>
+    <p>jspDestory()</p>
+
+    <ul>
+      <li>jspInit()과 마찬가지로 JSP페이지에서 destory()를 오버라이딩 할 일이 있으면 jspDestory()를 오버라이딩 해서 사용하면된다.</li>
+    </ul>
+  </li>
+  <li>
+    <p>_jspService()</p>
+
+    <ul>
+      <li>HttpJspPage에 선언된 _jspService()는 JSP 페이지가 해야 할 작업이 들어 있는 메서드이다. 서블릿 컨테이너가 service()를 호출하면 service() 메서드 내부에서는 바로 이 메서드를 호출함으로써 JSP 페이지에 작성했던 코드가 실행된다.</li>
+    </ul>
+  </li>
+</ul>
+
+<h3 id="jsp---">JSP의 주요 구성 요소</h3>
+
+<h4 id="section">지시자 태그</h4>
+
+<p><code class="highlighter-rouge">page</code>지시자는 JSP페이지와 관련된 속성을 정의할 때 사용하는 태그이다. JSP 지시자에는 <code class="highlighter-rouge">page</code>, <code class="highlighter-rouge">taglib</code>, <code class="highlighter-rouge">include</code>가 있다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="o">&lt;%</span><span class="nd">@page</span> <span class="kn">import</span><span class="err">="</span><span class="nn">spms.vo.Member</span><span class="s">"%&gt;
+&lt;%@page import="</span><span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">ArrayList</span><span class="s">"%&gt;
+&lt;%@ page 
+	language="</span><span class="n">java</span><span class="s">" 
+	contentType="</span><span class="n">text</span><span class="o">/</span><span class="n">html</span><span class="o">;</span> <span class="n">charset</span><span class="o">=</span><span class="n">UTF</span><span class="o">-</span><span class="mi">8</span><span class="s">"
+    pageEncoding="</span><span class="n">UTF</span><span class="o">-</span><span class="mi">8</span><span class="err">"</span><span class="o">%&gt;</span>
+</code></pre>
+</div>
+
+<ul>
+  <li><code class="highlighter-rouge">language속성</code>은 스크립트릿(Scriptlet)이나, 표현식(Expression element), 선언부(Declaration element)를 작성할때 사용한다.</li>
+  <li><code class="highlighter-rouge">contenttype속성</code>은 출력할 데이터의 MIME타입과 문자 집합을 지정한다.</li>
+  <li><code class="highlighter-rouge">pageEncoding속성</code>은 출력할 데이터의 문자 집합을 지정한다. 기본값은 <code class="highlighter-rouge">ISO-8859-1</code>이다. 만약 이속성을 생략하면 <code class="highlighter-rouge">contentType</code>에 설정된 값을 사용한다. <code class="highlighter-rouge">contentType속성</code>에도 없다면 기본값 <code class="highlighter-rouge">ISO-8859-1</code>을 사용한다.</li>
+</ul>
+
+<h4 id="section-1">스크립트릿 태그</h4>
+
+<p>JSP 페이지 안에서 자바코드를 넣을 때는 스크립트릿(Scriptlet Elements)태그 <code class="highlighter-rouge">&lt;% %&gt;</code>안에 작성한다. <code class="highlighter-rouge">&lt;% 자바 코드 %&gt;</code></p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="o">&lt;%</span>
+<span class="n">String</span> <span class="n">v1</span> <span class="o">=</span> <span class="s">""</span><span class="o">;</span>
+<span class="n">String</span> <span class="n">v2</span> <span class="o">=</span> <span class="s">""</span><span class="o">;</span>
+<span class="n">String</span> <span class="n">result</span> <span class="o">=</span> <span class="s">""</span><span class="o">;</span>
+<span class="n">String</span><span class="o">[]</span> <span class="n">selected</span> <span class="o">=</span> <span class="o">{</span><span class="s">""</span><span class="o">,</span> <span class="s">""</span><span class="o">,</span> <span class="s">""</span><span class="o">,</span> <span class="s">""</span><span class="o">};</span>
+
+<span class="c1">//값이 있을 때만 꺼낸다.</span>
+<span class="k">if</span> <span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"v1"</span><span class="o">)</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+	<span class="n">v1</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"v1"</span><span class="o">);</span>
+	<span class="n">v2</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"v2"</span><span class="o">);</span>
+	<span class="n">String</span> <span class="n">op</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"op"</span><span class="o">);</span>
+	
+	<span class="n">result</span> <span class="o">=</span> <span class="n">calculate</span><span class="o">(</span>
+				<span class="n">Integer</span><span class="o">.</span><span class="na">parseInt</span><span class="o">(</span><span class="n">v1</span><span class="o">),</span> 
+				<span class="n">Integer</span><span class="o">.</span><span class="na">parseInt</span><span class="o">(</span><span class="n">v2</span><span class="o">),</span> 
+				<span class="n">op</span><span class="o">);</span>
+	
+	<span class="k">if</span> <span class="o">(</span><span class="s">"+"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">op</span><span class="o">))</span> <span class="o">{</span>
+		<span class="n">selected</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="s">"selected"</span><span class="o">;</span>
+	<span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="s">"-"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">op</span><span class="o">))</span> <span class="o">{</span>
+		<span class="n">selected</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="s">"selected"</span><span class="o">;</span>
+	<span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="s">"*"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">op</span><span class="o">))</span> <span class="o">{</span>
+		<span class="n">selected</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span> <span class="o">=</span> <span class="s">"selected"</span><span class="o">;</span>
+	<span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="s">"/"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">op</span><span class="o">))</span> <span class="o">{</span>
+		<span class="n">selected</span><span class="o">[</span><span class="mi">3</span><span class="o">]</span> <span class="o">=</span> <span class="s">"selected"</span><span class="o">;</span>
+	<span class="o">}</span>
+<span class="o">}</span>
+<span class="o">%&gt;</span> 
+</code></pre>
+</div>
+
+<p>위 코드의 자바 서블릿 소스에서 _jspService() 메서드를 보면 스크립트릿 태그안의 자바소스가 그대로 입력된 것을 알 수 있다.</p>
+
+<h4 id="jsp--">JSP 내장 객체</h4>
+
+<p>JSP페이지에서 스크립트릿 <code class="highlighter-rouge">&lt;% %&gt;</code>이나 표현식 <code class="highlighter-rouge">&lt;%= %&gt;</code>을 작성할 때 별도의 선언 없이 사용하는 자바 객체를 JSP 내장객체(Implicit Objects)라 한다. <code class="highlighter-rouge">_jspService()</code>는 <code class="highlighter-rouge">javax.servlet.jsp.HttpJspPage</code> 인터페이스에 선언된 메서드이다. JSP페이지로 서블릿을 만들때 반드시 이 인터페이스를 구현하도록 정의 되어 있다.</p>
+
+<p>JSP 기술 사양서는 JSP페이지 작성자가 별도 선언 없이 즉시 이용할 수 있는 9개 객체를 정의 한다.</p>
+
+<p><code class="highlighter-rouge">request</code>, <code class="highlighter-rouge">response</code>, <code class="highlighter-rouge">pageContext</code>, <code class="highlighter-rouge">session</code>, <code class="highlighter-rouge">application</code>, <code class="highlighter-rouge">config</code>, <code class="highlighter-rouge">out</code>, <code class="highlighter-rouge">page</code>, <code class="highlighter-rouge">exception</code> 객체가 <code class="highlighter-rouge">_jspservice()</code>메서드에 선언되어 있어 별도의 선언 없이 스크립트릿과 표현식에 JSP내장객체를 사용할 수 있다.</p>
+
+<h4 id="section-2">선언문 태그</h4>
+
+<p>JSP 선언문(Declarations) <code class="highlighter-rouge">&lt;%! %&gt;</code>은 서블릿 클래스의 맴버(변수나 메서드)를 선언 할 때 사용하는 태그이다. JSP페이지에서 선언문 <code class="highlighter-rouge">&lt;%! %&gt;</code>을 작성하는 위치는 위, 아래, 가운데 어디든 상관 없다. 왜나햐면 선언문은 <code class="highlighter-rouge">_jspService()</code>메서드 안에 복사되는 것이 아니라, <code class="highlighter-rouge">_jspService()</code>밖의 클래스 블록 안에 복사 되기 때문이다.</p>
+
+<p><code class="highlighter-rouge">&lt;%! 맴버 변수 및 메서드 선언 %&gt;</code></p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="o">&lt;%!</span> 
+<span class="kd">private</span> <span class="n">String</span> <span class="nf">calculate</span><span class="o">(</span><span class="kt">int</span> <span class="n">a</span><span class="o">,</span> <span class="kt">int</span> <span class="n">b</span><span class="o">,</span> <span class="n">String</span> <span class="n">op</span><span class="o">)</span> <span class="o">{</span>
+	<span class="kt">int</span> <span class="n">r</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+		<span class="k">if</span> <span class="o">(</span><span class="s">"+"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">op</span><span class="o">))</span> <span class="o">{</span>
+		<span class="n">r</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="o">;</span>	
+	<span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="s">"-"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">op</span><span class="o">))</span> <span class="o">{</span>
+		<span class="n">r</span> <span class="o">=</span> <span class="n">a</span> <span class="o">-</span> <span class="n">b</span><span class="o">;</span>
+	<span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="s">"*"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">op</span><span class="o">))</span> <span class="o">{</span>
+		<span class="n">r</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span><span class="o">;</span>
+	<span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="s">"/"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">op</span><span class="o">))</span> <span class="o">{</span>
+		<span class="n">r</span> <span class="o">=</span> <span class="n">a</span> <span class="o">/</span> <span class="n">b</span><span class="o">;</span>
+	<span class="o">}</span>
+	<span class="k">return</span> <span class="n">Integer</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span><span class="n">r</span><span class="o">);</span>
+<span class="o">}</span>
+<span class="o">%&gt;</span>
+</code></pre>
+</div>
+
+<h4 id="section-3">표현식 태그</h4>
+
+<p>표현식(Expressions)태그는 문자열을 출력할 때 사용한다. <code class="highlighter-rouge">&lt;%= %&gt;</code>안에는 결과를 반환하는 자바코드가 와야한다. 표현식도 스크립트릿과 같이 <code class="highlighter-rouge">_jspService()</code>안에 순서대로 복사한다.</p>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;body&gt;</span>
+<span class="nt">&lt;h2&gt;</span>JSP 계산기<span class="nt">&lt;/h2&gt;</span>
+<span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"Calculator.jsp"</span> <span class="na">method=</span><span class="s">"get"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">name=</span><span class="s">"v1"</span> <span class="na">size=</span><span class="s">"4"</span> <span class="na">value=</span><span class="s">"&lt;%=v1%&gt;"</span><span class="nt">&gt;</span> 
+	<span class="nt">&lt;select</span> <span class="na">name=</span><span class="s">"op"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;option</span> <span class="na">value=</span><span class="s">"+"</span> <span class="err">&lt;%=</span><span class="na">selected</span><span class="err">[</span><span class="na">0</span><span class="err">]%</span><span class="nt">&gt;</span>&gt;+<span class="nt">&lt;/option&gt;</span>
+		<span class="nt">&lt;option</span> <span class="na">value=</span><span class="s">"-"</span> <span class="err">&lt;%=</span><span class="na">selected</span><span class="err">[</span><span class="na">1</span><span class="err">]%</span><span class="nt">&gt;</span>&gt;-<span class="nt">&lt;/option&gt;</span>
+		<span class="nt">&lt;option</span> <span class="na">value=</span><span class="s">"*"</span> <span class="err">&lt;%=</span><span class="na">selected</span><span class="err">[</span><span class="na">2</span><span class="err">]%</span><span class="nt">&gt;</span>&gt;*<span class="nt">&lt;/option&gt;</span>
+		<span class="nt">&lt;option</span> <span class="na">value=</span><span class="s">"/"</span> <span class="err">&lt;%=</span><span class="na">selected</span><span class="err">[</span><span class="na">3</span><span class="err">]%</span><span class="nt">&gt;</span>&gt;/<span class="nt">&lt;/option&gt;</span>
+	<span class="nt">&lt;/select&gt;</span> 
+	<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">name=</span><span class="s">"v2"</span> <span class="na">size=</span><span class="s">"4"</span> <span class="na">value=</span><span class="s">"&lt;%=v2%&gt;"</span><span class="nt">&gt;</span> 
+	<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"submit"</span> <span class="na">value=</span><span class="s">"="</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">size=</span><span class="s">"8"</span> <span class="na">value=</span><span class="s">"&lt;%=result%&gt;"</span><span class="nt">&gt;&lt;br&gt;</span>
+<span class="nt">&lt;/form&gt;</span> 
+<span class="nt">&lt;/body&gt;</span>
+</code></pre>
+</div>
+
+<p>표현식 태그에 작성한 자바코드가 서블릿 파일안에서는 <code class="highlighter-rouge">out.print()</code>출력의 인자값(argument)으로 복사된다. 출력문을 만들 때 <code class="highlighter-rouge">out.print()</code>만 사용하는 것은 아니다. <code class="highlighter-rouge">out.write()</code>도 가능하다 즉 JSP엔진에 따라 만들어지는 자바코드가 달라 질 수 있다. 톰켓에서는 JSP 표현식에 대해 <code class="highlighter-rouge">out.print()</code>메서드를 만든다.</p>
+
+<h1 id="view">2. 뷰(View)</h1>
+
+<h3 id="value-object">Value Object</h3>
+
+<p>데이터베이스에서 가져온 정보를 JSP페이지에 전달하려면 그 정보를 담을 객체가 필요하다. 이렇게 값을 담는 용도로 사용하는 객체를 <code class="highlighter-rouge">값 객체(value object)</code>라고한다. VO는 계층간 또는 객체 간에 데이터를 전달하는 데 용이하므로 <code class="highlighter-rouge">데이터 수송 객체(Data Transfer Object)</code>라고도 한다. 
+보통 데이터베이스 테이블에 대응하여 값 객체를 정의한다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">spms</span><span class="o">.</span><span class="na">vo</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.util.Date</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Member</span> <span class="o">{</span>
+	<span class="kd">protected</span> <span class="kt">int</span> 		<span class="n">no</span><span class="o">;</span>
+	<span class="kd">protected</span> <span class="n">String</span> 	<span class="n">name</span><span class="o">;</span>
+	<span class="kd">protected</span> <span class="n">String</span> 	<span class="n">email</span><span class="o">;</span>
+	<span class="kd">protected</span> <span class="n">String</span> 	<span class="n">password</span><span class="o">;</span>
+	<span class="kd">protected</span> <span class="n">Date</span>		<span class="n">createdDate</span><span class="o">;</span>
+	<span class="kd">protected</span> <span class="n">Date</span>		<span class="n">modifiedDate</span><span class="o">;</span>
+	
+	<span class="kd">public</span> <span class="kt">int</span> <span class="nf">getNo</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="n">no</span><span class="o">;</span>
+	<span class="o">}</span>
+	<span class="kd">public</span> <span class="n">Member</span> <span class="nf">setNo</span><span class="o">(</span><span class="kt">int</span> <span class="n">no</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">no</span> <span class="o">=</span> <span class="n">no</span><span class="o">;</span>
+		<span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+	<span class="o">}</span>
+	<span class="kd">public</span> <span class="n">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="n">name</span><span class="o">;</span>
+	<span class="o">}</span>
+	<span class="kd">public</span> <span class="n">Member</span> <span class="nf">setName</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
+		<span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+	<span class="o">}</span>
+	<span class="kd">public</span> <span class="n">String</span> <span class="nf">getEmail</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="n">email</span><span class="o">;</span>
+	<span class="o">}</span>
+	<span class="kd">public</span> <span class="n">Member</span> <span class="nf">setEmail</span><span class="o">(</span><span class="n">String</span> <span class="n">email</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">email</span> <span class="o">=</span> <span class="n">email</span><span class="o">;</span>
+		<span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+	<span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">setXXX()</code>메소드의 return값을 this로 하는 이유는 다음과 같다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code>
+	<span class="c1">//return this를 사용한 경우</span>
+	<span class="k">while</span><span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="na">next</span><span class="o">())</span> <span class="o">{</span>
+		<span class="n">members</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">Member</span><span class="o">()</span>
+			<span class="o">.</span><span class="na">setNo</span><span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="na">getInt</span><span class="o">(</span><span class="s">"MNO"</span><span class="o">))</span>
+			<span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">"MNAME"</span><span class="o">))</span>
+	<span class="o">}</span>
+
+	<span class="c1">//set메서드 반환값이 없는 경우</span>
+	<span class="n">Member</span> <span class="n">member</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Member</span><span class="o">();</span>
+	<span class="n">member</span><span class="o">.</span><span class="na">setNo</span><span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="na">getInt</span><span class="o">(</span><span class="s">"MNO"</span><span class="o">));</span>
+	<span class="n">member</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">"MNAME"</span><span class="o">));</span>
+	<span class="n">member</span><span class="o">.</span><span class="na">setEmail</span><span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">"EMAIL"</span><span class="o">));</span>
+</code></pre>
+</div>
+
+<p>객체를 생성한 즉시, setter메서드를 연속으로 호출하여 값을 할당한다. 이런 코딩 방식은 스크립팅 언어에서 널리 사용되는 방식이다.</p>
+
+<h3 id="requestdispatcher-forward-include">RequestDispatcher, forward, include</h3>
+
+<p>화면생성을 위해 JSP로 작업을 위임해야한다. 이렇게 다른 서블릿이나 JSP로 작업을 위임할 때 사용하는 객체가 <code class="highlighter-rouge">RequestDispatcher</code>이다. 이 객체는 <code class="highlighter-rouge">HttpservletRequest</code>를 통해서 얻을 수 있다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">RequestDispatcher</span> <span class="n">rd</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getRequestDispatcher</span><span class="o">(</span>
+			<span class="s">"/member/MemberList.jsp"</span><span class="o">);</span>
+</code></pre>
+</div>
+
+<p>예)</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="c1">// request에 회원 목록 데이터 보관한다.</span>
+<span class="n">request</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="s">"members"</span><span class="o">,</span> <span class="n">members</span><span class="o">);</span>
+			
+<span class="c1">// JSP로 출력을 위임한다.</span>
+<span class="n">RequestDispatcher</span> <span class="n">rd</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getRequestDispatcher</span><span class="o">(</span>
+		<span class="s">"/member/MemberList.jsp"</span><span class="o">);</span>
+<span class="n">rd</span><span class="o">.</span><span class="na">include</span><span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">);</span>
+</code></pre>
+</div>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="err">&lt;</span>%@page import="spms.vo.Member"%&gt;
+<span class="err">&lt;</span>%@page import="java.util.ArrayList"%&gt;
+<span class="err">&lt;</span>%@ page 
+	language="java" 
+	contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%&gt;
+<span class="cp">&lt;!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
+	"http://www.w3.org/TR/html4/loose.dtd"&gt;</span>
+<span class="nt">&lt;html&gt;</span>
+<span class="nt">&lt;head&gt;</span>
+<span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">"Content-Type"</span> <span class="na">content=</span><span class="s">"text/html; charset=UTF-8"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;title&gt;</span>회원 목록<span class="nt">&lt;/title&gt;</span>
+<span class="nt">&lt;/head&gt;</span>
+<span class="nt">&lt;body&gt;</span>
+<span class="nt">&lt;h1&gt;</span>회원목록<span class="nt">&lt;/h1&gt;</span>
+<span class="nt">&lt;p&gt;&lt;a</span> <span class="na">href=</span><span class="s">'add'</span><span class="nt">&gt;</span>신규 회원<span class="nt">&lt;/a&gt;&lt;/p&gt;</span>
+<span class="err">&lt;</span>%
+ArrayList<span class="nt">&lt;Member&gt;</span> members = (ArrayList<span class="nt">&lt;Member&gt;</span>)request.getAttribute(
+								"members");
+for(Member member : members) {
+%&gt;
+<span class="err">&lt;</span>%=member.getNo()%&gt;,
+<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">'update?no=&lt;%=member.getNo()%&gt;'</span><span class="nt">&gt;</span><span class="err">&lt;</span>%=member.getName()%&gt;<span class="nt">&lt;/a&gt;</span>,
+<span class="err">&lt;</span>%=member.getEmail()%&gt;,
+<span class="err">&lt;</span>%=member.getCreatedDate()%&gt;
+<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">'delete?no=&lt;%=member.getNo()%&gt;'</span><span class="nt">&gt;</span>[삭제]<span class="nt">&lt;/a&gt;&lt;br&gt;</span>
+<span class="err">&lt;</span>%} %&gt;
+<span class="nt">&lt;/body&gt;</span>
+<span class="nt">&lt;/html&gt;</span>
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">page</code> 지시자로 <code class="highlighter-rouge">import</code>를 처리한다. 그리고 <code class="highlighter-rouge">setAttribute</code>로 넘겨준 값을 <code class="highlighter-rouge">getAttribute()</code>를 호출하여 사용한다.</p>
+
+<h4 id="forward">forward</h4>
+
+<p>포워드 방식은 작업을 한 번 위임하면 다시 이전 서블릿으로 제어권이 돌아오지 않는다.
+포워딩은 예외가 발생하면 화면 내용보다 좀 더 부드러운 안내 문구를 출력하는데 보통 사용한다.</p>
+
+<ul>
+  <li>포워딩(Servlet에서 사용하는 경우)</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">RequestDispatcher</span> <span class="n">rd</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getRequestDispatcher</span><span class="o">(</span><span class="s">"/error.jsp"</span><span class="o">);</span>
+<span class="n">rd</span><span class="o">.</span><span class="na">forward</span><span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">);</span>
+</code></pre>
+</div>
+
+<ul>
+  <li>포워딩(JSP에서 사용하는 경우)</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="o">&lt;</span><span class="nl">jsp:</span><span class="n">forward</span> <span class="n">page</span><span class="o">=</span><span class="s">"/header.jsp"</span><span class="o">/&gt;</span>
+</code></pre>
+</div>
+
+<h4 id="include">include</h4>
+
+<p>인클루드 방식은 다른 서블릿으로 작업을 위임한 후 , 그 서블릿의 실행이 끝나면 다시 이전 서블릿으로 제어권이 넘어온다. 한 jsp에 여러 페이지를 포함할 때 사용한다.</p>
+
+<ul>
+  <li>인클루딩(Servlet에서 사용하는 경우)</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">RequestDispatcher</span> <span class="n">rd</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getRequestDispatcher</span><span class="o">(</span><span class="s">"/Header.jsp"</span><span class="o">);</span>
+<span class="n">rd</span><span class="o">.</span><span class="na">include</span><span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">);</span>
+</code></pre>
+</div>
+
+<ul>
+  <li>인클루딩(JSP에서 사용하는 경우)</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="o">&lt;</span><span class="nl">jsp:</span><span class="n">include</span> <span class="n">page</span><span class="o">=</span><span class="s">"/header.jsp"</span><span class="o">/&gt;</span>
+</code></pre>
+</div>
+
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/09/12/view_and_jsp/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
+                  <a class="post-link" href="/2016/09/12/MVC/">MVC 이해하기</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-09-12
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#web" title="Category: web" rel="category">web</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="mvc-">1. MVC 아키텍처</h1>
+
+<p><img src="http://joswlv.github.io/images/mvc.png" alt="" /></p>
+
+<h3 id="controller-">컨트롤러(controller)컴포넌트의 역할</h3>
+
+<p>클라이언트의 요청을 받았을 때 그 요청에 대해 실제 업무를 수행하는 모델 컴포넌트를 호출하는 일을 한다. 또 클라이언트가 보낸 데이터가 있다면, 모델을 호출할 때 전달하기 쉽게 데이터를 적절히 가공하는 일을 한다. 모델이 업무를 수행을 완료하면, 그 결과를 가지고 화면을 생성하도록 뷰에게 전달한다.</p>
+
+<p>즉 클라이언트 요청에 대해 모델과 뷰를 결정하여 전달하는 일을 한다.</p>
+
+<h3 id="model-">모델(model)컴포넌트의 역할</h3>
+
+<p>데이터 저장소와 연동하여 사용자가 입력한 데이터나 사용자에게 출력할 데이터를 다루는 일을 한다. 특히 여러개의 데이터 변경 작업(추가, 변경, 삭제)을 하나의 작업으로 묵는 트랜잭션을 다루는 일도 한다.</p>
+
+<h3 id="view--">뷰(view) 컴포넌트의 역할</h3>
+
+<p>모델이 처리한 데이터나 그 작업 결과를 가지고 사용자에게 출력할 화면을 만드는 일을 한다. 이렇게 생성된 화면은 웹브라우저가 출력한다.</p>
+
+<p>즉 뷰 컴포넌트는 HTML과 CSS, JavaScript를 사용하여 웹 브라우저가 출력할 UI를 만든다.</p>
+
+<h1 id="mcv-">2. MCV의 이점</h1>
+
+<h3 id="section">높은 재사용성, 넓은 융통성</h3>
+
+<ul>
+  <li><code class="highlighter-rouge">look and feel</code>을 쉽게 교채할 수 있다.</li>
+  <li><code class="highlighter-rouge">on source multi use</code>를 쉽게 구현할 수 있다.</li>
+  <li>코드를 재사용할 수 있다.</li>
+</ul>
+
+<h3 id="section-1">빠른 개발, 저렴한 비용</h3>
+
+<ul>
+  <li>다른 프로젝트에서도 모델 컴포넌트를 재사용할 수 있기 때문에 개발 속도가 빨라진다.</li>
+  <li>소스 코드를 역할에 따라 여러 컴포넌트로 쪼개게 되면, 그 컴포넌트의 나니도에 따라 좀 더 낮은 수준의 개발자를 투입하여 개발 및 유지보수 비용 감소</li>
+</ul>
+
+<h1 id="mvc--">3. MVC 구동 원리</h1>
+
+<p>아래 그림은 클라이언트 요청에서 화면 출력까지 과정을 나타낸다.</p>
+
+<p><img src="http://joswlv.github.io/images/mvca.png" alt="" /></p>
+
+<ol>
+  <li>웹 브라우저가 웹어플리케이션을 실행을 요청하면, 웹서버가 그 요청을 받아서 서블릿 컨테이너에게 넘겨준다. 서블릿 컨테이너는 URL을 확인하여 그 요청을 처리할 서브릿을 찾아 실행한다.</li>
+  <li>서블릿은 실제 업무를 처리하는 모델 자바 객체의 메서드를 호출한다. 만약 웹 브라우저가 보낸 데이터를 저장하거나 변경해야 한다면 그 데이터를 가공하여 VO(Value Object)를 생성하고, 모델 객체의 메서드를 호출할 때 인자값을 넘긴다.</li>
+  <li>모델 객체는 JDBC를 사용하여 매개변수로 넘어온 VO를 데이터베이스에 저장하거나, 데이터베이스로부터 질의 결과를 가져와 VO로 만들어 반환한다. 이렇게 VO는 객체와 객체 사이에 데이터를 전달하는 용도로 사용하기 때문에 <code class="highlighter-rouge">데이터 전송객체(DTO : Data Transfer Object)</code>라고 한다.</li>
+  <li>서블릿은 모델 객체로부터 반환받은 값을 JSP에 전달한다.</li>
+  <li>JSP는 서블릿으로부터 전달받은 VO를 참조하여 웹브라우저가 출력할 결과 화면을 만들고 웹브라우저에 출력함으로써 요청 처리를 완료한다.</li>
+  <li>웹브라우저는 서버로부터 받은 응답 내용을 화면에 출력한다.</li>
+</ol>
+
+<h3 id="reference">Reference</h3>
+<ul>
+  <li><a href="http://www.yes24.com/24/Goods/13159413?Acode=101">열혈강의 자바 웹 개발 워크북</a></li>
+</ul>
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/09/12/MVC/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
+                  <a class="post-link" href="/2016/09/10/servlet_and_JDBC/">HttpServlet와 JDBC, Refresh,Filter</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-09-10
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#web" title="Category: web" rel="category">web</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="jdbc">1. JDBC종류</h1>
+<p>DBMS 밴더는 자신들의 DBMS에 접속할 수 있는 API를 만들어 배포한다. 즉 DMBS를 사용하기 위해서는 밴더가 제공하는 API에 맞게 개발해야한다. 문제는 밴더들 별로, API가 달라 개발비용 및 유지보수에 많은 비용이 들어간다.</p>
+
+<p>그래서 마이크로소프트에서 밴더에 종속 받지 않고 DBMS에 접근 가능한 ODBC를 만들어 배포했다. 대부분의 DBMS API는 ODBC에 포함되어 있다. 이 라이브어리를 <code class="highlighter-rouge">ODBC 드라이버</code>라고 명칭한다.</p>
+
+<h2 id="jdbc-type-1">1) JDBC Type 1</h2>
+
+<p><img src="http://joswlv.github.io/images/jdbctype1.png" alt="" /></p>
+
+<p>주요특징은 다음과 같다.</p>
+
+<ul>
+  <li>ODBC 드라이버를 사용하여 DBMS에 접속</li>
+  <li>JRE에 포함되어 있다</li>
+  <li>속도가 유형중에서 가장 느리다.</li>
+  <li>Excel이나 Access파일에 접속할 때 유용하다.</li>
+</ul>
+
+<h2 id="jdbc-type-2">2) JDBC Type 2</h2>
+
+<p><img src="http://joswlv.github.io/images/jdbctype2.png" alt="" /></p>
+
+<p>주요특징은 다음과 같다.</p>
+
+<ul>
+  <li>DBMS밴더 API 사용</li>
+  <li>별도 JDBC 드라이버를 내려받아야함</li>
+  <li>DBMS 클라이언트의 설치 필요</li>
+</ul>
+
+<h2 id="jdbc-type-3">3) JDBC Type 3</h2>
+
+<p><img src="http://joswlv.github.io/images/jdbctype3.png" alt="" /></p>
+
+<p>주요특징은 다음과 같다.</p>
+
+<ul>
+  <li>미들웨어 서버를 경유하여 DBMS에 접속</li>
+  <li>미들웨어에서 제공하는 JDBC 드라이버 사용</li>
+  <li>ODBC나 밴더 API처럼 C나 C++로 만든 API를 호출하지 않기 때문에 Pure Java라 한다.</li>
+</ul>
+
+<h2 id="jdbc-type-4">4) JDBC Type 4</h2>
+
+<p><img src="http://joswlv.github.io/images/jdbctype4.png" alt="" /></p>
+
+<p>주요특징은 다음과 같다.</p>
+
+<ul>
+  <li>DBMS 프로토콜을 사용하여 직접 통신(ODBC드라이버가 필요없다.)</li>
+  <li>별도로 JDBC 드라이버 내려받아야한다.</li>
+  <li>Pure Java</li>
+  <li>주로 사용되는 드라이버이다.</li>
+</ul>
+
+<h1 id="jdbc-">2. JDBC와 서블릿</h1>
+
+<h2 id="javasql">1) java.sql</h2>
+
+<h3 id="section">1-1) 드라이버등록</h3>
+<p>JDBC프로그래밍의 첫번째 작업은 <code class="highlighter-rouge">DriverManager</code>를 이용하여 java.sql.Driver 인터페이스 구현체를 등록하는 것이다. 방법은 두가지가 있다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">DriverManager</span><span class="o">.</span><span class="na">registerDriver</span><span class="o">(</span><span class="k">new</span> <span class="n">com</span><span class="o">.</span><span class="na">mysql</span><span class="o">.</span><span class="na">jdbc</span><span class="o">.</span><span class="na">Driver</span><span class="o">());</span> <span class="c1">//DriverManager를 직접이용</span>
+
+<span class="n">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">getInitParameter</span><span class="o">(</span><span class="s">"QName"</span><span class="o">));</span> <span class="c1">//클래스로딩 </span>
+
+<span class="c1">//QName을 서블릿 초기화 매개변수의 값으 가져와서 작성하는 방법도 있다.</span>
+
+<span class="k">this</span><span class="o">.</span><span class="na">getInitParameter</span><span class="o">(</span><span class="cm">/*매개변수 이름 */</span><span class="o">);</span>
+</code></pre>
+</div>
+
+<h3 id="section-1">1-2) 데이터베이스 연결</h3>
+
+<p>다음과 같이 <code class="highlighter-rouge">DriverManager</code>의 <code class="highlighter-rouge">getConnection()</code>을 호출하여 MySQL 서버에 연결할 수 있다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">conn</span> <span class="o">=</span> <span class="n">DriverManager</span><span class="o">.</span><span class="na">getConnection</span><span class="o">(</span>
+					<span class="s">"jdbc:mysql://localhost/studydb"</span><span class="o">,</span> <span class="c1">//JDBC URL</span>
+					<span class="s">"study"</span><span class="o">,</span>	<span class="c1">// DBMS 사용자 아이디</span>
+					<span class="s">"study"</span><span class="o">);</span>	<span class="c1">// DBMS 사용자 암호</span>
+</code></pre>
+</div>
+
+<h3 id="sql---">1-3) SQL 실행 및 준비</h3>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">stmt</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="na">createStatement</span><span class="o">();</span> <span class="c1">//java.sql.Statement 인터페이스</span>
+
+<span class="n">stmt</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="na">prepareStatement</span><span class="o">(</span>       <span class="c1">//java.sql.PrepareStatement 인터페이스</span>
+					<span class="s">"INSERT INTO MEMBERS(EMAIL,PWD,MNAME,CRE_DATE,MOD_DATE)"</span>
+					<span class="o">+</span> <span class="s">" VALUES (?,?,?,NOW(),NOW())"</span><span class="o">);</span>
+			<span class="n">stmt</span><span class="o">.</span><span class="na">setString</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"email"</span><span class="o">));</span>
+			<span class="n">stmt</span><span class="o">.</span><span class="na">setString</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"password"</span><span class="o">));</span>
+			<span class="n">stmt</span><span class="o">.</span><span class="na">setString</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"name"</span><span class="o">));</span>
+
+</code></pre>
+</div>
+
+<h4 id="javasqlstatement--">java.sql.Statement 인터페이스의 구현체</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>메서드</th>
+      <th>설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>executeQuery()</td>
+      <td>결과가 만들어지는 SQL문을 실행할때 사용, 보통 SELECT문을 실행</td>
+    </tr>
+    <tr>
+      <td>executeUpdate()</td>
+      <td>DML과 DDL관련 SQL문을 실행할때 사용</td>
+    </tr>
+    <tr>
+      <td>execute()</td>
+      <td>SELECT, DML, DDL 명령문 모두에 사용가능</td>
+    </tr>
+    <tr>
+      <td>executeBatch()</td>
+      <td>addBatch()로 등록한 여러개의 SQL문을 한꺼번에 실행할때 사용</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><code class="highlighter-rouge">PreparedStatement</code>는 반복적인 질의를 하거나, 입력 매개변수가 많은 경우에 유용하다. 특히 이미지와 같은 바이너리 데이터를 저장하거나 변경할 경우는 <code class="highlighter-rouge">PreparedStatement</code>만 가능하다.</p>
+
+<p>위의 예제에서 SQL문에서 <code class="highlighter-rouge">?</code>문자로 표시된 것을 입력 매개변수라고 한다. 입력 항목의 값은 SQL문을 실행하기 전에 <code class="highlighter-rouge">setXXX()</code>메서드를 호출하여 설정해야한다.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>비교항목</th>
+      <th>Statement</th>
+      <th>PreparedStatement</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>실행속도</td>
+      <td>질의 할때마다 SQL문을 컴파일한다.</td>
+      <td>SQL문을 미리 준비하여 컴파일 해둔다. 입력 매개변수 값만 추가하여 서버에 전송한다. 특히 여러번 반복하여 질의하는 경우, 실행속도가 바름</td>
+    </tr>
+    <tr>
+      <td>바이너리데이터전송</td>
+      <td>불가능</td>
+      <td>가능</td>
+    </tr>
+    <tr>
+      <td>프로그래밍 편의성</td>
+      <td>SQL문 안에 입력 매개변수 값이 포함되어 있어서 SQL문이 복잡하고 매개변수가 여러개인 경우 코드 관리가 힘들다.</td>
+      <td>SQL문과 입력 매개변수가 분리되어 있어 코드작성이 편리하다.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="javasqlresultset--">java.sql.ResultSet 인터페이스의 구현체</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>메서드</th>
+      <th>설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>first()</td>
+      <td>서버에서 첫번째 레코드를 가져온다.</td>
+    </tr>
+    <tr>
+      <td>last()</td>
+      <td>서버에서 마지막번째 레코드를 가져온다.</td>
+    </tr>
+    <tr>
+      <td>previous()</td>
+      <td>서버에서 이전 레코드를 가져온다.</td>
+    </tr>
+    <tr>
+      <td>next()</td>
+      <td>서버에서 다음 레코드를 가져온다.</td>
+    </tr>
+    <tr>
+      <td>getXXX()</td>
+      <td>레코드에서 특정 컬럼의 값을 꺼낸다. XXX는 칼럼의 타입이다.</td>
+    </tr>
+    <tr>
+      <td>updateXXX()</td>
+      <td>레코드에서 특정 칼럼의 값을 변경한다.</td>
+    </tr>
+    <tr>
+      <td>deleteRow()</td>
+      <td>현재 레코드를 지운다.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/09/10/servlet_and_JDBC/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
+                  <a class="post-link" href="/2016/09/10/Servlet_programming/">Servlet_programming</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-09-10
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#web" title="Category: web" rel="category">web</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="cgi-">1.CGI프로그램과 서블릿</h1>
+
+<h2 id="cgi">1)CGI란?</h2>
+<p><img src="http://joswlv.github.io/images/cgi.png" alt="" /></p>
+
+<p>위의 그림은 웹어플리케이션의 실행과정이다. 웹브라우저가 웹서버에게 요청을하고, 서버는 클라이언트가 요청한 프로그램을 찾아서 실행한다. 그리고 해당 프로그램은 작업을 수행한 후 그 결과를 웹서버에게 돌려준다. 그러면 웹서버는 그 결과를 HTTP 형식에 맞추어 웹브라우저에게 보낸다.</p>
+
+<p>이대 웹서버와 프로그램 사이에 데이터를 주고받는 규칙을 <code class="highlighter-rouge">CGI(Common Gateway Interface)</code>라고 한다. 그래서 CGI규칙에 따라서 웹서버와 데이터를 주고 받도록 작성된 프로그램을 <code class="highlighter-rouge">CGI프로그램</code>이라한다.</p>
+
+<p>CGI프로그램은 C나 C++, java와 같은 컴파일 언어와 스크립언어로 작성할 수 있다.</p>
+
+<h2 id="section">2)서블릿</h2>
+
+<p>자바로 만든 CGI프로그램을 <code class="highlighter-rouge">서블릿(Servlet)</code>이라고 한다. 자바 서블릿이 다른 CGI 프로그램과 다른 점은, 웹 서버와 직접 데이터를 주고 받지 않으며, 전문 프로그램에 의해 관리된다는 점이다.</p>
+
+<h3 id="section-1">2-1)서블릿 컨테이너</h3>
+
+<p><img src="http://joswlv.github.io/images/servlet.png" alt="" /></p>
+
+<p>서블릿의 생성과 실행, 소멸 등 생명주기를 관리하는 프로그램을 <code class="highlighter-rouge">서블릿 컨테이너(Servlet Container)</code>라고 한다. 서블릿 컨테이너가 서블릿을 대신하여 CGI규칙에 따라 웹서버와 데이터를 주고 받는다. 더 이상 CGI규칙에 대해 알 필요가 없지만, 서블릿 컨테이너와 서블릿 사이의 규칙을 알아야한다.</p>
+
+<h1 id="javaxservletservlet-">2. javax.servlet.Servlet 인터페이스</h1>
+
+<h2 id="section-2">1)서블릿 인터페이스</h2>
+<p>서블릿 클래스는 반드시 javax.servlet.Servlet 인터페이스를 구현해야한다. 서블릿 컨테이너가 서블릿에 대해 호출할 메서드를 정의한 것이 Servlet인터페이스 이다.</p>
+
+<blockquote>
+  <p>서블릿 생명주기와 관련된 메소드</p>
+
+  <ul>
+    <li>init()</li>
+    <li>service()</li>
+    <li>destroy()</li>
+  </ul>
+</blockquote>
+
+<ul>
+  <li>getServletInfo()</li>
+  <li>getServletConfig()</li>
+</ul>
+
+<p>여기서 <code class="highlighter-rouge">service()</code>는 클라이언트가 요청할 때 마다 호출되는 메서드이다. 즉 실질적으로 서비스 작업을 수행하는 메서드 이다. 이 메서드에 서블릿이 해야 할 일을 작성하면된다.</p>
+
+<p><code class="highlighter-rouge">web.xml</code>파일을 <code class="highlighter-rouge">배치기술서(Deployment Descriptor)</code> 또는 <code class="highlighter-rouge">DD파일</code>이라고 한다. 여기에 웹어플리케이션의 배치 정보를 담고 있다. DD파일에 등록되지 않은 서블릿은 서블릿 컨테이너가 찾을 수 없다. URL과 서블릿도 매핑한다.</p>
+
+<blockquote>
+  <p>*참고 페키지명+클래스명 = Fully qualified name = QName 이라한다.</p>
+</blockquote>
+
+<h2 id="section-3">2) 서블릿 구동 절차</h2>
+
+<ol>
+  <li>클라이언트의 요청이 들어오면 서블릿 컨테이너는 서블릿을 찾는다.</li>
+  <li>서블릿 클래스를 로딩하고 인스턴스를 준비한 후 생성자를 호출한다. 그리고 서블릿 초기화 메서드인 init()를 호출합니다.</li>
+  <li>클라이언트 요청을 처리하는 service() 메서드를 호출한다.</li>
+  <li>service() 메서드에서 만든 결과를 HTTP 프로토콜에 맞추어 클라이언트에 응답하는 것으로 요청처리를 완료합니다.</li>
+  <li>서블릿 컨테이너를 종료하거나, 웹애플리케이션을 종료를 한다면,</li>
+  <li>서블릿 컨테이너는 종료되기 전에 서블릿이 마무리 작업을 수행할 수 있도록 생성된 모든 서블릿에 대해 destroy()메서드를 호출한다.</li>
+</ol>
+
+<h2 id="welcom-files">3) Welcom Files</h2>
+
+<p><code class="highlighter-rouge">웰컴 파일(Welcome Files)</code>이란, 디렉토리의 기본 웹페이지를 의미한다. 웰컴파일의 이름은 <code class="highlighter-rouge">web.xml</code>의 <code class="highlighter-rouge">&lt;welcome-file-list&gt;</code> 태그를 사용하여 설정할 수 있다. 이 태그의 하위 태그로 <code class="highlighter-rouge">&lt;welcome-file&gt;</code>이 있는데, 여기에 파일이름을 적으면 된다. 여러 개의 웰컴파일을 등록하게 되면, 디렉토리에서 웰컴 파일을 찾을 때 위에서부터 아래로 순차적으로 조회한다.</p>
+
+<h1 id="genericservlet">3. GenericServlet</h1>
+
+<p><code class="highlighter-rouge">GenericServlet</code>은 추상 클래스로 서블릿 클래스가 필요로 하는 <code class="highlighter-rouge">init()</code>, <code class="highlighter-rouge">destroy()</code>, <code class="highlighter-rouge">getServletConfig()</code>, <code class="highlighter-rouge">getServletInfo()</code>를 미리 구현하여 상속한다. 즉 <code class="highlighter-rouge">service()</code>메소드만 구현하면 된다.</p>
+
+<h2 id="servletrequest--">1) ServletRequest의 주요 메소드</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>메소드</th>
+      <th>설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>getRemoteAddr()</td>
+      <td>서비스를 요청한 클라이언트의 Ip주소를 반환</td>
+    </tr>
+    <tr>
+      <td>getScheme()</td>
+      <td>클라이언트가 요청한 URI형식 Scheme을 반환 즉 url에서 ‘:’문자전에 오는 값을 반환</td>
+    </tr>
+    <tr>
+      <td>getProtocol()</td>
+      <td>요청한 프로토콜의 이름과 버전을 반환</td>
+    </tr>
+    <tr>
+      <td>getParameterNames()</td>
+      <td>요청정보에서 매개변수 이름만 추출하여 반환</td>
+    </tr>
+    <tr>
+      <td>getParameterValues()</td>
+      <td>요청정보에서 매개변수 값만 추출하여 반환</td>
+    </tr>
+    <tr>
+      <td>getParameterMap()</td>
+      <td>요청 정보에서 매개변수들을 Map객체에 담아서 반환</td>
+    </tr>
+    <tr>
+      <td>setCharacteerEncoding()</td>
+      <td>POST요청의 매개변수에 대한 문자 집합을 설정 (기본은 <code class="highlighter-rouge">ISO-8859-1</code>)</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="servletresponse-">2) servletResponse 메소드</h2>
+<ul>
+  <li>setContentType() : 출력할 데이터의 인코딩 형식과 문자 집합을 설정</li>
+  <li>setCharacterEncoding() : 출력할 데이터의 문자 집합을 설정</li>
+</ul>
+
+<p>ex) `res.setContentType(“text/plain;chartest=UTF-8”);</p>
+
+<blockquote>
+  <p><code class="highlighter-rouge">setContentType()</code>의 인자 형식이 올바르지 않으면 웹브라우저는 서버에서 받은 결과를 화면에 출력하는 대신 파일저장 대화창을 띄운다.</p>
+</blockquote>
+
+<h1 id="webservlet------">4. @WebServlet 애노테이션을 이용한 서블릿 배치 정보 설정</h1>
+
+<p><code class="highlighter-rouge">Servlet 3.0</code> 사양부터는 애노테이션으로 서블릿 배치 정보를 설정할 수 있다. <code class="highlighter-rouge">web.xml</code>대신 애노테이션을 이용해 배치 정보를 작성해보자</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@WebServlet</span><span class="o">(</span>
+  <span class="n">urlPatterns</span><span class="o">={</span><span class="s">"/member/update"</span><span class="o">},</span>
+  <span class="n">initParams</span><span class="o">={</span>
+	  <span class="nd">@WebInitParam</span><span class="o">(</span><span class="n">name</span><span class="o">=</span><span class="s">"driver"</span><span class="o">,</span><span class="n">value</span><span class="o">=</span><span class="s">"com.mysql.jdbc.Driver"</span><span class="o">),</span>
+	  <span class="nd">@WebInitParam</span><span class="o">(</span><span class="n">name</span><span class="o">=</span><span class="s">"url"</span><span class="o">,</span><span class="n">value</span><span class="o">=</span><span class="s">"jdbc:mysql://localhost/studydb"</span><span class="o">),</span>
+	  <span class="nd">@WebInitParam</span><span class="o">(</span><span class="n">name</span><span class="o">=</span><span class="s">"username"</span><span class="o">,</span><span class="n">value</span><span class="o">=</span><span class="s">"study"</span><span class="o">),</span>
+	  <span class="nd">@WebInitParam</span><span class="o">(</span><span class="n">name</span><span class="o">=</span><span class="s">"password"</span><span class="o">,</span><span class="n">value</span><span class="o">=</span><span class="s">"study"</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CalculatorServlet</span> <span class="kd">extends</span> <span class="n">GenericServlet</span> <span class="o">{</span>
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">service</span><span class="o">(</span><span class="n">ServletRequest</span> <span class="n">req</span><span class="o">,</span> <span class="n">ServletResponse</span> <span class="n">res</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">ServletException</span><span class="o">,</span> 
+		<span class="o">....</span>
+	<span class="o">}</span>
+</code></pre>
+</div>
+
+<h3 id="reference">Reference</h3>
+<ul>
+  <li><a href="http://www.yes24.com/24/Goods/13159413?Acode=101">열혈강의 자바 웹 개발 워크북</a></li>
+</ul>
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/09/10/Servlet_programming/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+        </ul>
+
+
+
+        <!-- Pagination links -->
+        <div class="pagination">
+          
+            <a href="/index.html" class="previous"><i class="fa fa-angle-double-left"></i></a>
+            <a href="/page2" class="previous"><i class="fa fa-angle-left"></i></a>
+          
+          <span class="page_number ">3/5</span>
+          
+            <a href="/page4" class="next"><i class="fa fa-angle-right"></i></a>
+            <a href="/page5" class="next"><i class="fa fa-angle-double-right"></i></a>
+          
+        </div>
+    </div>
+    <!-- <button class="anchor"><i class="fa fa-anchor"></i></button> -->
+    <div class="right">
+        <div class="wrap">
+            <!-- Content -->
+            <div class="side ">
+                <div>
+                    <i class="fa fa-th-list"></i>
+                    Categories
+                </div>
+                <ul class="content-ul" cate>
+                    
+                    <li>
+                        <a href="/category/#js" class="categories-list-item" cate="js">
+                            <span class="name">
+                                js
+                            </span>
+                            <span class="badge">4</span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/category/#web" class="categories-list-item" cate="web">
+                            <span class="name">
+                                web
+                            </span>
+                            <span class="badge">14</span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/category/#python" class="categories-list-item" cate="python">
+                            <span class="name">
+                                python
+                            </span>
+                            <span class="badge">1</span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/category/#Spring" class="categories-list-item" cate="Spring">
+                            <span class="name">
+                                Spring
+                            </span>
+                            <span class="badge">3</span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/category/#Hadoop" class="categories-list-item" cate="Hadoop">
+                            <span class="name">
+                                Hadoop
+                            </span>
+                            <span class="badge">1</span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/category/#Java" class="categories-list-item" cate="Java">
+                            <span class="name">
+                                Java
+                            </span>
+                            <span class="badge">2</span>
+                        </a>
+                    </li>
+                    
+                </ul>
+            </div>
+            <div class="side">
+                <div>
+                    <i class="fa fa-pencil-square-o" aria-hidden="true"></i>
+                    Recent Posts
+                </div>
+                <ul class="content-ul" recent>
+                    
+                        <li><a href="/2016/10/07/Predicate/">Java 8 Predicate</a></li>
+                    
+                        <li><a href="/2016/10/06/List_remvoeif-Method/">List.removeif Method</a></li>
+                    
+                        <li><a href="/2016/10/02/Interceptor/">Interceptor</a></li>
+                    
+                        <li><a href="/2016/09/22/hadoop_ecosystem/">Hadoop Ecosystem</a></li>
+                    
+                        <li><a href="/2016/09/21/beancontext2/">스프링 IoC컨테이너 ApplicationContext [2]</a></li>
+                    
+                        <li><a href="/2016/09/21/beancontext1/">스프링 IoC컨테이너 ApplicationContext [1]</a></li>
+                    
+                        <li><a href="/2016/09/20/dynamic_sql/">mybatis 동적 SQL</a></li>
+                    
+                        <li><a href="/2016/09/20/mybatis_log/">mybatis log출력</a></li>
+                    
+                        <li><a href="/2016/09/18/mybatis/">mybatis 개론</a></li>
+                    
+                        <li><a href="/2016/09/17/reflection_property/">리플렉션API와 프로퍼티를 이용한 객체관리</a></li>
+                    
+                </ul>
+            </div>
+
+<!--
+            <div class="side">
+                <div>
+                    <i class="fa fa-tags"></i>
+                    Tags
+                </div>
+                <div class="tags-cloud">
+                    
+                    
+                    
+                    
+
+                    
+
+                    
+                </div>
+            </div> -->
+        </div>
+    </div>
+</div>
+
+
+    <footer class="site-footer">
+
+
+    <div class="wrapper">
+
+        <p class="description">
+            
+        </p>
+        <p class="contact">
+            Contact me at: 
+            <a href="https://github.com/joswlv" title="GitHub"><i class="fa fa-github" aria-hidden="true"></i></a>  
+            <a href="mailto:wh7923@gmail.com" title="email"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>     
+            <a href="https://www.facebook.com/wsj7923" title="Facebook"><i class="fa fa-facebook-official" aria-hidden="true"></i></a>    
+        </p>
+        <p>
+        </p>
+        <p class="power">
+            <span>
+                Site powered by <a href="https://jekyllrb.com/">Jekyll</a> & <a href="https://pages.github.com/">Github Pages</a>.
+            </span>
+        </p>
+    </div>
+</footer>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <div class="back-to-top">
+    <a href="#top" class="scroll">
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    </a>
+</div>
+
+    <script src=" /js/main.js " charset="utf-8"></script>
+    <script src=" /js/scroll.min.js " charset="utf-8"></script>
+  </body>
+
+</html>

@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>스프링 IoC컨테이너 ApplicationContext [1]</title>
+    <meta name="description" content="XML 기반 빈 관리 컨테이너스프링에서는 자바 객체를 빈(Bean)이라고 한다. 그래서 객체관리 컨테이너를 빈컨테이너라고 한다.(스프링 IoC컨테이너 == 빈컨테이너)ApplicationContext의 계층도      ApplicationContext (interface)     ...">
+
+    <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="stylesheet" href="/css/fontawesome/css/font-awesome.min.css ">
+    <link rel="stylesheet" href="/css/main.css ">
+    <link rel="canonical" href="http://joswlv.github.io/2016/09/21/beancontext1/">
+    <link rel="alternate" type="application/rss+xml" title="Joswlv" href="http://joswlv.github.io/feed.xml ">
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-83868242-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</head>
+
+
+  <body>
+
+    <header id="top">
+    <div class="wrapper">
+        <a href="/" class="brand">Joswlv</a>
+        <small></small>
+        <button id="headerMenu" class="menu"><i class="fa fa-bars"></i></button>
+        <nav id="headerNav">
+            <ul>
+                <li>
+                    
+                    <a href="/">
+                    
+                        <i class="fa fa-home"></i>Home
+                    </a>
+                </li>
+
+                
+                    
+                    <li>
+                        
+                        <a href="/archive/">
+                        
+                            <i class="fa fa-archive"></i>Archives
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/category/">
+                        
+                            <i class="fa fa-th-list"></i>Categories
+                        </a>
+                    </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        </nav>
+    </div>
+</header>
+
+
+        <div class="page clearfix" post>
+    <div class="left">
+        <h1>스프링 IoC컨테이너 ApplicationContext [1]</h1>
+        <div class="label">
+
+            <div class="label-card">
+                <i class="fa fa-calendar"></i>2016-09-21
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+            
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#Spring" title="Category: Spring" rel="category">Spring</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+            </div>
+
+        </div>
+        <hr>
+        <article itemscope itemtype="http://schema.org/BlogPosting">
+        <h1 id="xml----">XML 기반 빈 관리 컨테이너</h1>
+
+<p>스프링에서는 자바 객체를 <code class="highlighter-rouge">빈(Bean)</code>이라고 한다. 그래서 객체관리 컨테이너를 <code class="highlighter-rouge">빈컨테이너</code>라고 한다.</p>
+
+<p>(스프링 IoC컨테이너 == 빈컨테이너)</p>
+
+<p><strong>ApplicationContext의 계층도</strong></p>
+
+<blockquote>
+  <ul>
+    <li>ApplicationContext (interface)
+      <ul>
+        <li>ClasspathXmlApplicationContext (class)</li>
+        <li>FileSystemXmlApplicationContext (class)</li>
+        <li>WebApplicationContext (interface)</li>
+      </ul>
+    </li>
+  </ul>
+</blockquote>
+
+<p>스프링에서 빈 정보는 XML 파일에 저장해 두고 ClassPathXmlApplicationContext 클래스나 FileSystemXmlApplicaionContext 클래스를 사용하여 빈을 자동 생성한다. ClassPathXmlApplicationContext는 자바 클래스 경로에서 XML로 된 빈 설정 파일을 찾는다. FileSystemXmlApplicationContext는 파일 시스템 경로에서 빈 설정 파일을 찾는다. WebApplicationContext는 웹 어플리케이션을 위한 IoC 컨테이너로서 web.xml파일에 설정된 정보에 따라 XML파일을 찾는다.</p>
+
+<p><br /></p>
+
+<h3 id="bean--xml-">Bean 설정 XML 파일준비</h3>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">"http://www.springframework.org/schema/beans"</span>
+    <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
+    <span class="na">xsi:schemaLocation=</span><span class="s">"http://www.springframework.org/schema/beans</span>
+        <span class="err">http://www.springframework.org/schema/beans/spring-beans.xsd"</span><span class="nt">&gt;</span>
+        
+  <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"score"</span> <span class="na">class=</span><span class="s">"exam.test01.Score"</span><span class="nt">/&gt;</span>
+    
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre>
+</div>
+
+<p>bean태그는 <code class="highlighter-rouge">&lt;beans xmlns="http://www.springframework.org/schema/beans"/&gt;</code> 네임스페이스에 소속되어 있기 때문에 XML파서가 이해할 수 있다. 이는 자바 클래스에서 import하는 것과 비슷하다.</p>
+
+<p>위의 소스를 자바소스로 표현하면 아래와 같다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="k">new</span> <span class="n">exam</span><span class="o">.</span><span class="na">test01</span><span class="o">.</span><span class="na">Score</span><span class="o">();</span>
+</code></pre>
+</div>
+
+<p>스프링 IoC 컨테이너가 생성할 자바 빈에 대한 정보는 <code class="highlighter-rouge">&lt;bean&gt;</code>태그로 선언한다. class속성에는 클래스 이름을 정한다. 주의 할점은 반드시 패키지 이름을 포함한 클래스 이름(fully qulified name)이어야 한다. id속성은 객체의 식별자이다. 빈컨테이너에서 객체를 꺼낼 때 이 식별자를 사용한다.</p>
+
+<p><strong>스프링 IoC 컨테이너 사용</strong></p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Test</span> <span class="o">{</span>
+
+	<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+		<span class="n">ClassPathXmlApplicationContext</span> <span class="n">ctx</span> <span class="o">=</span> 
+				<span class="k">new</span> <span class="nf">ClassPathXmlApplicationContext</span><span class="o">(</span><span class="s">"exam/test01/beans.xml"</span><span class="o">);</span>
+		
+		<span class="n">Score</span> <span class="n">score</span> <span class="o">=</span> <span class="o">(</span><span class="n">Score</span><span class="o">)</span> <span class="n">ctx</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">"score"</span><span class="o">);</span>
+		
+		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"합계:"</span> <span class="o">+</span> <span class="n">score</span><span class="o">.</span><span class="na">sum</span><span class="o">());</span>
+		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"평균:"</span> <span class="o">+</span> <span class="n">score</span><span class="o">.</span><span class="na">average</span><span class="o">());</span>
+	<span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<h3 id="bean-">익명 Bean 선언</h3>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">"http://www.springframework.org/schema/beans"</span>
+    <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
+    <span class="na">xsi:schemaLocation=</span><span class="s">"http://www.springframework.org/schema/beans</span>
+        <span class="err">http://www.springframework.org/schema/beans/spring-beans.xsd"</span><span class="nt">&gt;</span>
+        
+  <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"exam.test03.Score"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"exam.test03.Score"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre>
+</div>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">exam</span><span class="o">.</span><span class="na">test03</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.springframework.context.support.ClassPathXmlApplicationContext</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Test</span> <span class="o">{</span>
+
+	<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+		<span class="n">ClassPathXmlApplicationContext</span> <span class="n">ctx</span> <span class="o">=</span> 
+				<span class="k">new</span> <span class="nf">ClassPathXmlApplicationContext</span><span class="o">(</span><span class="s">"exam/test03/beans.xml"</span><span class="o">);</span>
+		
+		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"[컨테이너에 보관된 객체의 이름 출력]"</span><span class="o">);</span>
+		<span class="k">for</span> <span class="o">(</span><span class="n">String</span> <span class="n">name</span> <span class="o">:</span> <span class="n">ctx</span><span class="o">.</span><span class="na">getBeanDefinitionNames</span><span class="o">())</span> <span class="o">{</span>
+			<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">name</span><span class="o">);</span>
+		<span class="o">}</span>
+		
+		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"[exam.test03.Score#0의 별명 출력]"</span><span class="o">);</span>
+		<span class="k">for</span> <span class="o">(</span><span class="n">String</span> <span class="n">alias</span> <span class="o">:</span> <span class="n">ctx</span><span class="o">.</span><span class="na">getAliases</span><span class="o">(</span><span class="s">"exam.test03.Score#0"</span><span class="o">))</span> <span class="o">{</span>
+			<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">alias</span><span class="o">);</span>
+		<span class="o">}</span>
+		
+		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"[익명 빈 꺼내기]"</span><span class="o">);</span>
+		<span class="n">Score</span> <span class="n">score1</span> <span class="o">=</span> <span class="o">(</span><span class="n">Score</span><span class="o">)</span> <span class="n">ctx</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">"exam.test03.Score"</span><span class="o">);</span>
+		<span class="n">Score</span> <span class="n">score2</span> <span class="o">=</span> <span class="o">(</span><span class="n">Score</span><span class="o">)</span> <span class="n">ctx</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">"exam.test03.Score#0"</span><span class="o">);</span>
+		<span class="k">if</span> <span class="o">(</span><span class="n">score1</span> <span class="o">==</span> <span class="n">score2</span><span class="o">)</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"score == score#0"</span><span class="o">);</span>
+		
+		<span class="n">Score</span> <span class="n">score3</span> <span class="o">=</span> <span class="o">(</span><span class="n">Score</span><span class="o">)</span> <span class="n">ctx</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">"exam.test03.Score#1"</span><span class="o">);</span>
+		<span class="k">if</span> <span class="o">(</span><span class="n">score1</span> <span class="o">!=</span> <span class="n">score3</span><span class="o">)</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"score != score#1"</span><span class="o">);</span>
+		
+		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"[클래스 타입으로 빈 꺼내기]"</span><span class="o">);</span>
+		<span class="n">Score</span> <span class="n">score4</span> <span class="o">=</span> <span class="o">(</span><span class="n">Score</span><span class="o">)</span> <span class="n">ctx</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="n">exam</span><span class="o">.</span><span class="na">test03</span><span class="o">.</span><span class="na">Score</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+	<span class="o">}</span>
+<span class="o">}</span>
+
+<span class="o">/*</span>
+<span class="o">[</span><span class="err">컨테이너에</span> <span class="err">보관된</span> <span class="err">객체의</span> <span class="err">이름</span> <span class="err">출력</span><span class="o">]</span>
+<span class="n">exam</span><span class="o">.</span><span class="na">test03</span><span class="o">.</span><span class="na">Score</span><span class="err">#</span><span class="mi">0</span>
+<span class="n">exam</span><span class="o">.</span><span class="na">test03</span><span class="o">.</span><span class="na">Score</span><span class="err">#</span><span class="mi">1</span>
+
+<span class="o">[</span><span class="n">exam</span><span class="o">.</span><span class="na">test03</span><span class="o">.</span><span class="na">Score</span><span class="err">#</span><span class="mi">0</span><span class="err">의</span> <span class="err">별명</span> <span class="err">출력</span><span class="o">]</span>
+<span class="n">exam</span><span class="o">.</span><span class="na">test03</span><span class="o">.</span><span class="na">Score</span>
+
+<span class="o">[</span><span class="err">익명</span> <span class="err">빈</span> <span class="err">꺼내기</span><span class="o">]</span>
+<span class="n">score</span> <span class="o">==</span> <span class="n">score</span><span class="err">#</span><span class="mi">0</span>
+<span class="n">score</span> <span class="o">!=</span> <span class="n">score</span><span class="err">#</span><span class="mi">1</span>
+
+<span class="o">[</span><span class="err">클래스</span> <span class="err">타입으로</span> <span class="err">빈</span> <span class="err">꺼내기</span><span class="o">]</span>
+<span class="n">Error</span>
+</code></pre>
+</div>
+
+<p>클래스 타입으로도 객체를 꺼낼 수 있다. 하지만 getBean()을 호출할 때 Score 클래스에 대한 정보를 담은 java.lang.Class객체를 넘겨서 빈컨테이너에서 이 클래스의 인스턴스를 찾는다. 이때 같은 타입의 객체가 여러 개 있을 경우 예외가 발생한다.</p>
+
+<p><br /></p>
+
+<h3 id="section">생성자와 프로퍼티 설정</h3>
+
+<p><code class="highlighter-rouge">&lt;constructor-arg&gt;</code> 엘러먼트를 이용하면 호출될 생성자를 지정할 수 있다.</p>
+
+<p>생성자를 지정하는 방법은 아래와 같다.</p>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">"http://www.springframework.org/schema/beans"</span>
+    <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
+    <span class="na">xsi:schemaLocation=</span><span class="s">"http://www.springframework.org/schema/beans</span>
+        <span class="err">http://www.springframework.org/schema/beans/spring-beans.xsd"</span><span class="nt">&gt;</span>
+        
+  <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"score1"</span> <span class="na">class=</span><span class="s">"exam.test04.Score"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;constructor-arg&gt;&lt;value</span> <span class="na">type=</span><span class="s">"java.lang.String"</span><span class="nt">&gt;</span>홍길동<span class="nt">&lt;/value&gt;&lt;/constructor-arg&gt;</span>
+      <span class="nt">&lt;constructor-arg&gt;&lt;value</span> <span class="na">type=</span><span class="s">"float"</span><span class="nt">&gt;</span>91<span class="nt">&lt;/value&gt;&lt;/constructor-arg&gt;</span>
+      <span class="nt">&lt;constructor-arg&gt;&lt;value</span> <span class="na">type=</span><span class="s">"float"</span><span class="nt">&gt;</span>92<span class="nt">&lt;/value&gt;&lt;/constructor-arg&gt;</span>
+      <span class="nt">&lt;constructor-arg&gt;&lt;value</span> <span class="na">type=</span><span class="s">"float"</span><span class="nt">&gt;</span>93<span class="nt">&lt;/value&gt;&lt;/constructor-arg&gt;</span>
+  <span class="nt">&lt;/bean&gt;</span>
+  //자바코드 -&gt; new Score("임꺽정",91,91,91);
+  
+  <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"score2"</span> <span class="na">class=</span><span class="s">"exam.test04.Score"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;constructor-arg&gt;&lt;value&gt;</span>임꺽정<span class="nt">&lt;/value&gt;&lt;/constructor-arg&gt;</span>
+      <span class="nt">&lt;constructor-arg&gt;&lt;value&gt;</span>81<span class="nt">&lt;/value&gt;&lt;/constructor-arg&gt;</span>
+      <span class="nt">&lt;constructor-arg&gt;&lt;value&gt;</span>82<span class="nt">&lt;/value&gt;&lt;/constructor-arg&gt;</span>
+      <span class="nt">&lt;constructor-arg&gt;&lt;value&gt;</span>83<span class="nt">&lt;/value&gt;&lt;/constructor-arg&gt;</span>
+  <span class="nt">&lt;/bean&gt;</span> 
+  //자바코드 -&gt; new Score("임꺽정",81,82,83);
+  
+  <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"score3"</span> <span class="na">class=</span><span class="s">"exam.test04.Score"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;constructor-arg</span> <span class="na">type=</span><span class="s">"java.lang.String"</span> <span class="na">value=</span><span class="s">"장보고"</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;constructor-arg</span> <span class="na">type=</span><span class="s">"float"</span> <span class="na">value=</span><span class="s">"71"</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;constructor-arg</span> <span class="na">type=</span><span class="s">"float"</span> <span class="na">value=</span><span class="s">"72"</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;constructor-arg</span> <span class="na">type=</span><span class="s">"float"</span> <span class="na">value=</span><span class="s">"73"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/bean&gt;</span> 
+  //자바코드 -&gt; new Score("장보고",71,72,73);
+  
+  <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"score4"</span> <span class="na">class=</span><span class="s">"exam.test04.Score"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;constructor-arg</span> <span class="na">value=</span><span class="s">"이순신"</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;constructor-arg</span> <span class="na">value=</span><span class="s">"100"</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;constructor-arg</span> <span class="na">value=</span><span class="s">"98"</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;constructor-arg</span> <span class="na">value=</span><span class="s">"99"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/bean&gt;</span>
+  //자바코드 -&gt; new Score("이순신",100,98,99);
+    
+  <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"score5"</span> <span class="na">class=</span><span class="s">"exam.test04.Score"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;constructor-arg</span> <span class="na">value=</span><span class="s">"70"</span> <span class="na">index=</span><span class="s">"3"</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;constructor-arg</span> <span class="na">value=</span><span class="s">"50"</span> <span class="na">index=</span><span class="s">"1"</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;constructor-arg</span> <span class="na">value=</span><span class="s">"강감찬"</span> <span class="na">index=</span><span class="s">"0"</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;constructor-arg</span> <span class="na">value=</span><span class="s">"60"</span> <span class="na">index=</span><span class="s">"2"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/bean&gt;</span>
+  //자바코드 -&gt; new Score("강감찬",50,60,70;
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre>
+</div>
+
+<p><br />
+프로퍼티값 설정은 다음과 같다.</p>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">"http://www.springframework.org/schema/beans"</span>
+    <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
+    <span class="na">xsi:schemaLocation=</span><span class="s">"http://www.springframework.org/schema/beans</span>
+        <span class="err">http://www.springframework.org/schema/beans/spring-beans.xsd"</span><span class="nt">&gt;</span>
+        
+  <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"score1"</span> <span class="na">class=</span><span class="s">"exam.test05.Score"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"name"</span><span class="nt">&gt;&lt;value&gt;</span>홍길동<span class="nt">&lt;/value&gt;&lt;/property&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"kor"</span><span class="nt">&gt;&lt;value&gt;</span>100<span class="nt">&lt;/value&gt;&lt;/property&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"eng"</span><span class="nt">&gt;&lt;value&gt;</span>95<span class="nt">&lt;/value&gt;&lt;/property&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"math"</span><span class="nt">&gt;&lt;value&gt;</span>90<span class="nt">&lt;/value&gt;&lt;/property&gt;</span>
+  <span class="nt">&lt;/bean&gt;</span>
+  //자바코드 -&gt; Score score1 = new Score();
+  //			score1.setName('홍길동');
+  //			score1.setKor(100);
+  //			score1.setEng(59);
+  //			score1.setMath(90);
+  
+  <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"score2"</span> <span class="na">class=</span><span class="s">"exam.test05.Score"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"name"</span> <span class="na">value=</span><span class="s">"임꺽정"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"kor"</span> <span class="na">value=</span><span class="s">"85"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"eng"</span> <span class="na">value=</span><span class="s">"99"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"math"</span> <span class="na">value=</span><span class="s">"100"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/bean&gt;</span>
+  //자바코드 -&gt; Score score2 = new Score();
+  //			score2.setName('임꺽정');
+  //			score2.setKor(85);
+  //			score2.setEng(99);
+  //			score2.setMath(100);  
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre>
+</div>
+
+<p><br /></p>
+
+<h3 id="bean------"><code class="highlighter-rouge">&lt;bean&gt;</code>의 속성을 이용하여 생성자 및 프로퍼티 설정하기</h3>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">"http://www.springframework.org/schema/beans"</span>
+    <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
+    <span class="na">xmlns:p=</span><span class="s">"http://www.springframework.org/schema/p"</span>
+    <span class="na">xmlns:c=</span><span class="s">"http://www.springframework.org/schema/c"</span>
+    <span class="na">xsi:schemaLocation=</span><span class="s">"http://www.springframework.org/schema/beans</span>
+        <span class="err">http://www.springframework.org/schema/beans/spring-beans.xsd"</span><span class="nt">&gt;</span>
+  
+  <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"score1"</span> <span class="na">class=</span><span class="s">"exam.test06.Score"</span>
+      <span class="na">p:name=</span><span class="s">"홍길동"</span> <span class="na">p:kor=</span><span class="s">"100"</span> <span class="na">p:eng=</span><span class="s">"95"</span> <span class="na">p:math=</span><span class="s">"90"</span><span class="nt">/&gt;</span>
+      
+  //자바코드 -&gt; Score score1 = new Score();
+  //			score1.setName('홍길동);
+  //			score1.setKor(100);
+  //			score1.setEng(95);
+  //			score1.setMath(90);
+  
+  <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"score2"</span> <span class="na">class=</span><span class="s">"exam.test06.Score"</span>
+      <span class="na">c:name=</span><span class="s">"임꺽정"</span> <span class="na">c:kor=</span><span class="s">"80"</span> <span class="na">c:eng=</span><span class="s">"90"</span> <span class="na">c:math=</span><span class="s">"100"</span><span class="nt">/&gt;</span>
+
+  //자바코드 -&gt; Score score2 = new Score('임꺽정',80,90,100);  
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">xmlns:p="http://www.springframework.org/schema/p"</code>, <code class="highlighter-rouge">xmlns:c="http://www.springframework.org/schema/c"</code>의 네임스페이스를 통해서 <code class="highlighter-rouge">&lt;bean&gt;</code>속성을 통해 프로퍼티와 생성자도 설정이 가능하다.</p>
+
+<p><br /></p>
+
+<h3 id="section-1">의존 객체 주입</h3>
+
+<p>어떤 객체가 작업을 수행하기 위해 다른 객체를 지속적으로 사용한다면 그 사용되는 객체를 의존 객체(depencencies)라 한다. 보통 지속적으로 사용할 객체는 프로퍼티에 보관한다.</p>
+
+<p>예제로 Car객체를 만들때 tires객체와 engine객체를 사용한다.</p>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">"http://www.springframework.org/schema/beans"</span>
+    <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
+    <span class="na">xmlns:p=</span><span class="s">"http://www.springframework.org/schema/p"</span>
+    <span class="na">xmlns:c=</span><span class="s">"http://www.springframework.org/schema/c"</span>
+    <span class="na">xsi:schemaLocation=</span><span class="s">"http://www.springframework.org/schema/beans</span>
+        <span class="err">http://www.springframework.org/schema/beans/spring-beans.xsd"</span><span class="nt">&gt;</span>
+  
+  <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"engine1"</span> <span class="na">class=</span><span class="s">"exam.test07.Engine"</span> 
+      <span class="na">c:maker=</span><span class="s">"Hyundai"</span> <span class="na">p:cc=</span><span class="s">"1998"</span><span class="nt">/&gt;</span>
+  //자바코드 -&gt; Engine engine1 = new Engine("Hyundai");
+  //			engine1.setCc(1998);			  
+  
+  <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"car1"</span> <span class="na">class=</span><span class="s">"exam.test07.Car"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"model"</span><span class="nt">&gt;&lt;value&gt;</span>Avante<span class="nt">&lt;/value&gt;&lt;/property&gt;</span>
+      <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"engine"</span><span class="nt">&gt;&lt;ref</span> <span class="na">bean=</span><span class="s">"engine1"</span><span class="nt">/&gt;&lt;/property&gt;</span>
+  <span class="nt">&lt;/bean&gt;</span>
+  //자바코드 -&gt; Car car1 = new Car();
+  //			car1.setModel("Avante");
+  //			car1.setEngine(engine1);  
+  
+  <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"car2"</span> <span class="na">class=</span><span class="s">"exam.test07.Car"</span>
+      <span class="na">c:model=</span><span class="s">"Equus"</span> <span class="na">c:engine-ref=</span><span class="s">"engine1"</span><span class="nt">/&gt;</span>
+  //자바코드 -&gt; Car car2 = new Car("Equus",engine1);
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">&lt;ref&gt;</code>태그를 사용하여 Engine의 참조하였다.</p>
+
+<p><br /></p>
+
+<h3 id="section-2">개별 인스턴스 주입하기</h3>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">"http://www.springframework.org/schema/beans"</span>
+	<span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span> 
+	<span class="na">xmlns:p=</span><span class="s">"http://www.springframework.org/schema/p"</span>
+	<span class="na">xmlns:c=</span><span class="s">"http://www.springframework.org/schema/c"</span>
+	<span class="na">xsi:schemaLocation=</span><span class="s">"http://www.springframework.org/schema/beans</span>
+        <span class="err">http://www.springframework.org/schema/beans/spring-beans.xsd"</span><span class="nt">&gt;</span>
+
+	<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"car1"</span> <span class="na">class=</span><span class="s">"exam.test08.Car"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;constructor-arg</span> <span class="na">value=</span><span class="s">"Avante"</span> <span class="nt">/&gt;</span>
+		<span class="nt">&lt;constructor-arg&gt;</span>
+			<span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"exam.test08.Engine"</span> <span class="na">p:maker=</span><span class="s">"Hyundai"</span> <span class="na">p:cc=</span><span class="s">"1495"</span> <span class="nt">/&gt;</span>
+		<span class="nt">&lt;/constructor-arg&gt;</span>
+	<span class="nt">&lt;/bean&gt;</span>
+		
+	//자바코드 -&gt; Engine temp = new Engine();
+	//			  temp.setMaker("Hyundai");
+	//			  temp.setCc(1495);
+	//			  Car Car1 = new Car("Avante", temp);
+	
+	<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"car2"</span> <span class="na">class=</span><span class="s">"exam.test08.Car"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"model"</span> <span class="na">value=</span><span class="s">"Sonata"</span> <span class="nt">/&gt;</span>
+		<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"engine"</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"exam.test08.Engine"</span> <span class="na">p:maker=</span><span class="s">"Hyundai"</span> <span class="na">p:cc=</span><span class="s">"1997"</span> <span class="nt">/&gt;</span>
+		<span class="nt">&lt;/property&gt;</span>
+	<span class="nt">&lt;/bean&gt;</span>
+	
+	//자바코드 -&gt; Car car2 new Car();
+	//			  car2.setModel("Sonata");
+	//			  Engine temp = new Engine();
+	//			  temp.setMaker("Hyundai");
+	//			  temp.setCc(1997);
+	//			  car2.setEngine(temp);
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre>
+</div>
+
+<p><br /></p>
+
+<h3 id="section-3">컬랙션 값 주입</h3>
+
+<p><strong>배열 프로퍼티의 값 주입</strong></p>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">"http://www.springframework.org/schema/beans"</span>
+	<span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span> 
+	<span class="na">xmlns:p=</span><span class="s">"http://www.springframework.org/schema/p"</span>
+	<span class="na">xmlns:c=</span><span class="s">"http://www.springframework.org/schema/c"</span>
+	<span class="na">xsi:schemaLocation=</span><span class="s">"http://www.springframework.org/schema/beans</span>
+        <span class="err">http://www.springframework.org/schema/beans/spring-beans.xsd"</span><span class="nt">&gt;</span>
+
+	<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"car1"</span> <span class="na">class=</span><span class="s">"exam.test09.Car"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;constructor-arg</span> <span class="na">value=</span><span class="s">"Avante"</span> <span class="nt">/&gt;</span>
+		<span class="nt">&lt;constructor-arg&gt;</span>
+			<span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"exam.test09.Engine"</span> <span class="na">p:maker=</span><span class="s">"Hyundai"</span> <span class="na">p:cc=</span><span class="s">"1495"</span> <span class="nt">/&gt;</span>
+		<span class="nt">&lt;/constructor-arg&gt;</span>
+		<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"tires"</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;list&gt;</span>
+				<span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"exam.test09.Tire"</span> <span class="na">p:maker=</span><span class="s">"Kumho"</span> <span class="na">p:spec=</span><span class="s">"P185"</span> <span class="nt">/&gt;</span>
+				<span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"exam.test09.Tire"</span> <span class="na">p:maker=</span><span class="s">"Kumho"</span> <span class="na">p:spec=</span><span class="s">"P185"</span> <span class="nt">/&gt;</span>
+			<span class="nt">&lt;/list&gt;</span>
+		<span class="nt">&lt;/property&gt;</span>
+	<span class="nt">&lt;/bean&gt;</span>
+	
+	//자바코드 -&gt; Engine temp = new Engine();
+	//			  temp.setMaker("Hyundai");
+	//			  temp.setCc(1495);
+	//			  Car car1 = new Car("Avante",temp);
+	//			  Tire[] temp2 = new Tire[]{new Tire(), new Tire()};
+	//			  temp2[0].setMaker("Kumho");
+	//			  temp2[0].setSpeck("P185");
+	//			  temp2[1].setMaker("Kumho");
+	//			  temp2[1].setSpeck("P185");
+	//			  car1.setTire(temp2);
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre>
+</div>
+<p><br /></p>
+
+<p><strong>Map과 Properties값 주입</strong></p>
+
+<blockquote>
+  <p>Map과 Preoperties의 용도</p>
+
+  <p>java.util.Map 타입의 클래스는 식별자(key)나 값(value)으로 문자열뿐만 아니라 다른 타입의 객체도 사용할 수 있습니다. java.util.Properties 클래스도 Map의 일종(Map 인터페이스를 구현했음)이지만 주로 문자열로 된 식별자와 값을 다룰 때 사용한다.</p>
+</blockquote>
+
+<p><br /></p>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">"http://www.springframework.org/schema/beans"</span>
+	<span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span> 
+	<span class="na">xmlns:p=</span><span class="s">"http://www.springframework.org/schema/p"</span>
+	<span class="na">xmlns:c=</span><span class="s">"http://www.springframework.org/schema/c"</span>
+	<span class="na">xsi:schemaLocation=</span><span class="s">"http://www.springframework.org/schema/beans</span>
+        <span class="err">http://www.springframework.org/schema/beans/spring-beans.xsd"</span><span class="nt">&gt;</span>
+
+	<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"spareTire"</span> <span class="na">class=</span><span class="s">"exam.test10.Tire"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"maker"</span> <span class="na">value=</span><span class="s">"Hyundai"</span> <span class="nt">/&gt;</span>
+		<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"spec"</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;props&gt;</span>
+				<span class="nt">&lt;prop</span> <span class="na">key=</span><span class="s">"width"</span><span class="nt">&gt;</span>205<span class="nt">&lt;/prop&gt;</span>
+				<span class="nt">&lt;prop</span> <span class="na">key=</span><span class="s">"ratio"</span><span class="nt">&gt;</span>65<span class="nt">&lt;/prop&gt;</span>
+				<span class="nt">&lt;prop</span> <span class="na">key=</span><span class="s">"rim.diameter"</span><span class="nt">&gt;</span>14<span class="nt">&lt;/prop&gt;</span>
+			<span class="nt">&lt;/props&gt;</span>
+		<span class="nt">&lt;/property&gt;</span>
+	<span class="nt">&lt;/bean&gt;</span>
+	
+	//자바 코드 -&gt; Tire spareTire = new Tire();
+	//				spareTire.setMaker("Hyundai");
+	//				Properties temp = new Properties();
+	//				temp.setProperty("width", "205");
+	//				temp.setProperty("ratio","65");
+	//				temp.setProperty("rim.diameter","14");
+	//				spareTire.setSpec(temp);
+
+	<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"car1"</span> <span class="na">class=</span><span class="s">"exam.test10.Car"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;constructor-arg</span> <span class="na">value=</span><span class="s">"Avante"</span> <span class="nt">/&gt;</span>
+		<span class="nt">&lt;constructor-arg&gt;</span>
+			<span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"exam.test10.Engine"</span> <span class="na">p:maker=</span><span class="s">"Hyundai"</span> <span class="na">p:cc=</span><span class="s">"1495"</span> <span class="nt">/&gt;</span>
+		<span class="nt">&lt;/constructor-arg&gt;</span>
+		<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"options"</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;map&gt;</span>
+				<span class="nt">&lt;entry&gt;</span>
+					<span class="nt">&lt;key&gt;</span>
+						<span class="nt">&lt;value&gt;</span>sunroof<span class="nt">&lt;/value&gt;</span>
+					<span class="nt">&lt;/key&gt;</span>
+					<span class="nt">&lt;value&gt;</span>yes<span class="nt">&lt;/value&gt;</span>
+				<span class="nt">&lt;/entry&gt;</span>
+				<span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">"airbag"</span> <span class="na">value=</span><span class="s">"dual"</span> <span class="nt">/&gt;</span>
+				<span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">"sparetire"</span><span class="nt">&gt;</span>
+					<span class="nt">&lt;ref</span> <span class="na">bean=</span><span class="s">"spareTire"</span> <span class="nt">/&gt;</span>
+				<span class="nt">&lt;/entry&gt;</span>
+			<span class="nt">&lt;/map&gt;</span>
+		<span class="nt">&lt;/property&gt;</span>
+	<span class="nt">&lt;/bean&gt;</span>
+	
+	//자바 코드 -&gt; Engine temp = new Engine();
+	//				temp.setMaker("Hyundai")
+	//				temp.setCc(1496);
+	//				Car car1 = new Car("Avante",temp);
+	//				Map<span class="nt">&lt;Object</span><span class="err">,Object</span><span class="nt">&gt;</span> tempMap = new HashMap<span class="nt">&lt;Object</span><span class="err">,Object</span><span class="nt">&gt;</span>();
+	//				car1.setOptions(tempMap);
+	//				tempMap.put("sunroof","yes");
+	//				tempMap.put("airbag","dual");
+	//				tempMap.put("spaertire",spareTire);
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre>
+</div>
+
+<p><br /></p>
+
+<h3 id="reference">Reference</h3>
+<ul>
+  <li><a href="http://www.yes24.com/24/Goods/13159413?Acode=101">열혈강의 자바 웹 개발 워크북</a></li>
+</ul>
+
+        </article>
+        <hr>
+
+        
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+        
+
+        <div class="post-recent">
+    <div class="pre">
+        
+        <p><strong>prev</strong> <a href="/2016/09/20/dynamic_sql/">mybatis 동적 SQL</a></p>
+        
+    </div>
+    <div class="nex">
+
+        
+        <p><strong>next</strong> <a href="/2016/09/21/beancontext2/">스프링 IoC컨테이너 ApplicationContext [2]</a></p>
+        
+    </div>
+</div>
+
+
+        <h2 id="comments">Comments</h2>
+        
+
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+     * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+
+    var disqus_config = function() {
+        this.page.url = 'http://joswlv.github.io/2016/09/21/beancontext1/'; // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://joswlv.github.io/2016/09/21/beancontext1/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document,
+            s = d.createElement('script');
+
+        s.src = '//joswlv.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+
+    </div>
+    <button class="anchor"><i class="fa fa-anchor"></i></button>
+    <div class="right">
+        <div class="wrap">
+
+            <!-- Content -->
+            <div class="side content">
+                <div>
+                    Content
+                </div>
+                <ul id="content-side" class="content-ul">
+                    <li><a href="#similar_posts">Similar Posts</a></li>
+                    <li><a href="#comments">Comments</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+/**
+ * target _blank
+ */
+(function() {
+    var aTags = document.querySelectorAll('article a:not([id])')
+    for (var i = 0; i < aTags.length; i++) {
+        aTags[i].setAttribute('target', '_blank')
+    }
+}());
+</script>
+<script src="/js/pageContent.js " charset="utf-8"></script>
+
+
+    <footer class="site-footer">
+
+
+    <div class="wrapper">
+
+        <p class="description">
+            
+        </p>
+        <p class="contact">
+            Contact me at: 
+            <a href="https://github.com/joswlv" title="GitHub"><i class="fa fa-github" aria-hidden="true"></i></a>  
+            <a href="mailto:wh7923@gmail.com" title="email"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>     
+            <a href="https://www.facebook.com/wsj7923" title="Facebook"><i class="fa fa-facebook-official" aria-hidden="true"></i></a>    
+        </p>
+        <p>
+        </p>
+        <p class="power">
+            <span>
+                Site powered by <a href="https://jekyllrb.com/">Jekyll</a> & <a href="https://pages.github.com/">Github Pages</a>.
+            </span>
+        </p>
+    </div>
+</footer>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <div class="back-to-top">
+    <a href="#top" class="scroll">
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    </a>
+</div>
+
+    <script src=" /js/main.js " charset="utf-8"></script>
+    <script src=" /js/scroll.min.js " charset="utf-8"></script>
+  </body>
+
+</html>

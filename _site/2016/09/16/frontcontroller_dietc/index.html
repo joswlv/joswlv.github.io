@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>프런트 컨트롤러 패턴과 의존성주입</title>
+    <meta name="description" content="1. 프런트 컨트롤러 패턴MVC구조에서 좀 더 유지보수가 쉬운 구조로 개선 한 것으로 두개의 컨트롤러를 사용하여 웹 브라우저 요청을 처리한다. 프론트 컨트롤러는 VO 객체의 준비, 뷰 컴포넌트의 위임, 오류 처리 등과 같은 공동 작업을 담당하고, 페이지 컨트롤러는 이름 그대로 요청...">
+
+    <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="stylesheet" href="/css/fontawesome/css/font-awesome.min.css ">
+    <link rel="stylesheet" href="/css/main.css ">
+    <link rel="canonical" href="http://joswlv.github.io/2016/09/16/frontcontroller_dietc/">
+    <link rel="alternate" type="application/rss+xml" title="Joswlv" href="http://joswlv.github.io/feed.xml ">
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-83868242-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</head>
+
+
+  <body>
+
+    <header id="top">
+    <div class="wrapper">
+        <a href="/" class="brand">Joswlv</a>
+        <small></small>
+        <button id="headerMenu" class="menu"><i class="fa fa-bars"></i></button>
+        <nav id="headerNav">
+            <ul>
+                <li>
+                    
+                    <a href="/">
+                    
+                        <i class="fa fa-home"></i>Home
+                    </a>
+                </li>
+
+                
+                    
+                    <li>
+                        
+                        <a href="/archive/">
+                        
+                            <i class="fa fa-archive"></i>Archives
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/category/">
+                        
+                            <i class="fa fa-th-list"></i>Categories
+                        </a>
+                    </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        </nav>
+    </div>
+</header>
+
+
+        <div class="page clearfix" post>
+    <div class="left">
+        <h1>프런트 컨트롤러 패턴과 의존성주입</h1>
+        <div class="label">
+
+            <div class="label-card">
+                <i class="fa fa-calendar"></i>2016-09-16
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+            
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#web" title="Category: web" rel="category">web</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+            </div>
+
+        </div>
+        <hr>
+        <article itemscope itemtype="http://schema.org/BlogPosting">
+        <h1 id="section">1. 프런트 컨트롤러 패턴</h1>
+
+<p>MVC구조에서 좀 더 유지보수가 쉬운 구조로 개선 한 것으로 두개의 컨트롤러를 사용하여 웹 브라우저 요청을 처리한다. 프론트 컨트롤러는 VO 객체의 준비, 뷰 컴포넌트의 위임, 오류 처리 등과 같은 공동 작업을 담당하고, 페이지 컨트롤러는 이름 그대로 요청한 페이지만을 위한 작업을 수행한다.</p>
+
+<p><img src="http://joswlv.github.io/images/frontcontroller.png" alt="" /></p>
+
+<ol>
+  <li>웹 브라우저는 회원 목록 페이지를 요청한다.</li>
+  <li>프런트 컨트롤러 <code class="highlighter-rouge">DispatcherServlet</code>은 회원 목록 요청 처리를 담당하는 페이지 컨트롤러를 호출한다. 이때 데이터를 주고받을 바구니 역할을 할 Map 객체를 넘긴다.</li>
+  <li>페이지 컨트롤러 <code class="highlighter-rouge">MemverListController</code>는 Dao에게 회원 목록 데이터를 요청한다.</li>
+  <li>MemberDao는 데이터베이스로 부터 회원 목록 데이터를 가져와서, Member객체에 담아 반환한다.</li>
+  <li>페이지 컨트롤러는 Dao가 반환한 회원 목록 데이터를 Map 객체에 저장한다. 그리고 프런트 컨트롤러에게 뷰 URL을 반환한다.</li>
+  <li>프런트 컨트롤러는 Map객체에 저장된 페이지 컨트롤러의 작업 결과물을 JSP가 사용할 수 있도록 ServletRequest로 옮긴다.</li>
+</ol>
+
+<p>프런트 컨트롤러가 페이지 컨트롤러에게 작업을 위임할때 <code class="highlighter-rouge">execute()</code>메서드를 호출한다. 이렇게 호출하기 위해서 페이지 컨트롤러 클래스를 대표하는 Interface를 만들고 <code class="highlighter-rouge">execute()</code>메서드를 상속받게 만든다. 그러면 일관성있는 사용을 보장할 수 있다.</p>
+
+<p>페이지 컨트롤러를 서블릿이 아닌 자바파일로 만들었기 때문에, Dao에서 리턴받은 결과값을 Map을 사용하여 데이터 저장하여, 프런트 컨트롤러로 전달한다. 프런트 컨트롤러에서는 jsp에서 이 데이터들을 사용하기 위해 서블릿 보관소에 저장한다. 이런 과정을 프런트 컨트롤러 패턴이라고 한다. <br /></p>
+
+<h1 id="didependency-injection---">2. DI(Dependency Injection)을 이용한 의존성 과리</h1>
+
+<p>의존 객체를 사용하는 쪽과 의존 객체(또는 보관소) 사이의 결합도가 높아져서 의존 객체나 보관소에 변경이 발생하면 바로 영향을 받는다. 그리고 의존 객체를 다른 객체로 대체하기 가 어렵다. 이런 문제를 해결하기 위해 의존 객체를 외부에서 주입받는 방식이 등장하였다.</p>
+
+<p>이의존객체를 전문으로 관리하는 <code class="highlighter-rouge">빈컨테이너(Java Beans Container)</code>를 사용한다. 빈컨테이너는 객체가 실행되기 전에 그 객체가 필요로 하는 의존 객체를 주입해주는 역할을 수행한다. 이런방식으로 의존 객체를 관리하는 것을 <code class="highlighter-rouge">의존성주입(DI:Dependency Injection)</code> 좀 더 일반적으로 <code class="highlighter-rouge">역제어(IoC:Inversion of Control)</code>라고 한다. 즉 역제어 방식의 한 예가 의존성 주입이다.</p>
+
+<p>하지만 이 방법으로는 <code class="highlighter-rouge">DispatcherServlet</code>의 경우 페이지 컨트롤러가 추가 될 때마다 조건문을 변경해야하고, <code class="highlighter-rouge">ContextLoaderListener</code>도 Dao나 페이지 컨트롤러가 추가될 때마다 변경해야하는 문제가 있다.
+<br /></p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="c1">// 의존 객체 주입을 위해 인스턴스 변수와 셋터 메서드 추가</span>
+<span class="c1">//- 또한 의존 객체를 꺼내는 기존 코드 변경</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MemberListController</span> <span class="kd">implements</span> <span class="n">Controller</span> <span class="o">{</span>
+  <span class="n">MemberDao</span> <span class="n">memberDao</span><span class="o">;</span>
+  
+  <span class="kd">public</span> <span class="n">MemberListController</span> <span class="nf">setMemberDao</span><span class="o">(</span><span class="n">MemberDao</span> <span class="n">memberDao</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">memberDao</span> <span class="o">=</span> <span class="n">memberDao</span><span class="o">;</span>
+    <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="n">String</span> <span class="nf">execute</span><span class="o">(</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">model</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+    <span class="n">model</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"members"</span><span class="o">,</span> <span class="n">memberDao</span><span class="o">.</span><span class="na">selectList</span><span class="o">());</span>
+    <span class="k">return</span> <span class="s">"/member/MemberList.jsp"</span><span class="o">;</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="c1">// ServletContext에 보관된 페이지 컨트롤러를 사용</span>
+<span class="nd">@SuppressWarnings</span><span class="o">(</span><span class="s">"serial"</span><span class="o">)</span>
+<span class="nd">@WebServlet</span><span class="o">(</span><span class="s">"*.do"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">DispatcherServlet</span> <span class="kd">extends</span> <span class="n">HttpServlet</span> <span class="o">{</span>
+  <span class="nd">@Override</span>
+  <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">service</span><span class="o">(</span>
+      <span class="n">HttpServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">HttpServletResponse</span> <span class="n">response</span><span class="o">)</span>
+      <span class="kd">throws</span> <span class="n">ServletException</span><span class="o">,</span> <span class="n">IOException</span> <span class="o">{</span>
+    <span class="n">response</span><span class="o">.</span><span class="na">setContentType</span><span class="o">(</span><span class="s">"text/html; charset=UTF-8"</span><span class="o">);</span>
+    <span class="n">String</span> <span class="n">servletPath</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getServletPath</span><span class="o">();</span>
+    <span class="k">try</span> <span class="o">{</span>
+      <span class="n">ServletContext</span> <span class="n">sc</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">getServletContext</span><span class="o">();</span>
+      
+      <span class="c1">// 페이지 컨트롤러에게 전달할 Map 객체를 준비한다. </span>
+      <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">Object</span><span class="o">&gt;</span> <span class="n">model</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">Object</span><span class="o">&gt;();</span>
+      <span class="n">model</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"session"</span><span class="o">,</span> <span class="n">request</span><span class="o">.</span><span class="na">getSession</span><span class="o">());</span>
+      
+      <span class="n">Controller</span> <span class="n">pageController</span> <span class="o">=</span> <span class="o">(</span><span class="n">Controller</span><span class="o">)</span> <span class="n">sc</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="n">servletPath</span><span class="o">);</span>
+      
+      <span class="k">if</span> <span class="o">(</span><span class="s">"/member/add.do"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">servletPath</span><span class="o">))</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"email"</span><span class="o">)</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+          <span class="n">model</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"member"</span><span class="o">,</span> <span class="k">new</span> <span class="n">Member</span><span class="o">()</span>
+            <span class="o">.</span><span class="na">setEmail</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"email"</span><span class="o">))</span>
+            <span class="o">.</span><span class="na">setPassword</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"password"</span><span class="o">))</span>
+            <span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"name"</span><span class="o">)));</span>
+        <span class="o">}</span>
+      <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="s">"/member/update.do"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">servletPath</span><span class="o">))</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"email"</span><span class="o">)</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+          <span class="n">model</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"member"</span><span class="o">,</span> <span class="k">new</span> <span class="n">Member</span><span class="o">()</span>
+            <span class="o">.</span><span class="na">setNo</span><span class="o">(</span><span class="n">Integer</span><span class="o">.</span><span class="na">parseInt</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"no"</span><span class="o">)))</span>
+            <span class="o">.</span><span class="na">setEmail</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"email"</span><span class="o">))</span>
+            <span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"name"</span><span class="o">)));</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+          <span class="n">model</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"no"</span><span class="o">,</span> <span class="k">new</span> <span class="n">Integer</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"no"</span><span class="o">)));</span>
+        <span class="o">}</span>
+      <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="s">"/member/delete.do"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">servletPath</span><span class="o">))</span> <span class="o">{</span>
+        <span class="n">model</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"no"</span><span class="o">,</span> <span class="k">new</span> <span class="n">Integer</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"no"</span><span class="o">)));</span>
+      <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="s">"/auth/login.do"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">servletPath</span><span class="o">))</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"email"</span><span class="o">)</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+          <span class="n">model</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"loginInfo"</span><span class="o">,</span> <span class="k">new</span> <span class="n">Member</span><span class="o">()</span>
+            <span class="o">.</span><span class="na">setEmail</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"email"</span><span class="o">))</span>
+            <span class="o">.</span><span class="na">setPassword</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"password"</span><span class="o">)));</span>
+        <span class="o">}</span>
+      <span class="o">}</span>
+      
+      <span class="c1">// 페이지 컨트롤러를 실행한다.</span>
+      <span class="n">String</span> <span class="n">viewUrl</span> <span class="o">=</span> <span class="n">pageController</span><span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="n">model</span><span class="o">);</span>
+      
+      <span class="c1">// Map 객체에 저장된 값을 ServletRequest에 복사한다.</span>
+      <span class="k">for</span> <span class="o">(</span><span class="n">String</span> <span class="n">key</span> <span class="o">:</span> <span class="n">model</span><span class="o">.</span><span class="na">keySet</span><span class="o">())</span> <span class="o">{</span>
+        <span class="n">request</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">model</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">));</span>
+      <span class="o">}</span>
+      
+      <span class="k">if</span> <span class="o">(</span><span class="n">viewUrl</span><span class="o">.</span><span class="na">startsWith</span><span class="o">(</span><span class="s">"redirect:"</span><span class="o">))</span> <span class="o">{</span>
+        <span class="n">response</span><span class="o">.</span><span class="na">sendRedirect</span><span class="o">(</span><span class="n">viewUrl</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="mi">9</span><span class="o">));</span>
+        <span class="k">return</span><span class="o">;</span>
+      <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+        <span class="n">RequestDispatcher</span> <span class="n">rd</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getRequestDispatcher</span><span class="o">(</span><span class="n">viewUrl</span><span class="o">);</span>
+        <span class="n">rd</span><span class="o">.</span><span class="na">include</span><span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">);</span>
+      <span class="o">}</span>
+      
+    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+      <span class="n">request</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="s">"error"</span><span class="o">,</span> <span class="n">e</span><span class="o">);</span>
+      <span class="n">RequestDispatcher</span> <span class="n">rd</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getRequestDispatcher</span><span class="o">(</span><span class="s">"/Error.jsp"</span><span class="o">);</span>
+      <span class="n">rd</span><span class="o">.</span><span class="na">forward</span><span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">);</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@WebListener</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ContextLoaderListener</span> <span class="kd">implements</span> <span class="n">ServletContextListener</span> <span class="o">{</span>
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">contextInitialized</span><span class="o">(</span><span class="n">ServletContextEvent</span> <span class="n">event</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">try</span> <span class="o">{</span>
+      <span class="n">ServletContext</span> <span class="n">sc</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="na">getServletContext</span><span class="o">();</span>
+      
+      <span class="n">InitialContext</span> <span class="n">initialContext</span> <span class="o">=</span> <span class="k">new</span> <span class="n">InitialContext</span><span class="o">();</span>
+      <span class="n">DataSource</span> <span class="n">ds</span> <span class="o">=</span> <span class="o">(</span><span class="n">DataSource</span><span class="o">)</span><span class="n">initialContext</span><span class="o">.</span><span class="na">lookup</span><span class="o">(</span>
+          <span class="s">"java:comp/env/jdbc/studydb"</span><span class="o">);</span>
+      
+      <span class="n">MemberDao</span> <span class="n">memberDao</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MemberDao</span><span class="o">();</span>
+      <span class="n">memberDao</span><span class="o">.</span><span class="na">setDataSource</span><span class="o">(</span><span class="n">ds</span><span class="o">);</span>
+      
+      <span class="n">sc</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="s">"/auth/login.do"</span><span class="o">,</span> 
+          <span class="k">new</span> <span class="nf">LogInController</span><span class="o">().</span><span class="na">setMemberDao</span><span class="o">(</span><span class="n">memberDao</span><span class="o">));</span>
+      <span class="n">sc</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="s">"/auth/logout.do"</span><span class="o">,</span> <span class="k">new</span> <span class="n">LogOutController</span><span class="o">());</span>
+      <span class="n">sc</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="s">"/member/list.do"</span><span class="o">,</span> 
+          <span class="k">new</span> <span class="nf">MemberListController</span><span class="o">().</span><span class="na">setMemberDao</span><span class="o">(</span><span class="n">memberDao</span><span class="o">));</span>
+      <span class="n">sc</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="s">"/member/add.do"</span><span class="o">,</span> 
+          <span class="k">new</span> <span class="nf">MemberAddController</span><span class="o">().</span><span class="na">setMemberDao</span><span class="o">(</span><span class="n">memberDao</span><span class="o">));</span>
+      <span class="n">sc</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="s">"/member/update.do"</span><span class="o">,</span> 
+          <span class="k">new</span> <span class="nf">MemberUpdateController</span><span class="o">().</span><span class="na">setMemberDao</span><span class="o">(</span><span class="n">memberDao</span><span class="o">));</span>
+      <span class="n">sc</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="s">"/member/delete.do"</span><span class="o">,</span> 
+          <span class="k">new</span> <span class="nf">MemberDeleteController</span><span class="o">().</span><span class="na">setMemberDao</span><span class="o">(</span><span class="n">memberDao</span><span class="o">));</span>
+      
+    <span class="o">}</span> <span class="k">catch</span><span class="o">(</span><span class="n">Throwable</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">contextDestroyed</span><span class="o">(</span><span class="n">ServletContextEvent</span> <span class="n">event</span><span class="o">)</span> <span class="o">{}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+<p><br /></p>
+
+<h3 id="reference">Reference</h3>
+<ul>
+  <li><a href="http://www.yes24.com/24/Goods/13159413?Acode=101">열혈강의 자바 웹 개발 워크북</a></li>
+</ul>
+
+
+        </article>
+        <hr>
+
+        
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+        
+
+        <div class="post-recent">
+    <div class="pre">
+        
+        <p><strong>prev</strong> <a href="/2016/09/15/dbconnection/">DB커넥션 관련 정리</a></p>
+        
+    </div>
+    <div class="nex">
+
+        
+        <p><strong>next</strong> <a href="/2016/09/17/reflection_property/">리플렉션API와 프로퍼티를 이용한 객체관리</a></p>
+        
+    </div>
+</div>
+
+
+        <h2 id="comments">Comments</h2>
+        
+
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+     * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+
+    var disqus_config = function() {
+        this.page.url = 'http://joswlv.github.io/2016/09/16/frontcontroller_dietc/'; // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://joswlv.github.io/2016/09/16/frontcontroller_dietc/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document,
+            s = d.createElement('script');
+
+        s.src = '//joswlv.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+
+    </div>
+    <button class="anchor"><i class="fa fa-anchor"></i></button>
+    <div class="right">
+        <div class="wrap">
+
+            <!-- Content -->
+            <div class="side content">
+                <div>
+                    Content
+                </div>
+                <ul id="content-side" class="content-ul">
+                    <li><a href="#similar_posts">Similar Posts</a></li>
+                    <li><a href="#comments">Comments</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+/**
+ * target _blank
+ */
+(function() {
+    var aTags = document.querySelectorAll('article a:not([id])')
+    for (var i = 0; i < aTags.length; i++) {
+        aTags[i].setAttribute('target', '_blank')
+    }
+}());
+</script>
+<script src="/js/pageContent.js " charset="utf-8"></script>
+
+
+    <footer class="site-footer">
+
+
+    <div class="wrapper">
+
+        <p class="description">
+            
+        </p>
+        <p class="contact">
+            Contact me at: 
+            <a href="https://github.com/joswlv" title="GitHub"><i class="fa fa-github" aria-hidden="true"></i></a>  
+            <a href="mailto:wh7923@gmail.com" title="email"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>     
+            <a href="https://www.facebook.com/wsj7923" title="Facebook"><i class="fa fa-facebook-official" aria-hidden="true"></i></a>    
+        </p>
+        <p>
+        </p>
+        <p class="power">
+            <span>
+                Site powered by <a href="https://jekyllrb.com/">Jekyll</a> & <a href="https://pages.github.com/">Github Pages</a>.
+            </span>
+        </p>
+    </div>
+</footer>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <div class="back-to-top">
+    <a href="#top" class="scroll">
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    </a>
+</div>
+
+    <script src=" /js/main.js " charset="utf-8"></script>
+    <script src=" /js/scroll.min.js " charset="utf-8"></script>
+  </body>
+
+</html>

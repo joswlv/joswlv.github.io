@@ -1,0 +1,376 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>mybatis 동적 SQL</title>
+    <meta name="description" content="동적 SQLmybatis는 동적 SQL을 위한 엘리먼트를 제공한다.동적 SQL을 작성할 때 사용하는 엘리먼트            엘리먼트 예      설명                  &lt;if test=”조건”&gt;SQL문&lt;/if&gt;      &lt;if&gt;태그...">
+
+    <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="stylesheet" href="/css/fontawesome/css/font-awesome.min.css ">
+    <link rel="stylesheet" href="/css/main.css ">
+    <link rel="canonical" href="http://joswlv.github.io/2016/09/20/dynamic_sql/">
+    <link rel="alternate" type="application/rss+xml" title="Joswlv" href="http://joswlv.github.io/feed.xml ">
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-83868242-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</head>
+
+
+  <body>
+
+    <header id="top">
+    <div class="wrapper">
+        <a href="/" class="brand">Joswlv</a>
+        <small></small>
+        <button id="headerMenu" class="menu"><i class="fa fa-bars"></i></button>
+        <nav id="headerNav">
+            <ul>
+                <li>
+                    
+                    <a href="/">
+                    
+                        <i class="fa fa-home"></i>Home
+                    </a>
+                </li>
+
+                
+                    
+                    <li>
+                        
+                        <a href="/archive/">
+                        
+                            <i class="fa fa-archive"></i>Archives
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/category/">
+                        
+                            <i class="fa fa-th-list"></i>Categories
+                        </a>
+                    </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        </nav>
+    </div>
+</header>
+
+
+        <div class="page clearfix" post>
+    <div class="left">
+        <h1>mybatis 동적 SQL</h1>
+        <div class="label">
+
+            <div class="label-card">
+                <i class="fa fa-calendar"></i>2016-09-20
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+            
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#web" title="Category: web" rel="category">web</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+            </div>
+
+        </div>
+        <hr>
+        <article itemscope itemtype="http://schema.org/BlogPosting">
+        <h1 id="sql">동적 SQL</h1>
+
+<p>mybatis는 동적 SQL을 위한 엘리먼트를 제공한다.</p>
+
+<p><br /></p>
+
+<p><strong>동적 SQL을 작성할 때 사용하는 엘리먼트</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>엘리먼트 예</th>
+      <th>설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>&lt;if test=”조건”&gt;SQL문&lt;/if&gt;</td>
+      <td><code class="highlighter-rouge">&lt;if&gt;</code>태그는 어떤 값을 상태를 검사하여 참일 경우에만 SQL문을 포함하고 싶을 때 사용한다. test속성에 지정된 조건이 참이면 <code class="highlighter-rouge">&lt;if&gt;</code>태그의 내용을 반환한다.</td>
+    </tr>
+    <tr>
+      <td>&lt;choose&gt; <br />   &lt;when test=”조건1”&gt;SQL문&lt;/when&gt; <br /> &lt;when test=”조건2”&gt;SQL문&lt;/when&gt; <br /> &lt;otherwise&gt;SQL문 &lt;/otherwise&gt; &lt;/choose&gt;</td>
+      <td><code class="highlighter-rouge">&lt;choose&gt;</code>태그는 검사할 조건이 여러 개일 경우에 사용한다. test속성에 지정된 조건이 참이면 <code class="highlighter-rouge">&lt;when&gt;</code>태그의 내용을 반환한다. 일치하는 조건이 없으면 <code class="highlighter-rouge">&lt;otherwise&gt;</code>의 내용을 반환한다.</td>
+    </tr>
+    <tr>
+      <td>&lt;where&gt; <br /> &lt;if test =”조건1&gt;SQL문&lt;/when&gt; <br /> &lt;if test=”조건2&gt;SQL문&lt;/when&gt; <br /> &lt;/where&gt;</td>
+      <td><code class="highlighter-rouge">&lt;where&gt;</code>태그는 WHERE절을 반환한다. <code class="highlighter-rouge">&lt;where&gt;</code> 안의 하위 태그를 실행하고 나서 반환값이 있으면 WHERE절을 만들어 반환하고, 없으면 WHERE절을 반환하지 않는다.</td>
+    </tr>
+    <tr>
+      <td>&lt;trim prefix=”단어” prefixOverrides=”문자열|문자열”&gt; <br /> &lt;if test=”조건1”&gt;SQL문&lt;/when&gt; <br /> &lt;if test=”조건2”&gt;SQL문&lt;/when&gt; <br /> &lt;/trim&gt;</td>
+      <td><code class="highlighter-rouge">&lt;trim&gt;</code>태그는 특정 단어로 시작하는 SQL문을 반환하고 싶을 때 사용한다. prefix는 반환값 앞에 붙일 접두어를 지정한다. prefixOverrides는 반환할 값에서 제거해야 하는 접두어를 지정한다. <br />  다시 말하면 <code class="highlighter-rouge">&lt;trim&gt;</code>의 반환값이 있다면, 그 값의 앞부분이 prefixOverride에 지정된 문자열과 일치할 경우 그 문자열을 제거한다. 그리고 그 값의 앞부분에 prefix로 지정한 접두어를 붙여 반환한다.</td>
+    </tr>
+    <tr>
+      <td>&lt;set&gt; <br /> &lt;if test=”조건1”&gt;SQL문&lt;/when&gt; <br /> &lt;if test=”조건2”&gt;SQL문&lt;/when&gt; <br /> &lt;set&gt;</td>
+      <td><code class="highlighter-rouge">&lt;set&gt;</code>태그는 UPDATE문의 SET절을 만들 때 사용한다. 조건이 참인 <code class="highlighter-rouge">&lt;if&gt;</code>의 내용은 SET절에 포함된다. SET 절의 항목이 여러개 일 경우 자동으로 콤마(,)를 붙인다.</td>
+    </tr>
+    <tr>
+      <td>&lt;foreach <br /> item=”항목”<br /> index=”인덱스”<br />collection=”목록”<br />open=”시작문자열”<br />close=”종료문자열”<br />separator=”구분자”&gt;<br /> &lt;/foreach&gt;</td>
+      <td><code class="highlighter-rouge">&lt;foreach&gt;</code>태그는 목록의 값을 가지고 SQL문을 만들 때 사용한다. 특히 IN(값, 값…)조건을 만들 때 좋다. item속성에는 항목을 가리킬 때 사용할 변수의 이름을 지정한다. index속성에는 항목의 인덱스 값을 꺼낼 때 사용할 변수 이름을 지정한다. collection속성에는 java.util.List 구현체나 배열 객체가 온다. open속성에는 최종 반환값의 접두어를 지정한다. close는 최종 반환값의 접미어를 지정한다. separatory 속성은 반복으로 생ㅇ성하는 값을 구분하기 위해 붙이는 문자열을 지정한다.</td>
+    </tr>
+    <tr>
+      <td>&lt;bind name=”변수명” value=”값”/&gt;</td>
+      <td><code class="highlighter-rouge">&lt;bind&gt;</code>태그는 변수를 생성할 때 사용한다.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><br /></p>
+
+<p><strong>사용예</strong></p>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code>//MySqlProjectDao.xml
+
+  <span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">"selectList"</span> <span class="na">resultMap=</span><span class="s">"projectResultMap"</span><span class="nt">&gt;</span>
+	  select PNO, PNAME, STA_DATE, END_DATE, STATE
+	  from PROJECTS
+	  order by 
+	  <span class="nt">&lt;choose&gt;</span> 
+        <span class="nt">&lt;when</span> <span class="na">test=</span><span class="s">"orderCond == 'TITLE_ASC'"</span><span class="nt">&gt;</span>PNAME asc<span class="nt">&lt;/when&gt;</span>
+        <span class="nt">&lt;when</span> <span class="na">test=</span><span class="s">"orderCond == 'TITLE_DESC'"</span><span class="nt">&gt;</span>PNAME desc<span class="nt">&lt;/when&gt;</span>
+        <span class="nt">&lt;when</span> <span class="na">test=</span><span class="s">"orderCond == 'STARTDATE_ASC'"</span><span class="nt">&gt;</span>STA_DATE asc<span class="nt">&lt;/when&gt;</span>
+        <span class="nt">&lt;when</span> <span class="na">test=</span><span class="s">"orderCond == 'STARTDATE_DESC'"</span><span class="nt">&gt;</span>STA_DATE desc<span class="nt">&lt;/when&gt;</span>
+        <span class="nt">&lt;when</span> <span class="na">test=</span><span class="s">"orderCond == 'ENDDATE_ASC'"</span><span class="nt">&gt;</span>END_DATE asc<span class="nt">&lt;/when&gt;</span>
+        <span class="nt">&lt;when</span> <span class="na">test=</span><span class="s">"orderCond == 'ENDDATE_DESC'"</span><span class="nt">&gt;</span>END_DATE desc<span class="nt">&lt;/when&gt;</span>
+        <span class="nt">&lt;when</span> <span class="na">test=</span><span class="s">"orderCond == 'STATE_ASC'"</span><span class="nt">&gt;</span>STATE asc<span class="nt">&lt;/when&gt;</span>
+        <span class="nt">&lt;when</span> <span class="na">test=</span><span class="s">"orderCond == 'STATE_DESC'"</span><span class="nt">&gt;</span>STATE desc<span class="nt">&lt;/when&gt;</span>
+        <span class="nt">&lt;when</span> <span class="na">test=</span><span class="s">"orderCond == 'PNO_ASC'"</span><span class="nt">&gt;</span>PNO asc<span class="nt">&lt;/when&gt;</span>
+        <span class="nt">&lt;otherwise&gt;</span>PNO desc<span class="nt">&lt;/otherwise&gt;</span>
+    <span class="nt">&lt;/choose&gt;</span>
+  <span class="nt">&lt;/select&gt;</span>
+  
+    <span class="nt">&lt;update</span> <span class="na">id=</span><span class="s">"update"</span> <span class="na">parameterType=</span><span class="s">"map"</span><span class="nt">&gt;</span>
+    update PROJECTS 
+ 	<span class="nt">&lt;set&gt;</span>
+      <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">"title != null"</span><span class="nt">&gt;</span>PNAME=#{title},<span class="nt">&lt;/if&gt;</span>
+      <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">"content != null"</span><span class="nt">&gt;</span>CONTENT=#{content},<span class="nt">&lt;/if&gt;</span>
+      <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">"startDate != null"</span><span class="nt">&gt;</span>STA_DATE=#{startDate},<span class="nt">&lt;/if&gt;</span>
+      <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">"endDate != null"</span><span class="nt">&gt;</span>END_DATE=#{endDate},<span class="nt">&lt;/if&gt;</span>
+      <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">"state != null"</span><span class="nt">&gt;</span>STATE=#{state},<span class="nt">&lt;/if&gt;</span>
+      <span class="nt">&lt;if</span> <span class="na">test=</span><span class="s">"tags != null"</span><span class="nt">&gt;</span>TAGS=#{tags}<span class="nt">&lt;/if&gt;</span>
+    <span class="nt">&lt;/set&gt;</span>
+    where PNO=#{no}
+  <span class="nt">&lt;/update&gt;</span>
+  
+</code></pre>
+</div>
+
+<p><br /></p>
+
+<h3 id="reference">Reference</h3>
+<ul>
+  <li><a href="http://www.yes24.com/24/Goods/13159413?Acode=101">열혈강의 자바 웹 개발 워크북</a></li>
+</ul>
+
+        </article>
+        <hr>
+
+        
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+        
+
+        <div class="post-recent">
+    <div class="pre">
+        
+        <p><strong>prev</strong> <a href="/2016/09/20/mybatis_log/">mybatis log출력</a></p>
+        
+    </div>
+    <div class="nex">
+
+        
+        <p><strong>next</strong> <a href="/2016/09/21/beancontext1/">스프링 IoC컨테이너 ApplicationContext [1]</a></p>
+        
+    </div>
+</div>
+
+
+        <h2 id="comments">Comments</h2>
+        
+
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+     * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+
+    var disqus_config = function() {
+        this.page.url = 'http://joswlv.github.io/2016/09/20/dynamic_sql/'; // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://joswlv.github.io/2016/09/20/dynamic_sql/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document,
+            s = d.createElement('script');
+
+        s.src = '//joswlv.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+
+    </div>
+    <button class="anchor"><i class="fa fa-anchor"></i></button>
+    <div class="right">
+        <div class="wrap">
+
+            <!-- Content -->
+            <div class="side content">
+                <div>
+                    Content
+                </div>
+                <ul id="content-side" class="content-ul">
+                    <li><a href="#similar_posts">Similar Posts</a></li>
+                    <li><a href="#comments">Comments</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+/**
+ * target _blank
+ */
+(function() {
+    var aTags = document.querySelectorAll('article a:not([id])')
+    for (var i = 0; i < aTags.length; i++) {
+        aTags[i].setAttribute('target', '_blank')
+    }
+}());
+</script>
+<script src="/js/pageContent.js " charset="utf-8"></script>
+
+
+    <footer class="site-footer">
+
+
+    <div class="wrapper">
+
+        <p class="description">
+            
+        </p>
+        <p class="contact">
+            Contact me at: 
+            <a href="https://github.com/joswlv" title="GitHub"><i class="fa fa-github" aria-hidden="true"></i></a>  
+            <a href="mailto:wh7923@gmail.com" title="email"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>     
+            <a href="https://www.facebook.com/wsj7923" title="Facebook"><i class="fa fa-facebook-official" aria-hidden="true"></i></a>    
+        </p>
+        <p>
+        </p>
+        <p class="power">
+            <span>
+                Site powered by <a href="https://jekyllrb.com/">Jekyll</a> & <a href="https://pages.github.com/">Github Pages</a>.
+            </span>
+        </p>
+    </div>
+</footer>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <div class="back-to-top">
+    <a href="#top" class="scroll">
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    </a>
+</div>
+
+    <script src=" /js/main.js " charset="utf-8"></script>
+    <script src=" /js/scroll.min.js " charset="utf-8"></script>
+  </body>
+
+</html>

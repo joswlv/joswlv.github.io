@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>List.removeif Method</title>
+    <meta name="description" content="List.remvoeif Methodremoveif()메소드는 리스트내의 엘리먼트를 필터조건의 만족한는 것만을 골라 삭제할 때 사용된다.Package: java.utilJava Platform: Java SE 8Syntax:removeif(Prdicate&lt;? super E&g...">
+
+    <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="stylesheet" href="/css/fontawesome/css/font-awesome.min.css ">
+    <link rel="stylesheet" href="/css/main.css ">
+    <link rel="canonical" href="http://joswlv.github.io/2016/10/06/List_remvoeif-Method/">
+    <link rel="alternate" type="application/rss+xml" title="Joswlv" href="http://joswlv.github.io/feed.xml ">
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-83868242-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</head>
+
+
+  <body>
+
+    <header id="top">
+    <div class="wrapper">
+        <a href="/" class="brand">Joswlv</a>
+        <small></small>
+        <button id="headerMenu" class="menu"><i class="fa fa-bars"></i></button>
+        <nav id="headerNav">
+            <ul>
+                <li>
+                    
+                    <a href="/">
+                    
+                        <i class="fa fa-home"></i>Home
+                    </a>
+                </li>
+
+                
+                    
+                    <li>
+                        
+                        <a href="/archive/">
+                        
+                            <i class="fa fa-archive"></i>Archives
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/category/">
+                        
+                            <i class="fa fa-th-list"></i>Categories
+                        </a>
+                    </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        </nav>
+    </div>
+</header>
+
+
+        <div class="page clearfix" post>
+    <div class="left">
+        <h1>List.removeif Method</h1>
+        <div class="label">
+
+            <div class="label-card">
+                <i class="fa fa-calendar"></i>2016-10-06
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+            
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#Java" title="Category: Java" rel="category">Java</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+            </div>
+
+        </div>
+        <hr>
+        <article itemscope itemtype="http://schema.org/BlogPosting">
+        <h1 id="listremvoeif-method">List.remvoeif Method</h1>
+
+<p><code class="highlighter-rouge">removeif()</code>메소드는 리스트내의 엘리먼트를 필터조건의 만족한는 것만을 골라 삭제할 때 사용된다.</p>
+
+<p><strong>Package:</strong> java.util</p>
+
+<p><strong>Java Platform:</strong> Java SE 8</p>
+
+<p><strong>Syntax:</strong></p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">removeif</span><span class="o">(</span><span class="n">Prdicate</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="n">E</span><span class="o">&gt;</span> <span class="n">filter</span><span class="o">)</span>
+</code></pre>
+</div>
+
+<p><strong>형태</strong></p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">removeIf</span><span class="o">(</span><span class="n">Predicate</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="n">E</span><span class="o">&gt;</span> <span class="n">filter</span><span class="o">)</span>
+</code></pre>
+</div>
+
+<p><strong>예</strong></p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.function.*</span><span class="o">;</span>  
+  
+<span class="kd">class</span> <span class="nc">SamplePredicate</span><span class="o">&lt;</span><span class="n">t</span><span class="o">&gt;</span> <span class="kd">implements</span> <span class="n">Predicate</span><span class="o">&lt;</span><span class="n">t</span><span class="o">&gt;{</span>  
+  <span class="n">T</span> <span class="n">varc1</span><span class="o">;</span>  
+  <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">test</span><span class="o">(</span><span class="n">T</span> <span class="n">varc</span><span class="o">){</span>  
+  <span class="k">if</span><span class="o">(</span><span class="n">varc1</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">varc</span><span class="o">)){</span>  
+   <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>  
+  <span class="o">}</span>  
+  <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>  
+  <span class="o">}</span>  
+<span class="o">}</span>  
+</code></pre>
+</div>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.*</span><span class="o">;</span>  
+  
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">test</span> <span class="o">{</span>  
+  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>  
+   
+  <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">color_list</span><span class="o">;</span>  
+  <span class="n">SamplePredicate</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">filter</span><span class="o">;</span>  
+    
+  <span class="n">color_list</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;&gt;</span> <span class="o">();</span>  
+  <span class="n">filter</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SamplePredicate</span><span class="o">&lt;&gt;</span> <span class="o">();</span>  
+    
+  <span class="n">filter</span><span class="o">.</span><span class="na">varc1</span> <span class="o">=</span> <span class="s">"White"</span><span class="o">;</span>  
+    
+ <span class="c1">// use add() method to add values in the list  </span>
+    <span class="n">color_list</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"White"</span><span class="o">);</span>  
+    <span class="n">color_list</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"Black"</span><span class="o">);</span>  
+    <span class="n">color_list</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"Red"</span><span class="o">);</span>  
+    <span class="n">color_list</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"White"</span><span class="o">);</span>  
+    <span class="n">color_list</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"Yellow"</span><span class="o">);</span>  
+    <span class="n">color_list</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"White"</span><span class="o">);</span>  
+    
+  <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"List of Colors"</span><span class="o">);</span>  
+  <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">color_list</span><span class="o">);</span>  
+    
+  <span class="c1">// Remove all White colors from color_list  </span>
+  <span class="n">color_list</span><span class="o">.</span><span class="na">removeIf</span><span class="o">(</span><span class="n">filter</span><span class="o">);</span>  
+    
+  <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Color list, after removing White colors :"</span><span class="o">);</span>  
+  <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">color_list</span><span class="o">);</span>  
+    
+ <span class="o">}</span>  
+<span class="o">}</span> 
+</code></pre>
+</div>
+
+<p><strong>결과</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>List of Colors
+[White, Black, Red, White, Yellow, White]
+Color list, after removing White colors :
+[Black, Red, Yellow]
+</code></pre>
+</div>
+
+<p><br /></p>
+
+<h3 id="reference">Reference</h3>
+<ul>
+  <li><a href="http://www.w3resource.com/java-tutorial/arraylist/arraylist_removeif.php">w3resource</a></li>
+</ul>
+
+        </article>
+        <hr>
+
+        
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+        
+
+        <div class="post-recent">
+    <div class="pre">
+        
+        <p><strong>prev</strong> <a href="/2016/10/02/Interceptor/">Interceptor</a></p>
+        
+    </div>
+    <div class="nex">
+
+        
+        <p><strong>next</strong> <a href="/2016/10/07/Predicate/">Java 8 Predicate</a></p>
+        
+    </div>
+</div>
+
+
+        <h2 id="comments">Comments</h2>
+        
+
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+     * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+
+    var disqus_config = function() {
+        this.page.url = 'http://joswlv.github.io/2016/10/06/List_remvoeif-Method/'; // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://joswlv.github.io/2016/10/06/List_remvoeif-Method/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document,
+            s = d.createElement('script');
+
+        s.src = '//joswlv.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+
+    </div>
+    <button class="anchor"><i class="fa fa-anchor"></i></button>
+    <div class="right">
+        <div class="wrap">
+
+            <!-- Content -->
+            <div class="side content">
+                <div>
+                    Content
+                </div>
+                <ul id="content-side" class="content-ul">
+                    <li><a href="#similar_posts">Similar Posts</a></li>
+                    <li><a href="#comments">Comments</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+/**
+ * target _blank
+ */
+(function() {
+    var aTags = document.querySelectorAll('article a:not([id])')
+    for (var i = 0; i < aTags.length; i++) {
+        aTags[i].setAttribute('target', '_blank')
+    }
+}());
+</script>
+<script src="/js/pageContent.js " charset="utf-8"></script>
+
+
+    <footer class="site-footer">
+
+
+    <div class="wrapper">
+
+        <p class="description">
+            
+        </p>
+        <p class="contact">
+            Contact me at: 
+            <a href="https://github.com/joswlv" title="GitHub"><i class="fa fa-github" aria-hidden="true"></i></a>  
+            <a href="mailto:wh7923@gmail.com" title="email"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>     
+            <a href="https://www.facebook.com/wsj7923" title="Facebook"><i class="fa fa-facebook-official" aria-hidden="true"></i></a>    
+        </p>
+        <p>
+        </p>
+        <p class="power">
+            <span>
+                Site powered by <a href="https://jekyllrb.com/">Jekyll</a> & <a href="https://pages.github.com/">Github Pages</a>.
+            </span>
+        </p>
+    </div>
+</footer>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <div class="back-to-top">
+    <a href="#top" class="scroll">
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    </a>
+</div>
+
+    <script src=" /js/main.js " charset="utf-8"></script>
+    <script src=" /js/scroll.min.js " charset="utf-8"></script>
+  </body>
+
+</html>

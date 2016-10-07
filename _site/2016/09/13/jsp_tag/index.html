@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>JSP 각종 태그들</title>
+    <meta name="description" content="1. JSP 액션 태그            액션      설명                  &lt;jsp:useBean&gt;      자바 인스턴스를 준비한다. 보관소에서 자바 인스턴스를 꺼내거나, 자바 인스턴스를 새로 만들어 보관소에 저장하는 코드를 생성한다. 자바인스턴스를 ...">
+
+    <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="stylesheet" href="/css/fontawesome/css/font-awesome.min.css ">
+    <link rel="stylesheet" href="/css/main.css ">
+    <link rel="canonical" href="http://joswlv.github.io/2016/09/13/jsp_tag/">
+    <link rel="alternate" type="application/rss+xml" title="Joswlv" href="http://joswlv.github.io/feed.xml ">
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-83868242-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</head>
+
+
+  <body>
+
+    <header id="top">
+    <div class="wrapper">
+        <a href="/" class="brand">Joswlv</a>
+        <small></small>
+        <button id="headerMenu" class="menu"><i class="fa fa-bars"></i></button>
+        <nav id="headerNav">
+            <ul>
+                <li>
+                    
+                    <a href="/">
+                    
+                        <i class="fa fa-home"></i>Home
+                    </a>
+                </li>
+
+                
+                    
+                    <li>
+                        
+                        <a href="/archive/">
+                        
+                            <i class="fa fa-archive"></i>Archives
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/category/">
+                        
+                            <i class="fa fa-th-list"></i>Categories
+                        </a>
+                    </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        </nav>
+    </div>
+</header>
+
+
+        <div class="page clearfix" post>
+    <div class="left">
+        <h1>JSP 각종 태그들</h1>
+        <div class="label">
+
+            <div class="label-card">
+                <i class="fa fa-calendar"></i>2016-09-13
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+            
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#web" title="Category: web" rel="category">web</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+            </div>
+
+        </div>
+        <hr>
+        <article itemscope itemtype="http://schema.org/BlogPosting">
+        <h1 id="jsp--">1. JSP 액션 태그</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>액션</th>
+      <th>설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>&lt;jsp:useBean&gt;</td>
+      <td>자바 인스턴스를 준비한다. 보관소에서 자바 인스턴스를 꺼내거나, 자바 인스턴스를 새로 만들어 보관소에 저장하는 코드를 생성한다. 자바인스턴스를 자바 빈(Java Bean)이라고 한다.</td>
+    </tr>
+    <tr>
+      <td>&lt;jsp:setProperty&gt;</td>
+      <td>자바빈의 프로퍼티 값을 설정합니다. 자바 객체의 셋터 메서드를 호출하는 코드를 생성한다.</td>
+    </tr>
+    <tr>
+      <td>&lt;jsp:getProperty&gt;</td>
+      <td>자바빈의 프로퍼티 값을 꺼낸다. 자바 객체의 겟터메서드를 호출하는 코드를 생성한다.</td>
+    </tr>
+    <tr>
+      <td>&lt;jsp:include&gt;</td>
+      <td>정적 또는 동적자원을 인클루딩 하는 자바 코드를 생성한다.</td>
+    </tr>
+    <tr>
+      <td>&lt;jsp:forward&gt;</td>
+      <td>현재 페이지의 실행을 멈추고 다른 정적자원이나 동적자원으로 포워딩하는 자바 코드를 생성한다.</td>
+    </tr>
+    <tr>
+      <td>&lt;jsp:param&gt;</td>
+      <td>jsp:include, jsp:forward, jsp:params의 자식 태그로 사용할 수 있다. ServletRequest 객체에 매게변수를 추가하는 코드를 생성한다.</td>
+    </tr>
+    <tr>
+      <td>&lt;jsp:plugin&gt;</td>
+      <td>Object 또는 Embed HTML태그를 생성한다.</td>
+    </tr>
+    <tr>
+      <td>&lt;jsp:element&gt;</td>
+      <td>임의의 xml태그나 html태그를 생성한다.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="jspusebean-">jsp:useBean 문법</h4>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="o">&lt;</span><span class="nl">jsp:</span><span class="n">useBean</span> <span class="n">id</span> <span class="o">=</span> <span class="err">'이름'</span> <span class="n">scope</span><span class="o">=</span><span class="s">"page|request|session|application"</span>
+			<span class="kd">class</span><span class="err">="클래스명"</span> <span class="nc">type</span><span class="o">=</span><span class="s">"타입명"</span> <span class="o">/&gt;</span>
+</code></pre>
+</div>
+
+<h4 id="jspusebean--1"><jsp:useBean> 사용예</jsp:useBean></h4>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="o">&lt;</span><span class="nl">jsp:</span><span class="n">useBean</span> <span class="n">id</span><span class="o">=</span><span class="s">"members"</span>
+			<span class="n">scope</span><span class="o">=</span><span class="s">"request"</span>
+			<span class="kd">class</span><span class="err">="</span><span class="nc">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">ArrayList</span><span class="s">"
+			type="</span><span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">ArrayList</span><span class="o">&lt;</span><span class="n">spms</span><span class="o">.</span><span class="na">vo</span><span class="o">.</span><span class="na">Member</span><span class="o">&gt;</span><span class="err">"</span><span class="o">/&gt;</span>
+</code></pre>
+</div>
+
+<ul>
+  <li>id 속성 - 객체이름을 설정한다. 이 이름을 사용하여 보관소로부터 값을 꺼낸다. 또 꺼낸 객체의 참조 변수이름으로 사용한다.</li>
+  <li>scope 속성 - 기존의 객체를 조회하거나 새로 만든 객체를 저장할 보관소를 지정한다.</li>
+  <li>class 속성 - 자바 객체를 생성할 때 사용할 클래스 이름을 지정한다. 클래스 이름은 반드시 패키지 이름을 포함해야하고, 인터페이스 이름은 안된다.</li>
+  <li>type 속성 - 참조 변수를 선언할 때 사용할 타입의 이름입니다. 클래스 이름 또는 인터페이스 이름이 올 수 있다.</li>
+</ul>
+
+<p>이렇게 JSP 액션 태그를 사용하면 자바 언어를 모르는 웹디자이너나 웹 퍼블리셔들과 협업이 쉽다.</p>
+
+<h1 id="elexpression-language">2.EL(Expression Language)</h1>
+
+<p>콤마, 대괄호를 사용하여 자바 빈의 프로퍼티나 맵, 리스트, 배열의 값을 보다 쉡게 꺼내게 해준다. 또한 스태틱으로 선언된 메서드를 호출 할 수도 있다.</p>
+
+<h4 id="el">EL표기법</h4>
+
+<p><code class="highlighter-rouge">${member.no} 또는 ${member["no"]}</code></p>
+
+<p>위 표기법을 java 코드로 표현하면 다음과 같다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">Member</span> <span class="n">obj</span> <span class="o">=</span> <span class="o">(</span><span class="n">Member</span><span class="o">)</span><span class="n">pageContext</span><span class="o">.</span><span class="na">findAttribute</span><span class="o">(</span><span class="s">"member"</span><span class="o">);</span>
+<span class="kt">int</span> <span class="n">val</span> <span class="o">=</span> <span class="n">obj</span><span class="o">.</span><span class="na">getNo</span><span class="o">();</span>
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">PageContext</code>의 findAttribute()는 다음 순서에 따라 보관소를 뒤져서 객체를 찾고, 없으면 <code class="highlighter-rouge">null</code>을 반환한다.</p>
+
+<blockquote>
+  <p>EL 검색순서</p>
+
+  <p>JspContext -&gt; servletRequest -&gt; HttpSession -&gt; ServletContext -&gt; null</p>
+</blockquote>
+
+<h4 id="el---">EL에서 검색 범위 지정</h4>
+
+<p>EL도 <jsp:useBean>처럼 네 군데 보관소에서 값을 꺼낼 수 있다. 다만 <jsp:useBean>과 다른 점은 EL로는 객체를 생성할 수 없다는 점이다. EL에서 보관소를 참조할 때의 이름은 다음과 같다.</jsp:useBean></jsp:useBean></p>
+
+<blockquote>
+  <p>pageScope -&gt; JspContext</p>
+
+  <p>requestScope -&gt; ServletRequest</p>
+
+  <p>sessionScope -&gt; HttpSession</p>
+
+  <p>applicationScope -&gt; ServletContext</p>
+</blockquote>
+
+<p><strong>예)</strong> <code class="highlighter-rouge">${requestScope.member.no}</code></p>
+
+<h4 id="el--">EL 기본 객체</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>객체</th>
+      <th>설명</th>
+      <th>코드</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>pageContext</td>
+      <td>JSP의 PageContext 객체</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>servletContext</td>
+      <td>ServletContext 객체</td>
+      <td>${pageContext.servletContext.객체명}</td>
+    </tr>
+    <tr>
+      <td>session</td>
+      <td>HttpSession 객체</td>
+      <td>${pageContext.session.객체명}</td>
+    </tr>
+    <tr>
+      <td>requset</td>
+      <td>ServletRequest 객체</td>
+      <td>${pageContext.request.객체명}</td>
+    </tr>
+    <tr>
+      <td>response</td>
+      <td>ServeltResponse객체</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>param</td>
+      <td>요청 매개변수의 값 조회</td>
+      <td>${param.매개변수명}</td>
+    </tr>
+    <tr>
+      <td>paramValues</td>
+      <td>요청 매개변수의 값 배열 조회</td>
+      <td>${paramValues.매개변수명}</td>
+    </tr>
+    <tr>
+      <td>header</td>
+      <td>HTTP헤더의 값 조회</td>
+      <td>${header.헤더명}</td>
+    </tr>
+    <tr>
+      <td>headerValues</td>
+      <td>HTTP헤더의 값 배열조회</td>
+      <td>${headerValues.헤더명}</td>
+    </tr>
+    <tr>
+      <td>cooki</td>
+      <td>쿠키값 조회</td>
+      <td>${cookie.쿠키명}</td>
+    </tr>
+    <tr>
+      <td>initParam</td>
+      <td>컨텍스트초기화 매개변수의 값조회</td>
+      <td>${initParam.매개변수명}</td>
+    </tr>
+    <tr>
+      <td>pageScope</td>
+      <td>page보관소의 값 조회</td>
+      <td>${pageScope.객체명}</td>
+    </tr>
+    <tr>
+      <td>requestScope</td>
+      <td>request 보관소의 값 조회</td>
+      <td>${requestScope.객체명}</td>
+    </tr>
+    <tr>
+      <td>sessionScope</td>
+      <td>session 보관소의 값 조회</td>
+      <td>${sessionScope.객체명}</td>
+    </tr>
+    <tr>
+      <td>applicationScope</td>
+      <td>application 보관소의 값 조회</td>
+      <td>${applicationScope.객체명}</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="section">리터럴 표현식</h3>
+
+<p>EL 블록에서 사용할 수 있는 값의 문자열, 정수, 부동 소수점, 참거짓, 널이 가능하다.</p>
+
+<p>다음은 EL에서 사용하거나 사용하기로 예약한 키워드이다. JspContext나 ServletRequest, Httpsession, ServletContext 보관소에 객체를 저장할 때, 그 식별자는 EL의 예약 키워드 이름과 같아서는 안된다.</p>
+
+<blockquote>
+  <p>and, or, not, eq, ne, lt, gt, le, ge, true, false, null, instanceof, empty, div, mod</p>
+</blockquote>
+
+<h1 id="jstljsp-standard-tag-library">3. JSTL(Jsp Standard Tag Library)</h1>
+
+<p><a href="http://jstl.java.net">http://jstl.java.net</a>으로 접속하여, 라이브러리를 다운로드 받아 사용한다.</p>
+
+<h3 id="section-1">사용할 태그 라이브어리 선언</h3>
+
+<p><strong>선언 방법</strong></p>
+
+<blockquote>
+  <p>&lt;%@ taglib uri=”사용할 태그의 라이브러리 URI” prefix=”접두사” %&gt;</p>
+</blockquote>
+
+<p><code class="highlighter-rouge">&lt;%@ tagli %&gt;</code>은 JSP의 지시자 태그이다. uri속성은 태그 라이브러리의 네임페이스 이름이다.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>태그라이브러리</th>
+      <th>접두사</th>
+      <th>네임페이스의 URI 식별자</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Core</td>
+      <td>c</td>
+      <td>http://java.sun.com/jsp/jstl/core</td>
+    </tr>
+    <tr>
+      <td>XML</td>
+      <td>x</td>
+      <td>http://java.sun.com/jsp/jstl/xml</td>
+    </tr>
+    <tr>
+      <td>l18N</td>
+      <td>fmt</td>
+      <td>http://java.sun.com/jsp/jstl/fmt</td>
+    </tr>
+    <tr>
+      <td>Database</td>
+      <td>sql</td>
+      <td>http://java.sun.com/jsp/jstl/sql</td>
+    </tr>
+    <tr>
+      <td>Functions</td>
+      <td>fn</td>
+      <td>http://java.sun.com/jsp/jstl/functions</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="cout-">&lt;c:out&gt; 태그</h3>
+
+<p><strong>문법</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;c:out value="출력할 값" default="기본값/&gt;
+또는
+&lt;c:out value="출력할 값"&gt;기본값\&lt;/c:out&gt;
+</code></pre>
+</div>
+
+<h3 id="cset-">&lt;c:set&gt; 태그</h3>
+
+<p><strong>문법</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>value 속성을 사용하여 값 설정
+&lt;c:set var="변수명" value="값" scope="page|request|session|application"/&gt;
+태그 콘텐츠를 사용하여 값 설정
+&lt;c:set var="변수명" scope="page|request|session|application"/&gt;값\&lt;/c:set&gt;
+</code></pre>
+</div>
+
+<h3 id="cremove-">&lt;c:remove&gt; 태그</h3>
+
+<p><strong>문법</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>value 속성을 사용하여 값 설정
+&lt;c:remove var="변수명" scope="page|request|session|application"/&gt;
+</code></pre>
+</div>
+
+<h3 id="cif-">&lt;c:if&gt; 태그</h3>
+
+<p><strong>문법</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;c:if teset="조건" var="변수명" scope="page|request|session|application"&gt;
+콘텐츠
+&lt;/c:if&gt;
+</code></pre>
+</div>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;c:if</span> <span class="na">test=</span><span class="s">"${10 &gt; 20}"</span> <span class="na">var=</span><span class="s">"result1"</span><span class="nt">&gt;</span>
+10은 20보다 크다.
+<span class="nt">&lt;/c:if&gt;</span>
+${result1}
+
+//결과
+//false
+</code></pre>
+</div>
+
+<h3 id="cchoose-">&lt;c:choose&gt; 태그</h3>
+
+<p><strong>문법</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;c:choos&gt;
+	&lt;c:when test="참거짓 값"&gt;&lt;/c:when&gt;
+	&lt;c:when test="참거짓 값"&gt;&lt;/c:when&gt;
+	....
+	&lt;c:otherwise&gt;&lt;/otherwise&gt;
+&lt;/c:choose&gt;
+</code></pre>
+</div>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="o">&lt;</span><span class="nl">c:</span><span class="n">set</span> <span class="n">var</span><span class="o">=</span><span class="s">"userid"</span> <span class="n">value</span><span class="o">=</span><span class="s">"hong"</span><span class="o">/&gt;</span>
+<span class="o">&lt;</span><span class="nl">c:</span><span class="n">choose</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="nl">c:</span><span class="n">when</span> <span class="n">test</span><span class="o">=</span><span class="s">"${userid == 'hong'}"</span><span class="o">&gt;</span>
+    <span class="err">홍길동님</span> <span class="err">반갑습니다</span><span class="o">.</span>
+  <span class="o">&lt;/</span><span class="nl">c:</span><span class="n">when</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="nl">c:</span><span class="n">when</span> <span class="n">test</span><span class="o">=</span><span class="s">"${userid == 'leem'}"</span><span class="o">&gt;</span>
+    <span class="err">임꺽정님</span> <span class="err">반갑습니다</span><span class="o">.</span>
+  <span class="o">&lt;/</span><span class="nl">c:</span><span class="n">when</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="nl">c:</span><span class="n">when</span> <span class="n">test</span><span class="o">=</span><span class="s">"${userid == 'admin'}"</span><span class="o">&gt;</span>
+    <span class="err">관리자</span> <span class="err">전용</span> <span class="err">페이지입니다</span><span class="o">.</span>
+  <span class="o">&lt;/</span><span class="nl">c:</span><span class="n">when</span><span class="o">&gt;</span>
+  <span class="o">&lt;</span><span class="nl">c:</span><span class="n">otherwise</span><span class="o">&gt;</span>
+    <span class="err">등록되지</span> <span class="err">않은</span> <span class="err">사용자입니다</span><span class="o">.</span>
+  <span class="o">&lt;/</span><span class="nl">c:</span><span class="n">otherwise</span><span class="o">&gt;</span>
+<span class="o">&lt;/</span><span class="nl">c:</span><span class="n">choose</span><span class="o">&gt;</span>
+
+<span class="c1">//결과</span>
+<span class="c1">//홍길동님 반갑습니다.</span>
+</code></pre>
+</div>
+
+<h3 id="cforeach-">&lt;c:forEach&gt; 태그</h3>
+
+<p><strong>문법</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;c:forEach var="변수명" item="목록데이터" begin="시작인덱스" end="종료인덱스"&gt;
+	콘텐츠
+&lt;/c:forEach&gt;
+</code></pre>
+</div>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;h3&gt;</span>반복문 - 배열<span class="nt">&lt;/h3&gt;</span>
+<span class="err">&lt;</span>% pageContext.setAttribute("nameList", 
+  new String[]{"홍길동", "임꺽정", "일지매"}); %&gt;
+<span class="nt">&lt;ul&gt;</span>
+<span class="nt">&lt;c:forEach</span> <span class="na">var=</span><span class="s">"name"</span> <span class="na">items=</span><span class="s">"${nameList}"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;li&gt;</span>${name}<span class="nt">&lt;/li&gt;</span>	
+<span class="nt">&lt;/c:forEach&gt;</span>
+<span class="nt">&lt;/ul&gt;</span>
+
+<span class="nt">&lt;h3&gt;</span>반복문 - 배열의 시작 인덱스와 종료 인덱스 지정<span class="nt">&lt;/h3&gt;</span>
+<span class="err">&lt;</span>% pageContext.setAttribute("nameList2", 
+  new String[]{"홍길동", "임꺽정", "일지매", "주먹대장", "똘이장군"}); %&gt;
+<span class="nt">&lt;ul&gt;</span>
+<span class="nt">&lt;c:forEach</span> <span class="na">var=</span><span class="s">"name"</span> <span class="na">items=</span><span class="s">"${nameList2}"</span> <span class="na">begin=</span><span class="s">"2"</span> <span class="na">end=</span><span class="s">"3"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;li&gt;</span>${name}<span class="nt">&lt;/li&gt;</span>	
+<span class="nt">&lt;/c:forEach&gt;</span>
+<span class="nt">&lt;/ul&gt;</span>
+
+<span class="nt">&lt;h3&gt;</span>반복문 - ArrayList 객체<span class="nt">&lt;/h3&gt;</span>
+<span class="err">&lt;</span>% 
+ArrayList<span class="nt">&lt;String&gt;</span> nameList3 = new ArrayList<span class="nt">&lt;String&gt;</span>();
+nameList3.add("홍길동");
+nameList3.add("임꺽정");
+nameList3.add("일지매");
+nameList3.add("주먹대장");
+nameList3.add("똘이장군");
+pageContext.setAttribute("nameList3", nameList3); 
+%&gt;
+<span class="nt">&lt;ul&gt;</span>
+<span class="nt">&lt;c:forEach</span> <span class="na">var=</span><span class="s">"name"</span> <span class="na">items=</span><span class="s">"${nameList3}"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;li&gt;</span>${name}<span class="nt">&lt;/li&gt;</span>	
+<span class="nt">&lt;/c:forEach&gt;</span>
+<span class="nt">&lt;/ul&gt;</span>
+
+<span class="nt">&lt;h3&gt;</span>반복문 - 콤마로 구분된 문자열<span class="nt">&lt;/h3&gt;</span>
+<span class="err">&lt;</span>% pageContext.setAttribute("nameList4", "홍길동,임꺽정,일지매,주먹대장,똘이장군"); %&gt;
+<span class="nt">&lt;ul&gt;</span>
+<span class="nt">&lt;c:forEach</span> <span class="na">var=</span><span class="s">"name"</span> <span class="na">items=</span><span class="s">"${nameList4}"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;li&gt;</span>${name}<span class="nt">&lt;/li&gt;</span>	
+<span class="nt">&lt;/c:forEach&gt;</span>
+<span class="nt">&lt;/ul&gt;</span>
+
+<span class="nt">&lt;h3&gt;</span>반복문 - 특정 횟수 만큼 반복<span class="nt">&lt;/h3&gt;</span>
+<span class="nt">&lt;ul&gt;</span>
+<span class="nt">&lt;c:forEach</span> <span class="na">var=</span><span class="s">"no"</span> <span class="na">begin=</span><span class="s">"1"</span> <span class="na">end=</span><span class="s">"6"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;li&gt;&lt;a</span> <span class="na">href=</span><span class="s">"jstl0${no}.jsp"</span><span class="nt">&gt;</span>JSTL 예제 ${no}<span class="nt">&lt;/a&gt;&lt;/li&gt;</span>	
+<span class="nt">&lt;/c:forEach&gt;</span>
+<span class="nt">&lt;/ul&gt;</span>
+</code></pre>
+</div>
+
+<h3 id="cfortokens-">&lt;c:forTokens&gt; 태그</h3>
+
+<p>문자열을 특정 구분자(delimiter)로 분리하여 반복문을 돌릴 수 있다.</p>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="err">&lt;</span>% pageContext.setAttribute("tokens","v1=20<span class="ni">&amp;v2=30&amp;op=+");</span> %&gt;
+<span class="nt">&lt;ul&gt;</span>
+<span class="nt">&lt;c:forTokens</span> <span class="na">var=</span><span class="s">"item"</span> <span class="na">items=</span><span class="s">"${tokens}"</span> <span class="na">delims=</span><span class="s">"&amp;"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;li&gt;</span>${item}<span class="nt">&lt;/li&gt;</span>	
+<span class="nt">&lt;/c:forTokens&gt;</span>
+<span class="nt">&lt;/ul&gt;</span>
+
+/*
+결과
+v1=20
+v2=30
+op=+
+*/
+</code></pre>
+</div>
+
+<p>이밖에도 &lt;c:url&gt;, &lt;c:import&gt;, &lt;c:redirection&gt;, &lt;fmt:parseData&gt; 등 많은 태그들이 있다.</p>
+
+<h3 id="reference">Reference</h3>
+<ul>
+  <li><a href="http://www.yes24.com/24/Goods/13159413?Acode=101">열혈강의 자바 웹 개발 워크북</a></li>
+</ul>
+
+        </article>
+        <hr>
+
+        
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+        
+
+        <div class="post-recent">
+    <div class="pre">
+        
+        <p><strong>prev</strong> <a href="/2016/09/13/jsp_tag_datastorage/">서블릿 데이터 보관소</a></p>
+        
+    </div>
+    <div class="nex">
+
+        
+        <p><strong>next</strong> <a href="/2016/09/15/dbconnection/">DB커넥션 관련 정리</a></p>
+        
+    </div>
+</div>
+
+
+        <h2 id="comments">Comments</h2>
+        
+
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+     * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+
+    var disqus_config = function() {
+        this.page.url = 'http://joswlv.github.io/2016/09/13/jsp_tag/'; // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://joswlv.github.io/2016/09/13/jsp_tag/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document,
+            s = d.createElement('script');
+
+        s.src = '//joswlv.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+
+    </div>
+    <button class="anchor"><i class="fa fa-anchor"></i></button>
+    <div class="right">
+        <div class="wrap">
+
+            <!-- Content -->
+            <div class="side content">
+                <div>
+                    Content
+                </div>
+                <ul id="content-side" class="content-ul">
+                    <li><a href="#similar_posts">Similar Posts</a></li>
+                    <li><a href="#comments">Comments</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+/**
+ * target _blank
+ */
+(function() {
+    var aTags = document.querySelectorAll('article a:not([id])')
+    for (var i = 0; i < aTags.length; i++) {
+        aTags[i].setAttribute('target', '_blank')
+    }
+}());
+</script>
+<script src="/js/pageContent.js " charset="utf-8"></script>
+
+
+    <footer class="site-footer">
+
+
+    <div class="wrapper">
+
+        <p class="description">
+            
+        </p>
+        <p class="contact">
+            Contact me at: 
+            <a href="https://github.com/joswlv" title="GitHub"><i class="fa fa-github" aria-hidden="true"></i></a>  
+            <a href="mailto:wh7923@gmail.com" title="email"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>     
+            <a href="https://www.facebook.com/wsj7923" title="Facebook"><i class="fa fa-facebook-official" aria-hidden="true"></i></a>    
+        </p>
+        <p>
+        </p>
+        <p class="power">
+            <span>
+                Site powered by <a href="https://jekyllrb.com/">Jekyll</a> & <a href="https://pages.github.com/">Github Pages</a>.
+            </span>
+        </p>
+    </div>
+</footer>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <div class="back-to-top">
+    <a href="#top" class="scroll">
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    </a>
+</div>
+
+    <script src=" /js/main.js " charset="utf-8"></script>
+    <script src=" /js/scroll.min.js " charset="utf-8"></script>
+  </body>
+
+</html>

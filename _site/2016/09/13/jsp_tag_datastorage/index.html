@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>서블릿 데이터 보관소</title>
+    <meta name="description" content="서블릿의 데이터 보관소ServletContext 보관소웹 애플리케이션이 시작 될 때 생성되어 웹 애플리케이션 종료될 때까지 유지된다. 이 보관소에 데이터를 보관하면 웹 애플리케이션이 실행되는 동안에는 모든 서블릿이 사용 할 수 있다. application변수를 통해 이 보관소를 참...">
+
+    <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="stylesheet" href="/css/fontawesome/css/font-awesome.min.css ">
+    <link rel="stylesheet" href="/css/main.css ">
+    <link rel="canonical" href="http://joswlv.github.io/2016/09/13/jsp_tag_datastorage/">
+    <link rel="alternate" type="application/rss+xml" title="Joswlv" href="http://joswlv.github.io/feed.xml ">
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-83868242-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</head>
+
+
+  <body>
+
+    <header id="top">
+    <div class="wrapper">
+        <a href="/" class="brand">Joswlv</a>
+        <small></small>
+        <button id="headerMenu" class="menu"><i class="fa fa-bars"></i></button>
+        <nav id="headerNav">
+            <ul>
+                <li>
+                    
+                    <a href="/">
+                    
+                        <i class="fa fa-home"></i>Home
+                    </a>
+                </li>
+
+                
+                    
+                    <li>
+                        
+                        <a href="/archive/">
+                        
+                            <i class="fa fa-archive"></i>Archives
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/category/">
+                        
+                            <i class="fa fa-th-list"></i>Categories
+                        </a>
+                    </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        </nav>
+    </div>
+</header>
+
+
+        <div class="page clearfix" post>
+    <div class="left">
+        <h1>서블릿 데이터 보관소</h1>
+        <div class="label">
+
+            <div class="label-card">
+                <i class="fa fa-calendar"></i>2016-09-13
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+            
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#web" title="Category: web" rel="category">web</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+            </div>
+
+        </div>
+        <hr>
+        <article itemscope itemtype="http://schema.org/BlogPosting">
+        <h1 id="section">서블릿의 데이터 보관소</h1>
+
+<p><img src="http://joswlv.github.io/images/servlet_storage.png" alt="" /></p>
+
+<h3 id="servletcontext-">ServletContext 보관소</h3>
+
+<p>웹 애플리케이션이 시작 될 때 생성되어 웹 애플리케이션 종료될 때까지 유지된다. 이 보관소에 데이터를 보관하면 웹 애플리케이션이 실행되는 동안에는 모든 서블릿이 사용 할 수 있다. <code class="highlighter-rouge">application</code>변수를 통해 이 보관소를 참조할 수 있다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">init</span><span class="o">(</span><span class="n">ServletConfig</span> <span class="n">config</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">ServletException</span> <span class="o">{</span>
+		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"AppInitServlet 준비…"</span><span class="o">);</span>
+		<span class="kd">super</span><span class="o">.</span><span class="na">init</span><span class="o">(</span><span class="n">config</span><span class="o">);</span>
+		<span class="k">try</span> <span class="o">{</span>
+			<span class="n">ServletContext</span> <span class="n">sc</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">getServletContext</span><span class="o">();</span>
+			<span class="n">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="n">sc</span><span class="o">.</span><span class="na">getInitParameter</span><span class="o">(</span><span class="s">"driver"</span><span class="o">));</span>
+			<span class="n">Connection</span> <span class="n">conn</span> <span class="o">=</span> <span class="n">DriverManager</span><span class="o">.</span><span class="na">getConnection</span><span class="o">(</span>
+						<span class="n">sc</span><span class="o">.</span><span class="na">getInitParameter</span><span class="o">(</span><span class="s">"url"</span><span class="o">),</span>
+						<span class="n">sc</span><span class="o">.</span><span class="na">getInitParameter</span><span class="o">(</span><span class="s">"username"</span><span class="o">),</span>
+						<span class="n">sc</span><span class="o">.</span><span class="na">getInitParameter</span><span class="o">(</span><span class="s">"password"</span><span class="o">));</span>
+			
+			<span class="n">sc</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="s">"conn"</span><span class="o">,</span> <span class="n">conn</span><span class="o">);</span>
+		<span class="o">}</span> <span class="k">catch</span><span class="o">(</span><span class="n">Throwable</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+			<span class="k">throw</span> <span class="k">new</span> <span class="nf">ServletException</span><span class="o">(</span><span class="n">e</span><span class="o">);</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">destroy</span><span class="o">()</span> <span class="o">{</span>
+		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"AppInitServlet 마무리..."</span><span class="o">);</span>
+		<span class="kd">super</span><span class="o">.</span><span class="na">destroy</span><span class="o">();</span>
+		<span class="n">Connection</span> <span class="n">conn</span> <span class="o">=</span> 
+				<span class="o">(</span><span class="n">Connection</span><span class="o">)</span><span class="k">this</span><span class="o">.</span><span class="na">getServletContext</span><span class="o">().</span><span class="na">getAttribute</span><span class="o">(</span><span class="s">"conn"</span><span class="o">);</span> 
+		<span class="k">try</span> <span class="o">{</span>
+			<span class="k">if</span> <span class="o">(</span><span class="n">conn</span> <span class="o">!=</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">conn</span><span class="o">.</span><span class="na">isClosed</span><span class="o">()</span> <span class="o">==</span> <span class="kc">false</span><span class="o">)</span> <span class="o">{</span>
+				<span class="n">conn</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+			<span class="o">}</span>
+		<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{}</span>
+		
+	<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>AppInitServlet클래스를 만들어 init()과 destroy()에서 DB커넥션과 릴리즈를 할 수 있다. 이 때 클래스의 URL 맵핑정보가 없는데, 이를 DD파일에서 다음과 같이 입력한다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="o">&lt;</span><span class="n">servlet</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="n">servlet</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span><span class="n">AppInitServlet</span><span class="o">&lt;/</span><span class="n">servlet</span><span class="o">-</span><span class="n">name</span><span class="o">&gt;</span>
+    <span class="o">&lt;</span><span class="n">servlet</span><span class="o">-</span><span class="kd">class</span><span class="err">&gt;</span><span class="nc">spms</span><span class="o">.</span><span class="na">servlets</span><span class="o">.</span><span class="na">AppInitServlet</span><span class="o">&lt;/</span><span class="n">servlet</span><span class="o">-</span><span class="kd">class</span><span class="err">&gt;</span>
+    <span class="err">&lt;</span><span class="nc">load</span><span class="o">-</span><span class="n">on</span><span class="o">-</span><span class="n">startup</span><span class="o">&gt;</span><span class="mi">1</span><span class="o">&lt;/</span><span class="n">load</span><span class="o">-</span><span class="n">on</span><span class="o">-</span><span class="n">startup</span><span class="o">&gt;</span>
+<span class="o">&lt;/</span><span class="n">servlet</span><span class="o">&gt;</span>
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">&lt;load-on-startup&gt; &lt;/load-on-startup&gt;</code>태그를 사용해 클라이언트 요청이 없어도 해당 서블릿이 웹어플리케이션이 시작 될 때 자동으로 생성된다. 이 태그의 값은 생성 순서를 의미한다.</p>
+
+<h3 id="httpsession-">HttpSession 보관소</h3>
+
+<p>클라이언트의 최초 요청 시 생성되어 브라우저를 닫을 때까지 유지된다. 보통 로그인 할 때 이 보관소를 초기화하고, 로그아웃하면 이 보관소에 저장된 값들을 비운다. 이 보관소에 값을 보관하면 서블릿이나 JSP 페이지에 상관없이 로그아웃 하기 전까지 계속 값을 유지 가능하다. <code class="highlighter-rouge">session</code>변수를 통해서 이 보관소에 참조할 수 있다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="c1">// HttpSession변수에 값을 저장한다.</span>
+<span class="n">HttpSession</span> <span class="n">session</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getSession</span><span class="o">();</span>
+<span class="n">session</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="s">"member"</span><span class="o">,</span> <span class="n">member</span><span class="o">);</span>
+
+<span class="c1">// HttpSession변수에 저장된 값을 가져다 사용한다.</span>
+<span class="n">Member</span> <span class="n">member</span> <span class="o">=</span> <span class="o">(</span><span class="n">Member</span><span class="o">)</span><span class="n">session</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="s">"member"</span><span class="o">);</span>
+
+<span class="c1">// HttpSession 객체를 제거한다.</span>
+<span class="n">session</span><span class="o">.</span><span class="na">invalidate</span><span class="o">();</span>
+</code></pre>
+</div>
+
+<h3 id="servletrequest">ServletRequest보관소</h3>
+
+<p>클라이언트의 요청이 들어올 때 생성되어, 클라이언트에게 응답 할 때까지 유지된다. 이 보관소는 포워딩이나 인클루딩하는 서블릿들 사이에서 값을 공유 할 때 유용하다. <code class="highlighter-rouge">request</code>변수를 통해 이 보관소에 참조할 수 있다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="c1">// JSP로 출력을 위임한다.</span>
+<span class="n">RequestDispatcher</span> <span class="n">rd</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getRequestDispatcher</span><span class="o">(</span><span class="s">"/member/MemberList.jsp"</span><span class="o">);</span>
+<span class="n">rd</span><span class="o">.</span><span class="na">include</span><span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">);</span>
+</code></pre>
+</div>
+
+<h3 id="jspcontext">JspContext보관소</h3>
+
+<p>JSP 페이지를 실행하는 동안만 유지. 실제로 잘 쓸 일이 없다. <code class="highlighter-rouge">pageContext</code>변수를 통해서 이 보관소를 참조할 수 있다.</p>
+
+<h3 id="reference">Reference</h3>
+<ul>
+  <li><a href="http://www.yes24.com/24/Goods/13159413?Acode=101">열혈강의 자바 웹 개발 워크북</a></li>
+  <li><a href="http://slenderankle.tistory.com/170">slenderankle_블로그</a></li>
+</ul>
+
+        </article>
+        <hr>
+
+        
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+        
+
+        <div class="post-recent">
+    <div class="pre">
+        
+        <p><strong>prev</strong> <a href="/2016/09/12/view_and_jsp/">뷰 컴포넌트와 JSP</a></p>
+        
+    </div>
+    <div class="nex">
+
+        
+        <p><strong>next</strong> <a href="/2016/09/13/jsp_tag/">JSP 각종 태그들</a></p>
+        
+    </div>
+</div>
+
+
+        <h2 id="comments">Comments</h2>
+        
+
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+     * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+
+    var disqus_config = function() {
+        this.page.url = 'http://joswlv.github.io/2016/09/13/jsp_tag_datastorage/'; // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://joswlv.github.io/2016/09/13/jsp_tag_datastorage/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document,
+            s = d.createElement('script');
+
+        s.src = '//joswlv.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+
+    </div>
+    <button class="anchor"><i class="fa fa-anchor"></i></button>
+    <div class="right">
+        <div class="wrap">
+
+            <!-- Content -->
+            <div class="side content">
+                <div>
+                    Content
+                </div>
+                <ul id="content-side" class="content-ul">
+                    <li><a href="#similar_posts">Similar Posts</a></li>
+                    <li><a href="#comments">Comments</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+/**
+ * target _blank
+ */
+(function() {
+    var aTags = document.querySelectorAll('article a:not([id])')
+    for (var i = 0; i < aTags.length; i++) {
+        aTags[i].setAttribute('target', '_blank')
+    }
+}());
+</script>
+<script src="/js/pageContent.js " charset="utf-8"></script>
+
+
+    <footer class="site-footer">
+
+
+    <div class="wrapper">
+
+        <p class="description">
+            
+        </p>
+        <p class="contact">
+            Contact me at: 
+            <a href="https://github.com/joswlv" title="GitHub"><i class="fa fa-github" aria-hidden="true"></i></a>  
+            <a href="mailto:wh7923@gmail.com" title="email"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>     
+            <a href="https://www.facebook.com/wsj7923" title="Facebook"><i class="fa fa-facebook-official" aria-hidden="true"></i></a>    
+        </p>
+        <p>
+        </p>
+        <p class="power">
+            <span>
+                Site powered by <a href="https://jekyllrb.com/">Jekyll</a> & <a href="https://pages.github.com/">Github Pages</a>.
+            </span>
+        </p>
+    </div>
+</footer>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <div class="back-to-top">
+    <a href="#top" class="scroll">
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    </a>
+</div>
+
+    <script src=" /js/main.js " charset="utf-8"></script>
+    <script src=" /js/scroll.min.js " charset="utf-8"></script>
+  </body>
+
+</html>

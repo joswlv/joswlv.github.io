@@ -1,0 +1,684 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>HttpServlet와 JDBC, Refresh,Filter</title>
+    <meta name="description" content="1. JDBC종류DBMS 밴더는 자신들의 DBMS에 접속할 수 있는 API를 만들어 배포한다. 즉 DMBS를 사용하기 위해서는 밴더가 제공하는 API에 맞게 개발해야한다. 문제는 밴더들 별로, API가 달라 개발비용 및 유지보수에 많은 비용이 들어간다.그래서 마이크로소프트에서 밴더...">
+
+    <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="stylesheet" href="/css/fontawesome/css/font-awesome.min.css ">
+    <link rel="stylesheet" href="/css/main.css ">
+    <link rel="canonical" href="http://joswlv.github.io/2016/09/10/servlet_and_JDBC/">
+    <link rel="alternate" type="application/rss+xml" title="Joswlv" href="http://joswlv.github.io/feed.xml ">
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-83868242-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</head>
+
+
+  <body>
+
+    <header id="top">
+    <div class="wrapper">
+        <a href="/" class="brand">Joswlv</a>
+        <small></small>
+        <button id="headerMenu" class="menu"><i class="fa fa-bars"></i></button>
+        <nav id="headerNav">
+            <ul>
+                <li>
+                    
+                    <a href="/">
+                    
+                        <i class="fa fa-home"></i>Home
+                    </a>
+                </li>
+
+                
+                    
+                    <li>
+                        
+                        <a href="/archive/">
+                        
+                            <i class="fa fa-archive"></i>Archives
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/category/">
+                        
+                            <i class="fa fa-th-list"></i>Categories
+                        </a>
+                    </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        </nav>
+    </div>
+</header>
+
+
+        <div class="page clearfix" post>
+    <div class="left">
+        <h1>HttpServlet와 JDBC, Refresh,Filter</h1>
+        <div class="label">
+
+            <div class="label-card">
+                <i class="fa fa-calendar"></i>2016-09-10
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+            
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#web" title="Category: web" rel="category">web</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+            </div>
+
+        </div>
+        <hr>
+        <article itemscope itemtype="http://schema.org/BlogPosting">
+        <h1 id="jdbc">1. JDBC종류</h1>
+<p>DBMS 밴더는 자신들의 DBMS에 접속할 수 있는 API를 만들어 배포한다. 즉 DMBS를 사용하기 위해서는 밴더가 제공하는 API에 맞게 개발해야한다. 문제는 밴더들 별로, API가 달라 개발비용 및 유지보수에 많은 비용이 들어간다.</p>
+
+<p>그래서 마이크로소프트에서 밴더에 종속 받지 않고 DBMS에 접근 가능한 ODBC를 만들어 배포했다. 대부분의 DBMS API는 ODBC에 포함되어 있다. 이 라이브어리를 <code class="highlighter-rouge">ODBC 드라이버</code>라고 명칭한다.</p>
+
+<h2 id="jdbc-type-1">1) JDBC Type 1</h2>
+
+<p><img src="http://joswlv.github.io/images/jdbctype1.png" alt="" /></p>
+
+<p>주요특징은 다음과 같다.</p>
+
+<ul>
+  <li>ODBC 드라이버를 사용하여 DBMS에 접속</li>
+  <li>JRE에 포함되어 있다</li>
+  <li>속도가 유형중에서 가장 느리다.</li>
+  <li>Excel이나 Access파일에 접속할 때 유용하다.</li>
+</ul>
+
+<h2 id="jdbc-type-2">2) JDBC Type 2</h2>
+
+<p><img src="http://joswlv.github.io/images/jdbctype2.png" alt="" /></p>
+
+<p>주요특징은 다음과 같다.</p>
+
+<ul>
+  <li>DBMS밴더 API 사용</li>
+  <li>별도 JDBC 드라이버를 내려받아야함</li>
+  <li>DBMS 클라이언트의 설치 필요</li>
+</ul>
+
+<h2 id="jdbc-type-3">3) JDBC Type 3</h2>
+
+<p><img src="http://joswlv.github.io/images/jdbctype3.png" alt="" /></p>
+
+<p>주요특징은 다음과 같다.</p>
+
+<ul>
+  <li>미들웨어 서버를 경유하여 DBMS에 접속</li>
+  <li>미들웨어에서 제공하는 JDBC 드라이버 사용</li>
+  <li>ODBC나 밴더 API처럼 C나 C++로 만든 API를 호출하지 않기 때문에 Pure Java라 한다.</li>
+</ul>
+
+<h2 id="jdbc-type-4">4) JDBC Type 4</h2>
+
+<p><img src="http://joswlv.github.io/images/jdbctype4.png" alt="" /></p>
+
+<p>주요특징은 다음과 같다.</p>
+
+<ul>
+  <li>DBMS 프로토콜을 사용하여 직접 통신(ODBC드라이버가 필요없다.)</li>
+  <li>별도로 JDBC 드라이버 내려받아야한다.</li>
+  <li>Pure Java</li>
+  <li>주로 사용되는 드라이버이다.</li>
+</ul>
+
+<h1 id="jdbc-">2. JDBC와 서블릿</h1>
+
+<h2 id="javasql">1) java.sql</h2>
+
+<h3 id="section">1-1) 드라이버등록</h3>
+<p>JDBC프로그래밍의 첫번째 작업은 <code class="highlighter-rouge">DriverManager</code>를 이용하여 java.sql.Driver 인터페이스 구현체를 등록하는 것이다. 방법은 두가지가 있다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">DriverManager</span><span class="o">.</span><span class="na">registerDriver</span><span class="o">(</span><span class="k">new</span> <span class="n">com</span><span class="o">.</span><span class="na">mysql</span><span class="o">.</span><span class="na">jdbc</span><span class="o">.</span><span class="na">Driver</span><span class="o">());</span> <span class="c1">//DriverManager를 직접이용</span>
+
+<span class="n">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">getInitParameter</span><span class="o">(</span><span class="s">"QName"</span><span class="o">));</span> <span class="c1">//클래스로딩 </span>
+
+<span class="c1">//QName을 서블릿 초기화 매개변수의 값으 가져와서 작성하는 방법도 있다.</span>
+
+<span class="k">this</span><span class="o">.</span><span class="na">getInitParameter</span><span class="o">(</span><span class="cm">/*매개변수 이름 */</span><span class="o">);</span>
+</code></pre>
+</div>
+
+<h3 id="section-1">1-2) 데이터베이스 연결</h3>
+
+<p>다음과 같이 <code class="highlighter-rouge">DriverManager</code>의 <code class="highlighter-rouge">getConnection()</code>을 호출하여 MySQL 서버에 연결할 수 있다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">conn</span> <span class="o">=</span> <span class="n">DriverManager</span><span class="o">.</span><span class="na">getConnection</span><span class="o">(</span>
+					<span class="s">"jdbc:mysql://localhost/studydb"</span><span class="o">,</span> <span class="c1">//JDBC URL</span>
+					<span class="s">"study"</span><span class="o">,</span>	<span class="c1">// DBMS 사용자 아이디</span>
+					<span class="s">"study"</span><span class="o">);</span>	<span class="c1">// DBMS 사용자 암호</span>
+</code></pre>
+</div>
+
+<h3 id="sql---">1-3) SQL 실행 및 준비</h3>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">stmt</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="na">createStatement</span><span class="o">();</span> <span class="c1">//java.sql.Statement 인터페이스</span>
+
+<span class="n">stmt</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="na">prepareStatement</span><span class="o">(</span>       <span class="c1">//java.sql.PrepareStatement 인터페이스</span>
+					<span class="s">"INSERT INTO MEMBERS(EMAIL,PWD,MNAME,CRE_DATE,MOD_DATE)"</span>
+					<span class="o">+</span> <span class="s">" VALUES (?,?,?,NOW(),NOW())"</span><span class="o">);</span>
+			<span class="n">stmt</span><span class="o">.</span><span class="na">setString</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"email"</span><span class="o">));</span>
+			<span class="n">stmt</span><span class="o">.</span><span class="na">setString</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"password"</span><span class="o">));</span>
+			<span class="n">stmt</span><span class="o">.</span><span class="na">setString</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"name"</span><span class="o">));</span>
+
+</code></pre>
+</div>
+
+<h4 id="javasqlstatement--">java.sql.Statement 인터페이스의 구현체</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>메서드</th>
+      <th>설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>executeQuery()</td>
+      <td>결과가 만들어지는 SQL문을 실행할때 사용, 보통 SELECT문을 실행</td>
+    </tr>
+    <tr>
+      <td>executeUpdate()</td>
+      <td>DML과 DDL관련 SQL문을 실행할때 사용</td>
+    </tr>
+    <tr>
+      <td>execute()</td>
+      <td>SELECT, DML, DDL 명령문 모두에 사용가능</td>
+    </tr>
+    <tr>
+      <td>executeBatch()</td>
+      <td>addBatch()로 등록한 여러개의 SQL문을 한꺼번에 실행할때 사용</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><code class="highlighter-rouge">PreparedStatement</code>는 반복적인 질의를 하거나, 입력 매개변수가 많은 경우에 유용하다. 특히 이미지와 같은 바이너리 데이터를 저장하거나 변경할 경우는 <code class="highlighter-rouge">PreparedStatement</code>만 가능하다.</p>
+
+<p>위의 예제에서 SQL문에서 <code class="highlighter-rouge">?</code>문자로 표시된 것을 입력 매개변수라고 한다. 입력 항목의 값은 SQL문을 실행하기 전에 <code class="highlighter-rouge">setXXX()</code>메서드를 호출하여 설정해야한다.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>비교항목</th>
+      <th>Statement</th>
+      <th>PreparedStatement</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>실행속도</td>
+      <td>질의 할때마다 SQL문을 컴파일한다.</td>
+      <td>SQL문을 미리 준비하여 컴파일 해둔다. 입력 매개변수 값만 추가하여 서버에 전송한다. 특히 여러번 반복하여 질의하는 경우, 실행속도가 바름</td>
+    </tr>
+    <tr>
+      <td>바이너리데이터전송</td>
+      <td>불가능</td>
+      <td>가능</td>
+    </tr>
+    <tr>
+      <td>프로그래밍 편의성</td>
+      <td>SQL문 안에 입력 매개변수 값이 포함되어 있어서 SQL문이 복잡하고 매개변수가 여러개인 경우 코드 관리가 힘들다.</td>
+      <td>SQL문과 입력 매개변수가 분리되어 있어 코드작성이 편리하다.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="javasqlresultset--">java.sql.ResultSet 인터페이스의 구현체</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>메서드</th>
+      <th>설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>first()</td>
+      <td>서버에서 첫번째 레코드를 가져온다.</td>
+    </tr>
+    <tr>
+      <td>last()</td>
+      <td>서버에서 마지막번째 레코드를 가져온다.</td>
+    </tr>
+    <tr>
+      <td>previous()</td>
+      <td>서버에서 이전 레코드를 가져온다.</td>
+    </tr>
+    <tr>
+      <td>next()</td>
+      <td>서버에서 다음 레코드를 가져온다.</td>
+    </tr>
+    <tr>
+      <td>getXXX()</td>
+      <td>레코드에서 특정 컬럼의 값을 꺼낸다. XXX는 칼럼의 타입이다.</td>
+    </tr>
+    <tr>
+      <td>updateXXX()</td>
+      <td>레코드에서 특정 칼럼의 값을 변경한다.</td>
+    </tr>
+    <tr>
+      <td>deleteRow()</td>
+      <td>현재 레코드를 지운다.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="jdbc--">1-3) JDBC 프로그래밍의 마무리</h3>
+
+<p>JDBC 프로그래밍을 할 때 주의할 점은 정상적으로 수행되는 오류가 발생하든 간에 반드시 자원해제를 수행하는 것이다. 자원을 해제하기 가장 좋은 위치는 <code class="highlighter-rouge">finally</code> 블록이다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="k">finally</span> <span class="o">{</span>
+			<span class="k">try</span> <span class="o">{</span><span class="k">if</span> <span class="o">(</span><span class="n">rs</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="n">rs</span><span class="o">.</span><span class="na">close</span><span class="o">();}</span> <span class="k">catch</span><span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{}</span>
+			<span class="k">try</span> <span class="o">{</span><span class="k">if</span> <span class="o">(</span><span class="n">stmt</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="n">stmt</span><span class="o">.</span><span class="na">close</span><span class="o">();}</span> <span class="k">catch</span><span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{}</span>
+			<span class="k">try</span> <span class="o">{</span><span class="k">if</span> <span class="o">(</span><span class="n">conn</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="n">conn</span><span class="o">.</span><span class="na">close</span><span class="o">();}</span> <span class="k">catch</span><span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{}</span>
+		<span class="o">}</span>
+</code></pre>
+</div>
+
+<h2 id="httpservlet">2) HttpServlet</h2>
+
+<h3 id="section-2">2-1) 절대경로, 상대경로</h3>
+
+<p><code class="highlighter-rouge">&lt;a&gt;</code>태그의 링크 URL이 <code class="highlighter-rouge">/</code>로 시작하면 절대 경로이고, <code class="highlighter-rouge">/</code> 시작하지 않으면 상대 경로이다.</p>
+
+<p><code class="highlighter-rouge">절대경로</code>는 웹 서버 루트를 기준으로 계산한다.</p>
+
+<p>예)</p>
+
+<blockquote>
+  <p>서버루트 –&gt; http://localhost:8080</p>
+
+  <p>최종경로 –&gt; http://localhost:8080/web22/member/add</p>
+
+  <p>절대경로 –&gt; /web22/member/add</p>
+</blockquote>
+
+<p><code class="highlighter-rouge">상대경로</code>는 현재 경로를 기준으로 계산한다.</p>
+
+<p>예)</p>
+
+<blockquote>
+  <p>현재경로 –&gt; http://localhost:8080/web/member/list</p>
+
+  <p>최종경로 –&gt; http://localhost:8080/web/member/add</p>
+
+  <p>상대경로 –&gt; add</p>
+</blockquote>
+
+<h3 id="httpservelt">2-2) HttpServelt</h3>
+
+<p><img src="http://joswlv.github.io/images/httpservlet.png" alt="" /></p>
+
+<p><code class="highlighter-rouge">HttpServlet</code>클래스는 <code class="highlighter-rouge">GenericServlet</code>클래스의 하위 클래스이다. <code class="highlighter-rouge">GenericServlet</code>클래스를 상속 받는 것과 마찬가지로 <code class="highlighter-rouge">javax.servlet.Servlet</code>인터페이스를 구현한 것이된다.</p>
+
+<p>서블릿 컨테이너는 Servlet규칙에 정의된 메서드를 호출하기 때문에, 서블릿 객체는 반드시 Servelt인터페이스를 구현 해야한다.</p>
+
+<p><img src="http://joswlv.github.io/images/httpservletservice.png" alt="" /></p>
+
+<p><code class="highlighter-rouge">HttpServlet</code>클래스는 클라이언트 요청이 들어오면, 첫째로 상속받은 <code class="highlighter-rouge">service()</code>메서드가 호출되고, 둘째로 <code class="highlighter-rouge">service()</code>는 클라이언트 요청 방식에 따라 <code class="highlighter-rouge">doGet()</code>이나 <code class="highlighter-rouge">doPost()</code> 등의 메서드를 호출한다. 따라서 <code class="highlighter-rouge">HttpServlet</code>을 상속받을 때 <code class="highlighter-rouge">service()</code>메서드를 직접 구현하기보다는 클라이언트의 요청방식에 따라 <code class="highlighter-rouge">doXXX()</code>메서드를 오버라이딩 한다.</p>
+
+<h2 id="refresh---redirect">3) Refresh - Redirect</h2>
+
+<p>Refresh는 잠간이나마 작업 결과를 출력하고 다른 페이지로 이동하기를 윈할때 사용하고, Redirect는 작업결과를 출력하지 않고 즉시 다른페이지로 이동하기를 원할때 상용한다.</p>
+<h3 id="refresh">3-1) 응답 헤더를 이용한 Refresh</h3>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">response</span><span class="o">.</span><span class="na">addHeader</span><span class="o">(</span><span class="s">"Refresh"</span><span class="o">,</span><span class="s">"1;url=list"</span><span class="o">);</span>
+</code></pre>
+</div>
+<p>1초후에 list페이지로 이동한다.</p>
+
+<h3 id="html-meta--refresh">3-2) Html의 meta태그를 이용한 Refresh</h3>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"&lt;meta http-equiv='refresh' content='1; url=list'&gt;"</span><span class="o">);</span>
+</code></pre>
+</div>
+<p>1초후에 list페이지로 이동한다.</p>
+
+<h3 id="redirect-sendredirect">3-3) redirect메서드 sendRedirect()</h3>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">response</span><span class="o">.</span><span class="na">sendRedirect</span><span class="o">(</span><span class="s">"list"</span><span class="o">);</span>
+</code></pre>
+</div>
+<p>list페이지로 redirection</p>
+
+<h2 id="context-">4) Context 매개변수</h2>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="c">&lt;!-- 컨텍스트 초기화 파라미터 --&gt;</span>
+	<span class="nt">&lt;context-param&gt;</span>
+		<span class="nt">&lt;param-name&gt;</span>driver<span class="nt">&lt;/param-name&gt;</span>
+		<span class="nt">&lt;param-value&gt;</span>com.mysql.jdbc.Driver<span class="nt">&lt;/param-value&gt;</span>
+	<span class="nt">&lt;/context-param&gt;</span>
+	<span class="nt">&lt;context-param&gt;</span>
+		<span class="nt">&lt;param-name&gt;</span>url<span class="nt">&lt;/param-name&gt;</span>
+		<span class="nt">&lt;param-value&gt;</span>jdbc:mysql://localhost/studydb<span class="nt">&lt;/param-value&gt;</span>
+	<span class="nt">&lt;/context-param&gt;</span>
+	<span class="nt">&lt;context-param&gt;</span>
+		<span class="nt">&lt;param-name&gt;</span>username<span class="nt">&lt;/param-name&gt;</span>
+		<span class="nt">&lt;param-value&gt;</span>study<span class="nt">&lt;/param-value&gt;</span>
+	<span class="nt">&lt;/context-param&gt;</span>
+	<span class="nt">&lt;context-param&gt;</span>
+		<span class="nt">&lt;param-name&gt;</span>password<span class="nt">&lt;/param-name&gt;</span>
+		<span class="nt">&lt;param-value&gt;</span>study<span class="nt">&lt;/param-value&gt;</span>
+	<span class="nt">&lt;/context-param&gt;</span>
+</code></pre>
+</div>
+<p>DD파일에 컨텍스트 초기화 파리마터를 정의하고 사용은 다음과 같이한다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">ServletContext</span> <span class="n">sc</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">getServletContext</span><span class="o">();</span>	<span class="c1">//HttpServlet으로 부터 상속받음</span>
+			<span class="n">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="n">sc</span><span class="o">.</span><span class="na">getInitParameter</span><span class="o">(</span><span class="s">"driver"</span><span class="o">));</span>  
+			<span class="n">conn</span> <span class="o">=</span> <span class="n">DriverManager</span><span class="o">.</span><span class="na">getConnection</span><span class="o">(</span>
+						<span class="n">sc</span><span class="o">.</span><span class="na">getInitParameter</span><span class="o">(</span><span class="s">"url"</span><span class="o">),</span>
+						<span class="n">sc</span><span class="o">.</span><span class="na">getInitParameter</span><span class="o">(</span><span class="s">"username"</span><span class="o">),</span>
+						<span class="n">sc</span><span class="o">.</span><span class="na">getInitParameter</span><span class="o">(</span><span class="s">"password"</span><span class="o">));</span>
+						
+			<span class="c1">//getInitParameter()를 호출하여 사용 </span>
+</code></pre>
+</div>
+
+<h2 id="filter">5) Filter</h2>
+
+<p>필터는 서블릿 실행 전후에 어떤 작업을 하고자 할때 사용하는 기술이다. 예를 들면 클라이언트가 보낸 데이터의 암호를 해제한다거나, 서블릿이 실행되기 전에 필요한 자원을 미리 준비한다거나, 서블릿이 실행될 때마다 로그를 남긴다거나 하는 작업을 필터를 통해 처리할 수 있다.</p>
+
+<blockquote>
+  <p>java.servlet –&gt; Filter</p>
+
+  <ul>
+    <li><code class="highlighter-rouge">init()</code></li>
+    <li><code class="highlighter-rouge">doFilter()</code></li>
+    <li><code class="highlighter-rouge">destory()</code></li>
+  </ul>
+</blockquote>
+
+<ul>
+  <li><code class="highlighter-rouge">init()</code> 메서드는 필터 객체가 생성되고 나서 준비 작업을 위해 딱한번 호출된다. 이 메서드의 매개변수는 <code class="highlighter-rouge">FilterConfig</code>객체이다.</li>
+  <li><code class="highlighter-rouge">doFilter()</code> 필터와 연결된 URL에 대해 요청이 들어오면 <code class="highlighter-rouge">doFilter()</code>가 항상 호출된다. 이메서드에 필터가 할 일을 작성하면된다.</li>
+</ul>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code>	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">doFilter</span><span class="o">(</span>
+			<span class="n">ServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">ServletResponse</span> <span class="n">response</span><span class="o">,</span>
+			<span class="n">FilterChain</span> <span class="n">nextFilter</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">ServletException</span> <span class="o">{</span>
+			
+		<span class="n">request</span><span class="o">.</span><span class="na">setCharacterEncoding</span><span class="o">(</span><span class="n">config</span><span class="o">.</span><span class="na">getInitParameter</span><span class="o">(</span><span class="s">"encoding"</span><span class="o">));</span>
+		
+		<span class="c1">// 다음 필터를 호출, 더이상 필터가 없다면 서블릿의 service()가 호출됨.</span>
+		<span class="n">nextFilter</span><span class="o">.</span><span class="na">doFilter</span><span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">);</span>
+		
+	<span class="o">}</span>
+</code></pre>
+</div>
+<ul>
+  <li><code class="highlighter-rouge">destroy()</code>서블릿 컨테이너는 웹 어플리케이션을 종료하기 전에 필터들에 대해 <code class="highlighter-rouge">destroy()</code>를 호출하여 마무리 작업을 할 수 있는 기회를 준다.</li>
+</ul>
+
+<h4 id="section-3">필터 배치</h4>
+
+<p>필터의 배치 방법도 서블릿과 마친가지로 두가지 가 있다. DD파일에 기술하는 방법과 애노테이션을 기술하는 방법이 있다.</p>
+
+<p><strong>DD파일에 작서한 예)</strong></p>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="c">&lt;!-- 필터 선언 --&gt;</span> 
+	<span class="nt">&lt;filter&gt;</span>
+		<span class="nt">&lt;filter-name&gt;</span>CharacterEncodingFilter<span class="nt">&lt;/filter-name&gt;</span>
+		<span class="nt">&lt;filter-class&gt;</span>spms.filters.CharacterEncodingFilter<span class="nt">&lt;/filter-class&gt;</span>
+		<span class="nt">&lt;init-param&gt;</span>
+			<span class="nt">&lt;param-name&gt;</span>encoding<span class="nt">&lt;/param-name&gt;</span>
+			<span class="nt">&lt;param-value&gt;</span>UTF-8<span class="nt">&lt;/param-value&gt;</span>
+		<span class="nt">&lt;/init-param&gt;</span>
+	<span class="nt">&lt;/filter&gt;</span>
+	
+	<span class="c">&lt;!-- 필터 URL 매핑 --&gt;</span>
+	<span class="nt">&lt;filter-mapping&gt;</span>
+		<span class="nt">&lt;filter-name&gt;</span>CharacterEncodingFilter<span class="nt">&lt;/filter-name&gt;</span>
+		<span class="nt">&lt;url-pattern&gt;</span>/*<span class="nt">&lt;/url-pattern&gt;</span>
+	<span class="nt">&lt;/filter-mapping&gt;</span>
+</code></pre>
+</div>
+
+<p><strong>애노테이션을 이용한 필터 배치 예)</strong></p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@WebFilter</span><span class="o">(</span>
+	<span class="n">urlPatterns</span><span class="o">=</span><span class="s">"/*"</span><span class="o">,</span>
+	<span class="n">initParams</span><span class="o">={</span>
+		<span class="nd">@WebInitParam</span><span class="o">(</span><span class="n">name</span><span class="o">=</span><span class="s">"encoding"</span><span class="o">,</span><span class="n">value</span><span class="o">=</span><span class="s">"UTF-8"</span><span class="o">)</span>
+	<span class="o">})</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CharacterEncodingFilter</span> <span class="kd">implements</span> <span class="n">Filter</span><span class="o">{</span>
+	<span class="n">FilterConfig</span> <span class="n">config</span><span class="o">;</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">init</span><span class="o">(</span><span class="n">FilterConfig</span> <span class="n">config</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">ServletException</span> <span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">config</span> <span class="o">=</span> <span class="n">config</span><span class="o">;</span>
+	<span class="o">}</span>
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">doFilter</span><span class="o">(</span>
+			<span class="n">ServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">ServletResponse</span> <span class="n">response</span><span class="o">,</span>
+			<span class="n">FilterChain</span> <span class="n">nextFilter</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span><span class="o">,</span> <span class="n">ServletException</span> <span class="o">{</span>
+		<span class="n">request</span><span class="o">.</span><span class="na">setCharacterEncoding</span><span class="o">(</span><span class="n">config</span><span class="o">.</span><span class="na">getInitParameter</span><span class="o">(</span><span class="s">"encoding"</span><span class="o">));</span>
+		<span class="n">nextFilter</span><span class="o">.</span><span class="na">doFilter</span><span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">);</span>
+	<span class="o">}</span>
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">destroy</span><span class="o">()</span> <span class="o">{}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<h3 id="reference">Reference</h3>
+<ul>
+  <li><a href="http://www.yes24.com/24/Goods/13159413?Acode=101">열혈강의 자바 웹 개발 워크북</a></li>
+</ul>
+
+        </article>
+        <hr>
+
+        
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+        
+
+        <div class="post-recent">
+    <div class="pre">
+        
+        <p><strong>prev</strong> <a href="/2016/09/10/Servlet_programming/">Servlet_programming</a></p>
+        
+    </div>
+    <div class="nex">
+
+        
+        <p><strong>next</strong> <a href="/2016/09/12/MVC/">MVC 이해하기</a></p>
+        
+    </div>
+</div>
+
+
+        <h2 id="comments">Comments</h2>
+        
+
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+     * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+
+    var disqus_config = function() {
+        this.page.url = 'http://joswlv.github.io/2016/09/10/servlet_and_JDBC/'; // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://joswlv.github.io/2016/09/10/servlet_and_JDBC/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document,
+            s = d.createElement('script');
+
+        s.src = '//joswlv.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+
+    </div>
+    <button class="anchor"><i class="fa fa-anchor"></i></button>
+    <div class="right">
+        <div class="wrap">
+
+            <!-- Content -->
+            <div class="side content">
+                <div>
+                    Content
+                </div>
+                <ul id="content-side" class="content-ul">
+                    <li><a href="#similar_posts">Similar Posts</a></li>
+                    <li><a href="#comments">Comments</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+/**
+ * target _blank
+ */
+(function() {
+    var aTags = document.querySelectorAll('article a:not([id])')
+    for (var i = 0; i < aTags.length; i++) {
+        aTags[i].setAttribute('target', '_blank')
+    }
+}());
+</script>
+<script src="/js/pageContent.js " charset="utf-8"></script>
+
+
+    <footer class="site-footer">
+
+
+    <div class="wrapper">
+
+        <p class="description">
+            
+        </p>
+        <p class="contact">
+            Contact me at: 
+            <a href="https://github.com/joswlv" title="GitHub"><i class="fa fa-github" aria-hidden="true"></i></a>  
+            <a href="mailto:wh7923@gmail.com" title="email"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>     
+            <a href="https://www.facebook.com/wsj7923" title="Facebook"><i class="fa fa-facebook-official" aria-hidden="true"></i></a>    
+        </p>
+        <p>
+        </p>
+        <p class="power">
+            <span>
+                Site powered by <a href="https://jekyllrb.com/">Jekyll</a> & <a href="https://pages.github.com/">Github Pages</a>.
+            </span>
+        </p>
+    </div>
+</footer>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <div class="back-to-top">
+    <a href="#top" class="scroll">
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    </a>
+</div>
+
+    <script src=" /js/main.js " charset="utf-8"></script>
+    <script src=" /js/scroll.min.js " charset="utf-8"></script>
+  </body>
+
+</html>
