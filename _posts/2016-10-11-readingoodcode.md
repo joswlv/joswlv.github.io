@@ -7,7 +7,7 @@ categories: Etc
 
 # 원본
 
-* [<읽기 좋은 코드가 좋은 코드다>](http://www.hanbit.co.kr/book/look.html?isbn=978-89-7914-914-2) 요약정리
+* [\<읽기 좋은 코드가 좋은 코드다\>](http://www.hanbit.co.kr/book/look.html?isbn=978-89-7914-914-2)
 * [NHN신입강의](https://nhnent.dooray.com/share/posts/1kprIA7VR3S4lwuMCa4D9Q)
 
 # 코드는 이해하기 쉬워야한다.
