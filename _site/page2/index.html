@@ -99,6 +99,1316 @@
             
               <li>
                 <h2>
+                  <a class="post-link" href="/2016/09/21/beancontext2/">스프링 IoC컨테이너 ApplicationContext [2]</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-09-21
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#Spring" title="Category: Spring" rel="category">Spring</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="xml----">XML 기반 빈 관리 컨테이너</h1>
+
+<h3 id="section">팩토리 메서드와 팩토리 빈</h3>
+
+<p>객체 지향 설계 기법 중에서 팩토리 메서드(factory method) 패턴과 빌더(Builder)패턴이 있다.</p>
+
+<p>인스턴스를 생성하는 일반적인 방법은 new 명령을 사용하는 것인데, new 명령을 통해 클래스와 생성자를 지정하면 해당 클래스의 인스턴스가 생성되고 초기화 된다. 문제는 인스턴스 생성작업이 복잡한 경우이다. 매번 인스턴스를 생성할 때마다 복잡한 과정을 거쳐야 한다면 코딩할 때 부담이 된다. 이를 해결하기 위해 나온 것이 팩토리 메서드 패던과 빌더 패턴이다.</p>
+
+<p>팩토리 클래스는 인스턴스 생성과정을 캡슐화 한다. 즉 인스턴스를 생성하고 초기화하는 복잡한 과정을 감추기 때문에 개발자입장에서는 인스턴스를 얻는 과정이 간결해진다.</p>
+
+<p>팩토리 메서드를 만들 때는 두가지 방법이 있다. 스태틱으로 선언하여 클래스 메서드로 만들거나 아니면 인스턴스 메서드로 만드는 것이다.</p>
+
+<p>먼저 스태틱으로 선언된 팩토리 메서드를 설정하는 방법을 보자</p>
+
+<p><br /></p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">exam</span><span class="o">.</span><span class="na">test11</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.text.SimpleDateFormat</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Properties</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">TireFactory</span> <span class="o">{</span>
+	<span class="kd">public</span> <span class="kd">static</span> <span class="n">Tire</span> <span class="nf">createTire</span><span class="o">(</span><span class="n">String</span> <span class="n">maker</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">if</span> <span class="o">(</span><span class="n">maker</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="s">"Hankook"</span><span class="o">))</span> <span class="o">{</span>
+			<span class="k">return</span> <span class="nf">createHankookTire</span><span class="o">();</span>
+		<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+			<span class="k">return</span> <span class="nf">createKumhoTire</span><span class="o">();</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+	
+	<span class="kd">private</span> <span class="kd">static</span> <span class="n">Tire</span> <span class="nf">createHankookTire</span><span class="o">()</span> <span class="o">{</span>
+		<span class="n">Tire</span> <span class="n">tire</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Tire</span><span class="o">();</span>
+		<span class="n">tire</span><span class="o">.</span><span class="na">setMaker</span><span class="o">(</span><span class="s">"Hankook"</span><span class="o">);</span>
+		
+		<span class="n">Properties</span> <span class="n">specProp</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Properties</span><span class="o">();</span>
+		<span class="n">specProp</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">"width"</span><span class="o">,</span> <span class="s">"205"</span><span class="o">);</span>
+		<span class="n">specProp</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">"ratio"</span><span class="o">,</span> <span class="s">"65"</span><span class="o">);</span>
+		<span class="n">specProp</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">"rim.diameter"</span><span class="o">,</span> <span class="s">"14"</span><span class="o">);</span>
+		<span class="n">tire</span><span class="o">.</span><span class="na">setSpec</span><span class="o">(</span><span class="n">specProp</span><span class="o">);</span>
+		
+		<span class="n">SimpleDateFormat</span> <span class="n">dateFormat</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SimpleDateFormat</span><span class="o">(</span><span class="s">"yyyy-MM-dd"</span><span class="o">);</span>
+		<span class="k">try</span> <span class="o">{</span>
+			<span class="n">tire</span><span class="o">.</span><span class="na">setCreatedDate</span><span class="o">(</span><span class="n">dateFormat</span><span class="o">.</span><span class="na">parse</span><span class="o">(</span><span class="s">"2014-5-5"</span><span class="o">));</span>
+		<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{}</span>
+		
+		<span class="k">return</span> <span class="n">tire</span><span class="o">;</span>
+	<span class="o">}</span>
+	
+	<span class="kd">private</span> <span class="kd">static</span> <span class="n">Tire</span> <span class="nf">createKumhoTire</span><span class="o">()</span> <span class="o">{</span>
+		<span class="n">Tire</span> <span class="n">tire</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Tire</span><span class="o">();</span>
+		<span class="n">tire</span><span class="o">.</span><span class="na">setMaker</span><span class="o">(</span><span class="s">"Kumho"</span><span class="o">);</span>
+		
+		<span class="n">Properties</span> <span class="n">specProp</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Properties</span><span class="o">();</span>
+		<span class="n">specProp</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">"width"</span><span class="o">,</span> <span class="s">"185"</span><span class="o">);</span>
+		<span class="n">specProp</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">"ratio"</span><span class="o">,</span> <span class="s">"75"</span><span class="o">);</span>
+		<span class="n">specProp</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">"rim.diameter"</span><span class="o">,</span> <span class="s">"16"</span><span class="o">);</span>
+		<span class="n">tire</span><span class="o">.</span><span class="na">setSpec</span><span class="o">(</span><span class="n">specProp</span><span class="o">);</span>
+		
+		<span class="n">SimpleDateFormat</span> <span class="n">dateFormat</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SimpleDateFormat</span><span class="o">(</span><span class="s">"yyyy-MM-dd"</span><span class="o">);</span>
+		<span class="k">try</span> <span class="o">{</span>
+			<span class="n">tire</span><span class="o">.</span><span class="na">setCreatedDate</span><span class="o">(</span><span class="n">dateFormat</span><span class="o">.</span><span class="na">parse</span><span class="o">(</span><span class="s">"2014-3-1"</span><span class="o">));</span>
+		<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{}</span>
+		
+		<span class="k">return</span> <span class="n">tire</span><span class="o">;</span>
+	<span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">"http://www.springframework.org/schema/beans"</span>
+	<span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span> 
+	<span class="na">xmlns:p=</span><span class="s">"http://www.springframework.org/schema/p"</span>
+	<span class="na">xmlns:c=</span><span class="s">"http://www.springframework.org/schema/c"</span>
+	<span class="na">xsi:schemaLocation=</span><span class="s">"http://www.springframework.org/schema/beans</span>
+        <span class="err">http://www.springframework.org/schema/beans/spring-beans.xsd"</span><span class="nt">&gt;</span>
+
+	<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"hankookTire"</span> <span class="na">class=</span><span class="s">"exam.test11.TireFactory"</span>
+		<span class="na">factory-method=</span><span class="s">"createTire"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;constructor-arg</span> <span class="na">value=</span><span class="s">"Hankook"</span> <span class="nt">/&gt;</span>
+	<span class="nt">&lt;/bean&gt;</span>
+	//자바코드 -&gt; Tire hankookTire = TireFactory.createTire("Hankook");
+	
+	<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"kumhoTire"</span> <span class="na">class=</span><span class="s">"exam.test11.TireFactory"</span>
+		<span class="na">factory-method=</span><span class="s">"createTire"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;constructor-arg</span> <span class="na">value=</span><span class="s">"Kumho"</span> <span class="nt">/&gt;</span>
+	<span class="nt">&lt;/bean&gt;</span>
+	//자바코드 -&gt; Tire kumhoTire = TireFactory.createTire("kumho");
+	
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre>
+</div>
+
+<p>여기서 중요한 것은 <code class="highlighter-rouge">factory-method</code>속성의 값이다. 이 값은 Tire 인스턴스를 생성할 메서드 이름이다. <code class="highlighter-rouge">factory-method</code>속성에는 반드시 static 메서드 이름을 지정해야 한다. 팩토리 메서드에 넘겨 줄 매개변수 값은 <code class="highlighter-rouge">&lt;constructor-arg&gt;</code>태그로 설정한다.</p>
+
+<blockquote>
+  <p>**자바객체(Java object) vs 인스턴스(instance) vs 빈(bean)</p>
+
+  <p>new 명령어나 팩토리 메서드로 생성된 <code class="highlighter-rouge">인스턴스</code>를 일반적으로 <code class="highlighter-rouge">자바 객체</code>라 부른다. 스프링에서는 자바 객체를 <code class="highlighter-rouge">빈</code>이라고 부른다. 일상 생활에서도 하나의 사물을 다양하게 표현하듯이, 예를 드렁 물을 음료라고 부리기도 하고 음료수, 마실것 등으로 부르는 것처럼, 프로그래밍에서도 하나의 개념을 다양한 말로 표현한다.</p>
+</blockquote>
+
+<p><br /></p>
+
+<p>다음으로 인스턴스 팩토리 메서드를 정의하고, 사용하는 예이다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">exam</span><span class="o">.</span><span class="na">test12</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.text.SimpleDateFormat</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Properties</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">TireFactory</span> <span class="o">{</span>
+	<span class="kd">public</span> <span class="n">Tire</span> <span class="nf">createTire</span><span class="o">(</span><span class="n">String</span> <span class="n">maker</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">if</span> <span class="o">(</span><span class="n">maker</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="s">"Hankook"</span><span class="o">))</span> <span class="o">{</span>
+			<span class="k">return</span> <span class="nf">createHankookTire</span><span class="o">();</span>
+		<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+			<span class="k">return</span> <span class="nf">createKumhoTire</span><span class="o">();</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+	
+	<span class="kd">private</span> <span class="n">Tire</span> <span class="nf">createHankookTire</span><span class="o">()</span> <span class="o">{</span>
+		<span class="n">Tire</span> <span class="n">tire</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Tire</span><span class="o">();</span>
+		<span class="n">tire</span><span class="o">.</span><span class="na">setMaker</span><span class="o">(</span><span class="s">"Hankook"</span><span class="o">);</span>
+		
+		<span class="n">Properties</span> <span class="n">specProp</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Properties</span><span class="o">();</span>
+		<span class="n">specProp</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">"width"</span><span class="o">,</span> <span class="s">"205"</span><span class="o">);</span>
+		<span class="n">specProp</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">"ratio"</span><span class="o">,</span> <span class="s">"65"</span><span class="o">);</span>
+		<span class="n">specProp</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">"rim.diameter"</span><span class="o">,</span> <span class="s">"14"</span><span class="o">);</span>
+		<span class="n">tire</span><span class="o">.</span><span class="na">setSpec</span><span class="o">(</span><span class="n">specProp</span><span class="o">);</span>
+		
+		<span class="n">SimpleDateFormat</span> <span class="n">dateFormat</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SimpleDateFormat</span><span class="o">(</span><span class="s">"yyyy-MM-dd"</span><span class="o">);</span>
+		<span class="k">try</span> <span class="o">{</span>
+			<span class="n">tire</span><span class="o">.</span><span class="na">setCreatedDate</span><span class="o">(</span><span class="n">dateFormat</span><span class="o">.</span><span class="na">parse</span><span class="o">(</span><span class="s">"2014-5-5"</span><span class="o">));</span>
+		<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{}</span>
+		
+		<span class="k">return</span> <span class="n">tire</span><span class="o">;</span>
+	<span class="o">}</span>
+	
+	<span class="kd">private</span> <span class="n">Tire</span> <span class="nf">createKumhoTire</span><span class="o">()</span> <span class="o">{</span>
+		<span class="n">Tire</span> <span class="n">tire</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Tire</span><span class="o">();</span>
+		<span class="n">tire</span><span class="o">.</span><span class="na">setMaker</span><span class="o">(</span><span class="s">"Kumho"</span><span class="o">);</span>
+		
+		<span class="n">Properties</span> <span class="n">specProp</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Properties</span><span class="o">();</span>
+		<span class="n">specProp</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">"width"</span><span class="o">,</span> <span class="s">"185"</span><span class="o">);</span>
+		<span class="n">specProp</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">"ratio"</span><span class="o">,</span> <span class="s">"75"</span><span class="o">);</span>
+		<span class="n">specProp</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">"rim.diameter"</span><span class="o">,</span> <span class="s">"16"</span><span class="o">);</span>
+		<span class="n">tire</span><span class="o">.</span><span class="na">setSpec</span><span class="o">(</span><span class="n">specProp</span><span class="o">);</span>
+		
+		<span class="n">SimpleDateFormat</span> <span class="n">dateFormat</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SimpleDateFormat</span><span class="o">(</span><span class="s">"yyyy-MM-dd"</span><span class="o">);</span>
+		<span class="k">try</span> <span class="o">{</span>
+			<span class="n">tire</span><span class="o">.</span><span class="na">setCreatedDate</span><span class="o">(</span><span class="n">dateFormat</span><span class="o">.</span><span class="na">parse</span><span class="o">(</span><span class="s">"2014-3-1"</span><span class="o">));</span>
+		<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{}</span>
+		
+		<span class="k">return</span> <span class="n">tire</span><span class="o">;</span>
+	<span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">"http://www.springframework.org/schema/beans"</span>
+	<span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span> 
+	<span class="na">xmlns:p=</span><span class="s">"http://www.springframework.org/schema/p"</span>
+	<span class="na">xmlns:c=</span><span class="s">"http://www.springframework.org/schema/c"</span>
+	<span class="na">xsi:schemaLocation=</span><span class="s">"http://www.springframework.org/schema/beans</span>
+        <span class="err">http://www.springframework.org/schema/beans/spring-beans.xsd"</span><span class="nt">&gt;</span>
+
+  <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"tireFactory"</span> <span class="na">class=</span><span class="s">"exam.test12.TireFactory"</span><span class="nt">/&gt;</span>
+  //자바코드 -&gt; TireFactory tireFactory = new TireFactory
+  
+	<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"hankookTire"</span> <span class="na">factory-bean=</span><span class="s">"tireFactory"</span> <span class="na">factory-method=</span><span class="s">"createTire"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;constructor-arg</span> <span class="na">value=</span><span class="s">"Hankook"</span> <span class="nt">/&gt;</span>
+	<span class="nt">&lt;/bean&gt;</span>
+	//자바코드 -&gt; Tire hankookTire = tireFactory.createTire("Hankook");
+
+	<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"kumhoTire"</span> <span class="na">factory-bean=</span><span class="s">"tireFactory"</span> <span class="na">factory-method=</span><span class="s">"createTire"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;constructor-arg</span> <span class="na">value=</span><span class="s">"Kumho"</span> <span class="nt">/&gt;</span>
+	<span class="nt">&lt;/bean&gt;</span>
+	//자바코드 -&gt; Tire hankookTire = tireFactory.createTire("Kumho");
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">factory-bean</code>속성에 팩토리 객체(tireFactory)를 지정한다. class 속성은 설정하지 않는다. <code class="highlighter-rouge">factory-method</code>속성에는 인스턴스 팩토리 메서드 이름을 지정한다. 스태틱 메서드는 안된다.!! 팩토리 메서드의 매개변수 값은 이전과 마찬가지로 <code class="highlighter-rouge">&lt;constructor-arg&gt;</code>태그로 지정한다.</p>
+
+<p><br /></p>
+
+<h3 id="section-1">스프링 규칙에 따라서 팩토리 빈 만들기</h3>
+
+<p>스프링에서는 팩토리 빈이 갖추어야 할 규칙을 <code class="highlighter-rouge">org.springframework.beans.factoryFactoryBean</code>인터페이스에 지정했다. 팩토리 클래스를 만들 때 이 규칙에 따라 메서드를 구현하면 된다.</p>
+
+<blockquote>
+  <p>FactoryBean인터페이스 구현</p>
+
+  <ul>
+    <li>[Interface] FactoryBean
+      <ul>
+        <li>getObject()</li>
+        <li>getObjectType()</li>
+        <li>isSingleton()</li>
+      </ul>
+    </li>
+  </ul>
+</blockquote>
+
+<p>보통 FactoryBean 인터페이스를 직접 구현하기보다는 스프링에서 제공하는 추상클래스를 상속해서 만든다. <code class="highlighter-rouge">org.springframework.beans.factory.config.AbstractFactoryBean</code>은 FactoryBean인터페이스를 미리 구현했다.</p>
+
+<blockquote>
+  <ul>
+    <li>[interface] FactoryBean
+      <ul>
+        <li>[abstract] AbstractFactoryBean - createInstance(), getObjectType()</li>
+        <li>[class] TireFactoryBean</li>
+      </ul>
+    </li>
+  </ul>
+</blockquote>
+
+<p>AbstractFactoryBean에는 createInstance()라는 추상 메서드가 잇다. 빈을 생성할 때 팩토리메서드로서 getObject()가 호출 되는데, getObject()는 내부적으로 바로 이 메서드를 호출한다. 즉 실제 빈을 생성하는 것은 createInstacne() 이다. 따라서 AbstractFactoryBean 클래스를 상속받을 때는 반드시 이 메서드를 구현해야 하고, 이 메서드에 빈 생성 코드를 넣는다.</p>
+
+<p>그리고 FactoryBean 인터페이스로부터 받은 getObjectType() 추상 메서드가 구현되지 않은 채로 남아 있다. 이 메서드는 팩토리 메서드(getObject())가 생성하는 객체의 타입을 알려 준다. 이 메서드는 반드시 구현해야한다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">exam</span><span class="o">.</span><span class="na">test13</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">java.text.SimpleDateFormat</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">java.util.Properties</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.springframework.beans.factory.config.AbstractFactoryBean</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">TireFactoryBean</span> <span class="kd">extends</span> <span class="n">AbstractFactoryBean</span><span class="o">&lt;</span><span class="n">Tire</span><span class="o">&gt;</span> <span class="o">{</span>
+	<span class="n">String</span> <span class="n">maker</span><span class="o">;</span>
+	
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">setMaker</span><span class="o">(</span><span class="n">String</span> <span class="n">maker</span><span class="o">)</span> <span class="o">{</span>
+	  <span class="k">this</span><span class="o">.</span><span class="na">maker</span> <span class="o">=</span> <span class="n">maker</span><span class="o">;</span>
+  <span class="o">}</span>
+	
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="n">Class</span><span class="o">&lt;?&gt;</span> <span class="n">getObjectType</span><span class="o">()</span> <span class="o">{</span>
+	  <span class="k">return</span> <span class="n">exam</span><span class="o">.</span><span class="na">test13</span><span class="o">.</span><span class="na">Tire</span><span class="o">.</span><span class="na">class</span><span class="o">;</span>
+	<span class="o">}</span>
+	
+	<span class="kd">protected</span> <span class="n">Tire</span> <span class="nf">createInstance</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">if</span> <span class="o">(</span><span class="n">maker</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="s">"Hankook"</span><span class="o">))</span> <span class="o">{</span>
+			<span class="k">return</span> <span class="nf">createHankookTire</span><span class="o">();</span>
+		<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+			<span class="k">return</span> <span class="nf">createKumhoTire</span><span class="o">();</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+	
+	<span class="kd">private</span> <span class="n">Tire</span> <span class="nf">createHankookTire</span><span class="o">()</span> <span class="o">{</span>
+		<span class="n">Tire</span> <span class="n">tire</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Tire</span><span class="o">();</span>
+		<span class="n">tire</span><span class="o">.</span><span class="na">setMaker</span><span class="o">(</span><span class="s">"Hankook"</span><span class="o">);</span>
+		
+		<span class="n">Properties</span> <span class="n">specProp</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Properties</span><span class="o">();</span>
+		<span class="n">specProp</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">"width"</span><span class="o">,</span> <span class="s">"205"</span><span class="o">);</span>
+		<span class="n">specProp</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">"ratio"</span><span class="o">,</span> <span class="s">"65"</span><span class="o">);</span>
+		<span class="n">specProp</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">"rim.diameter"</span><span class="o">,</span> <span class="s">"14"</span><span class="o">);</span>
+		<span class="n">tire</span><span class="o">.</span><span class="na">setSpec</span><span class="o">(</span><span class="n">specProp</span><span class="o">);</span>
+		
+		<span class="n">SimpleDateFormat</span> <span class="n">dateFormat</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SimpleDateFormat</span><span class="o">(</span><span class="s">"yyyy-MM-dd"</span><span class="o">);</span>
+		<span class="k">try</span> <span class="o">{</span>
+			<span class="n">tire</span><span class="o">.</span><span class="na">setCreatedDate</span><span class="o">(</span><span class="n">dateFormat</span><span class="o">.</span><span class="na">parse</span><span class="o">(</span><span class="s">"2014-5-5"</span><span class="o">));</span>
+		<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{}</span>
+		
+		<span class="k">return</span> <span class="n">tire</span><span class="o">;</span>
+	<span class="o">}</span>
+	
+	<span class="kd">private</span> <span class="n">Tire</span> <span class="nf">createKumhoTire</span><span class="o">()</span> <span class="o">{</span>
+		<span class="n">Tire</span> <span class="n">tire</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Tire</span><span class="o">();</span>
+		<span class="n">tire</span><span class="o">.</span><span class="na">setMaker</span><span class="o">(</span><span class="s">"Kumho"</span><span class="o">);</span>
+		
+		<span class="n">Properties</span> <span class="n">specProp</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Properties</span><span class="o">();</span>
+		<span class="n">specProp</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">"width"</span><span class="o">,</span> <span class="s">"185"</span><span class="o">);</span>
+		<span class="n">specProp</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">"ratio"</span><span class="o">,</span> <span class="s">"75"</span><span class="o">);</span>
+		<span class="n">specProp</span><span class="o">.</span><span class="na">setProperty</span><span class="o">(</span><span class="s">"rim.diameter"</span><span class="o">,</span> <span class="s">"16"</span><span class="o">);</span>
+		<span class="n">tire</span><span class="o">.</span><span class="na">setSpec</span><span class="o">(</span><span class="n">specProp</span><span class="o">);</span>
+		
+		<span class="n">SimpleDateFormat</span> <span class="n">dateFormat</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SimpleDateFormat</span><span class="o">(</span><span class="s">"yyyy-MM-dd"</span><span class="o">);</span>
+		<span class="k">try</span> <span class="o">{</span>
+			<span class="n">tire</span><span class="o">.</span><span class="na">setCreatedDate</span><span class="o">(</span><span class="n">dateFormat</span><span class="o">.</span><span class="na">parse</span><span class="o">(</span><span class="s">"2014-3-1"</span><span class="o">));</span>
+		<span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{}</span>
+		
+		<span class="k">return</span> <span class="n">tire</span><span class="o">;</span>
+	<span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">"http://www.springframework.org/schema/beans"</span>
+	<span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span> 
+	<span class="na">xmlns:p=</span><span class="s">"http://www.springframework.org/schema/p"</span>
+	<span class="na">xmlns:c=</span><span class="s">"http://www.springframework.org/schema/c"</span>
+	<span class="na">xsi:schemaLocation=</span><span class="s">"http://www.springframework.org/schema/beans</span>
+        <span class="err">http://www.springframework.org/schema/beans/spring-beans.xsd"</span><span class="nt">&gt;</span>
+
+	<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"hankookTire"</span> <span class="na">class=</span><span class="s">"exam.test13.TireFactoryBean"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"maker"</span> <span class="na">value=</span><span class="s">"Hankook"</span> <span class="nt">/&gt;</span>
+	<span class="nt">&lt;/bean&gt;</span>
+	//자바코드 -&gt; FactoryBean tempFactoryBean = new TireFactoryBean();
+	//			  tempFactoryBean.setMaker("Hankook");
+	//			  Tire tireFactory = tempFactoryBean.getObject();
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre>
+</div>
+
+<p><br /></p>
+
+<h3 id="section-2">빈의 범위 설정</h3>
+
+<p>스프링 IoC컨테이너는 빈을 생성할 때 기본으로 한개만 생성한다. getBean()을 호출하면 계속 동일한 객체를 반환한다. 그러나 설정을 통해 이런 빈의 생성 방식을 조정할 수 있다. 다음은 스프링에서 설정 가능한 범위를 정리한 표이다. <br /></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>범위</th>
+      <th>설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>singleton</td>
+      <td>오직 하나의 빈만 생성한다.(기본설정)</td>
+    </tr>
+    <tr>
+      <td>prototype</td>
+      <td>getBean()을 호출할 때마다 빈을 생성한다.</td>
+    </tr>
+    <tr>
+      <td>request</td>
+      <td>HTTP요청이 발생할 때마다 생성되며, 웹 어플리케이션에서만 이 범위를 설정할 수 있다.</td>
+    </tr>
+    <tr>
+      <td>session</td>
+      <td>HTTP세션이 생성될 때마다 빈이 생성되며, 웹 어플리케이션에서만 이 범위를 설정할 수 있다.</td>
+    </tr>
+    <tr>
+      <td>globalsession</td>
+      <td>전역 세션이 준비될 때 빈이 생성된다. 웹 어플리케이션에서만 이 범위를 지정할 수 있으며, 보통 포틀릿 컨텍스트에서 사용한다.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong>싱글톤과 프로토타입</strong></p>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">"http://www.springframework.org/schema/beans"</span>
+	<span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span> 
+	<span class="na">xmlns:p=</span><span class="s">"http://www.springframework.org/schema/p"</span>
+	<span class="na">xmlns:c=</span><span class="s">"http://www.springframework.org/schema/c"</span>
+	<span class="na">xsi:schemaLocation=</span><span class="s">"http://www.springframework.org/schema/beans</span>
+        <span class="err">http://www.springframework.org/schema/beans/spring-beans.xsd"</span><span class="nt">&gt;</span>
+
+	<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"hyundaiEngine"</span> <span class="na">class=</span><span class="s">"exam.test14.Engine"</span> 
+	    <span class="na">p:maker=</span><span class="s">"Hyundai"</span> <span class="na">p:cc=</span><span class="s">"1997"</span><span class="nt">/&gt;</span>
+	
+	<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"kiaEngine"</span> <span class="na">class=</span><span class="s">"exam.test14.Engine"</span>
+	    <span class="na">p:maker=</span><span class="s">"Kia"</span> <span class="na">p:cc=</span><span class="s">"3000"</span>
+	    <span class="na">scope=</span><span class="s">"prototype"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre>
+</div>
+
+<p>hyundaiEngine은 범위를 설정하지 않아서 기본 범위인 <code class="highlighter-rouge">singletone</code>으로 설정되었다.</p>
+
+<p>kiaEngine은 scope속성의 값을 <code class="highlighter-rouge">prototype</code>으로 설정했다. 이 경우 빈 컨테이너에게 kiaEngine을 요청할 때마다 매번 새 Engine인스턴스를 만들어 반환할 것이다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">exam</span><span class="o">.</span><span class="na">test14</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.springframework.context.support.ClassPathXmlApplicationContext</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Test</span> <span class="o">{</span>
+
+	<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+		<span class="n">ClassPathXmlApplicationContext</span> <span class="n">ctx</span> <span class="o">=</span> 
+				<span class="k">new</span> <span class="nf">ClassPathXmlApplicationContext</span><span class="o">(</span><span class="s">"exam/test14/beans.xml"</span><span class="o">);</span>
+		
+		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"[singleton 방식(기본)]-------------------------"</span><span class="o">);</span>
+		
+		<span class="n">Engine</span> <span class="n">e1</span> <span class="o">=</span> <span class="o">(</span><span class="n">Engine</span><span class="o">)</span> <span class="n">ctx</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">"hyundaiEngine"</span><span class="o">);</span>
+		<span class="n">Engine</span> <span class="n">e2</span> <span class="o">=</span> <span class="o">(</span><span class="n">Engine</span><span class="o">)</span> <span class="n">ctx</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">"hyundaiEngine"</span><span class="o">);</span>
+		
+		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"e1--&gt;"</span> <span class="o">+</span> <span class="n">e1</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"e2--&gt;"</span> <span class="o">+</span> <span class="n">e2</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+		<span class="k">if</span> <span class="o">(</span><span class="n">e1</span> <span class="o">==</span> <span class="n">e2</span><span class="o">)</span> <span class="o">{</span>
+			<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"e1 == e2"</span><span class="o">);</span>
+		<span class="o">}</span>
+		
+		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"[prototype 방식]-------------------------"</span><span class="o">);</span>
+		
+		<span class="n">Engine</span> <span class="n">e3</span> <span class="o">=</span> <span class="o">(</span><span class="n">Engine</span><span class="o">)</span> <span class="n">ctx</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">"kiaEngine"</span><span class="o">);</span>
+		<span class="n">Engine</span> <span class="n">e4</span> <span class="o">=</span> <span class="o">(</span><span class="n">Engine</span><span class="o">)</span> <span class="n">ctx</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">"kiaEngine"</span><span class="o">);</span>
+		
+		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"e3--&gt;"</span> <span class="o">+</span> <span class="n">e3</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"e4--&gt;"</span> <span class="o">+</span> <span class="n">e4</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+		<span class="k">if</span> <span class="o">(</span><span class="n">e3</span> <span class="o">!=</span> <span class="n">e4</span><span class="o">)</span> <span class="o">{</span>
+			<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"e3 != e4"</span><span class="o">);</span>
+		<span class="o">}</span>
+	<span class="o">}</span>
+<span class="o">}</span>
+
+<span class="cm">/*
+[singleton 방식(기본)]
+e1--&gt;[Engine:Hyundai,1997]
+e2--&gt;[Engine:Hyundai,1997]
+e1 == e2
+
+[prototype 방식]
+e3--&gt;[Engine:Kia,3000]
+e4--&gt;[Engine:Kia,3000]
+e3 != e4
+*/</span>
+</code></pre>
+</div>
+
+<p>kiaEngine의 범위는 프로토타입(prototype)으로 설정되었다. 따라서 getBean()을 호출할 때마다 새로운 빈을 만들어서 반환한다. 그래서 e3와 e4가 다르다고 출력된다.</p>
+
+<p><br /></p>
+
+<h3 id="section-3">애노테이션을 이용한 의존객체 자동 주입</h3>
+
+<p>스프링에서는 자바 애노테이션을 이용해 간단히 의존 객체를 주입할 방법을 제공해 준다. 빈의 셋터 메서드에 <code class="highlighter-rouge">@Autowired</code>를 선언하면 빈 컨테이너가 셋터의 매개변수 타입과 일치하는 빈을 찾아 자동으로 설정해 준다. 이 기능을 이용하려면 빈 설정 파일에 다음 객체를 선언해야 한다.</p>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"</span> <span class="nt">/&gt;</span>
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">AutowiredAnnotationBeanPostProcessor</code>클래스는 빈의 후 처리기(post processor)로서 빈을 생성한 후 즉시 <code class="highlighter-rouge">@Autowired</code>로 선언된 셋터를 찾아서 호출하는 역할을 수행한다. 즉 <code class="highlighter-rouge">@Autowired</code>가 붙은 프로퍼티에 대해 의존 객체(프로퍼티 타입과 일치하는 빈)를 찾아 주입(프로퍼티 할당)하는 일을 한다.
+<br /></p>
+
+<p><strong><code class="highlighter-rouge">@Autowired</code>적용</strong></p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Car</span> <span class="o">{</span>
+	<span class="n">String</span>							<span class="n">model</span><span class="o">;</span> <span class="c1">// 모델명</span>
+	<span class="n">Engine</span> 							<span class="n">engine</span><span class="o">;</span> <span class="c1">// 엔진</span>
+	<span class="n">Tire</span><span class="o">[]</span>							<span class="n">tires</span><span class="o">;</span> <span class="c1">// 타이어</span>
+	<span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">Object</span><span class="o">&gt;</span> 	<span class="n">options</span><span class="o">;</span> <span class="c1">//선택사항</span>
+	
+	<span class="kd">public</span> <span class="nf">Car</span><span class="o">()</span> <span class="o">{}</span>
+	
+	<span class="kd">public</span> <span class="nf">Car</span><span class="o">(</span><span class="n">String</span> <span class="n">model</span><span class="o">,</span> <span class="n">Engine</span> <span class="n">engine</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">;</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">engine</span> <span class="o">=</span> <span class="n">engine</span><span class="o">;</span>
+	<span class="o">}</span>
+	
+	<span class="kd">public</span> <span class="n">String</span> <span class="nf">getModel</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="n">model</span><span class="o">;</span>
+	<span class="o">}</span>
+	
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">setModel</span><span class="o">(</span><span class="n">String</span> <span class="n">model</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">model</span> <span class="o">=</span> <span class="n">model</span><span class="o">;</span>
+	<span class="o">}</span>
+	
+	<span class="kd">public</span> <span class="n">Engine</span> <span class="nf">getEngine</span><span class="o">()</span> <span class="o">{</span>
+		<span class="k">return</span> <span class="n">engine</span><span class="o">;</span>
+	<span class="o">}</span>
+	
+	<span class="nd">@Autowired</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">setEngine</span><span class="o">(</span><span class="n">Engine</span> <span class="n">engine</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">engine</span> <span class="o">=</span> <span class="n">engine</span><span class="o">;</span>
+	<span class="o">}</span>
+	
+	<span class="o">....</span>
+	
+</code></pre>
+</div>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">"http://www.springframework.org/schema/beans"</span>
+	<span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span> 
+	<span class="na">xmlns:p=</span><span class="s">"http://www.springframework.org/schema/p"</span>
+	<span class="na">xmlns:c=</span><span class="s">"http://www.springframework.org/schema/c"</span>
+	<span class="na">xsi:schemaLocation=</span><span class="s">"http://www.springframework.org/schema/beans</span>
+        <span class="err">http://www.springframework.org/schema/beans/spring-beans.xsd"</span><span class="nt">&gt;</span>
+
+  <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"org.springframework.beans.factory.annotation.AutowiredAnnotationBeanPostProcessor"</span> <span class="nt">/&gt;</span>
+  
+  //자바코드-&gt;  AutowiredAnnotationBeanPostProcessor tempAutowiredPostProcessor=
+  				new AutowiredAnnotationBeanPostProcessor();
+    
+  <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"hyundaiEngine"</span> <span class="na">class=</span><span class="s">"exam.test17.Engine"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;constructor-arg</span> <span class="na">value=</span><span class="s">"Hyundai"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/bean&gt;</span> 
+  //자바코드-&gt; Engine hyundaiEngine = new Engine("Hyundai");
+  
+  <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"car1"</span> <span class="na">class=</span><span class="s">"exam.test17.Car"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"model"</span> <span class="na">value=</span><span class="s">"Sonata"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/bean&gt;</span>
+  
+  <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"car2"</span> <span class="na">class=</span><span class="s">"exam.test17.Car"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"model"</span> <span class="na">value=</span><span class="s">"Grandeur"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/bean&gt;</span>
+  
+  //자바코드 -&gt;	Car car1 = new Car();
+  //			Car car2 = new Car();
+  //			car1.setModel("Sonata");
+  //			car2.setModel("Grandeur");
+  //			car1.setEngine(hyundaiEngine);
+  //			car2.setEngine(hyundaiEngine);
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre>
+</div>
+
+<p><br />
+<strong><code class="highlighter-rouge">@Autowired</code>의 <code class="highlighter-rouge">required</code>속성</strong>*</p>
+
+<p>프로퍼티(셋터메서드)에 대해 <code class="highlighter-rouge">@Autowired</code>를 선언하면 해당 프로퍼티는 기본으로 필수 입력 항목이 된다. 만약 프로퍼티에 주입할 의존 객체를 찾을 수 없으면 예외가 발생한다. 이때 <code class="highlighter-rouge">@Autowired</code>의 <code class="highlighter-rouge">required</code>속성을 이용하면 필수 입력 여부를 조정할 수 있다. <code class="highlighter-rouge">required</code>속성을 false로 설정하면 프로퍼티에 주입할 의존객체를 찾지 못하더라도 예외가 발 생하지 않는다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@Autowired</span><span class="o">(</span><span class="n">required</span><span class="o">=</span><span class="kc">false</span><span class="o">)</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">setEngine</span><span class="o">(</span><span class="n">Engine</span> <span class="n">engine</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">engine</span> <span class="o">=</span> <span class="n">engine</span><span class="o">;</span>
+	<span class="o">}</span>
+</code></pre>
+</div>
+
+<p><br /></p>
+
+<p><strong><code class="highlighter-rouge">@Qualifier</code>로 주입할 객체를 지정하기</strong></p>
+
+<p><code class="highlighter-rouge">@Autowired</code>는 프로퍼티에 주입할 수 있는 의존객체가 여러개 있을 경우 오류를 발생시키다. 즉 같은 타입의 객체가 여러개 있으면 그 중에서 어떤 객체를 주입해야 할지 알 수 없기 때문이다. 이 경우 애노테이션 <code class="highlighter-rouge">@Qualifier</code>를 사용하면 손쉽게 해결 가능하다. <code class="highlighter-rouge">@Qualifier</code>는 빈의 이름(또는 아이디)으로 의존 객체를 지정할 수 있다.</p>
+
+<p>이 애노테이션을 사용하려면 빈의 후 처리기(bean post processor)가 필요하다. 이런식으로 하다보니 애노테이션을 사용할 때마다 그 애노테이션을 처리할 객체를 등록해야 하는 불편함이 발생한다. 이런 불편함을 해소하기 위해 스프링에서는 애노테이션 처리와 관련된 빈(bean post processor)을 한꺼번에 등록할 수 있는 방법을 제공한다. 다음과 같이 간단히 태그를 선언하면 된다.</p>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;context:annotation-config/&gt;</span>
+</code></pre>
+</div>
+<p><br /></p>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">"http://www.springframework.org/schema/beans"</span>
+	<span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span> 
+	<span class="na">xmlns:p=</span><span class="s">"http://www.springframework.org/schema/p"</span>
+	<span class="na">xmlns:c=</span><span class="s">"http://www.springframework.org/schema/c"</span>
+	<span class="na">xmlns:context=</span><span class="s">"http://www.springframework.org/schema/context"</span>
+	<span class="na">xsi:schemaLocation=</span><span class="s">"http://www.springframework.org/schema/beans</span>
+        <span class="err">http://www.springframework.org/schema/beans/spring-beans.xsd</span>
+        <span class="err">http://www.springframework.org/schema/context</span>
+        <span class="err">http://www.springframework.org/schema/context/spring-context.xsd"</span><span class="nt">&gt;</span>
+
+  <span class="nt">&lt;context:annotation-config</span> <span class="nt">/&gt;</span>
+          
+  <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"hyundaiEngine"</span> <span class="na">class=</span><span class="s">"exam.test19.Engine"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;constructor-arg</span> <span class="na">value=</span><span class="s">"Hyundai"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/bean&gt;</span> 
+
+  <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"kiaEngine"</span> <span class="na">class=</span><span class="s">"exam.test19.Engine"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;constructor-arg</span> <span class="na">value=</span><span class="s">"Kia"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/bean&gt;</span> 
+
+  <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"car1"</span> <span class="na">class=</span><span class="s">"exam.test19.Car"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"model"</span> <span class="na">value=</span><span class="s">"Sonata"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/bean&gt;</span>
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre>
+</div>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Car</span> <span class="o">{</span>	
+	<span class="o">...</span>
+	
+	<span class="nd">@Autowired</span><span class="o">(</span><span class="n">required</span><span class="o">=</span><span class="kc">false</span><span class="o">)</span>
+	<span class="nd">@Qualifier</span><span class="o">(</span><span class="s">"kiaEngine"</span><span class="o">)</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">setEngine</span><span class="o">(</span> <span class="n">Engine</span> <span class="n">engine</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">engine</span> <span class="o">=</span> <span class="n">engine</span><span class="o">;</span>
+	<span class="o">}</span>
+	
+	<span class="o">...</span>
+	
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>engine 프로퍼티(setEngine()) 앞에 <code class="highlighter-rouge">@Qualifier</code> 선언을 했고, 이는 bean.xml에 선언된 엔진 객체 중에서 kiaEngine를 의존 객체로 주입한다.</p>
+
+<p><br /></p>
+
+<p><strong><code class="highlighter-rouge">@Autowired</code> + <code class="highlighter-rouge">@Qualifier</code> = <code class="highlighter-rouge">@Resource</code></strong></p>
+
+<p>JSR-250 명세에 정의된 <code class="highlighter-rouge">@Resource</code>를 사용하면 더 간단히 특히 의존객체를 지정할 수 있다. 이름으로 의존 객체를 지정할 경우 이 애노테이션을 사용할 것을 권장한다. 단, <code class="highlighter-rouge">@Autowired</code>는 <code class="highlighter-rouge">required</code>속성을 사용하여 프로퍼티 값의 필수 여부를 지정할 수 있지만 <code class="highlighter-rouge">@Resource</code>에는 그런 기능이 없으므로 <code class="highlighter-rouge">@Resource</code>는 무조건 필수 입력입니다. 해당 프로퍼티에 주입할 의존 객체가 없으면 오류가 발생하므로 의존객체 주입을 선택 사항으로 만들고 싶다면 <code class="highlighter-rouge">@Autowired</code>를 사용하면된다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Car</span> <span class="o">{</span>
+	<span class="o">...</span>
+	
+	<span class="nd">@Resource</span><span class="o">(</span><span class="n">name</span><span class="o">=</span><span class="s">"kiaEngine"</span><span class="o">)</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">setEngine</span><span class="o">(</span> <span class="n">Engine</span> <span class="n">engine</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">engine</span> <span class="o">=</span> <span class="n">engine</span><span class="o">;</span>
+	<span class="o">}</span>
+	<span class="o">...</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">@Resource</code>를 선언하고 name 속성에 주입하고자 하는 의존 객체의 이름을 지정한다.</p>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">"http://www.springframework.org/schema/beans"</span>
+	<span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span> 
+	<span class="na">xmlns:p=</span><span class="s">"http://www.springframework.org/schema/p"</span>
+	<span class="na">xmlns:c=</span><span class="s">"http://www.springframework.org/schema/c"</span>
+	<span class="na">xmlns:context=</span><span class="s">"http://www.springframework.org/schema/context"</span>
+	<span class="na">xsi:schemaLocation=</span><span class="s">"http://www.springframework.org/schema/beans</span>
+        <span class="err">http://www.springframework.org/schema/beans/spring-beans.xsd</span>
+        <span class="err">http://www.springframework.org/schema/context</span>
+        <span class="err">http://www.springframework.org/schema/context/spring-context.xsd"</span><span class="nt">&gt;</span>
+
+  <span class="nt">&lt;context:annotation-config</span> <span class="nt">/&gt;</span>
+          
+  <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"hyundaiEngine"</span> <span class="na">class=</span><span class="s">"exam.test20.Engine"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;constructor-arg</span> <span class="na">value=</span><span class="s">"Hyundai"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/bean&gt;</span> 
+
+  <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"kiaEngine"</span> <span class="na">class=</span><span class="s">"exam.test20.Engine"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;constructor-arg</span> <span class="na">value=</span><span class="s">"Kia"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/bean&gt;</span> 
+
+  <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"car1"</span> <span class="na">class=</span><span class="s">"exam.test20.Car"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"model"</span> <span class="na">value=</span><span class="s">"Sonata"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/bean&gt;</span>
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">@Resource</code>에 설정한 대로 해당 의존객체(kiaEngine)가 주입된다.</p>
+
+<p><br /></p>
+
+<h3 id="section-4">빈 자동 등록</h3>
+
+<p>컴포넌트 스캔과 애노테이션을 이용해 빈을 자동 등록하는 방법은 다음과 같다.</p>
+
+<ol>
+  <li>빈생성 대상이 되는 클래스에 <code class="highlighter-rouge">@Component</code>애노테이션으로 표시한다.</li>
+  <li>스프링 IoC컨테이너는 <code class="highlighter-rouge">@Component</code>가 붙은 클래스를 찾아 빈을 생성한다.</li>
+</ol>
+
+<p>스프링에서는 <code class="highlighter-rouge">@Component</code> 외에 클래스를 관리하고 이해하는데 도움을 주기 위해 클래스의 역할에 따라 붙일 수 있는 애노테이션을 추가로 제공한다. 다음 표는 빈 생성 대상 클래스임을 표시할 때 붙일 수 있는 애노테이션이다.</p>
+
+<p><br /></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>애노테이션</th>
+      <th>설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code class="highlighter-rouge">@Component</code></td>
+      <td>빈 생성 대상이 되는 모든 클래스에 대해 붙일 수 있다.</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">@Repository</code></td>
+      <td>DAO와 같은 퍼시스턴스(persistence) 역할을 수행하는 클래스에 붙인다.</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">@Service</code></td>
+      <td>서비스 역할을 수행하는 클래스에 붙인다.</td>
+    </tr>
+    <tr>
+      <td><code class="highlighter-rouge">@Controller</code></td>
+      <td>MVC구조에서 Controller 역할을 수행하는 클래스에 붙인다.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><strong><code class="highlighter-rouge">@Component</code>예&gt;</strong></p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@Component</span><span class="o">(</span><span class="s">"car"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Car</span> <span class="o">{</span>
+	<span class="o">...</span>
+	<span class="nd">@Autowired</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">setEngine</span><span class="o">(</span><span class="n">Engine</span> <span class="n">engine</span><span class="o">)</span> <span class="o">{</span>
+		<span class="k">this</span><span class="o">.</span><span class="na">engine</span> <span class="o">=</span> <span class="n">engine</span><span class="o">;</span>
+	<span class="o">}</span>
+	<span class="o">...</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">@Component</code>에 들어가는 속성값은 빈의 이름이다. getBean()을 호출할 때 사용한다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@Component</span><span class="o">(</span><span class="s">"engine"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Engine</span> <span class="o">{</span>
+	
+	<span class="o">...</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">"http://www.springframework.org/schema/beans"</span>
+	<span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span> 
+	<span class="na">xmlns:p=</span><span class="s">"http://www.springframework.org/schema/p"</span>
+	<span class="na">xmlns:c=</span><span class="s">"http://www.springframework.org/schema/c"</span>
+	<span class="na">xmlns:context=</span><span class="s">"http://www.springframework.org/schema/context"</span>
+	<span class="na">xsi:schemaLocation=</span><span class="s">"http://www.springframework.org/schema/beans</span>
+        <span class="err">http://www.springframework.org/schema/beans/spring-beans.xsd</span>
+        <span class="err">http://www.springframework.org/schema/context</span>
+        <span class="err">http://www.springframework.org/schema/context/spring-context.xsd"</span><span class="nt">&gt;</span>
+
+  <span class="nt">&lt;context:component-scan</span> <span class="na">base-package=</span><span class="s">"exam.test21"</span><span class="nt">/&gt;</span>
+
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">&lt;context:component-scan/&gt;</code> 태그를 사용하여 <code class="highlighter-rouge">@Component, @Repository</code> 등 빈 생성 표시자(애노테이션)가 붙은 클래스를 검색하라고 선언한다.</p>
+
+<p>앞의 코드의 경우 exam.test21 패키지 및 그 하위 패키지를 모두 검색할 것이다.</p>
+
+<p><code class="highlighter-rouge">&lt;context:component-scan/&gt;</code> 태그를 선언하면 <code class="highlighter-rouge">&lt;context:annotation-config/&gt;</code>태그의 기능이 자동으로 활성화된다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">exam</span><span class="o">.</span><span class="na">test21</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.springframework.context.support.ClassPathXmlApplicationContext</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Test</span> <span class="o">{</span>
+
+	<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+		<span class="n">ClassPathXmlApplicationContext</span> <span class="n">ctx</span> <span class="o">=</span> 
+				<span class="k">new</span> <span class="nf">ClassPathXmlApplicationContext</span><span class="o">(</span><span class="s">"exam/test21/beans.xml"</span><span class="o">);</span>
+		
+		<span class="n">Car</span> <span class="n">car</span> <span class="o">=</span> <span class="o">(</span><span class="n">Car</span><span class="o">)</span> <span class="n">ctx</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">"car"</span><span class="o">);</span>
+		
+		<span class="n">Engine</span> <span class="n">engine</span> <span class="o">=</span> <span class="o">(</span><span class="n">Engine</span><span class="o">)</span> <span class="n">ctx</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">"engine"</span><span class="o">);</span>
+		<span class="n">engine</span><span class="o">.</span><span class="na">setMaker</span><span class="o">(</span><span class="s">"Hyundai"</span><span class="o">);</span>
+		<span class="n">engine</span><span class="o">.</span><span class="na">setCc</span><span class="o">(</span><span class="mi">1997</span><span class="o">);</span>
+		
+		<span class="k">if</span> <span class="o">(</span><span class="n">car</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+			<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"car != null"</span><span class="o">);</span>
+		<span class="o">}</span>
+		
+		<span class="k">if</span> <span class="o">(</span><span class="n">engine</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+			<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"engine != null"</span><span class="o">);</span>
+		<span class="o">}</span>
+		
+		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">car</span><span class="o">);</span>
+		
+		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">car</span><span class="o">.</span><span class="na">toString</span><span class="o">());</span>
+	<span class="o">}</span>
+<span class="o">}</span>
+<span class="cm">/*
+car != null
+engine != null
+[car:null
+	[Engine:hyundai,1997]
+]
+*/</span>
+</code></pre>
+</div>
+
+<p>이렇게 컴포넌트 자동 탐색(<code class="highlighter-rouge">&lt;context:component-scan/&gt;</code>)과 빈 자동생성 표시자(<code class="highlighter-rouge">@Component</code> 등)를 이용하면 빈 설정 파일(bean.xml)에 일일이 빈 정보를 선언할 필요가 없다.</p>
+
+<p><br /></p>
+
+<blockquote>
+  <p><strong>컴포넌트 탐색의 포함 조건과 제외 조건</strong></p>
+
+  <p><code class="highlighter-rouge">&lt;context:component-scan/&gt;</code>을 사용할 때 다음과 같이 탐색 조건을 추가할 수 있다.</p>
+
+  <div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;context:component-scan</span> <span class="na">base-package=</span><span class="s">"exam.test21"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;context:include-filter</span> <span class="na">type=</span><span class="s">""</span> <span class="na">expression=</span><span class="s">""</span><span class="nt">/&gt;</span>
+	<span class="nt">&lt;context:exclude-filter</span> <span class="na">type=</span><span class="s">""</span> <span class="na">expression=</span><span class="s">""</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/context:component-scan&gt;</span>
+</code></pre>
+  </div>
+
+  <p><code class="highlighter-rouge">context:include-filter</code>태그는 빈 탐색에 포함할 대상자를 지정할 때사용한다.</p>
+
+  <p><code class="highlighter-rouge">context:exclude-filter</code>태그는 빈 탐색에 제외할 대상자를 지정할 때 사용한다.</p>
+</blockquote>
+
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/09/21/beancontext2/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
+                  <a class="post-link" href="/2016/09/21/beancontext1/">스프링 IoC컨테이너 ApplicationContext [1]</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-09-21
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#Spring" title="Category: Spring" rel="category">Spring</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="xml----">XML 기반 빈 관리 컨테이너</h1>
+
+<p>스프링에서는 자바 객체를 <code class="highlighter-rouge">빈(Bean)</code>이라고 한다. 그래서 객체관리 컨테이너를 <code class="highlighter-rouge">빈컨테이너</code>라고 한다.</p>
+
+<p>(스프링 IoC컨테이너 == 빈컨테이너)</p>
+
+<p><strong>ApplicationContext의 계층도</strong></p>
+
+<blockquote>
+  <ul>
+    <li>ApplicationContext (interface)
+      <ul>
+        <li>ClasspathXmlApplicationContext (class)</li>
+        <li>FileSystemXmlApplicationContext (class)</li>
+        <li>WebApplicationContext (interface)</li>
+      </ul>
+    </li>
+  </ul>
+</blockquote>
+
+<p>스프링에서 빈 정보는 XML 파일에 저장해 두고 ClassPathXmlApplicationContext 클래스나 FileSystemXmlApplicaionContext 클래스를 사용하여 빈을 자동 생성한다. ClassPathXmlApplicationContext는 자바 클래스 경로에서 XML로 된 빈 설정 파일을 찾는다. FileSystemXmlApplicationContext는 파일 시스템 경로에서 빈 설정 파일을 찾는다. WebApplicationContext는 웹 어플리케이션을 위한 IoC 컨테이너로서 web.xml파일에 설정된 정보에 따라 XML파일을 찾는다.</p>
+
+<p><br /></p>
+
+<h3 id="bean--xml-">Bean 설정 XML 파일준비</h3>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">"http://www.springframework.org/schema/beans"</span>
+    <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
+    <span class="na">xsi:schemaLocation=</span><span class="s">"http://www.springframework.org/schema/beans</span>
+        <span class="err">http://www.springframework.org/schema/beans/spring-beans.xsd"</span><span class="nt">&gt;</span>
+        
+  <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"score"</span> <span class="na">class=</span><span class="s">"exam.test01.Score"</span><span class="nt">/&gt;</span>
+    
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre>
+</div>
+
+<p>bean태그는 <code class="highlighter-rouge">&lt;beans xmlns="http://www.springframework.org/schema/beans"/&gt;</code> 네임스페이스에 소속되어 있기 때문에 XML파서가 이해할 수 있다. 이는 자바 클래스에서 import하는 것과 비슷하다.</p>
+
+<p>위의 소스를 자바소스로 표현하면 아래와 같다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="k">new</span> <span class="n">exam</span><span class="o">.</span><span class="na">test01</span><span class="o">.</span><span class="na">Score</span><span class="o">();</span>
+</code></pre>
+</div>
+
+<p>스프링 IoC 컨테이너가 생성할 자바 빈에 대한 정보는 <code class="highlighter-rouge">&lt;bean&gt;</code>태그로 선언한다. class속성에는 클래스 이름을 정한다. 주의 할점은 반드시 패키지 이름을 포함한 클래스 이름(fully qulified name)이어야 한다. id속성은 객체의 식별자이다. 빈컨테이너에서 객체를 꺼낼 때 이 식별자를 사용한다.</p>
+
+<p><strong>스프링 IoC 컨테이너 사용</strong></p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">Test</span> <span class="o">{</span>
+
+	<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+		<span class="n">ClassPathXmlApplicationContext</span> <span class="n">ctx</span> <span class="o">=</span> 
+				<span class="k">new</span> <span class="nf">ClassPathXmlApplicationContext</span><span class="o">(</span><span class="s">"exam/test01/beans.xml"</span><span class="o">);</span>
+		
+		<span class="n">Score</span> <span class="n">score</span> <span class="o">=</span> <span class="o">(</span><span class="n">Score</span><span class="o">)</span> <span class="n">ctx</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">"score"</span><span class="o">);</span>
+		
+		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"합계:"</span> <span class="o">+</span> <span class="n">score</span><span class="o">.</span><span class="na">sum</span><span class="o">());</span>
+		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"평균:"</span> <span class="o">+</span> <span class="n">score</span><span class="o">.</span><span class="na">average</span><span class="o">());</span>
+	<span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<h3 id="bean-">익명 Bean 선언</h3>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">"http://www.springframework.org/schema/beans"</span>
+    <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
+    <span class="na">xsi:schemaLocation=</span><span class="s">"http://www.springframework.org/schema/beans</span>
+        <span class="err">http://www.springframework.org/schema/beans/spring-beans.xsd"</span><span class="nt">&gt;</span>
+        
+  <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"exam.test03.Score"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"exam.test03.Score"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre>
+</div>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">exam</span><span class="o">.</span><span class="na">test03</span><span class="o">;</span>
+
+<span class="kn">import</span> <span class="nn">org.springframework.context.support.ClassPathXmlApplicationContext</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Test</span> <span class="o">{</span>
+
+	<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+		<span class="n">ClassPathXmlApplicationContext</span> <span class="n">ctx</span> <span class="o">=</span> 
+				<span class="k">new</span> <span class="nf">ClassPathXmlApplicationContext</span><span class="o">(</span><span class="s">"exam/test03/beans.xml"</span><span class="o">);</span>
+		
+		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"[컨테이너에 보관된 객체의 이름 출력]"</span><span class="o">);</span>
+		<span class="k">for</span> <span class="o">(</span><span class="n">String</span> <span class="n">name</span> <span class="o">:</span> <span class="n">ctx</span><span class="o">.</span><span class="na">getBeanDefinitionNames</span><span class="o">())</span> <span class="o">{</span>
+			<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">name</span><span class="o">);</span>
+		<span class="o">}</span>
+		
+		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"[exam.test03.Score#0의 별명 출력]"</span><span class="o">);</span>
+		<span class="k">for</span> <span class="o">(</span><span class="n">String</span> <span class="n">alias</span> <span class="o">:</span> <span class="n">ctx</span><span class="o">.</span><span class="na">getAliases</span><span class="o">(</span><span class="s">"exam.test03.Score#0"</span><span class="o">))</span> <span class="o">{</span>
+			<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">alias</span><span class="o">);</span>
+		<span class="o">}</span>
+		
+		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"[익명 빈 꺼내기]"</span><span class="o">);</span>
+		<span class="n">Score</span> <span class="n">score1</span> <span class="o">=</span> <span class="o">(</span><span class="n">Score</span><span class="o">)</span> <span class="n">ctx</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">"exam.test03.Score"</span><span class="o">);</span>
+		<span class="n">Score</span> <span class="n">score2</span> <span class="o">=</span> <span class="o">(</span><span class="n">Score</span><span class="o">)</span> <span class="n">ctx</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">"exam.test03.Score#0"</span><span class="o">);</span>
+		<span class="k">if</span> <span class="o">(</span><span class="n">score1</span> <span class="o">==</span> <span class="n">score2</span><span class="o">)</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"score == score#0"</span><span class="o">);</span>
+		
+		<span class="n">Score</span> <span class="n">score3</span> <span class="o">=</span> <span class="o">(</span><span class="n">Score</span><span class="o">)</span> <span class="n">ctx</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="s">"exam.test03.Score#1"</span><span class="o">);</span>
+		<span class="k">if</span> <span class="o">(</span><span class="n">score1</span> <span class="o">!=</span> <span class="n">score3</span><span class="o">)</span> <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"score != score#1"</span><span class="o">);</span>
+		
+		<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"[클래스 타입으로 빈 꺼내기]"</span><span class="o">);</span>
+		<span class="n">Score</span> <span class="n">score4</span> <span class="o">=</span> <span class="o">(</span><span class="n">Score</span><span class="o">)</span> <span class="n">ctx</span><span class="o">.</span><span class="na">getBean</span><span class="o">(</span><span class="n">exam</span><span class="o">.</span><span class="na">test03</span><span class="o">.</span><span class="na">Score</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+	<span class="o">}</span>
+<span class="o">}</span>
+
+<span class="o">/*</span>
+<span class="o">[</span><span class="err">컨테이너에</span> <span class="err">보관된</span> <span class="err">객체의</span> <span class="err">이름</span> <span class="err">출력</span><span class="o">]</span>
+<span class="n">exam</span><span class="o">.</span><span class="na">test03</span><span class="o">.</span><span class="na">Score</span><span class="err">#</span><span class="mi">0</span>
+<span class="n">exam</span><span class="o">.</span><span class="na">test03</span><span class="o">.</span><span class="na">Score</span><span class="err">#</span><span class="mi">1</span>
+
+<span class="o">[</span><span class="n">exam</span><span class="o">.</span><span class="na">test03</span><span class="o">.</span><span class="na">Score</span><span class="err">#</span><span class="mi">0</span><span class="err">의</span> <span class="err">별명</span> <span class="err">출력</span><span class="o">]</span>
+<span class="n">exam</span><span class="o">.</span><span class="na">test03</span><span class="o">.</span><span class="na">Score</span>
+
+<span class="o">[</span><span class="err">익명</span> <span class="err">빈</span> <span class="err">꺼내기</span><span class="o">]</span>
+<span class="n">score</span> <span class="o">==</span> <span class="n">score</span><span class="err">#</span><span class="mi">0</span>
+<span class="n">score</span> <span class="o">!=</span> <span class="n">score</span><span class="err">#</span><span class="mi">1</span>
+
+<span class="o">[</span><span class="err">클래스</span> <span class="err">타입으로</span> <span class="err">빈</span> <span class="err">꺼내기</span><span class="o">]</span>
+<span class="n">Error</span>
+</code></pre>
+</div>
+
+<p>클래스 타입으로도 객체를 꺼낼 수 있다. 하지만 getBean()을 호출할 때 Score 클래스에 대한 정보를 담은 java.lang.Class객체를 넘겨서 빈컨테이너에서 이 클래스의 인스턴스를 찾는다. 이때 같은 타입의 객체가 여러 개 있을 경우 예외가 발생한다.</p>
+
+<p><br /></p>
+
+<h3 id="section">생성자와 프로퍼티 설정</h3>
+
+<p><code class="highlighter-rouge">&lt;constructor-arg&gt;</code> 엘러먼트를 이용하면 호출될 생성자를 지정할 수 있다.</p>
+
+<p>생성자를 지정하는 방법은 아래와 같다.</p>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">"http://www.springframework.org/schema/beans"</span>
+    <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
+    <span class="na">xsi:schemaLocation=</span><span class="s">"http://www.springframework.org/schema/beans</span>
+        <span class="err">http://www.springframework.org/schema/beans/spring-beans.xsd"</span><span class="nt">&gt;</span>
+        
+  <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"score1"</span> <span class="na">class=</span><span class="s">"exam.test04.Score"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;constructor-arg&gt;&lt;value</span> <span class="na">type=</span><span class="s">"java.lang.String"</span><span class="nt">&gt;</span>홍길동<span class="nt">&lt;/value&gt;&lt;/constructor-arg&gt;</span>
+      <span class="nt">&lt;constructor-arg&gt;&lt;value</span> <span class="na">type=</span><span class="s">"float"</span><span class="nt">&gt;</span>91<span class="nt">&lt;/value&gt;&lt;/constructor-arg&gt;</span>
+      <span class="nt">&lt;constructor-arg&gt;&lt;value</span> <span class="na">type=</span><span class="s">"float"</span><span class="nt">&gt;</span>92<span class="nt">&lt;/value&gt;&lt;/constructor-arg&gt;</span>
+      <span class="nt">&lt;constructor-arg&gt;&lt;value</span> <span class="na">type=</span><span class="s">"float"</span><span class="nt">&gt;</span>93<span class="nt">&lt;/value&gt;&lt;/constructor-arg&gt;</span>
+  <span class="nt">&lt;/bean&gt;</span>
+  //자바코드 -&gt; new Score("임꺽정",91,91,91);
+  
+  <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"score2"</span> <span class="na">class=</span><span class="s">"exam.test04.Score"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;constructor-arg&gt;&lt;value&gt;</span>임꺽정<span class="nt">&lt;/value&gt;&lt;/constructor-arg&gt;</span>
+      <span class="nt">&lt;constructor-arg&gt;&lt;value&gt;</span>81<span class="nt">&lt;/value&gt;&lt;/constructor-arg&gt;</span>
+      <span class="nt">&lt;constructor-arg&gt;&lt;value&gt;</span>82<span class="nt">&lt;/value&gt;&lt;/constructor-arg&gt;</span>
+      <span class="nt">&lt;constructor-arg&gt;&lt;value&gt;</span>83<span class="nt">&lt;/value&gt;&lt;/constructor-arg&gt;</span>
+  <span class="nt">&lt;/bean&gt;</span> 
+  //자바코드 -&gt; new Score("임꺽정",81,82,83);
+  
+  <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"score3"</span> <span class="na">class=</span><span class="s">"exam.test04.Score"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;constructor-arg</span> <span class="na">type=</span><span class="s">"java.lang.String"</span> <span class="na">value=</span><span class="s">"장보고"</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;constructor-arg</span> <span class="na">type=</span><span class="s">"float"</span> <span class="na">value=</span><span class="s">"71"</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;constructor-arg</span> <span class="na">type=</span><span class="s">"float"</span> <span class="na">value=</span><span class="s">"72"</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;constructor-arg</span> <span class="na">type=</span><span class="s">"float"</span> <span class="na">value=</span><span class="s">"73"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/bean&gt;</span> 
+  //자바코드 -&gt; new Score("장보고",71,72,73);
+  
+  <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"score4"</span> <span class="na">class=</span><span class="s">"exam.test04.Score"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;constructor-arg</span> <span class="na">value=</span><span class="s">"이순신"</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;constructor-arg</span> <span class="na">value=</span><span class="s">"100"</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;constructor-arg</span> <span class="na">value=</span><span class="s">"98"</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;constructor-arg</span> <span class="na">value=</span><span class="s">"99"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/bean&gt;</span>
+  //자바코드 -&gt; new Score("이순신",100,98,99);
+    
+  <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"score5"</span> <span class="na">class=</span><span class="s">"exam.test04.Score"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;constructor-arg</span> <span class="na">value=</span><span class="s">"70"</span> <span class="na">index=</span><span class="s">"3"</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;constructor-arg</span> <span class="na">value=</span><span class="s">"50"</span> <span class="na">index=</span><span class="s">"1"</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;constructor-arg</span> <span class="na">value=</span><span class="s">"강감찬"</span> <span class="na">index=</span><span class="s">"0"</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;constructor-arg</span> <span class="na">value=</span><span class="s">"60"</span> <span class="na">index=</span><span class="s">"2"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/bean&gt;</span>
+  //자바코드 -&gt; new Score("강감찬",50,60,70;
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre>
+</div>
+
+<p><br />
+프로퍼티값 설정은 다음과 같다.</p>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">"http://www.springframework.org/schema/beans"</span>
+    <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
+    <span class="na">xsi:schemaLocation=</span><span class="s">"http://www.springframework.org/schema/beans</span>
+        <span class="err">http://www.springframework.org/schema/beans/spring-beans.xsd"</span><span class="nt">&gt;</span>
+        
+  <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"score1"</span> <span class="na">class=</span><span class="s">"exam.test05.Score"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"name"</span><span class="nt">&gt;&lt;value&gt;</span>홍길동<span class="nt">&lt;/value&gt;&lt;/property&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"kor"</span><span class="nt">&gt;&lt;value&gt;</span>100<span class="nt">&lt;/value&gt;&lt;/property&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"eng"</span><span class="nt">&gt;&lt;value&gt;</span>95<span class="nt">&lt;/value&gt;&lt;/property&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"math"</span><span class="nt">&gt;&lt;value&gt;</span>90<span class="nt">&lt;/value&gt;&lt;/property&gt;</span>
+  <span class="nt">&lt;/bean&gt;</span>
+  //자바코드 -&gt; Score score1 = new Score();
+  //			score1.setName('홍길동');
+  //			score1.setKor(100);
+  //			score1.setEng(59);
+  //			score1.setMath(90);
+  
+  <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"score2"</span> <span class="na">class=</span><span class="s">"exam.test05.Score"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"name"</span> <span class="na">value=</span><span class="s">"임꺽정"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"kor"</span> <span class="na">value=</span><span class="s">"85"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"eng"</span> <span class="na">value=</span><span class="s">"99"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"math"</span> <span class="na">value=</span><span class="s">"100"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/bean&gt;</span>
+  //자바코드 -&gt; Score score2 = new Score();
+  //			score2.setName('임꺽정');
+  //			score2.setKor(85);
+  //			score2.setEng(99);
+  //			score2.setMath(100);  
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre>
+</div>
+
+<p><br /></p>
+
+<h3 id="bean------"><code class="highlighter-rouge">&lt;bean&gt;</code>의 속성을 이용하여 생성자 및 프로퍼티 설정하기</h3>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">"http://www.springframework.org/schema/beans"</span>
+    <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
+    <span class="na">xmlns:p=</span><span class="s">"http://www.springframework.org/schema/p"</span>
+    <span class="na">xmlns:c=</span><span class="s">"http://www.springframework.org/schema/c"</span>
+    <span class="na">xsi:schemaLocation=</span><span class="s">"http://www.springframework.org/schema/beans</span>
+        <span class="err">http://www.springframework.org/schema/beans/spring-beans.xsd"</span><span class="nt">&gt;</span>
+  
+  <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"score1"</span> <span class="na">class=</span><span class="s">"exam.test06.Score"</span>
+      <span class="na">p:name=</span><span class="s">"홍길동"</span> <span class="na">p:kor=</span><span class="s">"100"</span> <span class="na">p:eng=</span><span class="s">"95"</span> <span class="na">p:math=</span><span class="s">"90"</span><span class="nt">/&gt;</span>
+      
+  //자바코드 -&gt; Score score1 = new Score();
+  //			score1.setName('홍길동);
+  //			score1.setKor(100);
+  //			score1.setEng(95);
+  //			score1.setMath(90);
+  
+  <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"score2"</span> <span class="na">class=</span><span class="s">"exam.test06.Score"</span>
+      <span class="na">c:name=</span><span class="s">"임꺽정"</span> <span class="na">c:kor=</span><span class="s">"80"</span> <span class="na">c:eng=</span><span class="s">"90"</span> <span class="na">c:math=</span><span class="s">"100"</span><span class="nt">/&gt;</span>
+
+  //자바코드 -&gt; Score score2 = new Score('임꺽정',80,90,100);  
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">xmlns:p="http://www.springframework.org/schema/p"</code>, <code class="highlighter-rouge">xmlns:c="http://www.springframework.org/schema/c"</code>의 네임스페이스를 통해서 <code class="highlighter-rouge">&lt;bean&gt;</code>속성을 통해 프로퍼티와 생성자도 설정이 가능하다.</p>
+
+<p><br /></p>
+
+<h3 id="section-1">의존 객체 주입</h3>
+
+<p>어떤 객체가 작업을 수행하기 위해 다른 객체를 지속적으로 사용한다면 그 사용되는 객체를 의존 객체(depencencies)라 한다. 보통 지속적으로 사용할 객체는 프로퍼티에 보관한다.</p>
+
+<p>예제로 Car객체를 만들때 tires객체와 engine객체를 사용한다.</p>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">"http://www.springframework.org/schema/beans"</span>
+    <span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span>
+    <span class="na">xmlns:p=</span><span class="s">"http://www.springframework.org/schema/p"</span>
+    <span class="na">xmlns:c=</span><span class="s">"http://www.springframework.org/schema/c"</span>
+    <span class="na">xsi:schemaLocation=</span><span class="s">"http://www.springframework.org/schema/beans</span>
+        <span class="err">http://www.springframework.org/schema/beans/spring-beans.xsd"</span><span class="nt">&gt;</span>
+  
+  <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"engine1"</span> <span class="na">class=</span><span class="s">"exam.test07.Engine"</span> 
+      <span class="na">c:maker=</span><span class="s">"Hyundai"</span> <span class="na">p:cc=</span><span class="s">"1998"</span><span class="nt">/&gt;</span>
+  //자바코드 -&gt; Engine engine1 = new Engine("Hyundai");
+  //			engine1.setCc(1998);			  
+  
+  <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"car1"</span> <span class="na">class=</span><span class="s">"exam.test07.Car"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"model"</span><span class="nt">&gt;&lt;value&gt;</span>Avante<span class="nt">&lt;/value&gt;&lt;/property&gt;</span>
+      <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"engine"</span><span class="nt">&gt;&lt;ref</span> <span class="na">bean=</span><span class="s">"engine1"</span><span class="nt">/&gt;&lt;/property&gt;</span>
+  <span class="nt">&lt;/bean&gt;</span>
+  //자바코드 -&gt; Car car1 = new Car();
+  //			car1.setModel("Avante");
+  //			car1.setEngine(engine1);  
+  
+  <span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"car2"</span> <span class="na">class=</span><span class="s">"exam.test07.Car"</span>
+      <span class="na">c:model=</span><span class="s">"Equus"</span> <span class="na">c:engine-ref=</span><span class="s">"engine1"</span><span class="nt">/&gt;</span>
+  //자바코드 -&gt; Car car2 = new Car("Equus",engine1);
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">&lt;ref&gt;</code>태그를 사용하여 Engine의 참조하였다.</p>
+
+<p><br /></p>
+
+<h3 id="section-2">개별 인스턴스 주입하기</h3>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">"http://www.springframework.org/schema/beans"</span>
+	<span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span> 
+	<span class="na">xmlns:p=</span><span class="s">"http://www.springframework.org/schema/p"</span>
+	<span class="na">xmlns:c=</span><span class="s">"http://www.springframework.org/schema/c"</span>
+	<span class="na">xsi:schemaLocation=</span><span class="s">"http://www.springframework.org/schema/beans</span>
+        <span class="err">http://www.springframework.org/schema/beans/spring-beans.xsd"</span><span class="nt">&gt;</span>
+
+	<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"car1"</span> <span class="na">class=</span><span class="s">"exam.test08.Car"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;constructor-arg</span> <span class="na">value=</span><span class="s">"Avante"</span> <span class="nt">/&gt;</span>
+		<span class="nt">&lt;constructor-arg&gt;</span>
+			<span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"exam.test08.Engine"</span> <span class="na">p:maker=</span><span class="s">"Hyundai"</span> <span class="na">p:cc=</span><span class="s">"1495"</span> <span class="nt">/&gt;</span>
+		<span class="nt">&lt;/constructor-arg&gt;</span>
+	<span class="nt">&lt;/bean&gt;</span>
+		
+	//자바코드 -&gt; Engine temp = new Engine();
+	//			  temp.setMaker("Hyundai");
+	//			  temp.setCc(1495);
+	//			  Car Car1 = new Car("Avante", temp);
+	
+	<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"car2"</span> <span class="na">class=</span><span class="s">"exam.test08.Car"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"model"</span> <span class="na">value=</span><span class="s">"Sonata"</span> <span class="nt">/&gt;</span>
+		<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"engine"</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"exam.test08.Engine"</span> <span class="na">p:maker=</span><span class="s">"Hyundai"</span> <span class="na">p:cc=</span><span class="s">"1997"</span> <span class="nt">/&gt;</span>
+		<span class="nt">&lt;/property&gt;</span>
+	<span class="nt">&lt;/bean&gt;</span>
+	
+	//자바코드 -&gt; Car car2 new Car();
+	//			  car2.setModel("Sonata");
+	//			  Engine temp = new Engine();
+	//			  temp.setMaker("Hyundai");
+	//			  temp.setCc(1997);
+	//			  car2.setEngine(temp);
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre>
+</div>
+
+<p><br /></p>
+
+<h3 id="section-3">컬랙션 값 주입</h3>
+
+<p><strong>배열 프로퍼티의 값 주입</strong></p>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">"http://www.springframework.org/schema/beans"</span>
+	<span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span> 
+	<span class="na">xmlns:p=</span><span class="s">"http://www.springframework.org/schema/p"</span>
+	<span class="na">xmlns:c=</span><span class="s">"http://www.springframework.org/schema/c"</span>
+	<span class="na">xsi:schemaLocation=</span><span class="s">"http://www.springframework.org/schema/beans</span>
+        <span class="err">http://www.springframework.org/schema/beans/spring-beans.xsd"</span><span class="nt">&gt;</span>
+
+	<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"car1"</span> <span class="na">class=</span><span class="s">"exam.test09.Car"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;constructor-arg</span> <span class="na">value=</span><span class="s">"Avante"</span> <span class="nt">/&gt;</span>
+		<span class="nt">&lt;constructor-arg&gt;</span>
+			<span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"exam.test09.Engine"</span> <span class="na">p:maker=</span><span class="s">"Hyundai"</span> <span class="na">p:cc=</span><span class="s">"1495"</span> <span class="nt">/&gt;</span>
+		<span class="nt">&lt;/constructor-arg&gt;</span>
+		<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"tires"</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;list&gt;</span>
+				<span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"exam.test09.Tire"</span> <span class="na">p:maker=</span><span class="s">"Kumho"</span> <span class="na">p:spec=</span><span class="s">"P185"</span> <span class="nt">/&gt;</span>
+				<span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"exam.test09.Tire"</span> <span class="na">p:maker=</span><span class="s">"Kumho"</span> <span class="na">p:spec=</span><span class="s">"P185"</span> <span class="nt">/&gt;</span>
+			<span class="nt">&lt;/list&gt;</span>
+		<span class="nt">&lt;/property&gt;</span>
+	<span class="nt">&lt;/bean&gt;</span>
+	
+	//자바코드 -&gt; Engine temp = new Engine();
+	//			  temp.setMaker("Hyundai");
+	//			  temp.setCc(1495);
+	//			  Car car1 = new Car("Avante",temp);
+	//			  Tire[] temp2 = new Tire[]{new Tire(), new Tire()};
+	//			  temp2[0].setMaker("Kumho");
+	//			  temp2[0].setSpeck("P185");
+	//			  temp2[1].setMaker("Kumho");
+	//			  temp2[1].setSpeck("P185");
+	//			  car1.setTire(temp2);
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre>
+</div>
+<p><br /></p>
+
+<p><strong>Map과 Properties값 주입</strong></p>
+
+<blockquote>
+  <p>Map과 Preoperties의 용도</p>
+
+  <p>java.util.Map 타입의 클래스는 식별자(key)나 값(value)으로 문자열뿐만 아니라 다른 타입의 객체도 사용할 수 있습니다. java.util.Properties 클래스도 Map의 일종(Map 인터페이스를 구현했음)이지만 주로 문자열로 된 식별자와 값을 다룰 때 사용한다.</p>
+</blockquote>
+
+<p><br /></p>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="nt">&lt;beans</span> <span class="na">xmlns=</span><span class="s">"http://www.springframework.org/schema/beans"</span>
+	<span class="na">xmlns:xsi=</span><span class="s">"http://www.w3.org/2001/XMLSchema-instance"</span> 
+	<span class="na">xmlns:p=</span><span class="s">"http://www.springframework.org/schema/p"</span>
+	<span class="na">xmlns:c=</span><span class="s">"http://www.springframework.org/schema/c"</span>
+	<span class="na">xsi:schemaLocation=</span><span class="s">"http://www.springframework.org/schema/beans</span>
+        <span class="err">http://www.springframework.org/schema/beans/spring-beans.xsd"</span><span class="nt">&gt;</span>
+
+	<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"spareTire"</span> <span class="na">class=</span><span class="s">"exam.test10.Tire"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"maker"</span> <span class="na">value=</span><span class="s">"Hyundai"</span> <span class="nt">/&gt;</span>
+		<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"spec"</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;props&gt;</span>
+				<span class="nt">&lt;prop</span> <span class="na">key=</span><span class="s">"width"</span><span class="nt">&gt;</span>205<span class="nt">&lt;/prop&gt;</span>
+				<span class="nt">&lt;prop</span> <span class="na">key=</span><span class="s">"ratio"</span><span class="nt">&gt;</span>65<span class="nt">&lt;/prop&gt;</span>
+				<span class="nt">&lt;prop</span> <span class="na">key=</span><span class="s">"rim.diameter"</span><span class="nt">&gt;</span>14<span class="nt">&lt;/prop&gt;</span>
+			<span class="nt">&lt;/props&gt;</span>
+		<span class="nt">&lt;/property&gt;</span>
+	<span class="nt">&lt;/bean&gt;</span>
+	
+	//자바 코드 -&gt; Tire spareTire = new Tire();
+	//				spareTire.setMaker("Hyundai");
+	//				Properties temp = new Properties();
+	//				temp.setProperty("width", "205");
+	//				temp.setProperty("ratio","65");
+	//				temp.setProperty("rim.diameter","14");
+	//				spareTire.setSpec(temp);
+
+	<span class="nt">&lt;bean</span> <span class="na">id=</span><span class="s">"car1"</span> <span class="na">class=</span><span class="s">"exam.test10.Car"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;constructor-arg</span> <span class="na">value=</span><span class="s">"Avante"</span> <span class="nt">/&gt;</span>
+		<span class="nt">&lt;constructor-arg&gt;</span>
+			<span class="nt">&lt;bean</span> <span class="na">class=</span><span class="s">"exam.test10.Engine"</span> <span class="na">p:maker=</span><span class="s">"Hyundai"</span> <span class="na">p:cc=</span><span class="s">"1495"</span> <span class="nt">/&gt;</span>
+		<span class="nt">&lt;/constructor-arg&gt;</span>
+		<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"options"</span><span class="nt">&gt;</span>
+			<span class="nt">&lt;map&gt;</span>
+				<span class="nt">&lt;entry&gt;</span>
+					<span class="nt">&lt;key&gt;</span>
+						<span class="nt">&lt;value&gt;</span>sunroof<span class="nt">&lt;/value&gt;</span>
+					<span class="nt">&lt;/key&gt;</span>
+					<span class="nt">&lt;value&gt;</span>yes<span class="nt">&lt;/value&gt;</span>
+				<span class="nt">&lt;/entry&gt;</span>
+				<span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">"airbag"</span> <span class="na">value=</span><span class="s">"dual"</span> <span class="nt">/&gt;</span>
+				<span class="nt">&lt;entry</span> <span class="na">key=</span><span class="s">"sparetire"</span><span class="nt">&gt;</span>
+					<span class="nt">&lt;ref</span> <span class="na">bean=</span><span class="s">"spareTire"</span> <span class="nt">/&gt;</span>
+				<span class="nt">&lt;/entry&gt;</span>
+			<span class="nt">&lt;/map&gt;</span>
+		<span class="nt">&lt;/property&gt;</span>
+	<span class="nt">&lt;/bean&gt;</span>
+	
+	//자바 코드 -&gt; Engine temp = new Engine();
+	//				temp.setMaker("Hyundai")
+	//				temp.setCc(1496);
+	//				Car car1 = new Car("Avante",temp);
+	//				Map<span class="nt">&lt;Object</span><span class="err">,Object</span><span class="nt">&gt;</span> tempMap = new HashMap<span class="nt">&lt;Object</span><span class="err">,Object</span><span class="nt">&gt;</span>();
+	//				car1.setOptions(tempMap);
+	//				tempMap.put("sunroof","yes");
+	//				tempMap.put("airbag","dual");
+	//				tempMap.put("spaertire",spareTire);
+<span class="nt">&lt;/beans&gt;</span>
+</code></pre>
+</div>
+
+<p><br /></p>
+
+<h3 id="reference">Reference</h3>
+<ul>
+  <li><a href="http://www.yes24.com/24/Goods/13159413?Acode=101">열혈강의 자바 웹 개발 워크북</a></li>
+</ul>
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/09/21/beancontext1/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
                   <a class="post-link" href="/2016/09/20/dynamic_sql/">mybatis 동적 SQL</a>
                 </h2>
                 <div class="label">
@@ -1005,329 +2315,6 @@
                 <hr>
               </li>
             
-              <li>
-                <h2>
-                  <a class="post-link" href="/2016/09/16/frontcontroller_dietc/">프런트 컨트롤러 패턴과 의존성주입</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-09-16
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#web" title="Category: web" rel="category">web</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                </div>
-                <div class="excerpt">
-                    <h1 id="section">1. 프런트 컨트롤러 패턴</h1>
-
-<p>MVC구조에서 좀 더 유지보수가 쉬운 구조로 개선 한 것으로 두개의 컨트롤러를 사용하여 웹 브라우저 요청을 처리한다. 프론트 컨트롤러는 VO 객체의 준비, 뷰 컴포넌트의 위임, 오류 처리 등과 같은 공동 작업을 담당하고, 페이지 컨트롤러는 이름 그대로 요청한 페이지만을 위한 작업을 수행한다.</p>
-
-<p><img src="http://joswlv.github.io/images/frontcontroller.png" alt="" /></p>
-
-<ol>
-  <li>웹 브라우저는 회원 목록 페이지를 요청한다.</li>
-  <li>프런트 컨트롤러 <code class="highlighter-rouge">DispatcherServlet</code>은 회원 목록 요청 처리를 담당하는 페이지 컨트롤러를 호출한다. 이때 데이터를 주고받을 바구니 역할을 할 Map 객체를 넘긴다.</li>
-  <li>페이지 컨트롤러 <code class="highlighter-rouge">MemverListController</code>는 Dao에게 회원 목록 데이터를 요청한다.</li>
-  <li>MemberDao는 데이터베이스로 부터 회원 목록 데이터를 가져와서, Member객체에 담아 반환한다.</li>
-  <li>페이지 컨트롤러는 Dao가 반환한 회원 목록 데이터를 Map 객체에 저장한다. 그리고 프런트 컨트롤러에게 뷰 URL을 반환한다.</li>
-  <li>프런트 컨트롤러는 Map객체에 저장된 페이지 컨트롤러의 작업 결과물을 JSP가 사용할 수 있도록 ServletRequest로 옮긴다.</li>
-</ol>
-
-<p>프런트 컨트롤러가 페이지 컨트롤러에게 작업을 위임할때 <code class="highlighter-rouge">execute()</code>메서드를 호출한다. 이렇게 호출하기 위해서 페이지 컨트롤러 클래스를 대표하는 Interface를 만들고 <code class="highlighter-rouge">execute()</code>메서드를 상속받게 만든다. 그러면 일관성있는 사용을 보장할 수 있다.</p>
-
-<p>페이지 컨트롤러를 서블릿이 아닌 자바파일로 만들었기 때문에, Dao에서 리턴받은 결과값을 Map을 사용하여 데이터 저장하여, 프런트 컨트롤러로 전달한다. 프런트 컨트롤러에서는 jsp에서 이 데이터들을 사용하기 위해 서블릿 보관소에 저장한다. 이런 과정을 프런트 컨트롤러 패턴이라고 한다. <br /></p>
-
-<h1 id="didependency-injection---">2. DI(Dependency Injection)을 이용한 의존성 과리</h1>
-
-<p>의존 객체를 사용하는 쪽과 의존 객체(또는 보관소) 사이의 결합도가 높아져서 의존 객체나 보관소에 변경이 발생하면 바로 영향을 받는다. 그리고 의존 객체를 다른 객체로 대체하기 가 어렵다. 이런 문제를 해결하기 위해 의존 객체를 외부에서 주입받는 방식이 등장하였다.</p>
-
-<p>이의존객체를 전문으로 관리하는 <code class="highlighter-rouge">빈컨테이너(Java Beans Container)</code>를 사용한다. 빈컨테이너는 객체가 실행되기 전에 그 객체가 필요로 하는 의존 객체를 주입해주는 역할을 수행한다. 이런방식으로 의존 객체를 관리하는 것을 <code class="highlighter-rouge">의존성주입(DI:Dependency Injection)</code> 좀 더 일반적으로 <code class="highlighter-rouge">역제어(IoC:Inversion of Control)</code>라고 한다. 즉 역제어 방식의 한 예가 의존성 주입이다.</p>
-
-<p>하지만 이 방법으로는 <code class="highlighter-rouge">DispatcherServlet</code>의 경우 페이지 컨트롤러가 추가 될 때마다 조건문을 변경해야하고, <code class="highlighter-rouge">ContextLoaderListener</code>도 Dao나 페이지 컨트롤러가 추가될 때마다 변경해야하는 문제가 있다.
-<br /></p>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="c1">// 의존 객체 주입을 위해 인스턴스 변수와 셋터 메서드 추가</span>
-<span class="c1">//- 또한 의존 객체를 꺼내는 기존 코드 변경</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MemberListController</span> <span class="kd">implements</span> <span class="n">Controller</span> <span class="o">{</span>
-  <span class="n">MemberDao</span> <span class="n">memberDao</span><span class="o">;</span>
-  
-  <span class="kd">public</span> <span class="n">MemberListController</span> <span class="nf">setMemberDao</span><span class="o">(</span><span class="n">MemberDao</span> <span class="n">memberDao</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">this</span><span class="o">.</span><span class="na">memberDao</span> <span class="o">=</span> <span class="n">memberDao</span><span class="o">;</span>
-    <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
-  <span class="o">}</span>
-
-  <span class="nd">@Override</span>
-  <span class="kd">public</span> <span class="n">String</span> <span class="nf">execute</span><span class="o">(</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">model</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
-    <span class="n">model</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"members"</span><span class="o">,</span> <span class="n">memberDao</span><span class="o">.</span><span class="na">selectList</span><span class="o">());</span>
-    <span class="k">return</span> <span class="s">"/member/MemberList.jsp"</span><span class="o">;</span>
-  <span class="o">}</span>
-<span class="o">}</span>
-</code></pre>
-</div>
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="c1">// ServletContext에 보관된 페이지 컨트롤러를 사용</span>
-<span class="nd">@SuppressWarnings</span><span class="o">(</span><span class="s">"serial"</span><span class="o">)</span>
-<span class="nd">@WebServlet</span><span class="o">(</span><span class="s">"*.do"</span><span class="o">)</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">DispatcherServlet</span> <span class="kd">extends</span> <span class="n">HttpServlet</span> <span class="o">{</span>
-  <span class="nd">@Override</span>
-  <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">service</span><span class="o">(</span>
-      <span class="n">HttpServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">HttpServletResponse</span> <span class="n">response</span><span class="o">)</span>
-      <span class="kd">throws</span> <span class="n">ServletException</span><span class="o">,</span> <span class="n">IOException</span> <span class="o">{</span>
-    <span class="n">response</span><span class="o">.</span><span class="na">setContentType</span><span class="o">(</span><span class="s">"text/html; charset=UTF-8"</span><span class="o">);</span>
-    <span class="n">String</span> <span class="n">servletPath</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getServletPath</span><span class="o">();</span>
-    <span class="k">try</span> <span class="o">{</span>
-      <span class="n">ServletContext</span> <span class="n">sc</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">getServletContext</span><span class="o">();</span>
-      
-      <span class="c1">// 페이지 컨트롤러에게 전달할 Map 객체를 준비한다. </span>
-      <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">Object</span><span class="o">&gt;</span> <span class="n">model</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">Object</span><span class="o">&gt;();</span>
-      <span class="n">model</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"session"</span><span class="o">,</span> <span class="n">request</span><span class="o">.</span><span class="na">getSession</span><span class="o">());</span>
-      
-      <span class="n">Controller</span> <span class="n">pageController</span> <span class="o">=</span> <span class="o">(</span><span class="n">Controller</span><span class="o">)</span> <span class="n">sc</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="n">servletPath</span><span class="o">);</span>
-      
-      <span class="k">if</span> <span class="o">(</span><span class="s">"/member/add.do"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">servletPath</span><span class="o">))</span> <span class="o">{</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"email"</span><span class="o">)</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-          <span class="n">model</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"member"</span><span class="o">,</span> <span class="k">new</span> <span class="n">Member</span><span class="o">()</span>
-            <span class="o">.</span><span class="na">setEmail</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"email"</span><span class="o">))</span>
-            <span class="o">.</span><span class="na">setPassword</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"password"</span><span class="o">))</span>
-            <span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"name"</span><span class="o">)));</span>
-        <span class="o">}</span>
-      <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="s">"/member/update.do"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">servletPath</span><span class="o">))</span> <span class="o">{</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"email"</span><span class="o">)</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-          <span class="n">model</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"member"</span><span class="o">,</span> <span class="k">new</span> <span class="n">Member</span><span class="o">()</span>
-            <span class="o">.</span><span class="na">setNo</span><span class="o">(</span><span class="n">Integer</span><span class="o">.</span><span class="na">parseInt</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"no"</span><span class="o">)))</span>
-            <span class="o">.</span><span class="na">setEmail</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"email"</span><span class="o">))</span>
-            <span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"name"</span><span class="o">)));</span>
-        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-          <span class="n">model</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"no"</span><span class="o">,</span> <span class="k">new</span> <span class="n">Integer</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"no"</span><span class="o">)));</span>
-        <span class="o">}</span>
-      <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="s">"/member/delete.do"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">servletPath</span><span class="o">))</span> <span class="o">{</span>
-        <span class="n">model</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"no"</span><span class="o">,</span> <span class="k">new</span> <span class="n">Integer</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"no"</span><span class="o">)));</span>
-      <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="s">"/auth/login.do"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">servletPath</span><span class="o">))</span> <span class="o">{</span>
-        <span class="k">if</span> <span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"email"</span><span class="o">)</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-          <span class="n">model</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"loginInfo"</span><span class="o">,</span> <span class="k">new</span> <span class="n">Member</span><span class="o">()</span>
-            <span class="o">.</span><span class="na">setEmail</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"email"</span><span class="o">))</span>
-            <span class="o">.</span><span class="na">setPassword</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"password"</span><span class="o">)));</span>
-        <span class="o">}</span>
-      <span class="o">}</span>
-      
-      <span class="c1">// 페이지 컨트롤러를 실행한다.</span>
-      <span class="n">String</span> <span class="n">viewUrl</span> <span class="o">=</span> <span class="n">pageController</span><span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="n">model</span><span class="o">);</span>
-      
-      <span class="c1">// Map 객체에 저장된 값을 ServletRequest에 복사한다.</span>
-      <span class="k">for</span> <span class="o">(</span><span class="n">String</span> <span class="n">key</span> <span class="o">:</span> <span class="n">model</span><span class="o">.</span><span class="na">keySet</span><span class="o">())</span> <span class="o">{</span>
-        <span class="n">request</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">model</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">));</span>
-      <span class="o">}</span>
-      
-      <span class="k">if</span> <span class="o">(</span><span class="n">viewUrl</span><span class="o">.</span><span class="na">startsWith</span><span class="o">(</span><span class="s">"redirect:"</span><span class="o">))</span> <span class="o">{</span>
-        <span class="n">response</span><span class="o">.</span><span class="na">sendRedirect</span><span class="o">(</span><span class="n">viewUrl</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="mi">9</span><span class="o">));</span>
-        <span class="k">return</span><span class="o">;</span>
-      <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-        <span class="n">RequestDispatcher</span> <span class="n">rd</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getRequestDispatcher</span><span class="o">(</span><span class="n">viewUrl</span><span class="o">);</span>
-        <span class="n">rd</span><span class="o">.</span><span class="na">include</span><span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">);</span>
-      <span class="o">}</span>
-      
-    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-      <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
-      <span class="n">request</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="s">"error"</span><span class="o">,</span> <span class="n">e</span><span class="o">);</span>
-      <span class="n">RequestDispatcher</span> <span class="n">rd</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getRequestDispatcher</span><span class="o">(</span><span class="s">"/Error.jsp"</span><span class="o">);</span>
-      <span class="n">rd</span><span class="o">.</span><span class="na">forward</span><span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">);</span>
-    <span class="o">}</span>
-  <span class="o">}</span>
-<span class="o">}</span>
-</code></pre>
-</div>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@WebListener</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ContextLoaderListener</span> <span class="kd">implements</span> <span class="n">ServletContextListener</span> <span class="o">{</span>
-  <span class="nd">@Override</span>
-  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">contextInitialized</span><span class="o">(</span><span class="n">ServletContextEvent</span> <span class="n">event</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">try</span> <span class="o">{</span>
-      <span class="n">ServletContext</span> <span class="n">sc</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="na">getServletContext</span><span class="o">();</span>
-      
-      <span class="n">InitialContext</span> <span class="n">initialContext</span> <span class="o">=</span> <span class="k">new</span> <span class="n">InitialContext</span><span class="o">();</span>
-      <span class="n">DataSource</span> <span class="n">ds</span> <span class="o">=</span> <span class="o">(</span><span class="n">DataSource</span><span class="o">)</span><span class="n">initialContext</span><span class="o">.</span><span class="na">lookup</span><span class="o">(</span>
-          <span class="s">"java:comp/env/jdbc/studydb"</span><span class="o">);</span>
-      
-      <span class="n">MemberDao</span> <span class="n">memberDao</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MemberDao</span><span class="o">();</span>
-      <span class="n">memberDao</span><span class="o">.</span><span class="na">setDataSource</span><span class="o">(</span><span class="n">ds</span><span class="o">);</span>
-      
-      <span class="n">sc</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="s">"/auth/login.do"</span><span class="o">,</span> 
-          <span class="k">new</span> <span class="nf">LogInController</span><span class="o">().</span><span class="na">setMemberDao</span><span class="o">(</span><span class="n">memberDao</span><span class="o">));</span>
-      <span class="n">sc</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="s">"/auth/logout.do"</span><span class="o">,</span> <span class="k">new</span> <span class="n">LogOutController</span><span class="o">());</span>
-      <span class="n">sc</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="s">"/member/list.do"</span><span class="o">,</span> 
-          <span class="k">new</span> <span class="nf">MemberListController</span><span class="o">().</span><span class="na">setMemberDao</span><span class="o">(</span><span class="n">memberDao</span><span class="o">));</span>
-      <span class="n">sc</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="s">"/member/add.do"</span><span class="o">,</span> 
-          <span class="k">new</span> <span class="nf">MemberAddController</span><span class="o">().</span><span class="na">setMemberDao</span><span class="o">(</span><span class="n">memberDao</span><span class="o">));</span>
-      <span class="n">sc</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="s">"/member/update.do"</span><span class="o">,</span> 
-          <span class="k">new</span> <span class="nf">MemberUpdateController</span><span class="o">().</span><span class="na">setMemberDao</span><span class="o">(</span><span class="n">memberDao</span><span class="o">));</span>
-      <span class="n">sc</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="s">"/member/delete.do"</span><span class="o">,</span> 
-          <span class="k">new</span> <span class="nf">MemberDeleteController</span><span class="o">().</span><span class="na">setMemberDao</span><span class="o">(</span><span class="n">memberDao</span><span class="o">));</span>
-      
-    <span class="o">}</span> <span class="k">catch</span><span class="o">(</span><span class="n">Throwable</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-      <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
-    <span class="o">}</span>
-  <span class="o">}</span>
-
-  <span class="nd">@Override</span>
-  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">contextDestroyed</span><span class="o">(</span><span class="n">ServletContextEvent</span> <span class="n">event</span><span class="o">)</span> <span class="o">{}</span>
-<span class="o">}</span>
-</code></pre>
-</div>
-<p><br /></p>
-
-<h3 id="reference">Reference</h3>
-<ul>
-  <li><a href="http://www.yes24.com/24/Goods/13159413?Acode=101">열혈강의 자바 웹 개발 워크북</a></li>
-</ul>
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2016/09/16/frontcontroller_dietc/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
-              <li>
-                <h2>
-                  <a class="post-link" href="/2016/09/15/dbconnection/">DB커넥션 관련 정리</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-09-15
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#web" title="Category: web" rel="category">web</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                </div>
-                <div class="excerpt">
-                    <h1 id="daodata-access-object">1. DAO(Data Access Object)</h1>
-
-<p>DAO는 데이터 처리를 전문으로 하는 객체이다. 데이터베이스나 파일, 메모리 등을 이용하여 애플리케이션 데이터를 생성, 조회, 변경, 삭제하는 역할을 수행한다. DAO는 보통 하나의 DB테이블이나 DB뷰에 대응하고, 여러개의 테이블을 조인(join)한 데이터도 다룬다.</p>
-
-<p><img src="http://joswlv.github.io/images/dao.png" alt="" /></p>
-
-<ol>
-  <li>웹브라우저에서 회원 목록을 요청한다.</li>
-  <li>MemeberListServlet은 회원 목록 데이터를 얻기 위해 MemberDao의 메서드를 호출한다.</li>
-  <li>MemeberDao는 데이터베이스로부터 회원 정보를 가져온다.</li>
-  <li>MemberDao는 겨로가 레코드의 개수만큼 Member객체를 만들어 서블릿에게 반환한다.</li>
-  <li>MemberListServlet은 MemberDao로 부터 받은 회원 목록을 MemberList.jsp에 전달한다.</li>
-  <li>MemberList.jsp는 회원 목록 데이터를 가지고 화면을 생성한다. 그리고 제어권을 MemberListServlet에게 넘긴다.</li>
-  <li>MemberListServlet에게 넘긴다.</li>
-</ol>
-
-<p><strong>예&gt;</strong></p>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MemberDao</span> <span class="o">{</span>
-  <span class="n">Connection</span> <span class="n">connection</span><span class="o">;</span>
-
-  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setConnection</span><span class="o">(</span><span class="n">Connection</span> <span class="n">connection</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">this</span><span class="o">.</span><span class="na">connection</span> <span class="o">=</span> <span class="n">connection</span><span class="o">;</span>
-  <span class="o">}</span>
-
-  <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Member</span><span class="o">&gt;</span> <span class="nf">selectList</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
-    <span class="n">Statement</span> <span class="n">stmt</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
-    <span class="n">ResultSet</span> <span class="n">rs</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
-
-    <span class="k">try</span> <span class="o">{</span>
-      <span class="n">stmt</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="na">createStatement</span><span class="o">();</span>
-      <span class="n">rs</span> <span class="o">=</span> <span class="n">stmt</span><span class="o">.</span><span class="na">executeQuery</span><span class="o">(</span>
-          <span class="s">"SELECT MNO,MNAME,EMAIL,CRE_DATE"</span> <span class="o">+</span> 
-              <span class="s">" FROM MEMBERS"</span> <span class="o">+</span>
-          <span class="s">" ORDER BY MNO ASC"</span><span class="o">);</span>
-
-      <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Member</span><span class="o">&gt;</span> <span class="n">members</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Member</span><span class="o">&gt;();</span>
-
-      <span class="k">while</span><span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="na">next</span><span class="o">())</span> <span class="o">{</span>
-        <span class="n">members</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">Member</span><span class="o">()</span>
-        <span class="o">.</span><span class="na">setNo</span><span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="na">getInt</span><span class="o">(</span><span class="s">"MNO"</span><span class="o">))</span>
-        <span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">"MNAME"</span><span class="o">))</span>
-        <span class="o">.</span><span class="na">setEmail</span><span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">"EMAIL"</span><span class="o">))</span>
-        <span class="o">.</span><span class="na">setCreatedDate</span><span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="na">getDate</span><span class="o">(</span><span class="s">"CRE_DATE"</span><span class="o">))</span>	<span class="o">);</span>
-      <span class="o">}</span>
-
-      <span class="k">return</span> <span class="n">members</span><span class="o">;</span>
-
-    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-      <span class="k">throw</span> <span class="n">e</span><span class="o">;</span>
-
-    <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
-      <span class="k">try</span> <span class="o">{</span><span class="k">if</span> <span class="o">(</span><span class="n">rs</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="n">rs</span><span class="o">.</span><span class="na">close</span><span class="o">();}</span> <span class="k">catch</span><span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{}</span>
-      <span class="k">try</span> <span class="o">{</span><span class="k">if</span> <span class="o">(</span><span class="n">stmt</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="n">stmt</span><span class="o">.</span><span class="na">close</span><span class="o">();}</span> <span class="k">catch</span><span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{}</span>
-    <span class="o">}</span>
-  <span class="o">}</span>
-<span class="o">}</span> 
-</code></pre>
-</div>
-
-<p>위의 예에서 두가지를 배울 수 있다.</p>
-
-<ul>
-  <li>
-    <p>첫번째는 <code class="highlighter-rouge">프로그래밍의 유연성</code>이다. <code class="highlighter-rouge">selectList()</code>에서 리턴 타입이 List인터페이스인 것이다. 하지만 실제 리턴값은 ArrayList객체이다. 이런것을 프로그래밍의 유연성이라고 한다.</p>
-  </li>
-  <li>
-    <p>두번째는 <code class="highlighter-rouge">의존성주입(DI, Dependency Injection)</code> 다른말로 <code class="highlighter-rouge">역제어(IoC, Inversion of Control)</code>이다. connection 인스턴스 변수와 셋터 메서드는 MemberDao에서 ServletContext에 접근할 수 없기 때문에, ServletContext에 보관된 DB Connectoin 객체를 꺼낼 수 없어 필요하다. 외부로 부터 Connection객체를 connection 인스턴스변수와 셋터 메서드에 주입한다. 이런 것을 의존성 주입 또는 역제어라고 한다.<br /></p>
-  </li>
-</ul>
-
-<h1 id="servlet---listener">2. Servlet - Listener</h1>
-
-<p>서블릿 컨테이너는 웹 어플리케이션의 상태를 모니터링 할 수 있도록 웹어플리케이션의 시작에서 종료까지 주요한 사건에 대한 알람기능을 제공한다. 이를 사용하기 위해 규칙에 따라 객체를 만들어 DD파일에 등록하면 된다.</p>
-
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2016/09/15/dbconnection/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
         </ul>
 
 
@@ -1388,7 +2375,7 @@
                             <span class="name">
                                 Spring
                             </span>
-                            <span class="badge">3</span>
+                            <span class="badge">4</span>
                         </a>
                     </li>
                     
@@ -1410,6 +2397,15 @@
                         </a>
                     </li>
                     
+                    <li>
+                        <a href="/category/#Etc" class="categories-list-item" cate="Etc">
+                            <span class="name">
+                                Etc
+                            </span>
+                            <span class="badge">1</span>
+                        </a>
+                    </li>
+                    
                 </ul>
             </div>
             <div class="side">
@@ -1418,6 +2414,10 @@
                     Recent Posts
                 </div>
                 <ul class="content-ul" recent>
+                    
+                        <li><a href="/2016/10/13/LogBack/">LogBack in SpringBoot</a></li>
+                    
+                        <li><a href="/2016/10/11/readingoodcode/"><읽기좋은코드> 요약</a></li>
                     
                         <li><a href="/2016/10/07/Predicate/">Java 8 Predicate</a></li>
                     
@@ -1434,10 +2434,6 @@
                         <li><a href="/2016/09/20/dynamic_sql/">mybatis 동적 SQL</a></li>
                     
                         <li><a href="/2016/09/20/mybatis_log/">mybatis log출력</a></li>
-                    
-                        <li><a href="/2016/09/18/mybatis/">mybatis 개론</a></li>
-                    
-                        <li><a href="/2016/09/17/reflection_property/">리플렉션API와 프로퍼티를 이용한 객체관리</a></li>
                     
                 </ul>
             </div>
