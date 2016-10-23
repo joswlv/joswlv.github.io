@@ -5,9 +5,516 @@
     <description></description>
     <link>http://joswlv.github.io/</link>
     <atom:link href="http://joswlv.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Thu, 13 Oct 2016 09:28:14 +0900</pubDate>
-    <lastBuildDate>Thu, 13 Oct 2016 09:28:14 +0900</lastBuildDate>
+    <pubDate>Sun, 23 Oct 2016 11:21:08 +0900</pubDate>
+    <lastBuildDate>Sun, 23 Oct 2016 11:21:08 +0900</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
+    
+      <item>
+        <title>awk 사용법</title>
+        <description>&lt;h1 id=&quot;awk&quot;&gt;awk&lt;/h1&gt;
+
+&lt;p&gt;awk은 유닉스 기반 운영체제 (Linux, MacOs, Unix) shell programming에서 사용된다. 사용법이 간단하고 데이터 처리속도가 파이썬이나 R과 같은 인터프린터 언어와는 비교가 안될 정도로 빠르다.&lt;/p&gt;
+
+&lt;p&gt;C언어의 산술연산자(+,-,*,/,%,++,–,+=,-=,*=,/=,%=)와 조건문(for, while,do/while,if,and if/else)을 그대로 사용하기 때문에 ‘pseudo-C interpretor’라고 말하기도 한다.&lt;/p&gt;
+
+&lt;p&gt;awk은 행(column)지향적인 언어다. 즉 행렬로 구성된 데이터의 각 행을 원하는 방식으로 뽑아 손쉽게 데이터 처리를 한다. 그리고 그결과를 standard input 으로 보낸다. 사용법이 매우 간단하고 처리속도가 빠르기 때문에 대용량의 데이터를 다루는 분야에서 매우 유용하게 사용딘다.&lt;/p&gt;
+
+&lt;p&gt;사용 법은 다음과 같다.&lt;/p&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;awk 'pattern {action}' file&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;형식은 아주 간단하다. awk이 실앻되면 file을 앞에서부터 읽기 시작해서 정의된 pattern을 만족시키는 열에 대해서 {}안에 정의된 action을 실행한다.&lt;/p&gt;
+
+&lt;h1 id=&quot;section&quot;&gt;사용 예&lt;/h1&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# awk 의 초간단 사용법: awk 'pattern { action }' file&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# awk 는 각 열을 한줄씩 읽어들이면서 pattern 을 만족시키는 {action} 을 실행합니다.&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# awk 은 각 열을 space 를 기준으로 끊어 따로 저장하는데 예를 들면, 읽고 있는 열이&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# 'John apple 3' 인 경우 John 은 $1 이란 변수에, apple 은 $2 란 변수에 집어넣습니다.&lt;/span&gt;
+ 
+awk &lt;span class=&quot;s1&quot;&gt;'$1==0 { print $2 }'&lt;/span&gt; file  &lt;span class=&quot;c&quot;&gt;# 읽고 있는 열의 첫번째 값($1)이 0이면 둘째 값($2) 출력&lt;/span&gt;
+awk &amp;lt; file &lt;span class=&quot;s1&quot;&gt;'$1==0 { print $2 }'&lt;/span&gt;  &lt;span class=&quot;c&quot;&gt;# 이것도 위와 같은 결과를 출력합니다&lt;/span&gt;
+ 
+awk &amp;lt; file &lt;span class=&quot;s1&quot;&gt;'/^test/ { print $2 }'&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# regular expression 도 사용 가능합니다. &lt;/span&gt;
+ 
+&lt;span class=&quot;c&quot;&gt;# pattern 부분은 옵션입니다. 필요하지 않으면 빈칸으로 두면 됩니다.&lt;/span&gt;
+awk &amp;lt; file &lt;span class=&quot;s1&quot;&gt;'{ print $2, $3 }'&lt;/span&gt; 
+ 
+&lt;span class=&quot;c&quot;&gt;# 행을 표시하지 않으면 전체를 출력합니다. $0 은 열 전체를 의미합니다. 즉 둘다 결과는 같습니다. &lt;/span&gt;
+awk &amp;lt; file &lt;span class=&quot;s1&quot;&gt;'{print}'&lt;/span&gt; 
+awk &amp;lt; file &lt;span class=&quot;s1&quot;&gt;'{print $0}'&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;이때 pattern은 옵션이다. pattern란에 정규표현식이 들어가도 된다. 또 다른 사용법은 파일로 만든후에 파일을 실행시키는 법이다. 명령어가 길 경우 유용하다.&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# awk 의 또다른 사용법: awk -f filename&lt;/span&gt;
+awk -f hello.awk
+ 
+--- hello.awk file ---
+&lt;span class=&quot;c&quot;&gt;#!/bin/awk -f&lt;/span&gt;
+BEGIN &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; print &lt;span class=&quot;s2&quot;&gt;&quot;File&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\t&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;Owner&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; print &lt;span class=&quot;nv&quot;&gt;$8&lt;/span&gt;, &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\t&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;, &lt;span class=&quot;nv&quot;&gt;$3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+END &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; print &lt;span class=&quot;s2&quot;&gt;&quot; - DONE -&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# awk 은 space 와 tab 을 기준으로 행을 구분합니다. 하지만 -F 써서 이를 바꿀 수 있습니다.&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# awk 은 $1, $2.. 등을 field 라고 부르는데 그래서 옵션이 -F 즉 field separator 입니다. &lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# 참고할 점은 일단 seperator 를 바꾸면 space 와 tab 은 무시합니다.&lt;/span&gt;
+ 
+awk &amp;lt; /etc/passwd -F: &lt;span class=&quot;s1&quot;&gt;'{ print $5 }'&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# ':' 를 기준으로 끊어 다섯번째 값을 출력합니다&lt;/span&gt;
+ 
+&lt;span class=&quot;c&quot;&gt;# awk 을 이용한 연산&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;echo &lt;/span&gt;8 4 | awk &lt;span class=&quot;s1&quot;&gt;'{ print ($1-32)*(5/9) }'&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;&amp;gt; &lt;/span&gt;-13.3333  &lt;span class=&quot;c&quot;&gt;# awk 는 숫자를 실수로 다룹니다 (즉, 소수점까지 계산합니다)&lt;/span&gt;
+ 
+&lt;span class=&quot;c&quot;&gt;# awk 의 다양한 처리방식&lt;/span&gt;
+&lt;span class=&quot;nb&quot;&gt;echo &lt;/span&gt;5 4 | awk &lt;span class=&quot;s1&quot;&gt;'{ print $1 $2 }'&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# $1$2 이렇게 붙여도 결과는 같습니다&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;&amp;gt; &lt;/span&gt;54
+&lt;span class=&quot;nb&quot;&gt;echo &lt;/span&gt;5 4 | awk &lt;span class=&quot;s1&quot;&gt;'{ print $1,$2 }'&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;&amp;gt; &lt;/span&gt;5 4
+&lt;span class=&quot;nb&quot;&gt;echo &lt;/span&gt;5 4 | awk &lt;span class=&quot;s1&quot;&gt;'{ print $1+$2 }'&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;&amp;gt; &lt;/span&gt;9
+&lt;span class=&quot;nb&quot;&gt;echo &lt;/span&gt;a z | awk &lt;span class=&quot;s1&quot;&gt;'{ print $1+$2 }'&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# 문자를 산술 연산자로 더하면?&lt;/span&gt;
+&lt;span class=&quot;gp&quot;&gt;&amp;gt; &lt;/span&gt;0
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;awk에서 변수를 사용해 보다 정교한 프로그램을 작성할 수 있다. 우선 awk가 자동으로 생성하는 시스템 변수부터 시작하면 가장 흔하게 쓰는 시스템 변수는 위의 예에서 본 &lt;code class=&quot;highlighter-rouge&quot;&gt;$1&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;$2&lt;/code&gt;등 이다. 각 열을 읽으면서 &lt;code class=&quot;highlighter-rouge&quot;&gt;$1&lt;/code&gt;,&lt;code class=&quot;highlighter-rouge&quot;&gt;$2&lt;/code&gt;등에 첫번째 행, 두번째 행에 해당하는 값을 자동으로 집어 넣는다.&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# 각 열의 평균값을 구해봅시다. NF 는 Number of field 의 약자로 읽어들이는&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# 행의 갯수를 담는 고정 변수입니다. &lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# 매열마다 따로 계산해야 하므로 사용자 변수 total=0 으로 초기화 시킵니다.&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# ; 를 이용하여 여러 명령어를 순차적으로 나열할 수 있습니다. &lt;/span&gt;
+
+awk &lt;span class=&quot;s1&quot;&gt;'{ total=0; for (i=1; i&amp;lt;=NF; i++) total += $i; print total/NF; }'&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# 'BEGIN {} pattern {action} END {}' 구문을 이용하여 &lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# 처음과 끝에서만 작동하는 명령어를 삽입할 수 있습니다.&lt;/span&gt;
+awk &lt;span class=&quot;s1&quot;&gt;'{ tot += $1; n += 1; }  END { print tot/n; }'&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# awk built-in variables(대표적인 awk 고정 명령어들) &lt;/span&gt;
+NF: Number of fields &lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;the current record &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;현재 읽고 있는 열의 행의 갯수&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; 
+NR: Number of record processed since the beginning of current awk execution
+&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;지금까지 읽어들인 열의 갯수&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; 
+OFS: Output field separator &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;출력하는 행 구분자&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;. Default value &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot; &quot;&lt;/span&gt; 
+ORS: Output record separator &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;출력하는 열 구분자&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;. Default value &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;printf라는 함수를 보자. 지금까지는 awk의 기본 출력함수인 print만 보았다. 하지만 awk은 C의 printf함수도 지원한다. 이 함수를 이용하면 awk으로 처리한 데이터를 보다 정교하고 다양하게 출력할 수 있다.&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# 첫번째 행만 제거하고 나머지는 모두 출력합니다.&lt;/span&gt;
+awk &lt;span class=&quot;s1&quot;&gt;'{ for (i=2; i&amp;lt;=NF; i++) printf &quot;%s &quot;, $i; printf &quot;\n&quot;; }'&lt;/span&gt;
+ 
+&lt;span class=&quot;c&quot;&gt;# 주의사항: print vs. printf&lt;/span&gt;
+print 함수는 출력후 자동으로 그리고 내부적으로 &lt;span class=&quot;s1&quot;&gt;'\n'&lt;/span&gt; 을 붙입니다. 즉 따로 &lt;span class=&quot;s1&quot;&gt;'\n'&lt;/span&gt; 을 출력하지 않아도 next line 으로 넘어갑니다. 하지만 &lt;span class=&quot;nb&quot;&gt;printf &lt;/span&gt;는 반드시 &lt;span class=&quot;s1&quot;&gt;'\n'&lt;/span&gt; 을 따로 출력해야 합니다. 바꿔말하면 &lt;span class=&quot;s1&quot;&gt;'\n'&lt;/span&gt; 을 출력하지 않으면 전체를 모두 이어서 하나의 열로 만들 수 있습니다.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;추가적으로 awk의 내장형 함수들이 존재한다.&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;length&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;string&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;: 문자열의 문자수를 리턴합니다. 괄호를 비우면 현재 열의 전체 문자수를 리턴.	 
+int&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;number&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;: 숫자의 정수부분만 떼어 리턴합니다.
+split&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;string, array, separator&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;: 문자열을 separator 를 기준으로 분할하여 array 에 넣습니다.
+그리고 array 의 index 를 리턴합니다. array[1].. 이렇게 사용하면 됩니다.	 
+sprintf&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;format, arguments&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; 포맷에 맞추어 변수들이 값을 출력합니다.
+substr&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;string, position, length&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; 문자열의 특정 위치에서 특정 길이만큼 뽑아 리턴합니다.
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;이것들 중에서 split 함수의 예를 보면 다음과 같다.&lt;/p&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# 만약 아래와 같은 데이터가 있다고 합시다&lt;/span&gt;
+chr8:28481001-28483000     NA   0   2   3   0
+chr6:158956601-158957200   NA   0   2   2   2
+chr20:42185201-42188600    NA   0   0   0   3
+chr7:107542001-107543800   NA   0   0   2   0
+chr14:24525801-24529600    NA   0   3   0   2
+chr6:130689201-130690000   NA   2   0   0   2
+
+&lt;span class=&quot;c&quot;&gt;# 첫번째 field 를 쪼개서 DNA 의 길이를 계산하여 아래와 같이 출력하려고 합니다&lt;/span&gt;
+chr8  2000  0 2 3 0
+chr6  600   0 2 2 2
+chr20 3400  0 0 0 3
+chr7  1800  0 0 2 0
+chr14 3800  0 3 0 2
+chr6  800   2 0 0 2
+
+&lt;span class=&quot;c&quot;&gt;# 간단히 설명하면,&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# 1. 먼저 1$ 를 : 와 - 를 기준으로 쪼개서 a 라는 array 에 넣습니다: split($1,a,&quot;:|-&quot;)&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# 2. 그리고 염색체와 DNA 길이를 프린트 합니다: printf &quot;%s %s&quot;,a[1],a[3]-a[2]+1&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# 3. $1,$2 제외한 후 나머지를 프린트 합니다: $1=$2=&quot;&quot;;print&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# 4. 모든 action 을 ; 을 통해 연결합니다 (이는 각각의 action 을 순차적으로 연산하도록 합니다)&lt;/span&gt;
+
+awk &lt;span class=&quot;s1&quot;&gt;'{split($1,a,&quot;:|-&quot;);printf &quot;%s %s&quot;,a[1],a[3]-a[2]+1;$1=$2=&quot;&quot;;print}'&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;# '|' 은 OR 연산자 입니다. ':' 와 '-' 둘중에 하나를 만나면 쪼개도록 합니다.&lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# 중간에 printf 를 사용한 이유는 print 와는 다르게 '\n' 가 포함되어 있지 않아 뒤의 값들을 &lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# 이어서 출력하도록 합니다. 마지막에 사용된 print 는 '\n' 이 포함되어 있으므로 &lt;/span&gt;
+&lt;span class=&quot;c&quot;&gt;# 자연스럽게 다음 줄로 내려가게 합니다.&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;#특정파일을 탭 또는 공백으로 구분되어 있는데, 2번째 부분만 출력하고 싶다.&lt;/span&gt;
+
+awk &lt;span class=&quot;s1&quot;&gt;'{print $2}'&lt;/span&gt; file
+cat file | awk &lt;span class=&quot;s1&quot;&gt;'{print $2}'&lt;/span&gt;
+
+&lt;span class=&quot;c&quot;&gt;#특정파일이 ','로 구분되어 있는데 2번째 칼럼만 출력하고 싶다.&lt;/span&gt;
+
+awk -F &lt;span class=&quot;s2&quot;&gt;&quot;,&quot;&lt;/span&gt; &lt;span class=&quot;s1&quot;&gt;'{print $2}'&lt;/span&gt; file
+
+&lt;span class=&quot;c&quot;&gt;#파일의 특정 칼럼에 특정값이 있는 갯수를 알고 싶다.&lt;/span&gt;
+
+awk &lt;span class=&quot;s1&quot;&gt;'BEGIN{sum=0}{if ($2==&quot;TEXT&quot;){sum+=1}} END{print sum}'&lt;/span&gt; file
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;awk &lt;span class=&quot;s2&quot;&gt;&quot;{print FILENAME}&quot;&lt;/span&gt; test.txt 
+&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; test.txt 파일의 레코드 개수만큼 파일이름을 출력한다. 
+
+awk &lt;span class=&quot;s2&quot;&gt;&quot;{print NR}&quot;&lt;/span&gt; test.txt
+&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; test.txt 파일의 레코드 번호를 출력한다. 
+
+awk &lt;span class=&quot;s1&quot;&gt;'BEGIN {FS=&quot;\t&quot;} {print $1 ,  $2}'&lt;/span&gt; test.txt
+&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; test.txt 파일의 필드 구분자를 &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\t&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; 으로 지정하고, 1번째와 2번째 필드를 프린트 한다. 
+
+awk &lt;span class=&quot;s1&quot;&gt;'BEGIN {FS=&quot;\t&quot;; OFS =&quot;-&quot;} {print $1 ,  $2} END {print &quot;총 레코드의 수 : &quot; NR}'&lt;/span&gt; test.txt
+&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; test.txt 파일의 필드 구분자를 &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\t&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; 로 지정하고, 1번째와 2번째 필드를 프린트 하되, 필드 구분자를 &lt;span class=&quot;s2&quot;&gt;&quot;-&quot;&lt;/span&gt;
+로 바꾸어 출력하고, 모든 레코드가 끝난 뒤, 총 레코드의 수를 출력한다. 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h1 id=&quot;section-1&quot;&gt;정리&lt;/h1&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;awk [-f 프로그램파일] [-F 필드구분자] [“패턴{액션}”] [처리할 파일명]&lt;/p&gt;
+
+  &lt;p&gt;옵션:&lt;/p&gt;
+  &lt;blockquote&gt;
+    &lt;p&gt;-f: 프로그램파일(패턴을 저장한파일)&lt;/p&gt;
+
+    &lt;p&gt;-F: 필드 구분자&lt;/p&gt;
+
+    &lt;p&gt;“패턴{액션}”&lt;/p&gt;
+  &lt;/blockquote&gt;
+&lt;/blockquote&gt;
+
+&lt;h4 id=&quot;awk--&quot;&gt;awk 시스템 변수&lt;/h4&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;변수명&lt;/th&gt;
+      &lt;th&gt;내용&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;FILENAME&lt;/td&gt;
+      &lt;td&gt;현재 처리중인 파일명&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;FS&lt;/td&gt;
+      &lt;td&gt;필드 구분자로 디폴트는 공백&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;RS&lt;/td&gt;
+      &lt;td&gt;레코드 구분자로 그폴트는 새로운 라인&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;NF&lt;/td&gt;
+      &lt;td&gt;현재 레코드의 필드 개수&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;NR&lt;/td&gt;
+      &lt;td&gt;현재 레크드의 번호&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;OFS&lt;/td&gt;
+      &lt;td&gt;출력할 때 사용하는 FS&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;ORS&lt;/td&gt;
+      &lt;td&gt;출력할 때 사용하는 RS&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;$0&lt;/td&gt;
+      &lt;td&gt;입력 레코드의 전체&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;$n&lt;/td&gt;
+      &lt;td&gt;입력 레코드의 n번째 필드&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;reference&quot;&gt;Reference&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://ra2kstar.tistory.com/153&quot;&gt;초보개발자 이야기&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.hiscience.com/tech/archives/286&quot;&gt;hiscience&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Sun, 23 Oct 2016 10:04:00 +0900</pubDate>
+        <link>http://joswlv.github.io/2016/10/23/awk/</link>
+        <guid isPermaLink="true">http://joswlv.github.io/2016/10/23/awk/</guid>
+        
+        
+        <category>Unix/Linux</category>
+        
+      </item>
+    
+      <item>
+        <title>scp 와 rsync - 원격파일정송방법</title>
+        <description>&lt;p&gt;원격으로 파일을 전송하기 위해사용 되는 명령어!&lt;/p&gt;
+
+&lt;p&gt;scp와 rsync의 차이점은 symbolic link를 처리하는데 차이가 있다.&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;scp는 전송하려 하는 파일중에 symbolic link 가 있으면 링크된 원본파일이 전송된다. 즉 symlink가 유지 되지 않는다.!!&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h1 id=&quot;section&quot;&gt;사용법&lt;/h1&gt;
+
+&lt;h2 id=&quot;scp&quot;&gt;scp&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;scp -[옵션][보낼파일][받는서버 계정 아이디]@[받는서버 URL]:[받을 위치 절대 경로]&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;section-1&quot;&gt;예)&lt;/h3&gt;
+
+&lt;p&gt;scp -pr ./send joswlv@20.20.20.20:./receive&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;옵션:&lt;/p&gt;
+
+  &lt;p&gt;-r = recusive 하위 폴더 포함 모두 복사&lt;/p&gt;
+
+  &lt;p&gt;-p = preserve 권한 및 속성 유지&lt;/p&gt;
+
+  &lt;p&gt;-C = compression 압축&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h2 id=&quot;rsync&quot;&gt;rsync&lt;/h2&gt;
+
+&lt;h2 id=&quot;rsync-1&quot;&gt;rsync&lt;/h2&gt;
+
+&lt;p&gt;&lt;strong&gt;rsync -[옵션][보낼파일][받을위치]&lt;/strong&gt;&lt;/p&gt;
+
+&lt;p&gt;받을위치는 [서버계정 아이디]@[파일URL]:[받을 경로]로 사용가능&lt;/p&gt;
+
+&lt;h3 id=&quot;section-2&quot;&gt;예)&lt;/h3&gt;
+
+&lt;p&gt;rsync -avzP ./send joswlv@20.20.20.20:./receive&lt;/p&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;옵션:&lt;/p&gt;
+
+  &lt;p&gt;-v = 진행상황을 상세히 보여줌&lt;/p&gt;
+
+  &lt;p&gt;-r = 지정한 디렉토리의 하위 디렉토리까지 재귀적으로 실행&lt;/p&gt;
+
+  &lt;p&gt;-p = 버전속성 보존&lt;/p&gt;
+
+  &lt;p&gt;-z = 데이터압축 전송&lt;/p&gt;
+
+  &lt;p&gt;-u = 추가된 파일만 전송&lt;/p&gt;
+
+  &lt;p&gt;-b = 낡은 파일은 ~가 붙음&lt;/p&gt;
+
+  &lt;p&gt;-u = 새로운 파일을 덮어쓰지 않음&lt;/p&gt;
+
+  &lt;p&gt;-e = ssh(rsh) 전송암호화&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;reference&quot;&gt;Reference&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://ra2kstar.tistory.com/175&quot;&gt;초보개발자 이야기&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+</description>
+        <pubDate>Sun, 23 Oct 2016 09:04:00 +0900</pubDate>
+        <link>http://joswlv.github.io/2016/10/23/spc_rsync/</link>
+        <guid isPermaLink="true">http://joswlv.github.io/2016/10/23/spc_rsync/</guid>
+        
+        
+        <category>Unix/Linux</category>
+        
+      </item>
+    
+      <item>
+        <title>Sqoop</title>
+        <description>&lt;h1 id=&quot;sqoop&quot;&gt;Sqoop이란&lt;/h1&gt;
+
+&lt;p&gt;스쿱은 관계형 데이터베이스와 하둡 사이에서 데이터 이관을 지원하는 툴이다. 스쿱을 이용하면 관계형 데이터베이스의 데이터를 HDFS, 하이브, H베이스, Accumulo에 임포트하거나 반대로 익스포트할 수 있다. 스쿱은 클라우데라에서 개발했으며, 현재 아파치 오픈소스 프로젝트로 공개되었다. &lt;strong&gt;&lt;a href=&quot;http://sqoop.apache.org&quot;&gt;Sqoop&lt;/a&gt;&lt;/strong&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;sqoop-1&quot;&gt;Sqoop아키텍처&lt;/h1&gt;
+
+&lt;p&gt;스쿱은 관계형 데이터베이스를 읽고 쓸 수 있는 커넥터라는 개념을 사용한다. 커넥터는 각 데이터베이스별로 구현돼 있으며, JDBC 드라이버를 이용해 데이터베이스 접속 및 질의 실행을 요청한다.&lt;/p&gt;
+
+&lt;h1 id=&quot;section&quot;&gt;데이터 임포트 동작 방식&lt;/h1&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;클라이언트가 스쿱에 임포트를 요청한다. 이때 클라이언트는 데이터베이스 접속 정보, 임포트 대상 테이블, 임프토 질의, 실행할 맵 태스크 개수 등을 설정한다.&lt;/li&gt;
+  &lt;li&gt;스쿱은 데이터베이스에서 해당 테이블의 메타데이터를 조회해 ORM(Object Relational Mapping)클래스에는 익스포트 대상 테이블의 칼럼을 자바 변수로 매핑하고, 맵리듀스 잡 실행에 필요한 직렬화 메서드가 생성된다.&lt;/li&gt;
+  &lt;li&gt;스쿱은 ORM 클래스가 정상적으로 생성되면 맵리듀스 잡 실행을 요청한다. 그리고 스쿱은 맵 테스크의 출력 결과를 임포트에 사용하기 때문에 리듀스 태스크는 실행하지 않는다.&lt;/li&gt;
+  &lt;li&gt;맵 태스크는 데이터베이스에 JDBC로 접속한 후 SELECT질의를 실행한다.&lt;/li&gt;
+  &lt;li&gt;맵태스크는 질의문을 실행한 결과를 HDFS에 저장한다. 전체 맵 태스크가 종료되면 스쿱은 클라이언트에게 작업이 정상적으로 종료됐다고 알려준다.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&quot;section-1&quot;&gt;데이터 익스포트 동작방식&lt;/h1&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;클라이언트는 스쿱에 익스포트를 요청한다.&lt;/li&gt;
+  &lt;li&gt;스쿱은 데이터베이스에서 메타데이터를 조회한 후 맵리듀스 잡에서 사용할 ORM클래스를 생성한다.&lt;/li&gt;
+  &lt;li&gt;스쿱은 데이터베이스의 중간 테이블의 데이터를 모두 삭제한 후 맵리듀스 잡을 실행한다.&lt;/li&gt;
+  &lt;li&gt;맵 태스크는 HDFS에서 데이터를 조회한 후 INSERT 질의문을 만들어 중간 테이블에 데이터를 입력한다. 이때 질의문은 레코드당 한 번씩 실행하는 것이 아니라 천개 단위로 배치로 실행한다. 참고로 중간 테이블 사용여부와 배치단위는 sqoop.export.records.per.statement 옵션으로 수정할 수 있다.&lt;/li&gt;
+  &lt;li&gt;스쿱은 맵리듀스 잡이 정상적으로 종료되면 중간 테이블의 결과를 최종 테이블에 입력한다.&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;h1 id=&quot;section-2&quot;&gt;데이터 임포트&lt;/h1&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;옵션&lt;/th&gt;
+      &lt;th&gt;내용&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–usename&lt;/td&gt;
+      &lt;td&gt;데이터베이스 접속 계정&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–password&lt;/td&gt;
+      &lt;td&gt;데이터베이스 접속 암호&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–connect&lt;/td&gt;
+      &lt;td&gt;JDBC 접속 URL&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–table&lt;/td&gt;
+      &lt;td&gt;임포트 대상 테이블&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–columns&lt;/td&gt;
+      &lt;td&gt;특정 칼럼만 임포트할 경우 칼럼명을 설정. 이 옵션을 설정하지 않을 경우 전체 칼럼을 임포트&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–target-dir&lt;/td&gt;
+      &lt;td&gt;임포트 결과를 저장할 HDFS 디렉터리. 별도로 설정하지 않을 경우 “/user/계졍명/테이블명”에 데이터가 저장됨&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–query&lt;/td&gt;
+      &lt;td&gt;특정 테이블을 설정하지 않고 질의문 실행 결과를 임포트. 단 이 옵션을 사용할 경우 $CONDITIONS를 반드시 WHERE절에 사용해야 함. $CONDITIONS는 스쿱이 자동으로 생성하는 WHERE 조건을 나타내는 키워드임&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;-m,–num-mappers&lt;/td&gt;
+      &lt;td&gt;실행할 맵 태스크 개수, 데이터베이스에 부하를 줄 수 있으므로 적절한 태스크 개수를 설정해야함.&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–where&lt;/td&gt;
+      &lt;td&gt;임포트할 때 사용할 WHERE절&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;-z, –comppress&lt;/td&gt;
+      &lt;td&gt;임포트 결과를 압축&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–compression-codec&lt;/td&gt;
+      &lt;td&gt;하둡 압축 코덱, 기본값으로 Gzip을 사용함&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–as-textfile&lt;/td&gt;
+      &lt;td&gt;임포트 결과를 텍스트 파일로 저장. 스쿱은 텍스트 파일을 기본값으로 사용함&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–as-sequencefile&lt;/td&gt;
+      &lt;td&gt;임포트 결과를 시퀀스파일로 저장&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–null-string&lt;널갑문자열&gt;&lt;/널갑문자열&gt;&lt;/td&gt;
+      &lt;td&gt;문자열 칼럼에서 널 값 대신 사용할 문자열&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–null-non-string&lt;널값 문자열=&quot;&quot;&gt;&lt;/널값&gt;&lt;/td&gt;
+      &lt;td&gt;문자열이 아닌 칼럼에서 널 값 대신 사용할 문자열&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–direct&lt;/td&gt;
+      &lt;td&gt;고속 커넥터를 이용할 경우 사용&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h1 id=&quot;mysql--&quot;&gt;MySQL로 데이터 익스포트&lt;/h1&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;옵션&lt;/th&gt;
+      &lt;th&gt;내용&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–export-dir&lt;/td&gt;
+      &lt;td&gt;익스포트 대상 HDFS 디렉터리&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;-m, –num-mappers&lt;/td&gt;
+      &lt;td&gt;실행할 맵 태스크 개수, 데이터베이스에 부하를 줄 수 있으므로 적절한 태스크 개수를 설정해야함&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–table&lt;/td&gt;
+      &lt;td&gt;데이터베이스 최종 대상 테이블&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–staging-table&lt;/td&gt;
+      &lt;td&gt;데이터베이스 중간 데이터 저장용 테이블&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–clear-staging-table&lt;/td&gt;
+      &lt;td&gt;중간 데이터용 데이블 데이터 삭제 여부&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;-null-string&lt;널값 문자열=&quot;&quot;&gt;&lt;/널값&gt;&lt;/td&gt;
+      &lt;td&gt;문자열 칼럼에서 널 값 대신 사용할 문자열&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–null-non-string&lt;널값문자열&gt;&lt;/널값문자열&gt;&lt;/td&gt;
+      &lt;td&gt;문자열이 아닌 칼럼에서 널 값 대신 사용할 문자열&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;–direct&lt;/td&gt;
+      &lt;td&gt;고속커넥터를 이용할 경우 사용&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;reference&quot;&gt;Reference&lt;/h3&gt;
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://www.yes24.com/24/Goods/26903681?Acode=101&quot;&gt;시작하세요! 하둡 프로그래밍 : 빅데이터 분석을 위한 하둡 기초부터 YARN까지&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Fri, 14 Oct 2016 08:04:00 +0900</pubDate>
+        <link>http://joswlv.github.io/2016/10/14/sqoop/</link>
+        <guid isPermaLink="true">http://joswlv.github.io/2016/10/14/sqoop/</guid>
+        
+        
+        <category>Hadoop</category>
+        
+      </item>
     
       <item>
         <title>LogBack in SpringBoot</title>
@@ -1953,758 +2460,6 @@ engine != null
         
         
         <category>Spring</category>
-        
-      </item>
-    
-      <item>
-        <title>스프링 IoC컨테이너 ApplicationContext [1]</title>
-        <description>&lt;h1 id=&quot;xml----&quot;&gt;XML 기반 빈 관리 컨테이너&lt;/h1&gt;
-
-&lt;p&gt;스프링에서는 자바 객체를 &lt;code class=&quot;highlighter-rouge&quot;&gt;빈(Bean)&lt;/code&gt;이라고 한다. 그래서 객체관리 컨테이너를 &lt;code class=&quot;highlighter-rouge&quot;&gt;빈컨테이너&lt;/code&gt;라고 한다.&lt;/p&gt;
-
-&lt;p&gt;(스프링 IoC컨테이너 == 빈컨테이너)&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;ApplicationContext의 계층도&lt;/strong&gt;&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;ul&gt;
-    &lt;li&gt;ApplicationContext (interface)
-      &lt;ul&gt;
-        &lt;li&gt;ClasspathXmlApplicationContext (class)&lt;/li&gt;
-        &lt;li&gt;FileSystemXmlApplicationContext (class)&lt;/li&gt;
-        &lt;li&gt;WebApplicationContext (interface)&lt;/li&gt;
-      &lt;/ul&gt;
-    &lt;/li&gt;
-  &lt;/ul&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;스프링에서 빈 정보는 XML 파일에 저장해 두고 ClassPathXmlApplicationContext 클래스나 FileSystemXmlApplicaionContext 클래스를 사용하여 빈을 자동 생성한다. ClassPathXmlApplicationContext는 자바 클래스 경로에서 XML로 된 빈 설정 파일을 찾는다. FileSystemXmlApplicationContext는 파일 시스템 경로에서 빈 설정 파일을 찾는다. WebApplicationContext는 웹 어플리케이션을 위한 IoC 컨테이너로서 web.xml파일에 설정된 정보에 따라 XML파일을 찾는다.&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;bean--xml-&quot;&gt;Bean 설정 XML 파일준비&lt;/h3&gt;
-
-&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;beans&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;xmlns=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.springframework.org/schema/beans&quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;xmlns:xsi=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;xsi:schemaLocation=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.springframework.org/schema/beans&lt;/span&gt;
-        &lt;span class=&quot;err&quot;&gt;http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-        
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;score&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;exam.test01.Score&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-    
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/beans&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;bean태그는 &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;/&amp;gt;&lt;/code&gt; 네임스페이스에 소속되어 있기 때문에 XML파서가 이해할 수 있다. 이는 자바 클래스에서 import하는 것과 비슷하다.&lt;/p&gt;
-
-&lt;p&gt;위의 소스를 자바소스로 표현하면 아래와 같다.&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;exam&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;test01&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;Score&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;();&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;스프링 IoC 컨테이너가 생성할 자바 빈에 대한 정보는 &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;bean&amp;gt;&lt;/code&gt;태그로 선언한다. class속성에는 클래스 이름을 정한다. 주의 할점은 반드시 패키지 이름을 포함한 클래스 이름(fully qulified name)이어야 한다. id속성은 객체의 식별자이다. 빈컨테이너에서 객체를 꺼낼 때 이 식별자를 사용한다.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;스프링 IoC 컨테이너 사용&lt;/strong&gt;&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Test&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-	&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-		&lt;span class=&quot;n&quot;&gt;ClassPathXmlApplicationContext&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ctx&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 
-				&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ClassPathXmlApplicationContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;exam/test01/beans.xml&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-		
-		&lt;span class=&quot;n&quot;&gt;Score&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;score&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Score&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ctx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getBean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;score&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-		
-		&lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;합계:&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;score&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;sum&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-		&lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;평균:&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;+&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;score&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;average&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;());&lt;/span&gt;
-	&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h3 id=&quot;bean-&quot;&gt;익명 Bean 선언&lt;/h3&gt;
-
-&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;beans&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;xmlns=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.springframework.org/schema/beans&quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;xmlns:xsi=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;xsi:schemaLocation=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.springframework.org/schema/beans&lt;/span&gt;
-        &lt;span class=&quot;err&quot;&gt;http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-        
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;exam.test03.Score&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;exam.test03.Score&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/beans&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;kn&quot;&gt;package&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;exam&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;test03&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kn&quot;&gt;import&lt;/span&gt; &lt;span class=&quot;nn&quot;&gt;org.springframework.context.support.ClassPathXmlApplicationContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;;&lt;/span&gt;
-
-&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;class&lt;/span&gt; &lt;span class=&quot;nc&quot;&gt;Test&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-
-	&lt;span class=&quot;kd&quot;&gt;public&lt;/span&gt; &lt;span class=&quot;kd&quot;&gt;static&lt;/span&gt; &lt;span class=&quot;kt&quot;&gt;void&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;main&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;[]&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;args&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-		&lt;span class=&quot;n&quot;&gt;ClassPathXmlApplicationContext&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ctx&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; 
-				&lt;span class=&quot;k&quot;&gt;new&lt;/span&gt; &lt;span class=&quot;nf&quot;&gt;ClassPathXmlApplicationContext&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;exam/test03/beans.xml&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-		
-		&lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;[컨테이너에 보관된 객체의 이름 출력]&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-		&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;name&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ctx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getBeanDefinitionNames&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;())&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-			&lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;name&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-		&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-		
-		&lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;[exam.test03.Score#0의 별명 출력]&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-		&lt;span class=&quot;k&quot;&gt;for&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;String&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;alias&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;:&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ctx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getAliases&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;exam.test03.Score#0&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;))&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt;
-			&lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;alias&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-		&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-		
-		&lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;[익명 빈 꺼내기]&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-		&lt;span class=&quot;n&quot;&gt;Score&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;score1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Score&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ctx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getBean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;exam.test03.Score&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-		&lt;span class=&quot;n&quot;&gt;Score&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;score2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Score&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ctx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getBean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;exam.test03.Score#0&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-		&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;score1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;score2&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;score == score#0&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-		
-		&lt;span class=&quot;n&quot;&gt;Score&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;score3&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Score&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ctx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getBean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;exam.test03.Score#1&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-		&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;score1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;score3&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;score != score#1&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-		
-		&lt;span class=&quot;n&quot;&gt;System&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;out&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;println&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;[클래스 타입으로 빈 꺼내기]&quot;&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-		&lt;span class=&quot;n&quot;&gt;Score&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;score4&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;Score&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;ctx&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;getBean&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;exam&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;test03&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;Score&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;class&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;);&lt;/span&gt;
-	&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-
-&lt;span class=&quot;o&quot;&gt;/*&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;컨테이너에&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;보관된&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;객체의&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;이름&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;출력&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;exam&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;test03&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;Score&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;exam&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;test03&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;Score&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
-
-&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;exam&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;test03&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;Score&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;의&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;별명&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;출력&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;exam&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;test03&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;.&lt;/span&gt;&lt;span class=&quot;na&quot;&gt;Score&lt;/span&gt;
-
-&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;익명&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;빈&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;꺼내기&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;score&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;score&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;0&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;score&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;!=&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;score&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;#&lt;/span&gt;&lt;span class=&quot;mi&quot;&gt;1&lt;/span&gt;
-
-&lt;span class=&quot;o&quot;&gt;[&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;클래스&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;타입으로&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;빈&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;꺼내기&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;]&lt;/span&gt;
-&lt;span class=&quot;n&quot;&gt;Error&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;클래스 타입으로도 객체를 꺼낼 수 있다. 하지만 getBean()을 호출할 때 Score 클래스에 대한 정보를 담은 java.lang.Class객체를 넘겨서 빈컨테이너에서 이 클래스의 인스턴스를 찾는다. 이때 같은 타입의 객체가 여러 개 있을 경우 예외가 발생한다.&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;section&quot;&gt;생성자와 프로퍼티 설정&lt;/h3&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;constructor-arg&amp;gt;&lt;/code&gt; 엘러먼트를 이용하면 호출될 생성자를 지정할 수 있다.&lt;/p&gt;
-
-&lt;p&gt;생성자를 지정하는 방법은 아래와 같다.&lt;/p&gt;
-
-&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;beans&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;xmlns=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.springframework.org/schema/beans&quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;xmlns:xsi=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;xsi:schemaLocation=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.springframework.org/schema/beans&lt;/span&gt;
-        &lt;span class=&quot;err&quot;&gt;http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-        
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;score1&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;exam.test04.Score&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;nt&quot;&gt;&amp;lt;constructor-arg&amp;gt;&amp;lt;value&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;java.lang.String&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;홍길동&lt;span class=&quot;nt&quot;&gt;&amp;lt;/value&amp;gt;&amp;lt;/constructor-arg&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;nt&quot;&gt;&amp;lt;constructor-arg&amp;gt;&amp;lt;value&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;float&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;91&lt;span class=&quot;nt&quot;&gt;&amp;lt;/value&amp;gt;&amp;lt;/constructor-arg&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;nt&quot;&gt;&amp;lt;constructor-arg&amp;gt;&amp;lt;value&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;float&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;92&lt;span class=&quot;nt&quot;&gt;&amp;lt;/value&amp;gt;&amp;lt;/constructor-arg&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;nt&quot;&gt;&amp;lt;constructor-arg&amp;gt;&amp;lt;value&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;float&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;93&lt;span class=&quot;nt&quot;&gt;&amp;lt;/value&amp;gt;&amp;lt;/constructor-arg&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/bean&amp;gt;&lt;/span&gt;
-  //자바코드 -&amp;gt; new Score(&quot;임꺽정&quot;,91,91,91);
-  
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;score2&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;exam.test04.Score&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;nt&quot;&gt;&amp;lt;constructor-arg&amp;gt;&amp;lt;value&amp;gt;&lt;/span&gt;임꺽정&lt;span class=&quot;nt&quot;&gt;&amp;lt;/value&amp;gt;&amp;lt;/constructor-arg&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;nt&quot;&gt;&amp;lt;constructor-arg&amp;gt;&amp;lt;value&amp;gt;&lt;/span&gt;81&lt;span class=&quot;nt&quot;&gt;&amp;lt;/value&amp;gt;&amp;lt;/constructor-arg&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;nt&quot;&gt;&amp;lt;constructor-arg&amp;gt;&amp;lt;value&amp;gt;&lt;/span&gt;82&lt;span class=&quot;nt&quot;&gt;&amp;lt;/value&amp;gt;&amp;lt;/constructor-arg&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;nt&quot;&gt;&amp;lt;constructor-arg&amp;gt;&amp;lt;value&amp;gt;&lt;/span&gt;83&lt;span class=&quot;nt&quot;&gt;&amp;lt;/value&amp;gt;&amp;lt;/constructor-arg&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/bean&amp;gt;&lt;/span&gt; 
-  //자바코드 -&amp;gt; new Score(&quot;임꺽정&quot;,81,82,83);
-  
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;score3&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;exam.test04.Score&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;nt&quot;&gt;&amp;lt;constructor-arg&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;java.lang.String&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;장보고&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;nt&quot;&gt;&amp;lt;constructor-arg&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;float&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;71&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;nt&quot;&gt;&amp;lt;constructor-arg&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;float&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;72&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;nt&quot;&gt;&amp;lt;constructor-arg&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;float&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;73&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/bean&amp;gt;&lt;/span&gt; 
-  //자바코드 -&amp;gt; new Score(&quot;장보고&quot;,71,72,73);
-  
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;score4&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;exam.test04.Score&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;nt&quot;&gt;&amp;lt;constructor-arg&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;이순신&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;nt&quot;&gt;&amp;lt;constructor-arg&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;100&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;nt&quot;&gt;&amp;lt;constructor-arg&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;98&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;nt&quot;&gt;&amp;lt;constructor-arg&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;99&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/bean&amp;gt;&lt;/span&gt;
-  //자바코드 -&amp;gt; new Score(&quot;이순신&quot;,100,98,99);
-    
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;score5&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;exam.test04.Score&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;nt&quot;&gt;&amp;lt;constructor-arg&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;70&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;index=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;3&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;nt&quot;&gt;&amp;lt;constructor-arg&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;50&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;index=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;1&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;nt&quot;&gt;&amp;lt;constructor-arg&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;강감찬&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;index=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;0&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;nt&quot;&gt;&amp;lt;constructor-arg&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;60&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;index=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;2&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/bean&amp;gt;&lt;/span&gt;
-  //자바코드 -&amp;gt; new Score(&quot;강감찬&quot;,50,60,70;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/beans&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;&lt;br /&gt;
-프로퍼티값 설정은 다음과 같다.&lt;/p&gt;
-
-&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;beans&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;xmlns=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.springframework.org/schema/beans&quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;xmlns:xsi=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;xsi:schemaLocation=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.springframework.org/schema/beans&lt;/span&gt;
-        &lt;span class=&quot;err&quot;&gt;http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-        
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;score1&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;exam.test05.Score&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;name&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;value&amp;gt;&lt;/span&gt;홍길동&lt;span class=&quot;nt&quot;&gt;&amp;lt;/value&amp;gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;kor&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;value&amp;gt;&lt;/span&gt;100&lt;span class=&quot;nt&quot;&gt;&amp;lt;/value&amp;gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;eng&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;value&amp;gt;&lt;/span&gt;95&lt;span class=&quot;nt&quot;&gt;&amp;lt;/value&amp;gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;math&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;value&amp;gt;&lt;/span&gt;90&lt;span class=&quot;nt&quot;&gt;&amp;lt;/value&amp;gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/bean&amp;gt;&lt;/span&gt;
-  //자바코드 -&amp;gt; Score score1 = new Score();
-  //			score1.setName('홍길동');
-  //			score1.setKor(100);
-  //			score1.setEng(59);
-  //			score1.setMath(90);
-  
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;score2&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;exam.test05.Score&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;name&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;임꺽정&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;kor&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;85&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;eng&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;99&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;math&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;100&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/bean&amp;gt;&lt;/span&gt;
-  //자바코드 -&amp;gt; Score score2 = new Score();
-  //			score2.setName('임꺽정');
-  //			score2.setKor(85);
-  //			score2.setEng(99);
-  //			score2.setMath(100);  
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/beans&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;bean------&quot;&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;bean&amp;gt;&lt;/code&gt;의 속성을 이용하여 생성자 및 프로퍼티 설정하기&lt;/h3&gt;
-
-&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;beans&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;xmlns=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.springframework.org/schema/beans&quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;xmlns:xsi=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;xmlns:p=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.springframework.org/schema/p&quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;xmlns:c=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.springframework.org/schema/c&quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;xsi:schemaLocation=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.springframework.org/schema/beans&lt;/span&gt;
-        &lt;span class=&quot;err&quot;&gt;http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-  
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;score1&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;exam.test06.Score&quot;&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;p:name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;홍길동&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;p:kor=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;100&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;p:eng=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;95&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;p:math=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;90&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-      
-  //자바코드 -&amp;gt; Score score1 = new Score();
-  //			score1.setName('홍길동);
-  //			score1.setKor(100);
-  //			score1.setEng(95);
-  //			score1.setMath(90);
-  
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;score2&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;exam.test06.Score&quot;&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;c:name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;임꺽정&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;c:kor=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;80&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;c:eng=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;90&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;c:math=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;100&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-
-  //자바코드 -&amp;gt; Score score2 = new Score('임꺽정',80,90,100);  
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/beans&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;xmlns:p=&quot;http://www.springframework.org/schema/p&quot;&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;xmlns:c=&quot;http://www.springframework.org/schema/c&quot;&lt;/code&gt;의 네임스페이스를 통해서 &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;bean&amp;gt;&lt;/code&gt;속성을 통해 프로퍼티와 생성자도 설정이 가능하다.&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;section-1&quot;&gt;의존 객체 주입&lt;/h3&gt;
-
-&lt;p&gt;어떤 객체가 작업을 수행하기 위해 다른 객체를 지속적으로 사용한다면 그 사용되는 객체를 의존 객체(depencencies)라 한다. 보통 지속적으로 사용할 객체는 프로퍼티에 보관한다.&lt;/p&gt;
-
-&lt;p&gt;예제로 Car객체를 만들때 tires객체와 engine객체를 사용한다.&lt;/p&gt;
-
-&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;beans&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;xmlns=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.springframework.org/schema/beans&quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;xmlns:xsi=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;xmlns:p=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.springframework.org/schema/p&quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;xmlns:c=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.springframework.org/schema/c&quot;&lt;/span&gt;
-    &lt;span class=&quot;na&quot;&gt;xsi:schemaLocation=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.springframework.org/schema/beans&lt;/span&gt;
-        &lt;span class=&quot;err&quot;&gt;http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-  
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;engine1&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;exam.test07.Engine&quot;&lt;/span&gt; 
-      &lt;span class=&quot;na&quot;&gt;c:maker=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Hyundai&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;p:cc=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;1998&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-  //자바코드 -&amp;gt; Engine engine1 = new Engine(&quot;Hyundai&quot;);
-  //			engine1.setCc(1998);			  
-  
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;car1&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;exam.test07.Car&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;model&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;value&amp;gt;&lt;/span&gt;Avante&lt;span class=&quot;nt&quot;&gt;&amp;lt;/value&amp;gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;engine&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&amp;lt;ref&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;bean=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;engine1&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/bean&amp;gt;&lt;/span&gt;
-  //자바코드 -&amp;gt; Car car1 = new Car();
-  //			car1.setModel(&quot;Avante&quot;);
-  //			car1.setEngine(engine1);  
-  
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;car2&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;exam.test07.Car&quot;&lt;/span&gt;
-      &lt;span class=&quot;na&quot;&gt;c:model=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Equus&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;c:engine-ref=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;engine1&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-  //자바코드 -&amp;gt; Car car2 = new Car(&quot;Equus&quot;,engine1);
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/beans&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;ref&amp;gt;&lt;/code&gt;태그를 사용하여 Engine의 참조하였다.&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;section-2&quot;&gt;개별 인스턴스 주입하기&lt;/h3&gt;
-
-&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;beans&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;xmlns=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.springframework.org/schema/beans&quot;&lt;/span&gt;
-	&lt;span class=&quot;na&quot;&gt;xmlns:xsi=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&lt;/span&gt; 
-	&lt;span class=&quot;na&quot;&gt;xmlns:p=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.springframework.org/schema/p&quot;&lt;/span&gt;
-	&lt;span class=&quot;na&quot;&gt;xmlns:c=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.springframework.org/schema/c&quot;&lt;/span&gt;
-	&lt;span class=&quot;na&quot;&gt;xsi:schemaLocation=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.springframework.org/schema/beans&lt;/span&gt;
-        &lt;span class=&quot;err&quot;&gt;http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-
-	&lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;car1&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;exam.test08.Car&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-		&lt;span class=&quot;nt&quot;&gt;&amp;lt;constructor-arg&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Avante&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-		&lt;span class=&quot;nt&quot;&gt;&amp;lt;constructor-arg&amp;gt;&lt;/span&gt;
-			&lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;exam.test08.Engine&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;p:maker=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Hyundai&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;p:cc=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;1495&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-		&lt;span class=&quot;nt&quot;&gt;&amp;lt;/constructor-arg&amp;gt;&lt;/span&gt;
-	&lt;span class=&quot;nt&quot;&gt;&amp;lt;/bean&amp;gt;&lt;/span&gt;
-		
-	//자바코드 -&amp;gt; Engine temp = new Engine();
-	//			  temp.setMaker(&quot;Hyundai&quot;);
-	//			  temp.setCc(1495);
-	//			  Car Car1 = new Car(&quot;Avante&quot;, temp);
-	
-	&lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;car2&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;exam.test08.Car&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-		&lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;model&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Sonata&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-		&lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;engine&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-			&lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;exam.test08.Engine&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;p:maker=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Hyundai&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;p:cc=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;1997&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-		&lt;span class=&quot;nt&quot;&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
-	&lt;span class=&quot;nt&quot;&gt;&amp;lt;/bean&amp;gt;&lt;/span&gt;
-	
-	//자바코드 -&amp;gt; Car car2 new Car();
-	//			  car2.setModel(&quot;Sonata&quot;);
-	//			  Engine temp = new Engine();
-	//			  temp.setMaker(&quot;Hyundai&quot;);
-	//			  temp.setCc(1997);
-	//			  car2.setEngine(temp);
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/beans&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;section-3&quot;&gt;컬랙션 값 주입&lt;/h3&gt;
-
-&lt;p&gt;&lt;strong&gt;배열 프로퍼티의 값 주입&lt;/strong&gt;&lt;/p&gt;
-
-&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;beans&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;xmlns=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.springframework.org/schema/beans&quot;&lt;/span&gt;
-	&lt;span class=&quot;na&quot;&gt;xmlns:xsi=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&lt;/span&gt; 
-	&lt;span class=&quot;na&quot;&gt;xmlns:p=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.springframework.org/schema/p&quot;&lt;/span&gt;
-	&lt;span class=&quot;na&quot;&gt;xmlns:c=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.springframework.org/schema/c&quot;&lt;/span&gt;
-	&lt;span class=&quot;na&quot;&gt;xsi:schemaLocation=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.springframework.org/schema/beans&lt;/span&gt;
-        &lt;span class=&quot;err&quot;&gt;http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-
-	&lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;car1&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;exam.test09.Car&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-		&lt;span class=&quot;nt&quot;&gt;&amp;lt;constructor-arg&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Avante&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-		&lt;span class=&quot;nt&quot;&gt;&amp;lt;constructor-arg&amp;gt;&lt;/span&gt;
-			&lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;exam.test09.Engine&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;p:maker=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Hyundai&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;p:cc=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;1495&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-		&lt;span class=&quot;nt&quot;&gt;&amp;lt;/constructor-arg&amp;gt;&lt;/span&gt;
-		&lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;tires&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-			&lt;span class=&quot;nt&quot;&gt;&amp;lt;list&amp;gt;&lt;/span&gt;
-				&lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;exam.test09.Tire&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;p:maker=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Kumho&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;p:spec=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;P185&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-				&lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;exam.test09.Tire&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;p:maker=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Kumho&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;p:spec=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;P185&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-			&lt;span class=&quot;nt&quot;&gt;&amp;lt;/list&amp;gt;&lt;/span&gt;
-		&lt;span class=&quot;nt&quot;&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
-	&lt;span class=&quot;nt&quot;&gt;&amp;lt;/bean&amp;gt;&lt;/span&gt;
-	
-	//자바코드 -&amp;gt; Engine temp = new Engine();
-	//			  temp.setMaker(&quot;Hyundai&quot;);
-	//			  temp.setCc(1495);
-	//			  Car car1 = new Car(&quot;Avante&quot;,temp);
-	//			  Tire[] temp2 = new Tire[]{new Tire(), new Tire()};
-	//			  temp2[0].setMaker(&quot;Kumho&quot;);
-	//			  temp2[0].setSpeck(&quot;P185&quot;);
-	//			  temp2[1].setMaker(&quot;Kumho&quot;);
-	//			  temp2[1].setSpeck(&quot;P185&quot;);
-	//			  car1.setTire(temp2);
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/beans&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;Map과 Properties값 주입&lt;/strong&gt;&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;Map과 Preoperties의 용도&lt;/p&gt;
-
-  &lt;p&gt;java.util.Map 타입의 클래스는 식별자(key)나 값(value)으로 문자열뿐만 아니라 다른 타입의 객체도 사용할 수 있습니다. java.util.Properties 클래스도 Map의 일종(Map 인터페이스를 구현했음)이지만 주로 문자열로 된 식별자와 값을 다룰 때 사용한다.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;beans&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;xmlns=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.springframework.org/schema/beans&quot;&lt;/span&gt;
-	&lt;span class=&quot;na&quot;&gt;xmlns:xsi=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.w3.org/2001/XMLSchema-instance&quot;&lt;/span&gt; 
-	&lt;span class=&quot;na&quot;&gt;xmlns:p=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.springframework.org/schema/p&quot;&lt;/span&gt;
-	&lt;span class=&quot;na&quot;&gt;xmlns:c=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.springframework.org/schema/c&quot;&lt;/span&gt;
-	&lt;span class=&quot;na&quot;&gt;xsi:schemaLocation=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;http://www.springframework.org/schema/beans&lt;/span&gt;
-        &lt;span class=&quot;err&quot;&gt;http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-
-	&lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;spareTire&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;exam.test10.Tire&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-		&lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;maker&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Hyundai&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-		&lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;spec&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-			&lt;span class=&quot;nt&quot;&gt;&amp;lt;props&amp;gt;&lt;/span&gt;
-				&lt;span class=&quot;nt&quot;&gt;&amp;lt;prop&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;key=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;width&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;205&lt;span class=&quot;nt&quot;&gt;&amp;lt;/prop&amp;gt;&lt;/span&gt;
-				&lt;span class=&quot;nt&quot;&gt;&amp;lt;prop&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;key=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;ratio&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;65&lt;span class=&quot;nt&quot;&gt;&amp;lt;/prop&amp;gt;&lt;/span&gt;
-				&lt;span class=&quot;nt&quot;&gt;&amp;lt;prop&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;key=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;rim.diameter&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;14&lt;span class=&quot;nt&quot;&gt;&amp;lt;/prop&amp;gt;&lt;/span&gt;
-			&lt;span class=&quot;nt&quot;&gt;&amp;lt;/props&amp;gt;&lt;/span&gt;
-		&lt;span class=&quot;nt&quot;&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
-	&lt;span class=&quot;nt&quot;&gt;&amp;lt;/bean&amp;gt;&lt;/span&gt;
-	
-	//자바 코드 -&amp;gt; Tire spareTire = new Tire();
-	//				spareTire.setMaker(&quot;Hyundai&quot;);
-	//				Properties temp = new Properties();
-	//				temp.setProperty(&quot;width&quot;, &quot;205&quot;);
-	//				temp.setProperty(&quot;ratio&quot;,&quot;65&quot;);
-	//				temp.setProperty(&quot;rim.diameter&quot;,&quot;14&quot;);
-	//				spareTire.setSpec(temp);
-
-	&lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;car1&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;exam.test10.Car&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-		&lt;span class=&quot;nt&quot;&gt;&amp;lt;constructor-arg&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Avante&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-		&lt;span class=&quot;nt&quot;&gt;&amp;lt;constructor-arg&amp;gt;&lt;/span&gt;
-			&lt;span class=&quot;nt&quot;&gt;&amp;lt;bean&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;class=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;exam.test10.Engine&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;p:maker=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;Hyundai&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;p:cc=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;1495&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-		&lt;span class=&quot;nt&quot;&gt;&amp;lt;/constructor-arg&amp;gt;&lt;/span&gt;
-		&lt;span class=&quot;nt&quot;&gt;&amp;lt;property&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;options&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-			&lt;span class=&quot;nt&quot;&gt;&amp;lt;map&amp;gt;&lt;/span&gt;
-				&lt;span class=&quot;nt&quot;&gt;&amp;lt;entry&amp;gt;&lt;/span&gt;
-					&lt;span class=&quot;nt&quot;&gt;&amp;lt;key&amp;gt;&lt;/span&gt;
-						&lt;span class=&quot;nt&quot;&gt;&amp;lt;value&amp;gt;&lt;/span&gt;sunroof&lt;span class=&quot;nt&quot;&gt;&amp;lt;/value&amp;gt;&lt;/span&gt;
-					&lt;span class=&quot;nt&quot;&gt;&amp;lt;/key&amp;gt;&lt;/span&gt;
-					&lt;span class=&quot;nt&quot;&gt;&amp;lt;value&amp;gt;&lt;/span&gt;yes&lt;span class=&quot;nt&quot;&gt;&amp;lt;/value&amp;gt;&lt;/span&gt;
-				&lt;span class=&quot;nt&quot;&gt;&amp;lt;/entry&amp;gt;&lt;/span&gt;
-				&lt;span class=&quot;nt&quot;&gt;&amp;lt;entry&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;key=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;airbag&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;dual&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-				&lt;span class=&quot;nt&quot;&gt;&amp;lt;entry&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;key=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;sparetire&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-					&lt;span class=&quot;nt&quot;&gt;&amp;lt;ref&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;bean=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;spareTire&quot;&lt;/span&gt; &lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-				&lt;span class=&quot;nt&quot;&gt;&amp;lt;/entry&amp;gt;&lt;/span&gt;
-			&lt;span class=&quot;nt&quot;&gt;&amp;lt;/map&amp;gt;&lt;/span&gt;
-		&lt;span class=&quot;nt&quot;&gt;&amp;lt;/property&amp;gt;&lt;/span&gt;
-	&lt;span class=&quot;nt&quot;&gt;&amp;lt;/bean&amp;gt;&lt;/span&gt;
-	
-	//자바 코드 -&amp;gt; Engine temp = new Engine();
-	//				temp.setMaker(&quot;Hyundai&quot;)
-	//				temp.setCc(1496);
-	//				Car car1 = new Car(&quot;Avante&quot;,temp);
-	//				Map&lt;span class=&quot;nt&quot;&gt;&amp;lt;Object&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;,Object&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt; tempMap = new HashMap&lt;span class=&quot;nt&quot;&gt;&amp;lt;Object&lt;/span&gt;&lt;span class=&quot;err&quot;&gt;,Object&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;();
-	//				car1.setOptions(tempMap);
-	//				tempMap.put(&quot;sunroof&quot;,&quot;yes&quot;);
-	//				tempMap.put(&quot;airbag&quot;,&quot;dual&quot;);
-	//				tempMap.put(&quot;spaertire&quot;,spareTire);
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;/beans&amp;gt;&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;reference&quot;&gt;Reference&lt;/h3&gt;
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;http://www.yes24.com/24/Goods/13159413?Acode=101&quot;&gt;열혈강의 자바 웹 개발 워크북&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-        <pubDate>Wed, 21 Sep 2016 16:29:00 +0900</pubDate>
-        <link>http://joswlv.github.io/2016/09/21/beancontext1/</link>
-        <guid isPermaLink="true">http://joswlv.github.io/2016/09/21/beancontext1/</guid>
-        
-        
-        <category>Spring</category>
-        
-      </item>
-    
-      <item>
-        <title>mybatis 동적 SQL</title>
-        <description>&lt;h1 id=&quot;sql&quot;&gt;동적 SQL&lt;/h1&gt;
-
-&lt;p&gt;mybatis는 동적 SQL을 위한 엘리먼트를 제공한다.&lt;/p&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;동적 SQL을 작성할 때 사용하는 엘리먼트&lt;/strong&gt;&lt;/p&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;엘리먼트 예&lt;/th&gt;
-      &lt;th&gt;설명&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;&amp;lt;if test=”조건”&amp;gt;SQL문&amp;lt;/if&amp;gt;&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;if&amp;gt;&lt;/code&gt;태그는 어떤 값을 상태를 검사하여 참일 경우에만 SQL문을 포함하고 싶을 때 사용한다. test속성에 지정된 조건이 참이면 &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;if&amp;gt;&lt;/code&gt;태그의 내용을 반환한다.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;&amp;lt;choose&amp;gt; &lt;br /&gt;   &amp;lt;when test=”조건1”&amp;gt;SQL문&amp;lt;/when&amp;gt; &lt;br /&gt; &amp;lt;when test=”조건2”&amp;gt;SQL문&amp;lt;/when&amp;gt; &lt;br /&gt; &amp;lt;otherwise&amp;gt;SQL문 &amp;lt;/otherwise&amp;gt; &amp;lt;/choose&amp;gt;&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;choose&amp;gt;&lt;/code&gt;태그는 검사할 조건이 여러 개일 경우에 사용한다. test속성에 지정된 조건이 참이면 &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;when&amp;gt;&lt;/code&gt;태그의 내용을 반환한다. 일치하는 조건이 없으면 &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;otherwise&amp;gt;&lt;/code&gt;의 내용을 반환한다.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;&amp;lt;where&amp;gt; &lt;br /&gt; &amp;lt;if test =”조건1&amp;gt;SQL문&amp;lt;/when&amp;gt; &lt;br /&gt; &amp;lt;if test=”조건2&amp;gt;SQL문&amp;lt;/when&amp;gt; &lt;br /&gt; &amp;lt;/where&amp;gt;&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;where&amp;gt;&lt;/code&gt;태그는 WHERE절을 반환한다. &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;where&amp;gt;&lt;/code&gt; 안의 하위 태그를 실행하고 나서 반환값이 있으면 WHERE절을 만들어 반환하고, 없으면 WHERE절을 반환하지 않는다.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;&amp;lt;trim prefix=”단어” prefixOverrides=”문자열|문자열”&amp;gt; &lt;br /&gt; &amp;lt;if test=”조건1”&amp;gt;SQL문&amp;lt;/when&amp;gt; &lt;br /&gt; &amp;lt;if test=”조건2”&amp;gt;SQL문&amp;lt;/when&amp;gt; &lt;br /&gt; &amp;lt;/trim&amp;gt;&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;trim&amp;gt;&lt;/code&gt;태그는 특정 단어로 시작하는 SQL문을 반환하고 싶을 때 사용한다. prefix는 반환값 앞에 붙일 접두어를 지정한다. prefixOverrides는 반환할 값에서 제거해야 하는 접두어를 지정한다. &lt;br /&gt;  다시 말하면 &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;trim&amp;gt;&lt;/code&gt;의 반환값이 있다면, 그 값의 앞부분이 prefixOverride에 지정된 문자열과 일치할 경우 그 문자열을 제거한다. 그리고 그 값의 앞부분에 prefix로 지정한 접두어를 붙여 반환한다.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;&amp;lt;set&amp;gt; &lt;br /&gt; &amp;lt;if test=”조건1”&amp;gt;SQL문&amp;lt;/when&amp;gt; &lt;br /&gt; &amp;lt;if test=”조건2”&amp;gt;SQL문&amp;lt;/when&amp;gt; &lt;br /&gt; &amp;lt;set&amp;gt;&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;set&amp;gt;&lt;/code&gt;태그는 UPDATE문의 SET절을 만들 때 사용한다. 조건이 참인 &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;if&amp;gt;&lt;/code&gt;의 내용은 SET절에 포함된다. SET 절의 항목이 여러개 일 경우 자동으로 콤마(,)를 붙인다.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;&amp;lt;foreach &lt;br /&gt; item=”항목”&lt;br /&gt; index=”인덱스”&lt;br /&gt;collection=”목록”&lt;br /&gt;open=”시작문자열”&lt;br /&gt;close=”종료문자열”&lt;br /&gt;separator=”구분자”&amp;gt;&lt;br /&gt; &amp;lt;/foreach&amp;gt;&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;foreach&amp;gt;&lt;/code&gt;태그는 목록의 값을 가지고 SQL문을 만들 때 사용한다. 특히 IN(값, 값…)조건을 만들 때 좋다. item속성에는 항목을 가리킬 때 사용할 변수의 이름을 지정한다. index속성에는 항목의 인덱스 값을 꺼낼 때 사용할 변수 이름을 지정한다. collection속성에는 java.util.List 구현체나 배열 객체가 온다. open속성에는 최종 반환값의 접두어를 지정한다. close는 최종 반환값의 접미어를 지정한다. separatory 속성은 반복으로 생ㅇ성하는 값을 구분하기 위해 붙이는 문자열을 지정한다.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;&amp;lt;bind name=”변수명” value=”값”/&amp;gt;&lt;/td&gt;
-      &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;bind&amp;gt;&lt;/code&gt;태그는 변수를 생성할 때 사용한다.&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;사용예&lt;/strong&gt;&lt;/p&gt;
-
-&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;//MySqlProjectDao.xml
-
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;select&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;selectList&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;resultMap=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;projectResultMap&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-	  select PNO, PNAME, STA_DATE, END_DATE, STATE
-	  from PROJECTS
-	  order by 
-	  &lt;span class=&quot;nt&quot;&gt;&amp;lt;choose&amp;gt;&lt;/span&gt; 
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;when&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;test=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;orderCond == 'TITLE_ASC'&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;PNAME asc&lt;span class=&quot;nt&quot;&gt;&amp;lt;/when&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;when&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;test=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;orderCond == 'TITLE_DESC'&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;PNAME desc&lt;span class=&quot;nt&quot;&gt;&amp;lt;/when&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;when&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;test=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;orderCond == 'STARTDATE_ASC'&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;STA_DATE asc&lt;span class=&quot;nt&quot;&gt;&amp;lt;/when&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;when&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;test=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;orderCond == 'STARTDATE_DESC'&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;STA_DATE desc&lt;span class=&quot;nt&quot;&gt;&amp;lt;/when&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;when&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;test=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;orderCond == 'ENDDATE_ASC'&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;END_DATE asc&lt;span class=&quot;nt&quot;&gt;&amp;lt;/when&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;when&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;test=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;orderCond == 'ENDDATE_DESC'&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;END_DATE desc&lt;span class=&quot;nt&quot;&gt;&amp;lt;/when&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;when&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;test=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;orderCond == 'STATE_ASC'&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;STATE asc&lt;span class=&quot;nt&quot;&gt;&amp;lt;/when&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;when&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;test=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;orderCond == 'STATE_DESC'&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;STATE desc&lt;span class=&quot;nt&quot;&gt;&amp;lt;/when&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;when&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;test=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;orderCond == 'PNO_ASC'&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;PNO asc&lt;span class=&quot;nt&quot;&gt;&amp;lt;/when&amp;gt;&lt;/span&gt;
-        &lt;span class=&quot;nt&quot;&gt;&amp;lt;otherwise&amp;gt;&lt;/span&gt;PNO desc&lt;span class=&quot;nt&quot;&gt;&amp;lt;/otherwise&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/choose&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/select&amp;gt;&lt;/span&gt;
-  
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;update&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;update&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;parameterType=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;map&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
-    update PROJECTS 
- 	&lt;span class=&quot;nt&quot;&gt;&amp;lt;set&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;nt&quot;&gt;&amp;lt;if&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;test=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;title != null&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;PNAME=#{title},&lt;span class=&quot;nt&quot;&gt;&amp;lt;/if&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;nt&quot;&gt;&amp;lt;if&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;test=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;content != null&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;CONTENT=#{content},&lt;span class=&quot;nt&quot;&gt;&amp;lt;/if&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;nt&quot;&gt;&amp;lt;if&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;test=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;startDate != null&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;STA_DATE=#{startDate},&lt;span class=&quot;nt&quot;&gt;&amp;lt;/if&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;nt&quot;&gt;&amp;lt;if&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;test=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;endDate != null&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;END_DATE=#{endDate},&lt;span class=&quot;nt&quot;&gt;&amp;lt;/if&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;nt&quot;&gt;&amp;lt;if&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;test=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;state != null&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;STATE=#{state},&lt;span class=&quot;nt&quot;&gt;&amp;lt;/if&amp;gt;&lt;/span&gt;
-      &lt;span class=&quot;nt&quot;&gt;&amp;lt;if&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;test=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;tags != null&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;TAGS=#{tags}&lt;span class=&quot;nt&quot;&gt;&amp;lt;/if&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;/set&amp;gt;&lt;/span&gt;
-    where PNO=#{no}
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/update&amp;gt;&lt;/span&gt;
-  
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;reference&quot;&gt;Reference&lt;/h3&gt;
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;http://www.yes24.com/24/Goods/13159413?Acode=101&quot;&gt;열혈강의 자바 웹 개발 워크북&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-        <pubDate>Tue, 20 Sep 2016 12:30:00 +0900</pubDate>
-        <link>http://joswlv.github.io/2016/09/20/dynamic_sql/</link>
-        <guid isPermaLink="true">http://joswlv.github.io/2016/09/20/dynamic_sql/</guid>
-        
-        
-        <category>web</category>
-        
-      </item>
-    
-      <item>
-        <title>mybatis log출력</title>
-        <description>&lt;h1 id=&quot;mybatis--&quot;&gt;1. mybatis 로그 출력&lt;/h1&gt;
-
-&lt;p&gt;데이터베이스 입출력을 로그로 볼 수 있는 기능이 mybatis에 있다. mybatis설정 파일에 다음과 같이 편집을 한다.&lt;/p&gt;
-
-&lt;div class=&quot;language-xml highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;cp&quot;&gt;&amp;lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;cp&quot;&gt;&amp;lt;!DOCTYPE configuration
-  PUBLIC &quot;-//mybatis.org//DTD Config 3.0//EN&quot;
-  &quot;http://mybatis.org/dtd/mybatis-3-config.dtd&quot;&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;configuration&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;settings&amp;gt;&lt;/span&gt;
-    &lt;span class=&quot;nt&quot;&gt;&amp;lt;setting&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;logImpl&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;LOG4J&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;/&amp;gt;&lt;/span&gt;
-  &lt;span class=&quot;nt&quot;&gt;&amp;lt;/settings&amp;gt;&lt;/span&gt;
-  
-  ...
-  
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;lt;setting&amp;gt;&lt;/code&gt;태그를 사용하여 로그 출력기를 지정한다. 이 태그의 &lt;code class=&quot;highlighter-rouge&quot;&gt;name&lt;/code&gt;속성은 로그 출력기를 호출할 이름이고,  &lt;code class=&quot;highlighter-rouge&quot;&gt;value&lt;/code&gt;로그 출력기의 종류를 설정한다.&lt;/p&gt;
-
-&lt;p&gt;로그 출력기 종류는 다음과 같다.&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;SLF4J&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;LOG4J&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;LOG4J2&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;JDK_LOGGING&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;COMMONS_LOGGING&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;STDOUT_LOGGING&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;NO_LOGGING&lt;/code&gt;&lt;/p&gt;
-
-&lt;p&gt;다음 과정으로는 로그출력기의 설정파일을 만든다. 이 파일에는 로그의 수준, 출력방식, 출력형식, 로그 대상 등에 대한 정보가 들어 간다. 그리고 이 파일의 경로는 자바 클래스 경로(CLASSPATH)에 두어야 한다.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;# Global logging configuration
-log4j.rootLogger=ERROR, stdout
-
-# MyBatis logging configuration...
-log4j.logger.spms.dao=TRACE
-
-# Console output...
-log4j.appender.stdout=org.apache.log4j.ConsoleAppender
-log4j.appender.stdout.layout=org.apache.log4j.PatternLayout
-log4j.appender.stdout.layout.ConversionPattern=%5p [%t] - %m%n
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;section&quot;&gt;로그의 출력 등급 설정&lt;/h4&gt;
-
-&lt;p&gt;제일 먼저 루트 로거의 출력 등급을 ERROR로 설정했다. 루트 로거란 최상위 로거를 가리킨다. 하위 로거들은 항상 부모의 출력 등급을 상속 받는다. 하위 로거들의 등급을 별도로 설정하지 않으면 루트 로그의 출력 등급과 같은 ERROR가 된다.&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;로그 출력 등급표&lt;/strong&gt;&lt;/p&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;로그 출력 등급&lt;/th&gt;
-      &lt;th&gt;설명&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;FATAL&lt;/td&gt;
-      &lt;td&gt;어플리케이션을 중지해야 할 심각할 오류&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;ERROR&lt;/td&gt;
-      &lt;td&gt;오류가 발생 했지만, 어플리케이션은 계속 실행할 수 있는 상태&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;WARN&lt;/td&gt;
-      &lt;td&gt;잠재적 위험을 안고 있는 상태&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;INFO&lt;/td&gt;
-      &lt;td&gt;어플리케이션의 주요 실행 정보&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;DEBUG&lt;/td&gt;
-      &lt;td&gt;어플리케이션의 내부 실행 상황을 추적해 볼 수 있는 상세 정보&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;TRACE&lt;/td&gt;
-      &lt;td&gt;디버그보다 더 상세한 정보&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;section-1&quot;&gt;출력 담당자 선언 및 유형결정&lt;/h4&gt;
-
-&lt;p&gt;루트 로거의 출력 등급을 설정하는 값 다음에는 출력 담당자(Appender)의 이름이 온다. 위의 소스에서는 출력 담당자의 이름을 &lt;code class=&quot;highlighter-rouge&quot;&gt;stdout&lt;/code&gt;이라고 했다.&lt;/p&gt;
-
-&lt;p&gt;출력 담당자가 여럿일 때 당담자의 이름도 그 수만큼 지정한다. 이름은 마음데로 지정해도 된다.&lt;/p&gt;
-
-&lt;p&gt;출력 담당자 유형을 설정하는 문법은 다음과 같이 설정한다.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;log4j.appender.이름=출력 담당자(페키지명을 포함한 클래스명)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;주요 로그 출력자 클래스&lt;/strong&gt;&lt;/p&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;출력담당자클래스&lt;/th&gt;
-      &lt;th&gt;설명&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;org.apache.log4j.ConsoleAppender&lt;/td&gt;
-      &lt;td&gt;System.out 또는 System.err로 로그를 출력한다. 기본은 System.out이다. 즉 표준 출력 장치인 모니터로 출력한다.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;org.apache.log4j.FileAppender&lt;/td&gt;
-      &lt;td&gt;파일로 로그를 출력한다.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;org.apache.log4j.net.Socketappender&lt;/td&gt;
-      &lt;td&gt;원격의 로그 서버에 로그 정보를 담은 LoggingEvent객체를 보낸다.&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h4 id=&quot;section-2&quot;&gt;로그의 출력 형식 정의&lt;/h4&gt;
-
-&lt;p&gt;로그 출력 담당자를 결정했으면, 다음으로 로그의 출력 형식을 정의해야 한다. 문법은 다음과 같다.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;log4j.appender.이름.layout=출력형식 클래스(패키지명을 포함한 클래스명)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;p&gt;&lt;strong&gt;출력 형식 클래스&lt;/strong&gt;&lt;/p&gt;
-
-&lt;table&gt;
-  &lt;thead&gt;
-    &lt;tr&gt;
-      &lt;th&gt;출력 형식 클래스&lt;/th&gt;
-      &lt;th&gt;설명&lt;/th&gt;
-    &lt;/tr&gt;
-  &lt;/thead&gt;
-  &lt;tbody&gt;
-    &lt;tr&gt;
-      &lt;td&gt;org.apapche.log4j.SimpleLayout&lt;/td&gt;
-      &lt;td&gt;출력형식은 &lt;code class=&quot;highlighter-rouge&quot;&gt;출력등록-메시지&lt;/code&gt;이다. &lt;br /&gt;출력 결과 예) &lt;br /&gt;DEBUG - DB Connection Error!&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;org.apache.log4j.HTMLLayout&lt;/td&gt;
-      &lt;td&gt;HTML 테이블 형식으로 출력한다.&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;org.apache.log4j.PatternLayout&lt;/td&gt;
-      &lt;td&gt;변환 패턴의 형식에 따라 로그를 출력한다.  &lt;br /&gt;반환 패턴 예) &lt;br /&gt;%-5p[%t]:%m%n &lt;br /&gt;  출력 결과 예)&lt;br /&gt; DEBUG[main]:Message 1 &lt;br /&gt;WARN[main]:Message 2&lt;/td&gt;
-    &lt;/tr&gt;
-    &lt;tr&gt;
-      &lt;td&gt;org.apache.log4j.xml.XMLLayout&lt;/td&gt;
-      &lt;td&gt;log4j.dtd 규칙에 따라 XML을 만들어 출력한다.  &lt;br /&gt;출력 결과 예)&lt;br /&gt; &amp;lt;log4j:eventSet version=”1.2”xmlns:log4j=”http://jakarta.apache.org/log4j/”&amp;gt; &amp;amp;data: &amp;lt;/log4j:eventSet&amp;gt;&lt;/td&gt;
-    &lt;/tr&gt;
-  &lt;/tbody&gt;
-&lt;/table&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;reference&quot;&gt;Reference&lt;/h3&gt;
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;http://www.yes24.com/24/Goods/13159413?Acode=101&quot;&gt;열혈강의 자바 웹 개발 워크북&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-        <pubDate>Tue, 20 Sep 2016 11:29:00 +0900</pubDate>
-        <link>http://joswlv.github.io/2016/09/20/mybatis_log/</link>
-        <guid isPermaLink="true">http://joswlv.github.io/2016/09/20/mybatis_log/</guid>
-        
-        
-        <category>web</category>
         
       </item>
     

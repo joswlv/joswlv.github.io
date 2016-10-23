@@ -99,6 +99,602 @@
             
               <li>
                 <h2>
+                  <a class="post-link" href="/2016/10/23/awk/">awk 사용법</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-10-23
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#Unix/Linux" title="Category: Unix/Linux" rel="category">Unix/Linux</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="awk">awk</h1>
+
+<p>awk은 유닉스 기반 운영체제 (Linux, MacOs, Unix) shell programming에서 사용된다. 사용법이 간단하고 데이터 처리속도가 파이썬이나 R과 같은 인터프린터 언어와는 비교가 안될 정도로 빠르다.</p>
+
+<p>C언어의 산술연산자(+,-,*,/,%,++,–,+=,-=,*=,/=,%=)와 조건문(for, while,do/while,if,and if/else)을 그대로 사용하기 때문에 ‘pseudo-C interpretor’라고 말하기도 한다.</p>
+
+<p>awk은 행(column)지향적인 언어다. 즉 행렬로 구성된 데이터의 각 행을 원하는 방식으로 뽑아 손쉽게 데이터 처리를 한다. 그리고 그결과를 standard input 으로 보낸다. 사용법이 매우 간단하고 처리속도가 빠르기 때문에 대용량의 데이터를 다루는 분야에서 매우 유용하게 사용딘다.</p>
+
+<p>사용 법은 다음과 같다.</p>
+
+<p><code class="highlighter-rouge">awk 'pattern {action}' file</code></p>
+
+<p>형식은 아주 간단하다. awk이 실앻되면 file을 앞에서부터 읽기 시작해서 정의된 pattern을 만족시키는 열에 대해서 {}안에 정의된 action을 실행한다.</p>
+
+<h1 id="section">사용 예</h1>
+
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="c"># awk 의 초간단 사용법: awk 'pattern { action }' file</span>
+<span class="c"># awk 는 각 열을 한줄씩 읽어들이면서 pattern 을 만족시키는 {action} 을 실행합니다.</span>
+<span class="c"># awk 은 각 열을 space 를 기준으로 끊어 따로 저장하는데 예를 들면, 읽고 있는 열이</span>
+<span class="c"># 'John apple 3' 인 경우 John 은 $1 이란 변수에, apple 은 $2 란 변수에 집어넣습니다.</span>
+ 
+awk <span class="s1">'$1==0 { print $2 }'</span> file  <span class="c"># 읽고 있는 열의 첫번째 값($1)이 0이면 둘째 값($2) 출력</span>
+awk &lt; file <span class="s1">'$1==0 { print $2 }'</span>  <span class="c"># 이것도 위와 같은 결과를 출력합니다</span>
+ 
+awk &lt; file <span class="s1">'/^test/ { print $2 }'</span> <span class="c"># regular expression 도 사용 가능합니다. </span>
+ 
+<span class="c"># pattern 부분은 옵션입니다. 필요하지 않으면 빈칸으로 두면 됩니다.</span>
+awk &lt; file <span class="s1">'{ print $2, $3 }'</span> 
+ 
+<span class="c"># 행을 표시하지 않으면 전체를 출력합니다. $0 은 열 전체를 의미합니다. 즉 둘다 결과는 같습니다. </span>
+awk &lt; file <span class="s1">'{print}'</span> 
+awk &lt; file <span class="s1">'{print $0}'</span>
+</code></pre>
+</div>
+
+<p>이때 pattern은 옵션이다. pattern란에 정규표현식이 들어가도 된다. 또 다른 사용법은 파일로 만든후에 파일을 실행시키는 법이다. 명령어가 길 경우 유용하다.</p>
+
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="c"># awk 의 또다른 사용법: awk -f filename</span>
+awk -f hello.awk
+ 
+--- hello.awk file ---
+<span class="c">#!/bin/awk -f</span>
+BEGIN <span class="o">{</span> print <span class="s2">"File</span><span class="se">\t</span><span class="s2">Owner"</span> <span class="o">}</span>
+<span class="o">{</span> print <span class="nv">$8</span>, <span class="s2">"</span><span class="se">\t</span><span class="s2">"</span>, <span class="nv">$3</span><span class="o">}</span>
+END <span class="o">{</span> print <span class="s2">" - DONE -"</span> <span class="o">}</span>
+</code></pre>
+</div>
+
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="c"># awk 은 space 와 tab 을 기준으로 행을 구분합니다. 하지만 -F 써서 이를 바꿀 수 있습니다.</span>
+<span class="c"># awk 은 $1, $2.. 등을 field 라고 부르는데 그래서 옵션이 -F 즉 field separator 입니다. </span>
+<span class="c"># 참고할 점은 일단 seperator 를 바꾸면 space 와 tab 은 무시합니다.</span>
+ 
+awk &lt; /etc/passwd -F: <span class="s1">'{ print $5 }'</span> <span class="c"># ':' 를 기준으로 끊어 다섯번째 값을 출력합니다</span>
+ 
+<span class="c"># awk 을 이용한 연산</span>
+<span class="nb">echo </span>8 4 | awk <span class="s1">'{ print ($1-32)*(5/9) }'</span>
+<span class="gp">&gt; </span>-13.3333  <span class="c"># awk 는 숫자를 실수로 다룹니다 (즉, 소수점까지 계산합니다)</span>
+ 
+<span class="c"># awk 의 다양한 처리방식</span>
+<span class="nb">echo </span>5 4 | awk <span class="s1">'{ print $1 $2 }'</span> <span class="c"># $1$2 이렇게 붙여도 결과는 같습니다</span>
+<span class="gp">&gt; </span>54
+<span class="nb">echo </span>5 4 | awk <span class="s1">'{ print $1,$2 }'</span>
+<span class="gp">&gt; </span>5 4
+<span class="nb">echo </span>5 4 | awk <span class="s1">'{ print $1+$2 }'</span>
+<span class="gp">&gt; </span>9
+<span class="nb">echo </span>a z | awk <span class="s1">'{ print $1+$2 }'</span> <span class="c"># 문자를 산술 연산자로 더하면?</span>
+<span class="gp">&gt; </span>0
+
+</code></pre>
+</div>
+
+<p>awk에서 변수를 사용해 보다 정교한 프로그램을 작성할 수 있다. 우선 awk가 자동으로 생성하는 시스템 변수부터 시작하면 가장 흔하게 쓰는 시스템 변수는 위의 예에서 본 <code class="highlighter-rouge">$1</code>, <code class="highlighter-rouge">$2</code>등 이다. 각 열을 읽으면서 <code class="highlighter-rouge">$1</code>,<code class="highlighter-rouge">$2</code>등에 첫번째 행, 두번째 행에 해당하는 값을 자동으로 집어 넣는다.</p>
+
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="c"># 각 열의 평균값을 구해봅시다. NF 는 Number of field 의 약자로 읽어들이는</span>
+<span class="c"># 행의 갯수를 담는 고정 변수입니다. </span>
+<span class="c"># 매열마다 따로 계산해야 하므로 사용자 변수 total=0 으로 초기화 시킵니다.</span>
+<span class="c"># ; 를 이용하여 여러 명령어를 순차적으로 나열할 수 있습니다. </span>
+
+awk <span class="s1">'{ total=0; for (i=1; i&lt;=NF; i++) total += $i; print total/NF; }'</span>
+
+<span class="c"># 'BEGIN {} pattern {action} END {}' 구문을 이용하여 </span>
+<span class="c"># 처음과 끝에서만 작동하는 명령어를 삽입할 수 있습니다.</span>
+awk <span class="s1">'{ tot += $1; n += 1; }  END { print tot/n; }'</span>
+
+<span class="c"># awk built-in variables(대표적인 awk 고정 명령어들) </span>
+NF: Number of fields <span class="k">in </span>the current record <span class="o">(</span>현재 읽고 있는 열의 행의 갯수<span class="o">)</span> 
+NR: Number of record processed since the beginning of current awk execution
+<span class="o">(</span>지금까지 읽어들인 열의 갯수<span class="o">)</span> 
+OFS: Output field separator <span class="o">(</span>출력하는 행 구분자<span class="o">)</span>. Default value <span class="o">=</span> <span class="s2">" "</span> 
+ORS: Output record separator <span class="o">(</span>출력하는 열 구분자<span class="o">)</span>. Default value <span class="o">=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span>
+</code></pre>
+</div>
+
+<p>printf라는 함수를 보자. 지금까지는 awk의 기본 출력함수인 print만 보았다. 하지만 awk은 C의 printf함수도 지원한다. 이 함수를 이용하면 awk으로 처리한 데이터를 보다 정교하고 다양하게 출력할 수 있다.</p>
+
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="c"># 첫번째 행만 제거하고 나머지는 모두 출력합니다.</span>
+awk <span class="s1">'{ for (i=2; i&lt;=NF; i++) printf "%s ", $i; printf "\n"; }'</span>
+ 
+<span class="c"># 주의사항: print vs. printf</span>
+print 함수는 출력후 자동으로 그리고 내부적으로 <span class="s1">'\n'</span> 을 붙입니다. 즉 따로 <span class="s1">'\n'</span> 을 출력하지 않아도 next line 으로 넘어갑니다. 하지만 <span class="nb">printf </span>는 반드시 <span class="s1">'\n'</span> 을 따로 출력해야 합니다. 바꿔말하면 <span class="s1">'\n'</span> 을 출력하지 않으면 전체를 모두 이어서 하나의 열로 만들 수 있습니다.
+</code></pre>
+</div>
+
+<p>추가적으로 awk의 내장형 함수들이 존재한다.</p>
+
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code>length<span class="o">(</span>string<span class="o">)</span>: 문자열의 문자수를 리턴합니다. 괄호를 비우면 현재 열의 전체 문자수를 리턴.	 
+int<span class="o">(</span>number<span class="o">)</span>: 숫자의 정수부분만 떼어 리턴합니다.
+split<span class="o">(</span>string, array, separator<span class="o">)</span>: 문자열을 separator 를 기준으로 분할하여 array 에 넣습니다.
+그리고 array 의 index 를 리턴합니다. array[1].. 이렇게 사용하면 됩니다.	 
+sprintf<span class="o">(</span>format, arguments<span class="o">)</span> 포맷에 맞추어 변수들이 값을 출력합니다.
+substr<span class="o">(</span>string, position, length<span class="o">)</span> 문자열의 특정 위치에서 특정 길이만큼 뽑아 리턴합니다.
+</code></pre>
+</div>
+
+<p>이것들 중에서 split 함수의 예를 보면 다음과 같다.</p>
+
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="c"># 만약 아래와 같은 데이터가 있다고 합시다</span>
+chr8:28481001-28483000     NA   0   2   3   0
+chr6:158956601-158957200   NA   0   2   2   2
+chr20:42185201-42188600    NA   0   0   0   3
+chr7:107542001-107543800   NA   0   0   2   0
+chr14:24525801-24529600    NA   0   3   0   2
+chr6:130689201-130690000   NA   2   0   0   2
+
+<span class="c"># 첫번째 field 를 쪼개서 DNA 의 길이를 계산하여 아래와 같이 출력하려고 합니다</span>
+chr8  2000  0 2 3 0
+chr6  600   0 2 2 2
+chr20 3400  0 0 0 3
+chr7  1800  0 0 2 0
+chr14 3800  0 3 0 2
+chr6  800   2 0 0 2
+
+<span class="c"># 간단히 설명하면,</span>
+<span class="c"># 1. 먼저 1$ 를 : 와 - 를 기준으로 쪼개서 a 라는 array 에 넣습니다: split($1,a,":|-")</span>
+<span class="c"># 2. 그리고 염색체와 DNA 길이를 프린트 합니다: printf "%s %s",a[1],a[3]-a[2]+1</span>
+<span class="c"># 3. $1,$2 제외한 후 나머지를 프린트 합니다: $1=$2="";print</span>
+<span class="c"># 4. 모든 action 을 ; 을 통해 연결합니다 (이는 각각의 action 을 순차적으로 연산하도록 합니다)</span>
+
+awk <span class="s1">'{split($1,a,":|-");printf "%s %s",a[1],a[3]-a[2]+1;$1=$2="";print}'</span>
+
+<span class="c"># '|' 은 OR 연산자 입니다. ':' 와 '-' 둘중에 하나를 만나면 쪼개도록 합니다.</span>
+<span class="c"># 중간에 printf 를 사용한 이유는 print 와는 다르게 '\n' 가 포함되어 있지 않아 뒤의 값들을 </span>
+<span class="c"># 이어서 출력하도록 합니다. 마지막에 사용된 print 는 '\n' 이 포함되어 있으므로 </span>
+<span class="c"># 자연스럽게 다음 줄로 내려가게 합니다.</span>
+</code></pre>
+</div>
+
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="c">#특정파일을 탭 또는 공백으로 구분되어 있는데, 2번째 부분만 출력하고 싶다.</span>
+
+awk <span class="s1">'{print $2}'</span> file
+cat file | awk <span class="s1">'{print $2}'</span>
+
+<span class="c">#특정파일이 ','로 구분되어 있는데 2번째 칼럼만 출력하고 싶다.</span>
+
+awk -F <span class="s2">","</span> <span class="s1">'{print $2}'</span> file
+
+<span class="c">#파일의 특정 칼럼에 특정값이 있는 갯수를 알고 싶다.</span>
+
+awk <span class="s1">'BEGIN{sum=0}{if ($2=="TEXT"){sum+=1}} END{print sum}'</span> file
+</code></pre>
+</div>
+
+<div class="language-shell highlighter-rouge"><pre class="highlight"><code>awk <span class="s2">"{print FILENAME}"</span> test.txt 
+<span class="o">=</span> test.txt 파일의 레코드 개수만큼 파일이름을 출력한다. 
+
+awk <span class="s2">"{print NR}"</span> test.txt
+<span class="o">=</span> test.txt 파일의 레코드 번호를 출력한다. 
+
+awk <span class="s1">'BEGIN {FS="\t"} {print $1 ,  $2}'</span> test.txt
+<span class="o">=</span> test.txt 파일의 필드 구분자를 <span class="s2">"</span><span class="se">\t</span><span class="s2">"</span> 으로 지정하고, 1번째와 2번째 필드를 프린트 한다. 
+
+awk <span class="s1">'BEGIN {FS="\t"; OFS ="-"} {print $1 ,  $2} END {print "총 레코드의 수 : " NR}'</span> test.txt
+<span class="o">=</span> test.txt 파일의 필드 구분자를 <span class="s2">"</span><span class="se">\t</span><span class="s2">"</span> 로 지정하고, 1번째와 2번째 필드를 프린트 하되, 필드 구분자를 <span class="s2">"-"</span>
+로 바꾸어 출력하고, 모든 레코드가 끝난 뒤, 총 레코드의 수를 출력한다. 
+</code></pre>
+</div>
+
+<h1 id="section-1">정리</h1>
+
+<blockquote>
+  <p>awk [-f 프로그램파일] [-F 필드구분자] [“패턴{액션}”] [처리할 파일명]</p>
+
+  <p>옵션:</p>
+  <blockquote>
+    <p>-f: 프로그램파일(패턴을 저장한파일)</p>
+
+    <p>-F: 필드 구분자</p>
+
+    <p>“패턴{액션}”</p>
+  </blockquote>
+</blockquote>
+
+<h4 id="awk--">awk 시스템 변수</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>변수명</th>
+      <th>내용</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>FILENAME</td>
+      <td>현재 처리중인 파일명</td>
+    </tr>
+    <tr>
+      <td>FS</td>
+      <td>필드 구분자로 디폴트는 공백</td>
+    </tr>
+    <tr>
+      <td>RS</td>
+      <td>레코드 구분자로 그폴트는 새로운 라인</td>
+    </tr>
+    <tr>
+      <td>NF</td>
+      <td>현재 레코드의 필드 개수</td>
+    </tr>
+    <tr>
+      <td>NR</td>
+      <td>현재 레크드의 번호</td>
+    </tr>
+    <tr>
+      <td>OFS</td>
+      <td>출력할 때 사용하는 FS</td>
+    </tr>
+    <tr>
+      <td>ORS</td>
+      <td>출력할 때 사용하는 RS</td>
+    </tr>
+    <tr>
+      <td>$0</td>
+      <td>입력 레코드의 전체</td>
+    </tr>
+    <tr>
+      <td>$n</td>
+      <td>입력 레코드의 n번째 필드</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><br /></p>
+
+<h3 id="reference">Reference</h3>
+<ul>
+  <li><a href="http://ra2kstar.tistory.com/153">초보개발자 이야기</a></li>
+  <li><a href="http://www.hiscience.com/tech/archives/286">hiscience</a></li>
+</ul>
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/10/23/awk/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
+                  <a class="post-link" href="/2016/10/23/spc_rsync/">scp 와 rsync - 원격파일정송방법</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-10-23
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#Unix/Linux" title="Category: Unix/Linux" rel="category">Unix/Linux</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <p>원격으로 파일을 전송하기 위해사용 되는 명령어!</p>
+
+<p>scp와 rsync의 차이점은 symbolic link를 처리하는데 차이가 있다.</p>
+
+<blockquote>
+  <p>scp는 전송하려 하는 파일중에 symbolic link 가 있으면 링크된 원본파일이 전송된다. 즉 symlink가 유지 되지 않는다.!!</p>
+</blockquote>
+
+<h1 id="section">사용법</h1>
+
+<h2 id="scp">scp</h2>
+
+<p><strong>scp -[옵션][보낼파일][받는서버 계정 아이디]@[받는서버 URL]:[받을 위치 절대 경로]</strong></p>
+
+<h3 id="section-1">예)</h3>
+
+<p>scp -pr ./send joswlv@20.20.20.20:./receive</p>
+
+<blockquote>
+  <p>옵션:</p>
+
+  <p>-r = recusive 하위 폴더 포함 모두 복사</p>
+
+  <p>-p = preserve 권한 및 속성 유지</p>
+
+  <p>-C = compression 압축</p>
+</blockquote>
+
+<h2 id="rsync">rsync</h2>
+
+<h2 id="rsync-1">rsync</h2>
+
+<p><strong>rsync -[옵션][보낼파일][받을위치]</strong></p>
+
+<p>받을위치는 [서버계정 아이디]@[파일URL]:[받을 경로]로 사용가능</p>
+
+<h3 id="section-2">예)</h3>
+
+<p>rsync -avzP ./send joswlv@20.20.20.20:./receive</p>
+
+<blockquote>
+  <p>옵션:</p>
+
+  <p>-v = 진행상황을 상세히 보여줌</p>
+
+  <p>-r = 지정한 디렉토리의 하위 디렉토리까지 재귀적으로 실행</p>
+
+  <p>-p = 버전속성 보존</p>
+
+  <p>-z = 데이터압축 전송</p>
+
+  <p>-u = 추가된 파일만 전송</p>
+
+  <p>-b = 낡은 파일은 ~가 붙음</p>
+
+  <p>-u = 새로운 파일을 덮어쓰지 않음</p>
+
+  <p>-e = ssh(rsh) 전송암호화</p>
+</blockquote>
+
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/10/23/spc_rsync/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
+                  <a class="post-link" href="/2016/10/14/sqoop/">Sqoop</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-10-14
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#Hadoop" title="Category: Hadoop" rel="category">Hadoop</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="sqoop">Sqoop이란</h1>
+
+<p>스쿱은 관계형 데이터베이스와 하둡 사이에서 데이터 이관을 지원하는 툴이다. 스쿱을 이용하면 관계형 데이터베이스의 데이터를 HDFS, 하이브, H베이스, Accumulo에 임포트하거나 반대로 익스포트할 수 있다. 스쿱은 클라우데라에서 개발했으며, 현재 아파치 오픈소스 프로젝트로 공개되었다. <strong><a href="http://sqoop.apache.org">Sqoop</a></strong></p>
+
+<h1 id="sqoop-1">Sqoop아키텍처</h1>
+
+<p>스쿱은 관계형 데이터베이스를 읽고 쓸 수 있는 커넥터라는 개념을 사용한다. 커넥터는 각 데이터베이스별로 구현돼 있으며, JDBC 드라이버를 이용해 데이터베이스 접속 및 질의 실행을 요청한다.</p>
+
+<h1 id="section">데이터 임포트 동작 방식</h1>
+
+<ol>
+  <li>클라이언트가 스쿱에 임포트를 요청한다. 이때 클라이언트는 데이터베이스 접속 정보, 임포트 대상 테이블, 임프토 질의, 실행할 맵 태스크 개수 등을 설정한다.</li>
+  <li>스쿱은 데이터베이스에서 해당 테이블의 메타데이터를 조회해 ORM(Object Relational Mapping)클래스에는 익스포트 대상 테이블의 칼럼을 자바 변수로 매핑하고, 맵리듀스 잡 실행에 필요한 직렬화 메서드가 생성된다.</li>
+  <li>스쿱은 ORM 클래스가 정상적으로 생성되면 맵리듀스 잡 실행을 요청한다. 그리고 스쿱은 맵 테스크의 출력 결과를 임포트에 사용하기 때문에 리듀스 태스크는 실행하지 않는다.</li>
+  <li>맵 태스크는 데이터베이스에 JDBC로 접속한 후 SELECT질의를 실행한다.</li>
+  <li>맵태스크는 질의문을 실행한 결과를 HDFS에 저장한다. 전체 맵 태스크가 종료되면 스쿱은 클라이언트에게 작업이 정상적으로 종료됐다고 알려준다.</li>
+</ol>
+
+<h1 id="section-1">데이터 익스포트 동작방식</h1>
+
+<ol>
+  <li>클라이언트는 스쿱에 익스포트를 요청한다.</li>
+  <li>스쿱은 데이터베이스에서 메타데이터를 조회한 후 맵리듀스 잡에서 사용할 ORM클래스를 생성한다.</li>
+  <li>스쿱은 데이터베이스의 중간 테이블의 데이터를 모두 삭제한 후 맵리듀스 잡을 실행한다.</li>
+  <li>맵 태스크는 HDFS에서 데이터를 조회한 후 INSERT 질의문을 만들어 중간 테이블에 데이터를 입력한다. 이때 질의문은 레코드당 한 번씩 실행하는 것이 아니라 천개 단위로 배치로 실행한다. 참고로 중간 테이블 사용여부와 배치단위는 sqoop.export.records.per.statement 옵션으로 수정할 수 있다.</li>
+  <li>스쿱은 맵리듀스 잡이 정상적으로 종료되면 중간 테이블의 결과를 최종 테이블에 입력한다.</li>
+</ol>
+
+<h1 id="section-2">데이터 임포트</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>옵션</th>
+      <th>내용</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>–usename</td>
+      <td>데이터베이스 접속 계정</td>
+    </tr>
+    <tr>
+      <td>–password</td>
+      <td>데이터베이스 접속 암호</td>
+    </tr>
+    <tr>
+      <td>–connect</td>
+      <td>JDBC 접속 URL</td>
+    </tr>
+    <tr>
+      <td>–table</td>
+      <td>임포트 대상 테이블</td>
+    </tr>
+    <tr>
+      <td>–columns</td>
+      <td>특정 칼럼만 임포트할 경우 칼럼명을 설정. 이 옵션을 설정하지 않을 경우 전체 칼럼을 임포트</td>
+    </tr>
+    <tr>
+      <td>–target-dir</td>
+      <td>임포트 결과를 저장할 HDFS 디렉터리. 별도로 설정하지 않을 경우 “/user/계졍명/테이블명”에 데이터가 저장됨</td>
+    </tr>
+    <tr>
+      <td>–query</td>
+      <td>특정 테이블을 설정하지 않고 질의문 실행 결과를 임포트. 단 이 옵션을 사용할 경우 $CONDITIONS를 반드시 WHERE절에 사용해야 함. $CONDITIONS는 스쿱이 자동으로 생성하는 WHERE 조건을 나타내는 키워드임</td>
+    </tr>
+    <tr>
+      <td>-m,–num-mappers</td>
+      <td>실행할 맵 태스크 개수, 데이터베이스에 부하를 줄 수 있으므로 적절한 태스크 개수를 설정해야함.</td>
+    </tr>
+    <tr>
+      <td>–where</td>
+      <td>임포트할 때 사용할 WHERE절</td>
+    </tr>
+    <tr>
+      <td>-z, –comppress</td>
+      <td>임포트 결과를 압축</td>
+    </tr>
+    <tr>
+      <td>–compression-codec</td>
+      <td>하둡 압축 코덱, 기본값으로 Gzip을 사용함</td>
+    </tr>
+    <tr>
+      <td>–as-textfile</td>
+      <td>임포트 결과를 텍스트 파일로 저장. 스쿱은 텍스트 파일을 기본값으로 사용함</td>
+    </tr>
+    <tr>
+      <td>–as-sequencefile</td>
+      <td>임포트 결과를 시퀀스파일로 저장</td>
+    </tr>
+    <tr>
+      <td>–null-string<널갑문자열></널갑문자열></td>
+      <td>문자열 칼럼에서 널 값 대신 사용할 문자열</td>
+    </tr>
+    <tr>
+      <td>–null-non-string<널값 문자열=""></널값></td>
+      <td>문자열이 아닌 칼럼에서 널 값 대신 사용할 문자열</td>
+    </tr>
+    <tr>
+      <td>–direct</td>
+      <td>고속 커넥터를 이용할 경우 사용</td>
+    </tr>
+  </tbody>
+</table>
+
+<h1 id="mysql--">MySQL로 데이터 익스포트</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>옵션</th>
+      <th>내용</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>–export-dir</td>
+      <td>익스포트 대상 HDFS 디렉터리</td>
+    </tr>
+    <tr>
+      <td>-m, –num-mappers</td>
+      <td>실행할 맵 태스크 개수, 데이터베이스에 부하를 줄 수 있으므로 적절한 태스크 개수를 설정해야함</td>
+    </tr>
+    <tr>
+      <td>–table</td>
+      <td>데이터베이스 최종 대상 테이블</td>
+    </tr>
+    <tr>
+      <td>–staging-table</td>
+      <td>데이터베이스 중간 데이터 저장용 테이블</td>
+    </tr>
+    <tr>
+      <td>–clear-staging-table</td>
+      <td>중간 데이터용 데이블 데이터 삭제 여부</td>
+    </tr>
+    <tr>
+      <td>-null-string<널값 문자열=""></널값></td>
+      <td>문자열 칼럼에서 널 값 대신 사용할 문자열</td>
+    </tr>
+    <tr>
+      <td>–null-non-string<널값문자열></널값문자열></td>
+      <td>문자열이 아닌 칼럼에서 널 값 대신 사용할 문자열</td>
+    </tr>
+    <tr>
+      <td>–direct</td>
+      <td>고속커넥터를 이용할 경우 사용</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><br /></p>
+
+<h3 id="reference">Reference</h3>
+<ul>
+  <li><a href="http://www.yes24.com/24/Goods/26903681?Acode=101">시작하세요! 하둡 프로그래밍 : 빅데이터 분석을 위한 하둡 기초부터 YARN까지</a></li>
+</ul>
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/10/14/sqoop/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
                   <a class="post-link" href="/2016/10/13/LogBack/">LogBack in SpringBoot</a>
                 </h2>
                 <div class="label">
@@ -914,408 +1510,6 @@
                 <hr>
               </li>
             
-              <li>
-                <h2>
-                  <a class="post-link" href="/2016/10/06/List_remvoeif-Method/">List.removeif Method</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-10-06
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#Java" title="Category: Java" rel="category">Java</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                </div>
-                <div class="excerpt">
-                    <h1 id="listremvoeif-method">List.remvoeif Method</h1>
-
-<p><code class="highlighter-rouge">removeif()</code>메소드는 리스트내의 엘리먼트를 필터조건의 만족한는 것만을 골라 삭제할 때 사용된다.</p>
-
-<p><strong>Package:</strong> java.util</p>
-
-<p><strong>Java Platform:</strong> Java SE 8</p>
-
-<p><strong>Syntax:</strong></p>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">removeif</span><span class="o">(</span><span class="n">Prdicate</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="n">E</span><span class="o">&gt;</span> <span class="n">filter</span><span class="o">)</span>
-</code></pre>
-</div>
-
-<p><strong>형태</strong></p>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">removeIf</span><span class="o">(</span><span class="n">Predicate</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="n">E</span><span class="o">&gt;</span> <span class="n">filter</span><span class="o">)</span>
-</code></pre>
-</div>
-
-<p><strong>예</strong></p>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.function.*</span><span class="o">;</span>  
-  
-<span class="kd">class</span> <span class="nc">SamplePredicate</span><span class="o">&lt;</span><span class="n">t</span><span class="o">&gt;</span> <span class="kd">implements</span> <span class="n">Predicate</span><span class="o">&lt;</span><span class="n">t</span><span class="o">&gt;{</span>  
-  <span class="n">T</span> <span class="n">varc1</span><span class="o">;</span>  
-  <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">test</span><span class="o">(</span><span class="n">T</span> <span class="n">varc</span><span class="o">){</span>  
-  <span class="k">if</span><span class="o">(</span><span class="n">varc1</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">varc</span><span class="o">)){</span>  
-   <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>  
-  <span class="o">}</span>  
-  <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>  
-  <span class="o">}</span>  
-<span class="o">}</span>  
-</code></pre>
-</div>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.*</span><span class="o">;</span>  
-  
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">test</span> <span class="o">{</span>  
-  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>  
-   
-  <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">color_list</span><span class="o">;</span>  
-  <span class="n">SamplePredicate</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">filter</span><span class="o">;</span>  
-    
-  <span class="n">color_list</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;&gt;</span> <span class="o">();</span>  
-  <span class="n">filter</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SamplePredicate</span><span class="o">&lt;&gt;</span> <span class="o">();</span>  
-    
-  <span class="n">filter</span><span class="o">.</span><span class="na">varc1</span> <span class="o">=</span> <span class="s">"White"</span><span class="o">;</span>  
-    
- <span class="c1">// use add() method to add values in the list  </span>
-    <span class="n">color_list</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"White"</span><span class="o">);</span>  
-    <span class="n">color_list</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"Black"</span><span class="o">);</span>  
-    <span class="n">color_list</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"Red"</span><span class="o">);</span>  
-    <span class="n">color_list</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"White"</span><span class="o">);</span>  
-    <span class="n">color_list</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"Yellow"</span><span class="o">);</span>  
-    <span class="n">color_list</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"White"</span><span class="o">);</span>  
-    
-  <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"List of Colors"</span><span class="o">);</span>  
-  <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">color_list</span><span class="o">);</span>  
-    
-  <span class="c1">// Remove all White colors from color_list  </span>
-  <span class="n">color_list</span><span class="o">.</span><span class="na">removeIf</span><span class="o">(</span><span class="n">filter</span><span class="o">);</span>  
-    
-  <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Color list, after removing White colors :"</span><span class="o">);</span>  
-  <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">color_list</span><span class="o">);</span>  
-    
- <span class="o">}</span>  
-<span class="o">}</span> 
-</code></pre>
-</div>
-
-<p><strong>결과</strong></p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>List of Colors
-[White, Black, Red, White, Yellow, White]
-Color list, after removing White colors :
-[Black, Red, Yellow]
-</code></pre>
-</div>
-
-<p><br /></p>
-
-<h3 id="reference">Reference</h3>
-<ul>
-  <li><a href="http://www.w3resource.com/java-tutorial/arraylist/arraylist_removeif.php">w3resource</a></li>
-</ul>
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2016/10/06/List_remvoeif-Method/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
-              <li>
-                <h2>
-                  <a class="post-link" href="/2016/10/02/Interceptor/">Interceptor</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-10-02
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#Spring" title="Category: Spring" rel="category">Spring</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                </div>
-                <div class="excerpt">
-                    <h1 id="interceptor">Interceptor</h1>
-
-<p>ServletFilter와 유사하게 DispatcherServlet이 Controller를 호출하기 전/후에 요청 및 응답을 참조, 가공할 수 있는 일종의 필터 역할</p>
-
-<p>Filter와 다른점은 Filter는 DispatcherServlet보다 먼저 실행되기 때문에 Servlet관련 변수들을 사용할 수 없지만 Interceptor는 DispatcherServlet안에서 실행되기 때문에 Servlet관련 변수들을 사용할 수 있다.</p>
-
-<h3 id="handlerinterceptor-interface"><code class="highlighter-rouge">HandlerInterceptor</code> interface</h3>
-
-<ul>
-  <li>preHandler : 컨트롤러 실행 전 호출</li>
-  <li>postHandler : 컨트롤러가 정상적으로 실행된 후 호출 (예외 발생하면 호출되지 않음)</li>
-  <li>afterCompletion : 뷰 렌더링 후 호출 (예외 발생하면 메쏘드 인자로 전달됨)</li>
-</ul>
-
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2016/10/02/Interceptor/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
-              <li>
-                <h2>
-                  <a class="post-link" href="/2016/09/22/hadoop_ecosystem/">Hadoop Ecosystem</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-09-22
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#Hadoop" title="Category: Hadoop" rel="category">Hadoop</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                </div>
-                <div class="excerpt">
-                    <h1 id="hadoop-ecosystem">Hadoop Ecosystem</h1>
-
-<p><img src="http://joswlv.github.io/images/hadoopecosystem.png" alt="" /></p>
-
-<h3 id="section">코디네이터</h3>
-
-<ul>
-  <li>
-    <p>Zookeeper - <a href="http://zookeeper.apache.org">http://zookeeper.apache.org</a></p>
-
-    <p>분산 환경에서 서버간의 상호 조정이 필요한 다양한 서비스를 제공하는 시스템으로 크게 다음과 같은 네가지 역할을 수행한다. 첫째, 하나의 서버에만 서비스가 집중되지 않게 서비스를 알맞게 분산해 동시에 처리하게 해준다. 둘째 하나의 서버에서 처리한 결과를 다른 서버와도 동기화해서 데이터의 안정성을 보장한다. 셋째 운영서버에 문제가 발생해서 서비스를 제공할 수 없을 경우, 다른 대기 중인 서버를 운영 서버로 바꿔서 서비스가 중지 없이 제공되게 한다. 넷째 분산환경을 구성하는 서버의 환경설정을 통합적으로 관리한다.</p>
-  </li>
-</ul>
-
-<h3 id="section-1">리소스 관리</h3>
-
-<ul>
-  <li>
-    <p>YARN - <a href="http://hadoop.apache.org">http://hadoop.apache.org</a></p>
-
-    <p>얀(YARN)은 데이터 처리 작업을 실행하기 위한 클러스터 자원(CPU,메모리,디스크 등)과 스케줄링을 위한 프레임워크이다. 기존 하둡의 데이터 처리 프레임워크인 맵리듀스의 단점을 극복하기 위해 시작된 프로젝트이며, 하둡2.0부터 사용할 수 있다. 맵리듀스, 하이브, 임팔라, 타조, 스파크 등 다양한 어플리케이션들은 얀에서 리소스를 할당받아서 작업을 실행하게 된다.</p>
-  </li>
-  <li>
-    <p>Mesos - <a href="http://mesos.apache.org">http://mesos.apache.org</a></p>
-
-    <p>메소스(Mesos)는 클라우드 인프라스트럭처 및 컴퓨팅 엔진의 다양한 자원(CPU, 메모리, 디스크)을 통합적으로 고나리할 수 있도록 만든 자원 관리 프로젝트이다. 메소스는 클러스터링 환경에서 동적으로 자원을 할당하고 격리하는 메커니즘을 제공하며, 이를 통해 분산 환경에서 작업 실행을 최적화할 수 있다. 1만대 이상의 노드에도 대응 가능하며, 웹 기반 UI, 자바, C++, 파이썬API를 제공한다. 하둡, 스파크, 스톰, 엘라스틱 서치(Elastic Search), 카산드라(Cassandra), 젠킨스(Jenkins) 등 다양한 어플리케이션을 메소스에서 실행 할 수 있다.</p>
-  </li>
-</ul>
-
-<h3 id="section-2">데이터 저장</h3>
-
-<ul>
-  <li>
-    <p>HBase - <a href="http://hbase.apache.org">http://hbase.apache.org</a></p>
-
-    <p>H베이스는 HDFS기반의 칼럼 기반 데이터베이스 이다. 구글의 빅테이블 논문을 기반으로 개발 되었다. 실시간 랜덤 조회 및 업데이트가 가능하며, 각 프로세스는 개인의 데이터를 비동기적으로 업데이트 할 수 있다. 단 맵리듀스는 일괄 처리 방식으로 수행된다. 트위터, 야후, 어도비 같은 해외 업체에서 사용하고 있으며, 국내에서는 2012년 네이버가 모바일 메신저인 라인에 H베이스를 적용한 시스템 아키텍처를 발표했다.</p>
-  </li>
-  <li>
-    <p>Kudu - <a href="http://getkudu.io">http://getkudu.io</a></p>
-
-    <p>쿠두는 컬럼 기반의 스토리지로서, 특정 컬럼에 대한 데이터 읽기를 고속화할 수 있다. 물론 기존에도 HDFS dptjeh 파케이(Parquet), RC, ORC와 같은 파일 포맷을 사용하면 컬럼 기반으로 데이터를 저장할 수 있지만 HDFS 자체가 온라인 데이터 처리에 적합하지 않다는 약점이 있다. 그리고 HDFS기반으로 온라인 처리가 가능한 H베이스의 경우 데이터 분석 처리가 느라다는 단점이 잇다. 쿠두는 이러한 문제점을 보완해서 개발한 컬럼 기반 스토리지이며, 데이터의 발생부터 분석까지의 시간을 단축할 수 있다.</p>
-  </li>
-</ul>
-
-<h3 id="section-3">데이터 수집</h3>
-
-<ul>
-  <li>
-    <p>Chukwa - <a href="http://chukwa.apache.org">http://chukwa.apache.org</a></p>
-
-    <p>척와는 분산 환경에서 생성되는 데이터를 HDFS에 안정적으로 자장하는 플랫폼이다. 분산된 각 서버에서 에이전트를 실행하고, 콜렉터가 에이전트로부터 데이터를 받아 HDFS에 저장합니다. 콜렉터는 100개의 에이전트당 하나씩 구동되며, 데이터 중복 제거 등의 작업은 맵리듀스로 처리한다.</p>
-  </li>
-  <li>
-    <p>Flume - <a href="http://flume.apache.org">http://flume.apache.org</a></p>
-
-    <p>플럼은 척와처럼 분산된 서버에 에이전트가 설치되고, 에이전트로부터 데이터를 전달받는 콜랙터로 구성된다. 차이점은 전체 데이터의 흐름을 관리하는 마스터 서버가 있어서 데이터를 어디서 수집하고, 어떤 방식으로 전송하고, 어디에 저장할지를 동적으로 변경할 수 있다.</p>
-  </li>
-  <li>
-    <p>Scribe - <a href="http://github.com/facebook/scribe">http://github.com/facebook/scribe</a></p>
-
-    <p>페이스북에서 개발한 데이터 수집 플랫폼이며, Chukwa와는 다르게 데이터를 중앙 집중 서버로 전송하는 방식이다. 최종 데이터는 HDFS 외에 다양한 저장소를 활용할 수 있으며, 설치와 구성이 쉽게 다양한 프로그램 언어를 지원한다. HDFS에 저장할려면 JNI(Java Native Interface)를 이용해야한다.</p>
-  </li>
-  <li>
-    <p>Sqoop - <a href="http://sqoop.apache.org">http://sqoop.apache.org</a></p>
-
-    <p>스쿱은 대용량 데이터 전송 솔루션이며, Sqoop은 HDFS, RDBMS, DW, NoSQL 등 다양한 저장소에 대용량 데이터를 신속하게 전송하는 방법을 제공한다. 오라클, MS-SQL, DB2 등과 같은 상용 RDBMS와  MySQL, PostgreSQL과 같은 오픈 소스 RDBMS등을 지원한다.</p>
-  </li>
-  <li>
-    <p>Kafak - <a href="http://kafka.apache.org">http://kafka.apache.org</a></p>
-
-    <p>카프카는 데이터 스트림을 실시간으로 관리하기 위한 분산 메세징 시스템이다. 2011년 링크드인에서 자사의 대용량 이벤트처리를 위해 개발됐다. 발행구독모델로 구성되어 있으며, 데이터 손실을 막기 위하여 디스크에 데이터를 저장한다. 파티셔닝을 지원하기 때문에 다수의 카프카 서버에서 메시지를 분산 처리할 수 있으며, 시스템 안전성을 위하여 로드밸런싱과 내고장성(Fault Tolerant)를 보장한다. 다수의 글로벌 기업들이 카프카를 사용하고 있으며, 그중 링크드인은 하루에 1조1천억건 이상의 메시지를 카프카에서 처리하고 있다.</p>
-  </li>
-</ul>
-
-<h3 id="section-4">데이터 처리</h3>
-
-<ul>
-  <li>
-    <p>Pig - <a href="http://pig.apache.org">http://pig.apache.org</a></p>
-
-    <p>복잡한 맵리듀스 프로그래밍을 대체할 피그라틴(Pig Latin)이라는 자체 언어를 제공한다. 맵리듀스API를 매우 단순화한 형태이고 SQL과 유사한 형태로 설계되엇다. SQL과 유사하기만 할 뿐, 기존SQL 지식을 활용하기가 어려운 편이다.</p>
-  </li>
-  <li>
-    <p>Mahout - <a href="http://mahout.apache.org">http://mahout.apache.org</a></p>
-
-    <p>머하웃은 하둡기반으로 데이터 마이닝 알고리즘을 구현한 오픈소스프로젝트이다. 현재 분류(classification), 클러스터링(clustering), 추천 및 협업 필터링(Recommenders/collaborative filtering), Pattern Mining, 회귀분석(Regression), 차원 리덕션(Dimension reduction), 진화 알고리즘(Evolutionary Algorithms) 등 주요 알고리즘을 지원한다. 머하웃을 그대로 사용할 수도 잇지만 각 비즈니스 환경에 맞게 최적화해서 사용하는 경우가 많다.</p>
-  </li>
-  <li>
-    <p>Spark - <a href="http://spark.apache.org">http://spark.apache.org</a></p>
-
-    <p>스파크는 인메모리 기반의 범용 데이터 처리 플랫폼이다. 배치 처리, 머신러닝, SQL, 질의 처리, 스트리밍 데이터 처리, 그래프 라이브러리 처리와 같은 다양한 작업을 수용할 수 있도록 설계되었다.</p>
-  </li>
-  <li>
-    <p>Impala - <a href="http://impala.io">http://impala.io</a></p>
-
-    <p>임팔라는 클라우데라에서 개발한 하둡기반의 분산 쿼리 엔진이다. 맵리듀스를 사용하지 않고, C++로 개발한 인메모리 엔진을 사용해 빠른 성능을 보여준다. 임팔라는 데이터 조회를 위한 인터페이스로 HiveQL을 사용하며, 수초 내에 SQL 질의 결과를 확인할 수 있다.</p>
-  </li>
-  <li>
-    <p>Presto - <a href="https://prestodb.io">https://prestodb.io</a></p>
-
-    <p>프로스토는 페이스북이 개발한 대화형 질의를 처리하기 위한 분산 쿼리 엔진이다. 메모리 기반으로 데이터를 처리하며, 다양한 데이터 저장소에 데이터를 SQL로 처리할 수 있다. 특정 질의의 경우 하이브 대비 10배 정도 빠른 성능을 보여준다.</p>
-  </li>
-  <li>
-    <p>Hive - <a href="http://hive.apache.org">http://hive.apache.org</a></p>
-
-    <p>하이브는 하둡기반의 데이터웨어하우징용 솔루션이다. 페이스북에서 개발했으며, 오픈소스로 공개되며 주목박은 기술이다. SQL과 매우 유사한 HiveQL이라는 쿼리 언어를 제공한다. 그래서 자바를 모르는 데이터 분석가들도 쉡게 하둡 데이터를 분석할 수 있게 도와준다. HiveQL은 내부적으로 맵리듀스가 잡으로 변환되어 실행된다.</p>
-  </li>
-  <li>
-    <p>Tajo - <a href="http://tajo.apache.org">http://tajo.apache.org</a></p>
-
-    <p>타조는 고려대학교 박사과정 학생들이 주도해서 개발한 하둡 기반의 데이터 웨어하우스 시스템이다. 맵리듀스 엔진이 아닌 자체 분산 처리 엔진을 사용하며, HiveQL을 사용하는 다른 시스템과는 다르게 표준 SQL을 지원하는 것이 특징이다. HDFS, AWS, S3, H베이스, DBMS 등에 저장된 데이터 표준 SQL로 조회할 수 있고, 이기종 저장소 간의 데이터 조인 처리도 가능하다. 질의 유형에 따라 하이브나 스파크보다 1.5배 ~ 10배 빠른 성능을 보여준다.</p>
-  </li>
-</ul>
-
-<h3 id="section-5">워크플로우 관리</h3>
-
-<ul>
-  <li>
-    <p>Oozie - <a href="http://oozie.apache.org">http://oozie.apache.org</a></p>
-
-    <p>우지는 하둡 작업을 관리하는 워크플로우 및 코디네이터 시스템 이다. 자바 서블릿 컨테이너에서 실행되는 자바 웹 어플리케이션 서버이며, 맵리듀스 작업이나 피그 작업 같은 특화된 액션으로 구성된 워크플로우를 제어한다.</p>
-  </li>
-  <li>
-    <p>Airflow - <a href="http://nerds.airbnb.com/airflow">http://nerds.airbnb.com/airflow</a></p>
-
-    <p>에어플로우는 에어비앤비에서 개발한 워크플로우 플랫폼이다. 데이터 흐름의 시각화, 스케줄링, 모니터링이 가능하며, 하이브, 프레스토, DBMS 엔진과 결합해서 사용할 수 있다.</p>
-  </li>
-  <li>
-    <p>Azkaban - <a href="https://azkaban.github.io">https://azkaban.github.io</a></p>
-
-    <p>아즈카반은 링크드인에서 개발한 워크플로우 플랫폼이다. 링크드인은 자사의 복잡한 데이터 파이프라인을 관리하기 위해 아즈카반을 개발했으며, 이를 오픈소스로 공개했다. 아즈카반은 워크플로우 스케줄러, 시각화된 절차, 인증 및 권한 관리, 작업 모니터링 및 알람 등 다양한 기능은 웹UI로 제공한다.</p>
-  </li>
-  <li>
-    <p>Nifi -<a href="https://nifi.apache.org">https://nifi.apache.org</a></p>
-
-    <p>니이파이는 테이터 흐름을 모니터링하기 위한 프레임워크이다. 여러 네트워크를 통과하는 데이터 흐름을 웹UI에서 그래프로 표현하며, 프로토콜과 데이터 형식이 다르더라도 분석이 가능하다. 또한 데이터를 흘려보낼 때 우선순위를 제어할 수 있다.</p>
-  </li>
-</ul>
-
-<h3 id="section-6">데이터 시각화</h3>
-
-<ul>
-  <li>
-    <p>Zeppelin - <a href="https://zeppelin.incubator.apache.org">https://zeppelin.incubator.apache.org</a></p>
-
-    <p>제플린은 빅데이터 분석가를 위한 웹 기반 분석도구이며, 분석결과를 즉시 표, 그래프로 표현하는 시각화까지 지원한다. 아이파이썬(iPython)의 노트북(Notebook)과 유사한 노트북 기능을 제공하며, 분석가는 이를 통해 손쉽게 데이터를 추출, 정제, 분석, 공규할 수 있다. 또한 스파크, 하이브, 타조, 플링크, 엘라스틱 서치, 카산드라, DBMS 등 다양한 분석 플랫폼과 연동할 수 있다.</p>
-  </li>
-</ul>
-
-<h3 id="section-7">데이터 직렬화</h3>
-
-<ul>
-  <li>
-    <p>Avro - <a href="http://avro.apache.org">http://avro.apache.org</a></p>
-
-    <p>RPC(Remote Procedure Call)와 데이터 직렬화를 지원하는 프레임워크이다. JSON을 이용해 데이터 형식과 프로토콜을 정의하며, 작고 빠른 바이너리 포맷으로 데이터를 직렬화한다. 경쟁 솔루션으로는 아파치 쓰리프트(Thrift), 구글 프로토콜 버퍼(Protocol Buffer)등이 있다.</p>
-  </li>
-  <li>
-    <p>Thrift - <a href="http://thrift.apache.org">http://thrift.apache.org</a></p>
-
-    <p>쓰리프트는 서로 다른 언어로 개발된 모듈들의 통합을 지원하는 RPC 프레임워크이다. 예를 들어, 서비스모듈은 자바로 개발하고, 서버 모듈은 C++로 개발됐을 때 쓰리프트로 두 모듈이 통신하는 코드를 생성할 수 있다. 쓰리프트는 개발자가 데이터 타입과 서비스 인터페이스를 선언하면 RPC 형태의 클라이언트와 서버 코드를 자동으로 생성한다. 자바, C++, C#, 펄, PHP, Python, 뎅파이, 얼랭, Go, Node.js 등 과 같이 다양한 언어를 지원한다.</p>
-  </li>
-</ul>
-
-<p><br /></p>
-
-<h3 id="reference">Reference</h3>
-<ul>
-  <li><a href="http://www.yes24.com/24/Goods/26903681?Acode=101">시작하세요! 하둡 프로그래밍 : 빅데이터 분석을 위한 하둡 기초부터 YARN까지</a></li>
-</ul>
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2016/09/22/hadoop_ecosystem/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
         </ul>
 
 
@@ -1385,7 +1579,7 @@ Color list, after removing White colors :
                             <span class="name">
                                 Hadoop
                             </span>
-                            <span class="badge">1</span>
+                            <span class="badge">2</span>
                         </a>
                     </li>
                     
@@ -1407,6 +1601,15 @@ Color list, after removing White colors :
                         </a>
                     </li>
                     
+                    <li>
+                        <a href="/category/#Unix/Linux" class="categories-list-item" cate="Unix/Linux">
+                            <span class="name">
+                                Unix/Linux
+                            </span>
+                            <span class="badge">2</span>
+                        </a>
+                    </li>
+                    
                 </ul>
             </div>
             <div class="side">
@@ -1415,6 +1618,12 @@ Color list, after removing White colors :
                     Recent Posts
                 </div>
                 <ul class="content-ul" recent>
+                    
+                        <li><a href="/2016/10/23/awk/">awk 사용법</a></li>
+                    
+                        <li><a href="/2016/10/23/spc_rsync/">scp 와 rsync - 원격파일정송방법</a></li>
+                    
+                        <li><a href="/2016/10/14/sqoop/">Sqoop</a></li>
                     
                         <li><a href="/2016/10/13/LogBack/">LogBack in SpringBoot</a></li>
                     
@@ -1429,12 +1638,6 @@ Color list, after removing White colors :
                         <li><a href="/2016/09/22/hadoop_ecosystem/">Hadoop Ecosystem</a></li>
                     
                         <li><a href="/2016/09/21/beancontext2/">스프링 IoC컨테이너 ApplicationContext [2]</a></li>
-                    
-                        <li><a href="/2016/09/21/beancontext1/">스프링 IoC컨테이너 ApplicationContext [1]</a></li>
-                    
-                        <li><a href="/2016/09/20/dynamic_sql/">mybatis 동적 SQL</a></li>
-                    
-                        <li><a href="/2016/09/20/mybatis_log/">mybatis log출력</a></li>
                     
                 </ul>
             </div>
