@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Optional
+title: 이미지 픽셀다루기
 date: 2016-11-02 08:04
 categories: js
 ---
