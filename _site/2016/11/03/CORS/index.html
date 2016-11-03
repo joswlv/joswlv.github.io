@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>CORS</title>
+    <meta name="description" content="HTTP 접근 제어 (CORS)Cross Origin Resource Sharing(CORS)HTTP요청은 기본적으로 Cross-Site-HTTP Requests가 가능하다.다시말하면, &lt;img&gt;, &lt;link&gt;, &lt;script&gt;태그로 다른 도메인의 ...">
+
+    <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="stylesheet" href="/css/fontawesome/css/font-awesome.min.css ">
+    <link rel="stylesheet" href="/css/main.css ">
+    <link rel="canonical" href="http://joswlv.github.io/2016/11/03/CORS/">
+    <link rel="alternate" type="application/rss+xml" title="Joswlv" href="http://joswlv.github.io/feed.xml ">
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-83868242-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</head>
+
+
+  <body>
+
+    <header id="top">
+    <div class="wrapper">
+        <a href="/" class="brand">Joswlv</a>
+        <small></small>
+        <button id="headerMenu" class="menu"><i class="fa fa-bars"></i></button>
+        <nav id="headerNav">
+            <ul>
+                <li>
+                    
+                    <a href="/">
+                    
+                        <i class="fa fa-home"></i>Home
+                    </a>
+                </li>
+
+                
+                    
+                    <li>
+                        
+                        <a href="/archive/">
+                        
+                            <i class="fa fa-archive"></i>Archives
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/category/">
+                        
+                            <i class="fa fa-th-list"></i>Categories
+                        </a>
+                    </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        </nav>
+    </div>
+</header>
+
+
+        <div class="page clearfix" post>
+    <div class="left">
+        <h1>CORS</h1>
+        <div class="label">
+
+            <div class="label-card">
+                <i class="fa fa-calendar"></i>2016-11-03
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+            
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#web" title="Category: web" rel="category">web</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+            </div>
+
+        </div>
+        <hr>
+        <article itemscope itemtype="http://schema.org/BlogPosting">
+        <h1 id="http---cors">HTTP 접근 제어 (CORS)</h1>
+
+<h2 id="cross-origin-resource-sharingcors">Cross Origin Resource Sharing(CORS)</h2>
+
+<p>HTTP요청은 기본적으로 Cross-Site-HTTP Requests가 가능하다.</p>
+
+<p>다시말하면, <code class="highlighter-rouge">&lt;img&gt;</code>, <code class="highlighter-rouge">&lt;link&gt;</code>, <code class="highlighter-rouge">&lt;script&gt;</code>태그로 다른 도메인의 리소스를 가져오는 것이 가능하다.</p>
+
+<p>그런데!</p>
+
+<p>스크립트에서 생성된 Cross-Site HTTP Requests는 <a href="https://developer.mozilla.org/ko/docs/Web/Security/Same-origin_policy">Same Origin Policy</a>를 적용 받기 때문에 Cross-Site HTTP Requests가 불가능하다.</p>
+
+<p>ajax가 많이 사용되면서 스크립트에서 생성되는 <code class="highlighter-rouge">XMLHttpRequest</code>에 대해서도 Cross-Site HTTP Requests가 가능해야 한다는 요구가 많이 나왔고 W3C에서 CORS라는 이름의 권고안이 나왔다.</p>
+
+<h2 id="cors--">CORS 요청의 종류</h2>
+
+<ul>
+  <li>Simple</li>
+  <li>Preflight</li>
+  <li>Credential</li>
+  <li>Non-Credential</li>
+</ul>
+
+<p>브라우저가 요청 내용을 분석하여 4가지 방식 중 해당하는 방식으로 서버에 요청을 날린다.</p>
+
+<h2 id="section">실무에서..</h2>
+
+<p>얼마전 이미지의 다른 도메인에서 불러와서 켄버스에 그려 이미지의 픽셀값을 가져오는 일이 있었다.</p>
+
+<p><img src="http://joswlv.github.io/images/cors_erro.png" alt="" /></p>
+
+<p>이런 에러가 발생하였다.</p>
+
+<p>처음에는 이미지 CORS 속성을 <code class="highlighter-rouge">anonymous</code>로 지정을 했다.</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nx">img</span><span class="p">.</span><span class="nx">crossOrigin</span> <span class="o">=</span> <span class="s2">"anonymous"</span><span class="p">;</span>
+</code></pre>
+</div>
+
+<p>그래도 계속되었다.</p>
+
+<p>이미지가 저장되어 있는 서버에서 이미지를 보내줄 때 헤더에 crossOrigin내용을 첨부해서 보내주면 되지만, 현실적으로 불가능해 클라이언트 측에서 처리하기로 했고 아래와 같이 이미지를 DOM스토리지에 저장하고 DOM스토리지에서 이미지를 불러오는 방식으로 문제를 해결 했다.</p>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;IfModule</span> <span class="na">mod_setenvif</span><span class="err">.</span><span class="na">c</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;IfModule</span> <span class="na">mod_headers</span><span class="err">.</span><span class="na">c</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;FilesMatch</span> <span class="err">"\.(</span><span class="na">cur</span><span class="err">|</span><span class="na">gif</span><span class="err">|</span><span class="na">ico</span><span class="err">|</span><span class="na">jpe</span><span class="err">?</span><span class="na">g</span><span class="err">|</span><span class="na">png</span><span class="err">|</span><span class="na">svgz</span><span class="err">?|</span><span class="na">webp</span><span class="err">)$"</span><span class="nt">&gt;</span>
+            SetEnvIf Origin ":" IS_CORS
+            Header set Access-Control-Allow-Origin "*" env=IS_CORS
+        <span class="nt">&lt;/FilesMatch&gt;</span>
+    <span class="nt">&lt;/IfModule&gt;</span>
+<span class="nt">&lt;/IfModule&gt;</span>
+</code></pre>
+</div>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">img</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Image</span><span class="p">,</span>
+    <span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">"canvas"</span><span class="p">),</span>
+    <span class="nx">ctx</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s2">"2d"</span><span class="p">),</span>
+    <span class="nx">src</span> <span class="o">=</span> <span class="s2">"http://example.com/image"</span><span class="p">;</span> <span class="c1">// insert image url here</span>
+
+<span class="nx">img</span><span class="p">.</span><span class="nx">crossOrigin</span> <span class="o">=</span> <span class="s2">"Anonymous"</span><span class="p">;</span>
+
+<span class="nx">img</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">img</span><span class="p">.</span><span class="nx">width</span><span class="p">;</span>
+    <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span> <span class="o">=</span> <span class="nx">img</span><span class="p">.</span><span class="nx">height</span><span class="p">;</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">drawImage</span><span class="p">(</span> <span class="nx">img</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>
+    <span class="nx">localStorage</span><span class="p">.</span><span class="nx">setItem</span><span class="p">(</span> <span class="s2">"savedImageData"</span><span class="p">,</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">toDataURL</span><span class="p">(</span><span class="s2">"image/png"</span><span class="p">)</span> <span class="p">);</span>
+<span class="p">}</span>
+<span class="nx">img</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">src</span><span class="p">;</span>
+<span class="c1">// make sure the load event fires for cached images too</span>
+<span class="k">if</span> <span class="p">(</span> <span class="nx">img</span><span class="p">.</span><span class="nx">complete</span> <span class="o">||</span> <span class="nx">img</span><span class="p">.</span><span class="nx">complete</span> <span class="o">===</span> <span class="kc">undefined</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="nx">img</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="s2">"data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="</span><span class="p">;</span>
+    <span class="nx">img</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">src</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p><strong>Browser compatibility</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Chrom</th>
+      <th>Firefox</th>
+      <th>IE</th>
+      <th>Opera</th>
+      <th>Safari</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>13</td>
+      <td>8</td>
+      <td>No support</td>
+      <td>No support</td>
+      <td>?</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="reference">Reference</h3>
+
+<ul>
+  <li><a href="http://hanmomhanda.github.io/2015/07/21/Cross-Origin-Resource-Sharing/">뒤태지존의 끄적거림</a></li>
+  <li><a href="https://developer.mozilla.org/en-US/docs/Web/HTML/CORS_enabled_image?redirectlocale=en-US&amp;redirectslug=CORS_Enabled_Image">MDN</a></li>
+</ul>
+
+        </article>
+        <hr>
+
+        
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+        
+
+        <div class="post-recent">
+    <div class="pre">
+        
+        <p><strong>prev</strong> <a href="/2016/11/02/gitaddpgitcommitv/">git add -p와 git commit -v</a></p>
+        
+    </div>
+    <div class="nex">
+
+        
+    </div>
+</div>
+
+
+        <h2 id="comments">Comments</h2>
+        
+
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+     * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+
+    var disqus_config = function() {
+        this.page.url = 'http://joswlv.github.io/2016/11/03/CORS/'; // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://joswlv.github.io/2016/11/03/CORS/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document,
+            s = d.createElement('script');
+
+        s.src = '//joswlv.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+
+    </div>
+    <button class="anchor"><i class="fa fa-anchor"></i></button>
+    <div class="right">
+        <div class="wrap">
+
+            <!-- Content -->
+            <div class="side content">
+                <div>
+                    Content
+                </div>
+                <ul id="content-side" class="content-ul">
+                    <li><a href="#similar_posts">Similar Posts</a></li>
+                    <li><a href="#comments">Comments</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+/**
+ * target _blank
+ */
+(function() {
+    var aTags = document.querySelectorAll('article a:not([id])')
+    for (var i = 0; i < aTags.length; i++) {
+        aTags[i].setAttribute('target', '_blank')
+    }
+}());
+</script>
+<script src="/js/pageContent.js " charset="utf-8"></script>
+
+
+    <footer class="site-footer">
+
+
+    <div class="wrapper">
+
+        <p class="description">
+            
+        </p>
+        <p class="contact">
+            Contact me at: 
+            <a href="https://github.com/joswlv" title="GitHub"><i class="fa fa-github" aria-hidden="true"></i></a>  
+            <a href="mailto:wh7923@gmail.com" title="email"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>     
+            <a href="https://www.facebook.com/wsj7923" title="Facebook"><i class="fa fa-facebook-official" aria-hidden="true"></i></a>    
+        </p>
+        <p>
+        </p>
+        <p class="power">
+            <span>
+                Site powered by <a href="https://jekyllrb.com/">Jekyll</a> & <a href="https://pages.github.com/">Github Pages</a>.
+            </span>
+        </p>
+    </div>
+</footer>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <div class="back-to-top">
+    <a href="#top" class="scroll">
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    </a>
+</div>
+
+    <script src=" /js/main.js " charset="utf-8"></script>
+    <script src=" /js/scroll.min.js " charset="utf-8"></script>
+  </body>
+
+</html>

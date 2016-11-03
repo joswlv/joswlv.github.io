@@ -6,14 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Apache Directory listing 제거</title>
-    <meta name="description" content="Apache설치한경로에서  httpd.conf를 수정한다.  /etc/httpd/conf/httpd.conf	(RPM 설치)  /usr/local/apach/conf/httpd.conf	(tar 설치)Options Indexes FollowSymLinks Includes또는Opti...">
+    <title>git add -p와 git commit -v</title>
+    <meta name="description" content="참고 링크Outsider’s Dev Story간단한 설명git add -p 를 하면 수정된 부분을 하나의 hock으로 보여주면서 추가할 것인지 말것인지를 물어본다.git commit -v 을 사용하면 커밋메시지를 입력할 때 화면 아래에 diff가 한번 더 나온다.">
 
     <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
     <link rel="icon" href="/favicon.ico?" type="image/x-icon">
     <link rel="stylesheet" href="/css/fontawesome/css/font-awesome.min.css ">
     <link rel="stylesheet" href="/css/main.css ">
-    <link rel="canonical" href="http://joswlv.github.io/2016/10/29/directorylisting/">
+    <link rel="canonical" href="http://joswlv.github.io/2016/11/02/gitaddpgitcommitv/">
     <link rel="alternate" type="application/rss+xml" title="Joswlv" href="http://joswlv.github.io/feed.xml ">
 
 
@@ -94,11 +94,11 @@
 
         <div class="page clearfix" post>
     <div class="left">
-        <h1>Apache Directory listing 제거</h1>
+        <h1>git add -p와 git commit -v</h1>
         <div class="label">
 
             <div class="label-card">
-                <i class="fa fa-calendar"></i>2016-10-29
+                <i class="fa fa-calendar"></i>2016-11-02
             </div>
 
             <div class="label-card">
@@ -131,31 +131,15 @@
         </div>
         <hr>
         <article itemscope itemtype="http://schema.org/BlogPosting">
-        <p>Apache설치한경로에서  httpd.conf를 수정한다.</p>
+        <h1 id="section">참고 링크</h1>
 
-<blockquote>
-  <p>/etc/httpd/conf/httpd.conf	(RPM 설치)</p>
+<p><a href="https://blog.outsider.ne.kr/1247">Outsider’s Dev Story</a></p>
 
-  <p>/usr/local/apach/conf/httpd.conf	(tar 설치)</p>
-</blockquote>
+<h1 id="section-1">간단한 설명</h1>
 
-<p><strong>Options Indexes FollowSymLinks Includes</strong></p>
+<p><code class="highlighter-rouge">git add -p</code> 를 하면 수정된 부분을 하나의 hock으로 보여주면서 추가할 것인지 말것인지를 물어본다.</p>
 
-<p>또는</p>
-
-<p><strong>Options All Indexes FollowSymLinks MultiViews</strong></p>
-
-<p>위 두문구중에서 하나는 있을 것이다.</p>
-
-<p>거기서 <code class="highlighter-rouge">Indexes</code>구문을 제거하고 아래와 같이 수정하고 저장한다.</p>
-
-<p><strong>Options FollowSymLinks Includes</strong></p>
-
-<p>또는</p>
-
-<p><strong>Options All FollowSymLinks MultiViews</strong></p>
-
-<p>그리고 apache를 재시작하면 끝~!!</p>
+<p><code class="highlighter-rouge">git commit -v</code> 을 사용하면 커밋메시지를 입력할 때 화면 아래에 diff가 한번 더 나온다.</p>
 
 
         </article>
@@ -198,13 +182,13 @@
         <div class="post-recent">
     <div class="pre">
         
-        <p><strong>prev</strong> <a href="/2016/10/24/optional/">Optional</a></p>
+        <p><strong>prev</strong> <a href="/2016/11/02/imagepixelget/">이미지 픽셀다루기</a></p>
         
     </div>
     <div class="nex">
 
         
-        <p><strong>next</strong> <a href="/2016/11/02/imagepixelget/">이미지 픽셀다루기</a></p>
+        <p><strong>next</strong> <a href="/2016/11/03/CORS/">CORS</a></p>
         
     </div>
 </div>
@@ -222,8 +206,8 @@
      */
 
     var disqus_config = function() {
-        this.page.url = 'http://joswlv.github.io/2016/10/29/directorylisting/'; // Replace PAGE_URL with your page's canonical URL variable
-        this.page.identifier = 'http://joswlv.github.io/2016/10/29/directorylisting/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        this.page.url = 'http://joswlv.github.io/2016/11/02/gitaddpgitcommitv/'; // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://joswlv.github.io/2016/11/02/gitaddpgitcommitv/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
     };
 
     (function() { // DON'T EDIT BELOW THIS LINE

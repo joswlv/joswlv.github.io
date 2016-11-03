@@ -101,6 +101,413 @@
             
               <li>
                 <h2>
+                  <a class="post-link" href="/2016/08/28/run_to_same_server/">Apache2웹서버와 Node.js어플리케이션을 함께 사용하기!</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-08-28
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#web" title="Category: web" rel="category">web</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h3 id="section">순서</h3>
+<ol>
+  <li>내부적으로 다른 포트에 nodejs기반의 서버를 실행한다.</li>
+  <li>apache의 VirtualHosts 설정에서 ProxyPass를 설정한다.</li>
+  <li>특정 url로 접근식 1번으로 갈 수 있게 설정한다.</li>
+</ol>
+
+<h3 id="section-1">과정</h3>
+<ol>
+  <li>mod_proxy, mod_proxy_http가 필요하다. (ubuntu apache서버는 기본적으로 설치되어있음. <code class="highlighter-rouge">/etc/apache2/mods-available</code>안에 있음 <code class="highlighter-rouge">a2enmod proxy</code>,<code class="highlighter-rouge">a2enmod proxy_http</code>로 설정함</li>
+  <li>가상호스트를 설정함 ./sites-available 내부에 기존파일 또는 신규파일을 추가한다.</li>
+</ol>
+
+<div class="language-powershell highlighter-rouge"><pre class="highlight"><code>&lt;VirtualHost <span class="k">*</span>:80&gt;
+	DocumentRoot /var/www/example.com/public_html
+	ServerName  www.example.com
+
+	<span class="c1"># Index file and Document Root (where the public files are located)</span>
+	DirectoryIndex index.html index.php
+
+	<span class="c1"># Log file locations</span>
+	LogLevel warn
+	ErrorLog  /var/www/amazeapp.com/log/error.log
+	CustomLog /var/www/amazeapp.com/log/access.log combined
+
+
+	<span class="c1"># 아래가 핵심이다.</span>
+
+	ProxyRequests off
+
+	&lt;Proxy <span class="k">*</span>&gt;
+	    Order deny,allow    <span class="c1"># 이부분의 경우, 콤마(,) 사이에 공백 없어야 함!</span>
+	    Allow <span class="k">from </span>all
+	&lt;/Proxy&gt;
+
+	&lt;Location /&gt; <span class="c1"># 내부적으로 접속 노드를 늘리고 싶다면 여기에 추가.</span>
+	    ProxyPass http://localhost:3000/
+	    ProxyPassReverse http://localhost:3000/
+	&lt;/Location&gt;
+
+&lt;/VirtualHost&gt;
+</code></pre>
+</div>
+
+<ol>
+  <li>아파치 재시작</li>
+</ol>
+
+<p>끝~</p>
+
+<h3 id="reference">Reference</h3>
+<p><a href="https://github.com/sindresorhus/guides/blob/master/run-node-server-alongside-apache.md">https://github.com/sindresorhus/guides/blob/master/run-node-server-alongside-apache.md</a></p>
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/08/28/run_to_same_server/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
+                  <a class="post-link" href="/2016/08/07/Angularjs_if/">AngularJS_AngularJS_if</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-08-07
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#js" title="Category: js" rel="category">js</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <p>AngularJS의 조건문은 4가지가 존재한다.</p>
+
+<ul>
+  <li>ng-switch</li>
+  <li>ng-hide, ng-show</li>
+  <li>ng-class</li>
+  <li>ng-if</li>
+</ul>
+
+<h2 id="ng-switch">1. ng-switch</h2>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">ng-switch</span> <span class="na">on=</span><span class="s">"fruits"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">ng-switch-when=</span><span class="s">"apple"</span><span class="nt">&gt;</span>
+        <span class="c">&lt;!-- fruits값이 apple일 때 해당 태그가 실행됩니다.--&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">ng-switch-default</span><span class="nt">&gt;</span>
+        <span class="c">&lt;!-- code to render the regular video block --&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre>
+</div>
+<p><code class="highlighter-rouge">on</code>에 <code class="highlighter-rouge">switch</code>의 대상이 되는 변수를 적어준다.</p>
+
+<h3 id="ng-switch-">ng-switch 예제</h3>
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">ng-app=</span><span class="s">""</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">ng-model=</span><span class="s">"fruits"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;p&gt;</span>입력한 값: <span class="nt">&lt;/p&gt;</span>
+	<span class="nt">&lt;div</span> <span class="na">ng-switch=</span><span class="s">""</span> <span class="na">on=</span><span class="s">"fruits"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;div</span> <span class="na">ng-switch-when=</span><span class="s">"appel"</span><span class="nt">&gt;</span>
+			apple을 입력!
+		<span class="nt">&lt;/div&gt;</span>
+		<span class="nt">&lt;div</span> <span class="na">ng-switch-default</span><span class="nt">&gt;</span>
+			아무것도 입력하지 않음
+		<span class="nt">&lt;/div&gt;</span>
+	<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre>
+</div>
+
+<h2 id="ng-hide--ng-show">2. ng-hide / ng-show</h2>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">ng-hide=</span><span class="s">"isBlockedMember"</span><span class="nt">&gt;</span>
+    <span class="c">&lt;!-- isBlockedMember가 true값을 가지면 해당 &lt;div&gt;태그는 보이지 않습니다.--&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">ng-show=</span><span class="s">"isLogged"</span><span class="nt">&gt;</span>
+    <span class="c">&lt;!-- isLogged가 true값을 가지면 해당 &lt;div&gt;가 보이게 됩니다. --&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre>
+</div>
+
+<p>특정 조건에 있어 show/hide를 할 수 있는 <code class="highlighter-rouge">directive</code> 이다.</p>
+
+<h3 id="ng-hide--ng-show-">ng-hide / ng-show 예제</h3>
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;div&gt;</span>
+	<span class="nt">&lt;spand&gt;</span>isMember:<span class="nt">&lt;/span&gt;</span>
+	<span class="nt">&lt;select</span> <span class="na">ng-model=</span><span class="s">"isMember"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;option</span> <span class="na">value=</span><span class="s">"true"</span><span class="nt">&gt;</span>YES<span class="nt">&lt;/option&gt;</span>
+		<span class="nt">&lt;option</span> <span class="na">value=</span><span class="s">"false"</span><span class="nt">&gt;</span>NO<span class="nt">&lt;/option&gt;</span>
+	<span class="nt">&lt;/select&gt;</span>
+
+	<span class="nt">&lt;p&gt;</span>isMember : <span class="nt">&lt;/p&gt;</span>
+	<span class="nt">&lt;div</span> <span class="na">ng-show=</span><span class="s">"isMember=='true'"</span><span class="nt">&gt;</span>
+		회원입니다.
+	<span class="nt">&lt;/div&gt;</span>
+	<span class="nt">&lt;div</span> <span class="na">ng-hide=</span><span class="s">"!(isMember=='false')"</span><span class="nt">&gt;</span>
+		회원이 아닙니다.
+	<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre>
+</div>
+
+<h2 id="ng-class">3. ng-class</h2>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">ng-class=</span><span class="s">"{block-member: member.isBlocked}"</span><span class="nt">&gt;</span>
+    <span class="c">&lt;!-- member객체의 isBlocked의 값이 true이면 해당 태그에 block-member클래스가 등록됩니다. --&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre>
+</div>
+<p>css와 함께 태그를 컨트롤하기에 좋음</p>
+
+<h3 id="ng-class-">ng-class 예제</h3>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">style=</span><span class="s">"width:100%; background-color:#eee"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;span&gt;</span>chang Background color: <span class="nt">&lt;/span&gt;</span>
+	<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">ng-model=</span><span class="s">"bgColor"</span> <span class="na">placeholder=</span><span class="s">"red를 입력해보세요."</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;div</span> <span class="na">style=</span><span class="s">"width:200px; height:100px;"</span> <span class="na">ng-class=</span><span class="s">"{'red: bgColor=='red'}"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre>
+</div>
+
+<h2 id="ng-if">4. ng-if</h2>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">ng-if=</span><span class="s">"lastLogged == today"</span><span class="nt">&gt;</span>
+    <span class="c">&lt;!-- 변수의 값이 today와 일치할 때 이 태그가 보여지게 됩니다.--&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">ng-if=</span><span class="s">"lastLogged != today"</span><span class="nt">&gt;</span>
+    <span class="c">&lt;!-- 변수의 값이 today와 일치하지 않을 때 이 태그가 보여지게 됩니다. --&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">ng-else</code>는 존재하지 않는다!!</p>
+
+<h3 id="reference">Reference</h3>
+<ul>
+  <li><a href="http://rhammer.tistory.com/55">고무망치</a></li>
+  <li><a href="https://www.angularjs.org">angularJs</a></li>
+</ul>
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/08/07/Angularjs_if/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
+                  <a class="post-link" href="/2016/07/08/Angularjs_promise_and_q/">AngularJS_Promise객체 와 $q서비스</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-07-08
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#js" title="Category: js" rel="category">js</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h2 id="promise">Promise객체</h2>
+<p>promise 객체는 약속을 표현하는 자바스크립트 객체이다.</p>
+
+<p>AngularJS에서 <code class="highlighter-rouge">$http</code>,<code class="highlighter-rouge">$tiemoute</code>,<code class="highlighter-rouge">$resource</code>,<code class="highlighter-rouge">$route</code>등 여러 서비스에서 promise객체를 반환한다.</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">fetchData</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">cb</span><span class="p">){</span>
+  <span class="nx">getDataFromServer</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">){</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">err</span><span class="p">){</span>
+      <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="kc">null</span><span class="p">);</span>
+    <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+      <span class="nx">transformData</span><span class="p">(</span><span class="nx">result</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">transformedResult</span><span class="p">){</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">err</span><span class="p">){</span>
+          <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="kc">null</span><span class="p">);</span>
+        <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+          <span class="nx">saveToIndexDB</span><span class="p">(</span><span class="nx">result</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">savedData</span><span class="p">){</span>
+            <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">savedData</span><span class="p">);</span>
+          <span class="p">});</span>
+        <span class="p">}</span>
+      <span class="p">});</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+<p>위 코드는 콜백지옥이다. promise객체를 사용하면 다음과 같다.</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">fetchData</span><span class="p">(</span><span class="nx">id</span><span class="p">){</span>
+  <span class="k">return</span> <span class="nx">getDataFromServer</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">transformData</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">saveToIndexDB</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+<p>then으로 묶어 주면 된다. 코드가 예뻐졌다. 그리고 <code class="highlighter-rouge">error</code>처리도 쉬워진다.</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nx">fetchData</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">result</span><span class="p">){</span>
+
+  <span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+    <span class="c1">// exceptions in transformData, or saveToIndexDB</span>
+    <span class="c1">// will result in this error callback being called.</span>
+  <span class="p">});</span>
+</code></pre>
+</div>
+
+<h2 id="deferred">Deferred객체</h2>
+<p>약속을 정의했으면 누군가는 약속을 지키거나 거절해야 한다. 이러한 일을 하는 것이 <code class="highlighter-rouge">deferred</code>객체이다. <code class="highlighter-rouge">deferred</code>객체는 약속을 만들고 만든 약속의 상태를 변경한다.</p>
+
+<p>AngluarJS는 <code class="highlighter-rouge">$q.deferred()</code>를 이용하여 <code class="highlighter-rouge">deferred</code>객체를 생성할 수 있다. (<code class="highlighter-rouge">deferred</code>객체 생성은 곧 <code class="highlighter-rouge">Promise</code>객체 생성이기도 하다.)</p>
+
+<p><code class="highlighter-rouge">deferred</code>객체는 <code class="highlighter-rouge">resolve</code>,<code class="highlighter-rouge">reject</code>,<code class="highlighter-rouge">notify</code>를 통하여 약속으 지키거나 거절/취소하여 진행 상태를 알려준다.</p>
+
+<p><code class="highlighter-rouge">deferred</code>객체는 주로 별도의 서비스를 만들고 해당 서비스에서 생성하여 해당 객체의 약속을 반환하는 식으로 많이 사용된다.</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">'demo-app'</span><span class="p">,</span> <span class="p">[])</span>
+  <span class="p">.</span><span class="nx">factory</span><span class="p">(</span><span class="s1">'userService'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$http</span><span class="p">,</span> <span class="nx">$log</span><span class="p">,</span> <span class="nx">$q</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">{</span>
+     <span class="na">getUser</span><span class="p">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">userId</span><span class="p">)</span> <span class="p">{</span>
+       <span class="c1">//deferred 객체를 생성한다.</span>
+       <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">$q</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+       <span class="nx">$http</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'/api/users/'</span> <span class="o">+</span> <span class="nx">userID</span><span class="p">)</span>
+         <span class="p">.</span><span class="nx">success</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">//요청이 성공하면 약속을 지키고 별도 데이터를 전달한다.</span>
+            <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">({</span>
+               <span class="na">name</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span>
+               <span class="na">address</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">address</span><span class="p">});</span>
+         <span class="p">}).</span><span class="nx">error</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">msg</span><span class="p">,</span> <span class="nx">code</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">//요청이 실패하면 약속을 취소하고 메시지를 전달한다.</span>
+            <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span><span class="p">(</span><span class="nx">msg</span><span class="p">);</span>
+            <span class="nx">$log</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">msg</span><span class="p">,</span> <span class="nx">code</span><span class="p">);</span>
+         <span class="p">});</span>
+       <span class="c1">//해당 deferred 객체의 약속을 반환한다.</span>
+       <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+     <span class="p">}</span>
+    <span class="p">}</span>
+	<span class="p">});</span>
+</code></pre>
+</div>
+
+<h2 id="promise-qall">여러 Promise 묶어주기($q.all)</h2>
+<p>$q 서비스는 미래에 지켜지거나 지켜지지 않을 여러 약속을 하나의 약속으로 처리할 수 있는 API도 제공한다.</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nx">factory</span><span class="p">(</span><span class="s1">'asyncService'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$http</span><span class="p">,</span> <span class="nx">$q</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="na">loadDataFromTwoReq</span><span class="p">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">$q</span><span class="p">.</span><span class="nx">defer</span><span class="p">(),</span>
+          <span class="nx">httpPromise1</span> <span class="o">=</span> <span class="nx">$http</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'/api/req1'</span><span class="p">),</span>
+          <span class="nx">httpPromise2</span> <span class="o">=</span> <span class="nx">$http</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'/api/req2'</span><span class="p">);</span>
+
+      <span class="c1">//두 약속을 $q.all 메서드를 이용해 새로운 약속을 만든다.</span>
+      <span class="nx">$q</span><span class="p">.</span><span class="nx">all</span><span class="p">(</span><span class="nx">httpPromise1</span><span class="p">,</span> <span class="nx">httpPromise2</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">then</span><span class="p">(</span>
+          <span class="kd">function</span><span class="p">(</span><span class="nx">results</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">//두 약속이 모두 지켜지면 asyncService서비스가 반한하는 약속을 지키고 두 약속이 전달하는 결과를 묶은 배열로 전달한다.</span>
+            <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">results</span><span class="p">)</span>
+          <span class="p">},</span>
+          <span class="kd">function</span><span class="p">(</span><span class="nx">errors</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span><span class="p">(</span><span class="nx">errors</span><span class="p">);</span>
+          <span class="p">},</span>
+          <span class="kd">function</span><span class="p">(</span><span class="nx">updates</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">deferred</span><span class="p">.</span><span class="nx">update</span><span class="p">(</span><span class="nx">updates</span><span class="p">);</span>
+        <span class="p">});</span>
+      <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">};</span>
+<span class="p">});</span>
+</code></pre>
+</div>
+
+<p>위 코드는 일반적인 콜백 방식으로 작성하게 되면 첫 번째 요청의 성공 콜백에서 다른 요청을 하고 그 요청의 성공 콜백에서 두 요청에 대한 성공 처리를 하는 코드를 작성하게 된다.</p>
+
+<p>하지만!! $q 서비스는 $q.all 메서드를 이용해 약속을 바환하는 여러 비동기적인 일이 병렬적으로 행해지고 있다.
+약속을 하나로 묶어 성공/실패 처리를 할 수 있게 해준다.</p>
+
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/07/08/Angularjs_promise_and_q/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
                   <a class="post-link" href="/2016/07/07/Angularjs_how_to_ues_filter_and_watch/">AngularJS_How to use filter & $watch</a>
                 </h2>
                 <div class="label">
@@ -334,7 +741,7 @@
                             <span class="name">
                                 js
                             </span>
-                            <span class="badge">4</span>
+                            <span class="badge">5</span>
                         </a>
                     </li>
                     
@@ -343,7 +750,7 @@
                             <span class="name">
                                 web
                             </span>
-                            <span class="badge">14</span>
+                            <span class="badge">15</span>
                         </a>
                     </li>
                     
@@ -388,7 +795,7 @@
                             <span class="name">
                                 Etc
                             </span>
-                            <span class="badge">2</span>
+                            <span class="badge">3</span>
                         </a>
                     </li>
                     
@@ -419,6 +826,12 @@
                 </div>
                 <ul class="content-ul" recent>
                     
+                        <li><a href="/2016/11/03/CORS/">CORS</a></li>
+                    
+                        <li><a href="/2016/11/02/gitaddpgitcommitv/">git add -p와 git commit -v</a></li>
+                    
+                        <li><a href="/2016/11/02/imagepixelget/">이미지 픽셀다루기</a></li>
+                    
                         <li><a href="/2016/10/29/directorylisting/">Apache Directory listing 제거</a></li>
                     
                         <li><a href="/2016/10/24/optional/">Optional</a></li>
@@ -432,12 +845,6 @@
                         <li><a href="/2016/10/13/LogBack/">LogBack in SpringBoot</a></li>
                     
                         <li><a href="/2016/10/11/readingoodcode/"><읽기좋은코드> 요약</a></li>
-                    
-                        <li><a href="/2016/10/07/Predicate/">Java 8 Predicate</a></li>
-                    
-                        <li><a href="/2016/10/06/List_remvoeif-Method/">List.removeif Method</a></li>
-                    
-                        <li><a href="/2016/10/02/Interceptor/">Interceptor</a></li>
                     
                 </ul>
             </div>

@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>이미지 픽셀다루기</title>
+    <meta name="description" content="이미지 픽셀값 뽑기이미지를 로드 -&gt; Canvas에 그리기 -&gt; imgdata뽑기 -&gt; 가지고 놀기!!var canvas;var ctx;var imgsrc;function loadFile(event) {    var output = document.getElemen...">
+
+    <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="stylesheet" href="/css/fontawesome/css/font-awesome.min.css ">
+    <link rel="stylesheet" href="/css/main.css ">
+    <link rel="canonical" href="http://joswlv.github.io/2016/11/02/imagepixelget/">
+    <link rel="alternate" type="application/rss+xml" title="Joswlv" href="http://joswlv.github.io/feed.xml ">
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-83868242-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</head>
+
+
+  <body>
+
+    <header id="top">
+    <div class="wrapper">
+        <a href="/" class="brand">Joswlv</a>
+        <small></small>
+        <button id="headerMenu" class="menu"><i class="fa fa-bars"></i></button>
+        <nav id="headerNav">
+            <ul>
+                <li>
+                    
+                    <a href="/">
+                    
+                        <i class="fa fa-home"></i>Home
+                    </a>
+                </li>
+
+                
+                    
+                    <li>
+                        
+                        <a href="/archive/">
+                        
+                            <i class="fa fa-archive"></i>Archives
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/category/">
+                        
+                            <i class="fa fa-th-list"></i>Categories
+                        </a>
+                    </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        </nav>
+    </div>
+</header>
+
+
+        <div class="page clearfix" post>
+    <div class="left">
+        <h1>이미지 픽셀다루기</h1>
+        <div class="label">
+
+            <div class="label-card">
+                <i class="fa fa-calendar"></i>2016-11-02
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+            
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#js" title="Category: js" rel="category">js</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+            </div>
+
+        </div>
+        <hr>
+        <article itemscope itemtype="http://schema.org/BlogPosting">
+        <h1 id="section">이미지 픽셀값 뽑기</h1>
+
+<p>이미지를 로드 -&gt; Canvas에 그리기 -&gt; imgdata뽑기 -&gt; 가지고 놀기!!</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">canvas</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">ctx</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">imgsrc</span><span class="p">;</span>
+<span class="kd">function</span> <span class="nx">loadFile</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">output</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'output'</span><span class="p">);</span>
+    <span class="nx">output</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">URL</span><span class="p">.</span><span class="nx">createObjectURL</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">files</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+    <span class="nx">imgsrc</span><span class="o">=</span><span class="nx">output</span><span class="p">.</span><span class="nx">src</span><span class="p">;</span>
+    <span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// drawing active image</span>
+        <span class="kd">var</span> <span class="nx">image</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Image</span><span class="p">();</span>
+        <span class="c1">// creating canvas object</span>
+        <span class="nx">image</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">ctx</span><span class="p">.</span><span class="nx">drawImage</span><span class="p">(</span><span class="nx">image</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">image</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> <span class="nx">image</span><span class="p">.</span><span class="nx">height</span><span class="p">);</span> <span class="c1">// draw the image on the canvas</span>
+        <span class="p">};</span>
+        <span class="nx">image</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">imgsrc</span><span class="p">;</span>
+        <span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'panel'</span><span class="p">);</span>
+        <span class="nx">ctx</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s1">'2d'</span><span class="p">);</span>
+        <span class="nx">$</span><span class="p">(</span><span class="s1">'#panel'</span><span class="p">).</span><span class="nx">mousemove</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// mouse move handler</span>
+            <span class="kd">var</span> <span class="nx">canvasOffset</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">canvas</span><span class="p">).</span><span class="nx">offset</span><span class="p">();</span>
+            <span class="kd">var</span> <span class="nx">canvasX</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">pageX</span> <span class="o">-</span> <span class="nx">canvasOffset</span><span class="p">.</span><span class="nx">left</span><span class="p">);</span>
+            <span class="kd">var</span> <span class="nx">canvasY</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">pageY</span> <span class="o">-</span> <span class="nx">canvasOffset</span><span class="p">.</span><span class="nx">top</span><span class="p">);</span>
+            <span class="kd">var</span> <span class="nx">imageData</span> <span class="o">=</span> <span class="nx">ctx</span><span class="p">.</span><span class="nx">getImageData</span><span class="p">(</span><span class="nx">canvasX</span><span class="p">,</span> <span class="nx">canvasY</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="kd">var</span> <span class="nx">pixel</span> <span class="o">=</span> <span class="nx">imageData</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
+            <span class="kd">var</span> <span class="nx">pixelColor</span> <span class="o">=</span> <span class="s2">"rgba("</span> <span class="o">+</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">", "</span> <span class="o">+</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s2">", "</span> <span class="o">+</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s2">", "</span> <span class="o">+</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="s2">")"</span><span class="p">;</span>
+            <span class="nx">$</span><span class="p">(</span><span class="s1">'#preview'</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="s1">'backgroundColor'</span><span class="p">,</span> <span class="nx">pixelColor</span><span class="p">);</span>
+        <span class="p">});</span>
+        <span class="nx">$</span><span class="p">(</span><span class="s1">'#panel'</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// mouse click handler</span>
+            <span class="kd">var</span> <span class="nx">canvasOffset</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">canvas</span><span class="p">).</span><span class="nx">offset</span><span class="p">();</span>
+            <span class="kd">var</span> <span class="nx">canvasX</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">pageX</span> <span class="o">-</span> <span class="nx">canvasOffset</span><span class="p">.</span><span class="nx">left</span><span class="p">);</span>
+            <span class="kd">var</span> <span class="nx">canvasY</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">pageY</span> <span class="o">-</span> <span class="nx">canvasOffset</span><span class="p">.</span><span class="nx">top</span><span class="p">);</span>
+            <span class="kd">var</span> <span class="nx">imageData</span> <span class="o">=</span> <span class="nx">ctx</span><span class="p">.</span><span class="nx">getImageData</span><span class="p">(</span><span class="nx">canvasX</span><span class="p">,</span> <span class="nx">canvasY</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="kd">var</span> <span class="nx">pixel</span> <span class="o">=</span> <span class="nx">imageData</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
+            <span class="nx">$</span><span class="p">(</span><span class="s1">'#rVal'</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">pixel</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+            <span class="nx">$</span><span class="p">(</span><span class="s1">'#gVal'</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">pixel</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+            <span class="nx">$</span><span class="p">(</span><span class="s1">'#bVal'</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">pixel</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+            <span class="nx">$</span><span class="p">(</span><span class="s1">'#rgbVal'</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">pixel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">','</span> <span class="o">+</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s1">','</span> <span class="o">+</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+            <span class="nx">$</span><span class="p">(</span><span class="s1">'#rgbaVal'</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">pixel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">','</span> <span class="o">+</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s1">','</span> <span class="o">+</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s1">','</span> <span class="o">+</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">3</span><span class="p">]);</span>
+            <span class="kd">var</span> <span class="nx">dColor</span> <span class="o">=</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="mi">256</span> <span class="o">*</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">65536</span> <span class="o">*</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+            <span class="nx">$</span><span class="p">(</span><span class="s1">'#hexVal'</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="s1">'#'</span> <span class="o">+</span> <span class="nx">dColor</span><span class="p">.</span><span class="nx">toString</span><span class="p">(</span><span class="mi">16</span><span class="p">));</span>
+        <span class="p">});</span>
+    <span class="p">});</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+
+        </article>
+        <hr>
+
+        
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+        
+
+        <div class="post-recent">
+    <div class="pre">
+        
+        <p><strong>prev</strong> <a href="/2016/10/29/directorylisting/">Apache Directory listing 제거</a></p>
+        
+    </div>
+    <div class="nex">
+
+        
+        <p><strong>next</strong> <a href="/2016/11/02/gitaddpgitcommitv/">git add -p와 git commit -v</a></p>
+        
+    </div>
+</div>
+
+
+        <h2 id="comments">Comments</h2>
+        
+
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+     * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+
+    var disqus_config = function() {
+        this.page.url = 'http://joswlv.github.io/2016/11/02/imagepixelget/'; // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://joswlv.github.io/2016/11/02/imagepixelget/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document,
+            s = d.createElement('script');
+
+        s.src = '//joswlv.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+
+    </div>
+    <button class="anchor"><i class="fa fa-anchor"></i></button>
+    <div class="right">
+        <div class="wrap">
+
+            <!-- Content -->
+            <div class="side content">
+                <div>
+                    Content
+                </div>
+                <ul id="content-side" class="content-ul">
+                    <li><a href="#similar_posts">Similar Posts</a></li>
+                    <li><a href="#comments">Comments</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+/**
+ * target _blank
+ */
+(function() {
+    var aTags = document.querySelectorAll('article a:not([id])')
+    for (var i = 0; i < aTags.length; i++) {
+        aTags[i].setAttribute('target', '_blank')
+    }
+}());
+</script>
+<script src="/js/pageContent.js " charset="utf-8"></script>
+
+
+    <footer class="site-footer">
+
+
+    <div class="wrapper">
+
+        <p class="description">
+            
+        </p>
+        <p class="contact">
+            Contact me at: 
+            <a href="https://github.com/joswlv" title="GitHub"><i class="fa fa-github" aria-hidden="true"></i></a>  
+            <a href="mailto:wh7923@gmail.com" title="email"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>     
+            <a href="https://www.facebook.com/wsj7923" title="Facebook"><i class="fa fa-facebook-official" aria-hidden="true"></i></a>    
+        </p>
+        <p>
+        </p>
+        <p class="power">
+            <span>
+                Site powered by <a href="https://jekyllrb.com/">Jekyll</a> & <a href="https://pages.github.com/">Github Pages</a>.
+            </span>
+        </p>
+    </div>
+</footer>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <div class="back-to-top">
+    <a href="#top" class="scroll">
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    </a>
+</div>
+
+    <script src=" /js/main.js " charset="utf-8"></script>
+    <script src=" /js/scroll.min.js " charset="utf-8"></script>
+  </body>
+
+</html>
