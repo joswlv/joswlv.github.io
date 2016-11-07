@@ -5,16 +5,16 @@
     <description></description>
     <link>http://joswlv.github.io/</link>
     <atom:link href="http://joswlv.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 07 Nov 2016 15:10:35 +0900</pubDate>
-    <lastBuildDate>Mon, 07 Nov 2016 15:10:35 +0900</lastBuildDate>
+    <pubDate>Mon, 07 Nov 2016 15:19:39 +0900</pubDate>
+    <lastBuildDate>Mon, 07 Nov 2016 15:19:39 +0900</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
-    
+
       <item>
         <title>jquery :last 선택자</title>
         <description>&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;table&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id =&lt;/span&gt;&lt;span class=&quot;err&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;table1&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt; ---&lt;span class=&quot;nt&quot;&gt;&amp;lt;/table&amp;gt;&lt;/span&gt;
 &lt;span class=&quot;nt&quot;&gt;&amp;lt;table&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id =&lt;/span&gt;&lt;span class=&quot;err&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;table2&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt; ---&lt;span class=&quot;nt&quot;&gt;&amp;lt;/table&amp;gt;&lt;/span&gt;
 &lt;span class=&quot;nt&quot;&gt;&amp;lt;table&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id =&lt;/span&gt;&lt;span class=&quot;err&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;table3&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt; ---&lt;span class=&quot;nt&quot;&gt;&amp;lt;/table&amp;gt;&lt;/span&gt;
-&lt;span class=&quot;nt&quot;&gt;&amp;lt;table&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id =&lt;/span&gt;&lt;span class=&quot;err&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;table4&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt; 
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;table&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;id =&lt;/span&gt;&lt;span class=&quot;err&quot;&gt; &lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;table4&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
 	&lt;span class=&quot;nt&quot;&gt;&amp;lt;tr&amp;gt;&lt;/span&gt;---&lt;span class=&quot;nt&quot;&gt;&amp;lt;/tr&amp;gt;&lt;/span&gt;
 	&lt;span class=&quot;nt&quot;&gt;&amp;lt;tr&amp;gt;&lt;/span&gt;
 		&lt;span class=&quot;nt&quot;&gt;&amp;lt;td&amp;gt;&lt;/span&gt;asd&lt;span class=&quot;nt&quot;&gt;&amp;lt;td&amp;gt;&lt;/span&gt;
@@ -43,12 +43,12 @@
         <pubDate>Mon, 07 Nov 2016 08:04:00 +0900</pubDate>
         <link>http://joswlv.github.io/2016/11/07/jqueryselector/</link>
         <guid isPermaLink="true">http://joswlv.github.io/2016/11/07/jqueryselector/</guid>
-        
-        
+
+
         <category>js</category>
-        
+
       </item>
-    
+
       <item>
         <title>정규표현식</title>
         <description>&lt;h1 id=&quot;section&quot;&gt;들어가기 전에&lt;/h1&gt;
@@ -131,12 +131,12 @@
         <pubDate>Fri, 04 Nov 2016 08:04:00 +0900</pubDate>
         <link>http://joswlv.github.io/2016/11/04/regexp/</link>
         <guid isPermaLink="true">http://joswlv.github.io/2016/11/04/regexp/</guid>
-        
-        
+
+
         <category>js</category>
-        
+
       </item>
-    
+
       <item>
         <title>CORS</title>
         <description>&lt;h1 id=&quot;http---cors&quot;&gt;HTTP 접근 제어 (CORS)&lt;/h1&gt;
@@ -248,12 +248,12 @@
         <pubDate>Thu, 03 Nov 2016 08:04:00 +0900</pubDate>
         <link>http://joswlv.github.io/2016/11/03/CORS/</link>
         <guid isPermaLink="true">http://joswlv.github.io/2016/11/03/CORS/</guid>
-        
-        
+
+
         <category>web</category>
-        
+
       </item>
-    
+
       <item>
         <title>git add -p와 git commit -v</title>
         <description>&lt;h1 id=&quot;section&quot;&gt;참고 링크&lt;/h1&gt;
@@ -270,12 +270,12 @@
         <pubDate>Wed, 02 Nov 2016 09:05:00 +0900</pubDate>
         <link>http://joswlv.github.io/2016/11/02/gitaddpgitcommitv/</link>
         <guid isPermaLink="true">http://joswlv.github.io/2016/11/02/gitaddpgitcommitv/</guid>
-        
-        
+
+
         <category>Etc</category>
-        
+
       </item>
-    
+
       <item>
         <title>이미지 픽셀다루기</title>
         <description>&lt;h1 id=&quot;section&quot;&gt;이미지 픽셀값 뽑기&lt;/h1&gt;
@@ -331,12 +331,12 @@
         <pubDate>Wed, 02 Nov 2016 08:04:00 +0900</pubDate>
         <link>http://joswlv.github.io/2016/11/02/imagepixelget/</link>
         <guid isPermaLink="true">http://joswlv.github.io/2016/11/02/imagepixelget/</guid>
-        
-        
+
+
         <category>js</category>
-        
+
       </item>
-    
+
       <item>
         <title>Apache Directory listing 제거</title>
         <description>&lt;p&gt;Apache설치한경로에서  httpd.conf를 수정한다.&lt;/p&gt;
@@ -369,12 +369,12 @@
         <pubDate>Sat, 29 Oct 2016 09:04:00 +0900</pubDate>
         <link>http://joswlv.github.io/2016/10/29/directorylisting/</link>
         <guid isPermaLink="true">http://joswlv.github.io/2016/10/29/directorylisting/</guid>
-        
-        
+
+
         <category>Etc</category>
-        
+
       </item>
-    
+
       <item>
         <title>Optional</title>
         <description>&lt;h1 id=&quot;nil-&quot;&gt;nil 의미&lt;/h1&gt;
@@ -557,12 +557,12 @@
         <pubDate>Mon, 24 Oct 2016 08:04:00 +0900</pubDate>
         <link>http://joswlv.github.io/2016/10/24/optional/</link>
         <guid isPermaLink="true">http://joswlv.github.io/2016/10/24/optional/</guid>
-        
-        
+
+
         <category>Swift</category>
-        
+
       </item>
-    
+
       <item>
         <title>awk 사용법</title>
         <description>&lt;h1 id=&quot;awk&quot;&gt;awk&lt;/h1&gt;
@@ -585,17 +585,17 @@
 &lt;span class=&quot;c&quot;&gt;# awk 는 각 열을 한줄씩 읽어들이면서 pattern 을 만족시키는 {action} 을 실행합니다.&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# awk 은 각 열을 space 를 기준으로 끊어 따로 저장하는데 예를 들면, 읽고 있는 열이&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# 'John apple 3' 인 경우 John 은 $1 이란 변수에, apple 은 $2 란 변수에 집어넣습니다.&lt;/span&gt;
- 
+
 awk &lt;span class=&quot;s1&quot;&gt;'$1==0 { print $2 }'&lt;/span&gt; file  &lt;span class=&quot;c&quot;&gt;# 읽고 있는 열의 첫번째 값($1)이 0이면 둘째 값($2) 출력&lt;/span&gt;
 awk &amp;lt; file &lt;span class=&quot;s1&quot;&gt;'$1==0 { print $2 }'&lt;/span&gt;  &lt;span class=&quot;c&quot;&gt;# 이것도 위와 같은 결과를 출력합니다&lt;/span&gt;
- 
+
 awk &amp;lt; file &lt;span class=&quot;s1&quot;&gt;'/^test/ { print $2 }'&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# regular expression 도 사용 가능합니다. &lt;/span&gt;
- 
+
 &lt;span class=&quot;c&quot;&gt;# pattern 부분은 옵션입니다. 필요하지 않으면 빈칸으로 두면 됩니다.&lt;/span&gt;
-awk &amp;lt; file &lt;span class=&quot;s1&quot;&gt;'{ print $2, $3 }'&lt;/span&gt; 
- 
+awk &amp;lt; file &lt;span class=&quot;s1&quot;&gt;'{ print $2, $3 }'&lt;/span&gt;
+
 &lt;span class=&quot;c&quot;&gt;# 행을 표시하지 않으면 전체를 출력합니다. $0 은 열 전체를 의미합니다. 즉 둘다 결과는 같습니다. &lt;/span&gt;
-awk &amp;lt; file &lt;span class=&quot;s1&quot;&gt;'{print}'&lt;/span&gt; 
+awk &amp;lt; file &lt;span class=&quot;s1&quot;&gt;'{print}'&lt;/span&gt;
 awk &amp;lt; file &lt;span class=&quot;s1&quot;&gt;'{print $0}'&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
@@ -604,7 +604,7 @@ awk &amp;lt; file &lt;span class=&quot;s1&quot;&gt;'{print $0}'&lt;/span&gt;
 
 &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# awk 의 또다른 사용법: awk -f filename&lt;/span&gt;
 awk -f hello.awk
- 
+
 --- hello.awk file ---
 &lt;span class=&quot;c&quot;&gt;#!/bin/awk -f&lt;/span&gt;
 BEGIN &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; print &lt;span class=&quot;s2&quot;&gt;&quot;File&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\t&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;Owner&quot;&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
@@ -616,13 +616,13 @@ END &lt;span class=&quot;o&quot;&gt;{&lt;/span&gt; print &lt;span class=&quot;s2
 &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# awk 은 space 와 tab 을 기준으로 행을 구분합니다. 하지만 -F 써서 이를 바꿀 수 있습니다.&lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# awk 은 $1, $2.. 등을 field 라고 부르는데 그래서 옵션이 -F 즉 field separator 입니다. &lt;/span&gt;
 &lt;span class=&quot;c&quot;&gt;# 참고할 점은 일단 seperator 를 바꾸면 space 와 tab 은 무시합니다.&lt;/span&gt;
- 
+
 awk &amp;lt; /etc/passwd -F: &lt;span class=&quot;s1&quot;&gt;'{ print $5 }'&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# ':' 를 기준으로 끊어 다섯번째 값을 출력합니다&lt;/span&gt;
- 
+
 &lt;span class=&quot;c&quot;&gt;# awk 을 이용한 연산&lt;/span&gt;
 &lt;span class=&quot;nb&quot;&gt;echo &lt;/span&gt;8 4 | awk &lt;span class=&quot;s1&quot;&gt;'{ print ($1-32)*(5/9) }'&lt;/span&gt;
 &lt;span class=&quot;gp&quot;&gt;&amp;gt; &lt;/span&gt;-13.3333  &lt;span class=&quot;c&quot;&gt;# awk 는 숫자를 실수로 다룹니다 (즉, 소수점까지 계산합니다)&lt;/span&gt;
- 
+
 &lt;span class=&quot;c&quot;&gt;# awk 의 다양한 처리방식&lt;/span&gt;
 &lt;span class=&quot;nb&quot;&gt;echo &lt;/span&gt;5 4 | awk &lt;span class=&quot;s1&quot;&gt;'{ print $1 $2 }'&lt;/span&gt; &lt;span class=&quot;c&quot;&gt;# $1$2 이렇게 붙여도 결과는 같습니다&lt;/span&gt;
 &lt;span class=&quot;gp&quot;&gt;&amp;gt; &lt;/span&gt;54
@@ -650,10 +650,10 @@ awk &lt;span class=&quot;s1&quot;&gt;'{ total=0; for (i=1; i&amp;lt;=NF; i++) to
 awk &lt;span class=&quot;s1&quot;&gt;'{ tot += $1; n += 1; }  END { print tot/n; }'&lt;/span&gt;
 
 &lt;span class=&quot;c&quot;&gt;# awk built-in variables(대표적인 awk 고정 명령어들) &lt;/span&gt;
-NF: Number of fields &lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;the current record &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;현재 읽고 있는 열의 행의 갯수&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; 
+NF: Number of fields &lt;span class=&quot;k&quot;&gt;in &lt;/span&gt;the current record &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;현재 읽고 있는 열의 행의 갯수&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
 NR: Number of record processed since the beginning of current awk execution
-&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;지금까지 읽어들인 열의 갯수&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; 
-OFS: Output field separator &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;출력하는 행 구분자&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;. Default value &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot; &quot;&lt;/span&gt; 
+&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;지금까지 읽어들인 열의 갯수&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;
+OFS: Output field separator &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;출력하는 행 구분자&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;. Default value &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot; &quot;&lt;/span&gt;
 ORS: Output record separator &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;출력하는 열 구분자&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;. Default value &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\n&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
@@ -662,7 +662,7 @@ ORS: Output record separator &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;출�
 
 &lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;c&quot;&gt;# 첫번째 행만 제거하고 나머지는 모두 출력합니다.&lt;/span&gt;
 awk &lt;span class=&quot;s1&quot;&gt;'{ for (i=2; i&amp;lt;=NF; i++) printf &quot;%s &quot;, $i; printf &quot;\n&quot;; }'&lt;/span&gt;
- 
+
 &lt;span class=&quot;c&quot;&gt;# 주의사항: print vs. printf&lt;/span&gt;
 print 함수는 출력후 자동으로 그리고 내부적으로 &lt;span class=&quot;s1&quot;&gt;'\n'&lt;/span&gt; 을 붙입니다. 즉 따로 &lt;span class=&quot;s1&quot;&gt;'\n'&lt;/span&gt; 을 출력하지 않아도 next line 으로 넘어갑니다. 하지만 &lt;span class=&quot;nb&quot;&gt;printf &lt;/span&gt;는 반드시 &lt;span class=&quot;s1&quot;&gt;'\n'&lt;/span&gt; 을 따로 출력해야 합니다. 바꿔말하면 &lt;span class=&quot;s1&quot;&gt;'\n'&lt;/span&gt; 을 출력하지 않으면 전체를 모두 이어서 하나의 열로 만들 수 있습니다.
 &lt;/code&gt;&lt;/pre&gt;
@@ -670,10 +670,10 @@ print 함수는 출력후 자동으로 그리고 내부적으로 &lt;span class=
 
 &lt;p&gt;추가적으로 awk의 내장형 함수들이 존재한다.&lt;/p&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;length&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;string&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;: 문자열의 문자수를 리턴합니다. 괄호를 비우면 현재 열의 전체 문자수를 리턴.	 
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;length&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;string&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;: 문자열의 문자수를 리턴합니다. 괄호를 비우면 현재 열의 전체 문자수를 리턴.
 int&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;number&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;: 숫자의 정수부분만 떼어 리턴합니다.
 split&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;string, array, separator&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt;: 문자열을 separator 를 기준으로 분할하여 array 에 넣습니다.
-그리고 array 의 index 를 리턴합니다. array[1].. 이렇게 사용하면 됩니다.	 
+그리고 array 의 index 를 리턴합니다. array[1].. 이렇게 사용하면 됩니다.
 sprintf&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;format, arguments&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; 포맷에 맞추어 변수들이 값을 출력합니다.
 substr&lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;string, position, length&lt;span class=&quot;o&quot;&gt;)&lt;/span&gt; 문자열의 특정 위치에서 특정 길이만큼 뽑아 리턴합니다.
 &lt;/code&gt;&lt;/pre&gt;
@@ -727,18 +727,18 @@ awk &lt;span class=&quot;s1&quot;&gt;'BEGIN{sum=0}{if ($2==&quot;TEXT&quot;){sum
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
-&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;awk &lt;span class=&quot;s2&quot;&gt;&quot;{print FILENAME}&quot;&lt;/span&gt; test.txt 
-&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; test.txt 파일의 레코드 개수만큼 파일이름을 출력한다. 
+&lt;div class=&quot;language-shell highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;awk &lt;span class=&quot;s2&quot;&gt;&quot;{print FILENAME}&quot;&lt;/span&gt; test.txt
+&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; test.txt 파일의 레코드 개수만큼 파일이름을 출력한다.
 
 awk &lt;span class=&quot;s2&quot;&gt;&quot;{print NR}&quot;&lt;/span&gt; test.txt
-&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; test.txt 파일의 레코드 번호를 출력한다. 
+&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; test.txt 파일의 레코드 번호를 출력한다.
 
 awk &lt;span class=&quot;s1&quot;&gt;'BEGIN {FS=&quot;\t&quot;} {print $1 ,  $2}'&lt;/span&gt; test.txt
-&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; test.txt 파일의 필드 구분자를 &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\t&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; 으로 지정하고, 1번째와 2번째 필드를 프린트 한다. 
+&lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; test.txt 파일의 필드 구분자를 &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\t&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; 으로 지정하고, 1번째와 2번째 필드를 프린트 한다.
 
 awk &lt;span class=&quot;s1&quot;&gt;'BEGIN {FS=&quot;\t&quot;; OFS =&quot;-&quot;} {print $1 ,  $2} END {print &quot;총 레코드의 수 : &quot; NR}'&lt;/span&gt; test.txt
 &lt;span class=&quot;o&quot;&gt;=&lt;/span&gt; test.txt 파일의 필드 구분자를 &lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt;&lt;span class=&quot;se&quot;&gt;\t&lt;/span&gt;&lt;span class=&quot;s2&quot;&gt;&quot;&lt;/span&gt; 로 지정하고, 1번째와 2번째 필드를 프린트 하되, 필드 구분자를 &lt;span class=&quot;s2&quot;&gt;&quot;-&quot;&lt;/span&gt;
-로 바꾸어 출력하고, 모든 레코드가 끝난 뒤, 총 레코드의 수를 출력한다. 
+로 바꾸어 출력하고, 모든 레코드가 끝난 뒤, 총 레코드의 수를 출력한다.
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/div&gt;
 
@@ -817,12 +817,12 @@ awk &lt;span class=&quot;s1&quot;&gt;'BEGIN {FS=&quot;\t&quot;; OFS =&quot;-&quo
         <pubDate>Sun, 23 Oct 2016 10:04:00 +0900</pubDate>
         <link>http://joswlv.github.io/2016/10/23/awk/</link>
         <guid isPermaLink="true">http://joswlv.github.io/2016/10/23/awk/</guid>
-        
-        
+
+
         <category>Unix/Linux</category>
-        
+
       </item>
-    
+
       <item>
         <title>scp 와 rsync - 원격파일정송방법</title>
         <description>&lt;p&gt;원격으로 파일을 전송하기 위해사용 되는 명령어!&lt;/p&gt;
@@ -896,12 +896,12 @@ awk &lt;span class=&quot;s1&quot;&gt;'BEGIN {FS=&quot;\t&quot;; OFS =&quot;-&quo
         <pubDate>Sun, 23 Oct 2016 09:04:00 +0900</pubDate>
         <link>http://joswlv.github.io/2016/10/23/spc_rsync/</link>
         <guid isPermaLink="true">http://joswlv.github.io/2016/10/23/spc_rsync/</guid>
-        
-        
+
+
         <category>Unix/Linux</category>
-        
+
       </item>
-    
+
       <item>
         <title>Sqoop</title>
         <description>&lt;h1 id=&quot;sqoop&quot;&gt;Sqoop이란&lt;/h1&gt;
@@ -1064,11 +1064,11 @@ awk &lt;span class=&quot;s1&quot;&gt;'BEGIN {FS=&quot;\t&quot;; OFS =&quot;-&quo
         <pubDate>Fri, 14 Oct 2016 08:04:00 +0900</pubDate>
         <link>http://joswlv.github.io/2016/10/14/sqoop/</link>
         <guid isPermaLink="true">http://joswlv.github.io/2016/10/14/sqoop/</guid>
-        
-        
+
+
         <category>Hadoop</category>
-        
+
       </item>
-    
+
   </channel>
 </rss>
