@@ -6,14 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Apache2웹서버와 Node.js어플리케이션을 함께 사용하기!</title>
-    <meta name="description" content="순서  내부적으로 다른 포트에 nodejs기반의 서버를 실행한다.  apache의 VirtualHosts 설정에서 ProxyPass를 설정한다.  특정 url로 접근식 1번으로 갈 수 있게 설정한다.과정  mod_proxy, mod_proxy_http가 필요하다. (ubuntu a...">
+    <title>정규표현식</title>
+    <meta name="description" content="들어가기 전에정규식은 문자열에서 문자 조합에 일치 시키기 위해 사용되는 패턴이다.자바스크립트에서, 정규식은 객체이다.이 패턴들은 RegExp의 exec메소드와 test  메소드 그리고 String의 match메소드, replace메소드, search메소드, split메소드와 함께 ...">
 
     <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
     <link rel="icon" href="/favicon.ico?" type="image/x-icon">
     <link rel="stylesheet" href="/css/fontawesome/css/font-awesome.min.css ">
     <link rel="stylesheet" href="/css/main.css ">
-    <link rel="canonical" href="http://joswlv.github.io/2016/08/28/run_to_same_server/">
+    <link rel="canonical" href="http://joswlv.github.io/2016/11/04/regexp/">
     <link rel="alternate" type="application/rss+xml" title="Joswlv" href="http://joswlv.github.io/feed.xml ">
 
 
@@ -96,11 +96,11 @@
 
         <div class="page clearfix" post>
     <div class="left">
-        <h1>Apache2웹서버와 Node.js어플리케이션을 함께 사용하기!</h1>
+        <h1>정규표현식</h1>
         <div class="label">
 
             <div class="label-card">
-                <i class="fa fa-calendar"></i>2016-08-28
+                <i class="fa fa-calendar"></i>2016-11-04
             </div>
 
             <div class="label-card">
@@ -120,7 +120,7 @@
   <i class="fa fa-th-list"></i>
   
     
-        <a href="/category/#web" title="Category: web" rel="category">web</a>
+        <a href="/category/#js" title="Category: js" rel="category">js</a>
     
   
 
@@ -133,58 +133,82 @@
         </div>
         <hr>
         <article itemscope itemtype="http://schema.org/BlogPosting">
-        <h3 id="section">순서</h3>
-<ol>
-  <li>내부적으로 다른 포트에 nodejs기반의 서버를 실행한다.</li>
-  <li>apache의 VirtualHosts 설정에서 ProxyPass를 설정한다.</li>
-  <li>특정 url로 접근식 1번으로 갈 수 있게 설정한다.</li>
-</ol>
+        <h1 id="section">들어가기 전에</h1>
 
-<h3 id="section-1">과정</h3>
-<ol>
-  <li>mod_proxy, mod_proxy_http가 필요하다. (ubuntu apache서버는 기본적으로 설치되어있음. <code class="highlighter-rouge">/etc/apache2/mods-available</code>안에 있음 <code class="highlighter-rouge">a2enmod proxy</code>,<code class="highlighter-rouge">a2enmod proxy_http</code>로 설정함</li>
-  <li>가상호스트를 설정함 ./sites-available 내부에 기존파일 또는 신규파일을 추가한다.</li>
-</ol>
+<p>정규식은 문자열에서 문자 조합에 일치 시키기 위해 사용되는 패턴이다.</p>
 
-<div class="language-powershell highlighter-rouge"><pre class="highlight"><code>&lt;VirtualHost <span class="k">*</span>:80&gt;
-	DocumentRoot /var/www/example.com/public_html
-	ServerName  www.example.com
+<p>자바스크립트에서, 정규식은 객체이다.</p>
 
-	<span class="c1"># Index file and Document Root (where the public files are located)</span>
-	DirectoryIndex index.html index.php
+<p>이 패턴들은 <code class="highlighter-rouge">RegExp</code>의 <code class="highlighter-rouge">exec</code>메소드와 <code class="highlighter-rouge">test</code>  메소드 그리고 <code class="highlighter-rouge">String</code>의 <code class="highlighter-rouge">match</code>메소드, <code class="highlighter-rouge">replace</code>메소드, <code class="highlighter-rouge">search</code>메소드, <code class="highlighter-rouge">split</code>메소드와 함께 쓰인다.</p>
 
-	<span class="c1"># Log file locations</span>
-	LogLevel warn
-	ErrorLog  /var/www/amazeapp.com/log/error.log
-	CustomLog /var/www/amazeapp.com/log/access.log combined
+<h1 id="section-1">정규식 만들기</h1>
 
+<p>정규식은 두가지 방법으로 만들 수 있다.</p>
 
-	<span class="c1"># 아래가 핵심이다.</span>
-
-	ProxyRequests off
-
-	&lt;Proxy <span class="k">*</span>&gt;
-	    Order deny,allow    <span class="c1"># 이부분의 경우, 콤마(,) 사이에 공백 없어야 함!</span>
-	    Allow <span class="k">from </span>all
-	&lt;/Proxy&gt;
-
-	&lt;Location /&gt; <span class="c1"># 내부적으로 접속 노드를 늘리고 싶다면 여기에 추가.</span>
-	    ProxyPass http://localhost:3000/
-	    ProxyPassReverse http://localhost:3000/
-	&lt;/Location&gt;
-
-&lt;/VirtualHost&gt;
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">re</span> <span class="o">=</span> <span class="sr">/abc+d/</span><span class="p">;</span>
 </code></pre>
 </div>
 
-<ol>
-  <li>아파치 재시작</li>
-</ol>
+<p>정규식 리터럴은 스크립트가 로드될때 정규식의 컴파일이 작동한다. 정규식이 계속 사용될 때는 위와 같은 형식으로 사용하는 것이 좋다.</p>
 
-<p>끝~</p>
+<p>또다른 방법은 <code class="highlighter-rouge">RegExp</code>객체의 생성자 함수를 호출하는 것이다.</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">re</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="s2">"abc+d"</span><span class="p">);</span>
+</code></pre>
+</div>
+
+<p>생성자 함수를 사용하면 정규식의 런타임 컴파일을 제공한다.</p>
+
+<h1 id="section-2">정규식 패턴 작성하기</h1>
+
+<h2 id="section-3">단순한 패턴 사용하기</h2>
+
+<p>단순한 패턴은 찾고자하는 문자들로 구성된다. 예를 들어 /abc/라는 패턴은 문자열에서 정확히 ‘abc’라는 문자들이 모두 함께 순서대로 나타나야지 일치한다.</p>
+
+<h2 id="section-4">특수 문자를 사용하기</h2>
+
+<p>단순 패턴보다 더 복잡한 경우 특수문자를 사용하여 패턴을 만든다.</p>
+
+<h2 id="section-5">정규식 사용하기</h2>
+
+<p><strong>JavaScript에서 정규식에서 쓰이는 메소드</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Method</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>exec</td>
+      <td>일치하는 문자열을 찾는 RegExp메소드이다. 정보를 가지고 있는 배열을 반환한다.</td>
+    </tr>
+    <tr>
+      <td>test</td>
+      <td>일치하는 문자열을 검사하는 RegExp 메소드이다. true나 false를 반환한다.</td>
+    </tr>
+    <tr>
+      <td>match</td>
+      <td>일치하는 문자열을 찾는 String메소드이다. 정보를 가지고 있는 배열을 반환하거나 일치하지 않는 부분을 null로 반환한다.</td>
+    </tr>
+    <tr>
+      <td>search</td>
+      <td>일치하는 문자열을 검사하는 String메소드이다. 일치하는 인덱스를 반환하거나 검색에 실패할 시 -1을 반환한다.</td>
+    </tr>
+    <tr>
+      <td>replace</td>
+      <td>일치하는 문자열을 찾는 String메소드이다. 일치하는 문자열을 replacement로 대체한다.</td>
+    </tr>
+  </tbody>
+</table>
 
 <h3 id="reference">Reference</h3>
-<p><a href="https://github.com/sindresorhus/guides/blob/master/run-node-server-alongside-apache.md">https://github.com/sindresorhus/guides/blob/master/run-node-server-alongside-apache.md</a></p>
+
+<ul>
+  <li><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Guide/%EC%A0%95%EA%B7%9C%EC%8B%9D">MDN</a></li>
+</ul>
 
         </article>
         <hr>
@@ -226,13 +250,13 @@
         <div class="post-recent">
     <div class="pre">
         
-        <p><strong>prev</strong> <a href="/2016/08/07/Angularjs_if/">AngularJS_AngularJS_if</a></p>
+        <p><strong>prev</strong> <a href="/2016/11/03/CORS/">CORS</a></p>
         
     </div>
     <div class="nex">
 
         
-        <p><strong>next</strong> <a href="/2016/09/08/Sorting-post/">Sorting</a></p>
+        <p><strong>next</strong> <a href="/2016/11/07/jqueryselector/">jquery :last 선택자</a></p>
         
     </div>
 </div>
@@ -250,8 +274,8 @@
      */
 
     var disqus_config = function() {
-        this.page.url = 'http://joswlv.github.io/2016/08/28/run_to_same_server/'; // Replace PAGE_URL with your page's canonical URL variable
-        this.page.identifier = 'http://joswlv.github.io/2016/08/28/run_to_same_server/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        this.page.url = 'http://joswlv.github.io/2016/11/04/regexp/'; // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://joswlv.github.io/2016/11/04/regexp/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
     };
 
     (function() { // DON'T EDIT BELOW THIS LINE
