@@ -103,6 +103,196 @@
             
               <li>
                 <h2>
+                  <a class="post-link" href="/2016/09/10/Servlet_programming/">Servlet_programming</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-09-10
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#web" title="Category: web" rel="category">web</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="cgi-">1.CGI프로그램과 서블릿</h1>
+
+<h2 id="cgi">1)CGI란?</h2>
+<p><img src="http://joswlv.github.io/images/cgi.png" alt="" /></p>
+
+<p>위의 그림은 웹어플리케이션의 실행과정이다. 웹브라우저가 웹서버에게 요청을하고, 서버는 클라이언트가 요청한 프로그램을 찾아서 실행한다. 그리고 해당 프로그램은 작업을 수행한 후 그 결과를 웹서버에게 돌려준다. 그러면 웹서버는 그 결과를 HTTP 형식에 맞추어 웹브라우저에게 보낸다.</p>
+
+<p>이대 웹서버와 프로그램 사이에 데이터를 주고받는 규칙을 <code class="highlighter-rouge">CGI(Common Gateway Interface)</code>라고 한다. 그래서 CGI규칙에 따라서 웹서버와 데이터를 주고 받도록 작성된 프로그램을 <code class="highlighter-rouge">CGI프로그램</code>이라한다.</p>
+
+<p>CGI프로그램은 C나 C++, java와 같은 컴파일 언어와 스크립언어로 작성할 수 있다.</p>
+
+<h2 id="section">2)서블릿</h2>
+
+<p>자바로 만든 CGI프로그램을 <code class="highlighter-rouge">서블릿(Servlet)</code>이라고 한다. 자바 서블릿이 다른 CGI 프로그램과 다른 점은, 웹 서버와 직접 데이터를 주고 받지 않으며, 전문 프로그램에 의해 관리된다는 점이다.</p>
+
+<h3 id="section-1">2-1)서블릿 컨테이너</h3>
+
+<p><img src="http://joswlv.github.io/images/servlet.png" alt="" /></p>
+
+<p>서블릿의 생성과 실행, 소멸 등 생명주기를 관리하는 프로그램을 <code class="highlighter-rouge">서블릿 컨테이너(Servlet Container)</code>라고 한다. 서블릿 컨테이너가 서블릿을 대신하여 CGI규칙에 따라 웹서버와 데이터를 주고 받는다. 더 이상 CGI규칙에 대해 알 필요가 없지만, 서블릿 컨테이너와 서블릿 사이의 규칙을 알아야한다.</p>
+
+<h1 id="javaxservletservlet-">2. javax.servlet.Servlet 인터페이스</h1>
+
+<h2 id="section-2">1)서블릿 인터페이스</h2>
+<p>서블릿 클래스는 반드시 javax.servlet.Servlet 인터페이스를 구현해야한다. 서블릿 컨테이너가 서블릿에 대해 호출할 메서드를 정의한 것이 Servlet인터페이스 이다.</p>
+
+<blockquote>
+  <p>서블릿 생명주기와 관련된 메소드</p>
+
+  <ul>
+    <li>init()</li>
+    <li>service()</li>
+    <li>destroy()</li>
+  </ul>
+</blockquote>
+
+<ul>
+  <li>getServletInfo()</li>
+  <li>getServletConfig()</li>
+</ul>
+
+<p>여기서 <code class="highlighter-rouge">service()</code>는 클라이언트가 요청할 때 마다 호출되는 메서드이다. 즉 실질적으로 서비스 작업을 수행하는 메서드 이다. 이 메서드에 서블릿이 해야 할 일을 작성하면된다.</p>
+
+<p><code class="highlighter-rouge">web.xml</code>파일을 <code class="highlighter-rouge">배치기술서(Deployment Descriptor)</code> 또는 <code class="highlighter-rouge">DD파일</code>이라고 한다. 여기에 웹어플리케이션의 배치 정보를 담고 있다. DD파일에 등록되지 않은 서블릿은 서블릿 컨테이너가 찾을 수 없다. URL과 서블릿도 매핑한다.</p>
+
+<blockquote>
+  <p>*참고 페키지명+클래스명 = Fully qualified name = QName 이라한다.</p>
+</blockquote>
+
+<h2 id="section-3">2) 서블릿 구동 절차</h2>
+
+<ol>
+  <li>클라이언트의 요청이 들어오면 서블릿 컨테이너는 서블릿을 찾는다.</li>
+  <li>서블릿 클래스를 로딩하고 인스턴스를 준비한 후 생성자를 호출한다. 그리고 서블릿 초기화 메서드인 init()를 호출합니다.</li>
+  <li>클라이언트 요청을 처리하는 service() 메서드를 호출한다.</li>
+  <li>service() 메서드에서 만든 결과를 HTTP 프로토콜에 맞추어 클라이언트에 응답하는 것으로 요청처리를 완료합니다.</li>
+  <li>서블릿 컨테이너를 종료하거나, 웹애플리케이션을 종료를 한다면,</li>
+  <li>서블릿 컨테이너는 종료되기 전에 서블릿이 마무리 작업을 수행할 수 있도록 생성된 모든 서블릿에 대해 destroy()메서드를 호출한다.</li>
+</ol>
+
+<h2 id="welcom-files">3) Welcom Files</h2>
+
+<p><code class="highlighter-rouge">웰컴 파일(Welcome Files)</code>이란, 디렉토리의 기본 웹페이지를 의미한다. 웰컴파일의 이름은 <code class="highlighter-rouge">web.xml</code>의 <code class="highlighter-rouge">&lt;welcome-file-list&gt;</code> 태그를 사용하여 설정할 수 있다. 이 태그의 하위 태그로 <code class="highlighter-rouge">&lt;welcome-file&gt;</code>이 있는데, 여기에 파일이름을 적으면 된다. 여러 개의 웰컴파일을 등록하게 되면, 디렉토리에서 웰컴 파일을 찾을 때 위에서부터 아래로 순차적으로 조회한다.</p>
+
+<h1 id="genericservlet">3. GenericServlet</h1>
+
+<p><code class="highlighter-rouge">GenericServlet</code>은 추상 클래스로 서블릿 클래스가 필요로 하는 <code class="highlighter-rouge">init()</code>, <code class="highlighter-rouge">destroy()</code>, <code class="highlighter-rouge">getServletConfig()</code>, <code class="highlighter-rouge">getServletInfo()</code>를 미리 구현하여 상속한다. 즉 <code class="highlighter-rouge">service()</code>메소드만 구현하면 된다.</p>
+
+<h2 id="servletrequest--">1) ServletRequest의 주요 메소드</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>메소드</th>
+      <th>설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>getRemoteAddr()</td>
+      <td>서비스를 요청한 클라이언트의 Ip주소를 반환</td>
+    </tr>
+    <tr>
+      <td>getScheme()</td>
+      <td>클라이언트가 요청한 URI형식 Scheme을 반환 즉 url에서 ‘:’문자전에 오는 값을 반환</td>
+    </tr>
+    <tr>
+      <td>getProtocol()</td>
+      <td>요청한 프로토콜의 이름과 버전을 반환</td>
+    </tr>
+    <tr>
+      <td>getParameterNames()</td>
+      <td>요청정보에서 매개변수 이름만 추출하여 반환</td>
+    </tr>
+    <tr>
+      <td>getParameterValues()</td>
+      <td>요청정보에서 매개변수 값만 추출하여 반환</td>
+    </tr>
+    <tr>
+      <td>getParameterMap()</td>
+      <td>요청 정보에서 매개변수들을 Map객체에 담아서 반환</td>
+    </tr>
+    <tr>
+      <td>setCharacteerEncoding()</td>
+      <td>POST요청의 매개변수에 대한 문자 집합을 설정 (기본은 <code class="highlighter-rouge">ISO-8859-1</code>)</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="servletresponse-">2) servletResponse 메소드</h2>
+<ul>
+  <li>setContentType() : 출력할 데이터의 인코딩 형식과 문자 집합을 설정</li>
+  <li>setCharacterEncoding() : 출력할 데이터의 문자 집합을 설정</li>
+</ul>
+
+<p>ex) `res.setContentType(“text/plain;chartest=UTF-8”);</p>
+
+<blockquote>
+  <p><code class="highlighter-rouge">setContentType()</code>의 인자 형식이 올바르지 않으면 웹브라우저는 서버에서 받은 결과를 화면에 출력하는 대신 파일저장 대화창을 띄운다.</p>
+</blockquote>
+
+<h1 id="webservlet------">4. @WebServlet 애노테이션을 이용한 서블릿 배치 정보 설정</h1>
+
+<p><code class="highlighter-rouge">Servlet 3.0</code> 사양부터는 애노테이션으로 서블릿 배치 정보를 설정할 수 있다. <code class="highlighter-rouge">web.xml</code>대신 애노테이션을 이용해 배치 정보를 작성해보자</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@WebServlet</span><span class="o">(</span>
+  <span class="n">urlPatterns</span><span class="o">={</span><span class="s">"/member/update"</span><span class="o">},</span>
+  <span class="n">initParams</span><span class="o">={</span>
+	  <span class="nd">@WebInitParam</span><span class="o">(</span><span class="n">name</span><span class="o">=</span><span class="s">"driver"</span><span class="o">,</span><span class="n">value</span><span class="o">=</span><span class="s">"com.mysql.jdbc.Driver"</span><span class="o">),</span>
+	  <span class="nd">@WebInitParam</span><span class="o">(</span><span class="n">name</span><span class="o">=</span><span class="s">"url"</span><span class="o">,</span><span class="n">value</span><span class="o">=</span><span class="s">"jdbc:mysql://localhost/studydb"</span><span class="o">),</span>
+	  <span class="nd">@WebInitParam</span><span class="o">(</span><span class="n">name</span><span class="o">=</span><span class="s">"username"</span><span class="o">,</span><span class="n">value</span><span class="o">=</span><span class="s">"study"</span><span class="o">),</span>
+	  <span class="nd">@WebInitParam</span><span class="o">(</span><span class="n">name</span><span class="o">=</span><span class="s">"password"</span><span class="o">,</span><span class="n">value</span><span class="o">=</span><span class="s">"study"</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CalculatorServlet</span> <span class="kd">extends</span> <span class="n">GenericServlet</span> <span class="o">{</span>
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">service</span><span class="o">(</span><span class="n">ServletRequest</span> <span class="n">req</span><span class="o">,</span> <span class="n">ServletResponse</span> <span class="n">res</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">ServletException</span><span class="o">,</span> 
+		<span class="o">....</span>
+	<span class="o">}</span>
+</code></pre>
+</div>
+
+<h3 id="reference">Reference</h3>
+<ul>
+  <li><a href="http://www.yes24.com/24/Goods/13159413?Acode=101">열혈강의 자바 웹 개발 워크북</a></li>
+</ul>
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/09/10/Servlet_programming/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
                   <a class="post-link" href="/2016/09/09/%E1%84%8B%E1%85%B0%E1%86%B8%E1%84%8B%E1%85%A5%E1%84%91%E1%85%B3%E1%86%AF%E1%84%85%E1%85%B5%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%89%E1%85%A7%E1%86%AB%E1%84%8B%E1%85%B4_%E1%84%8B%E1%85%B5%E1%84%92%E1%85%A2/">웹어플리케이션의 이해</a>
                 </h2>
                 <div class="label">
@@ -716,83 +906,6 @@
                 <hr>
               </li>
             
-              <li>
-                <h2>
-                  <a class="post-link" href="/2016/07/07/Angularjs_how_to_ues_filter_and_watch/">AngularJS_How to use filter & $watch</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-07-07
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#js" title="Category: js" rel="category">js</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                </div>
-                <div class="excerpt">
-                    <p><code class="highlighter-rouge">ng-Repeat</code>는 기본적으로 필터기능을 지원한다. completed, active, all 세개 버튼을 만들어서 각각을 클릭할때 필터링 로직이 작동하도록 만들어 보자.</p>
-
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"btn-group"</span> <span class="na">role=</span><span class="s">"group"</span> <span class="na">aria-label=</span><span class="s">"..."</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"button"</span> <span class="na">ng-click=</span><span class="s">"status='completed'"</span><span class="nt">&gt;</span>Completed<span class="nt">&lt;/button&gt;</span>
-  <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"button"</span> <span class="na">ng-click=</span><span class="s">"status='active'"</span><span class="nt">&gt;</span>Active<span class="nt">&lt;/button&gt;</span>
-  <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"button"</span> <span class="na">ng-click=</span><span class="s">"status=''"</span><span class="nt">&gt;</span>All<span class="nt">&lt;/button&gt;</span>
-<span class="nt">&lt;/div&gt;</span>
-</code></pre>
-</div>
-
-<p>어떤 버튼을 클릭했는지 상태를 저장하는 스코프변수 <code class="highlighter-rouge">$scope.status</code>에 저장한다.</p>
-
-<p>필터에 따라 동적으로 <code class="highlighter-rouge">ng-repeat</code>가 동작해야 한다.</p>
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;ul</span> <span class="na">ng-repeat=</span><span class="s">"todo in todos | filter:statusFilter"</span>
-</code></pre>
-</div>
-<p>버튼을 누를 때 마다 <code class="highlighter-rouge">statusFilter</code>값이 변할 것이다.</p>
-
-<h3 id="watch">$watch</h3>
-<p>이것은 스코프 변수의 변경을 감지하고 그때마다 사용자가 설정한 함수를 실행한다. (주의! 많이 사용하면 메모리 자원을 많이 먹는다.)</p>
-
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="c1">// 필터버튼을 클릭하고 status 값이 변경되면 $watch()에 등록한 함수가 동작한다.</span>
-<span class="nx">$scope</span><span class="p">.</span><span class="nx">$watch</span><span class="p">(</span><span class="s1">'status'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">$scope</span><span class="p">.</span><span class="nx">status</span> <span class="o">===</span> <span class="s1">'completed'</span><span class="p">)</span> <span class="p">{</span>        <span class="c1">// Completed 클릭시</span>
-    <span class="nx">$scope</span><span class="p">.</span><span class="nx">statusFilter</span> <span class="o">=</span> <span class="p">{</span><span class="na">completed</span><span class="p">:</span> <span class="kc">true</span><span class="p">};</span>  <span class="c1">// 필터를 설정한다.</span>
-  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">$scope</span><span class="p">.</span><span class="nx">status</span> <span class="o">===</span> <span class="s1">'active'</span><span class="p">)</span> <span class="p">{</span>    <span class="c1">// Active 클릭시</span>
-    <span class="nx">$scope</span><span class="p">.</span><span class="nx">statusFilter</span> <span class="o">=</span> <span class="p">{</span><span class="na">completed</span><span class="p">:</span> <span class="kc">false</span><span class="p">};</span> <span class="c1">// 필터를 설정한다.</span>
-  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>                                    <span class="c1">// All 클릭시</span>
-    <span class="nx">$scope</span><span class="p">.</span><span class="nx">statusFilter</span> <span class="o">=</span> <span class="p">{};</span>                 <span class="c1">// 필터를 해제한다.</span>
-  <span class="p">}</span>
-<span class="p">})</span>
-</code></pre>
-</div>
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2016/07/07/Angularjs_how_to_ues_filter_and_watch/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
         </ul>
 
 
@@ -826,7 +939,7 @@
                             <span class="name">
                                 js
                             </span>
-                            <span class="badge">7</span>
+                            <span class="badge">8</span>
                         </a>
                     </li>
                     
@@ -911,6 +1024,8 @@
                 </div>
                 <ul class="content-ul" recent>
                     
+                        <li><a href="/2016/11/10/JQuery_findnode/">jquery 선택자</a></li>
+                    
                         <li><a href="/2016/11/07/jqueryselector/">jquery :last 선택자</a></li>
                     
                         <li><a href="/2016/11/04/regexp/">정규표현식</a></li>
@@ -928,8 +1043,6 @@
                         <li><a href="/2016/10/23/awk/">awk 사용법</a></li>
                     
                         <li><a href="/2016/10/23/spc_rsync/">scp 와 rsync - 원격파일정송방법</a></li>
-                    
-                        <li><a href="/2016/10/14/sqoop/">Sqoop</a></li>
                     
                 </ul>
             </div>
