@@ -46,4 +46,4 @@ if (check2 == null && check1 == ''){
 ### Reference
 
 * [ohyecloudy pnotes](http://ohyecloudy.com/pnotes/archives/542/)
-* 
+* [kkikkodev](http://kkikkodev.tistory.com/284)

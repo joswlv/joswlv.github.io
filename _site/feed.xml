@@ -5,9 +5,72 @@
     <description></description>
     <link>http://joswlv.github.io/</link>
     <atom:link href="http://joswlv.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 11 Nov 2016 12:11:25 +0900</pubDate>
-    <lastBuildDate>Fri, 11 Nov 2016 12:11:25 +0900</lastBuildDate>
+    <pubDate>Fri, 18 Nov 2016 18:25:20 +0900</pubDate>
+    <lastBuildDate>Fri, 18 Nov 2016 18:25:20 +0900</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
+    
+      <item>
+        <title>Short-circuit evaluation</title>
+        <description>&lt;h1 id=&quot;short-circuit-evaluation&quot;&gt;Short-circuit evaluation이란&lt;/h1&gt;
+
+&lt;blockquote&gt;
+  &lt;table&gt;
+    &lt;tbody&gt;
+      &lt;tr&gt;
+        &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;and&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;or&lt;/code&gt;논리 연산에서 인자 하나만 보고 결과를 확실히 알 수 있을 때, 뒤에 ㄴ오는 인자를 확인하지 않고 바로 답을 내는 방법이다. &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;amp;&amp;amp;&lt;/code&gt; 연산일 때, 하나라도 false이면 무조건 답이 false이고&lt;/td&gt;
+        &lt;td&gt; &lt;/td&gt;
+        &lt;td&gt;연산일 땐, 하나라도 true이면 무조건 답이 true이다. 지원하는 언어는 &lt;a href=&quot;https://en.wikipedia.org/wiki/Short-circuit_evaluation#Support_in_common_programming_languages&quot;&gt;여기&lt;/a&gt;&lt;/td&gt;
+      &lt;/tr&gt;
+    &lt;/tbody&gt;
+  &lt;/table&gt;
+&lt;/blockquote&gt;
+
+&lt;p&gt;예를 보면 다음과 같다.&lt;/p&gt;
+
+&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;조건식 1 &amp;amp;&amp;amp; 조건식 2
+조건식 1 이 false 이면, 조건식 2 를 건너뜀
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h4 id=&quot;section&quot;&gt;설명&lt;/h4&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;amp;&amp;amp;&lt;/code&gt;연산자에서는 두 조건식이 모두 true가 되어야 전체 결과가 true가 되는데, &lt;code class=&quot;highlighter-rouge&quot;&gt;조건식1&lt;/code&gt;이 &lt;code class=&quot;highlighter-rouge&quot;&gt;false&lt;/code&gt;가되면 &lt;code class=&quot;highlighter-rouge&quot;&gt;조건식2&lt;/code&gt;을 보지 않아도 전체가 &lt;code class=&quot;highlighter-rouge&quot;&gt;false&lt;/code&gt;가 되므로 &lt;code class=&quot;highlighter-rouge&quot;&gt;조건식2&lt;/code&gt;를 체크하지 않는다.&lt;/p&gt;
+
+&lt;h1 id=&quot;section-1&quot;&gt;적용한 예&lt;/h1&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;check1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;''&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;check2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;blabla&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;위 경우에서 &lt;code class=&quot;highlighter-rouge&quot;&gt;''&lt;/code&gt;을 먼저 체크하는 것보다 &lt;code class=&quot;highlighter-rouge&quot;&gt;null&lt;/code&gt;인 경우를 먼저 체크하는 것이 안전하다고 한다.&lt;/p&gt;
+
+&lt;p&gt;수정하면 아래와 같다.&lt;/p&gt;
+
+&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;check2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;check1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;''&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
+	&lt;span class=&quot;n&quot;&gt;blabla&lt;/span&gt;
+&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h3 id=&quot;reference&quot;&gt;Reference&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;http://ohyecloudy.com/pnotes/archives/542/&quot;&gt;ohyecloudy pnotes&lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;&lt;a href=&quot;http://kkikkodev.tistory.com/284&quot;&gt;kkikkodev&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Fri, 18 Nov 2016 15:04:00 +0900</pubDate>
+        <link>http://joswlv.github.io/2016/11/18/Shortcircuitevaluation/</link>
+        <guid isPermaLink="true">http://joswlv.github.io/2016/11/18/Shortcircuitevaluation/</guid>
+        
+        
+        <category>Java</category>
+        
+      </item>
     
       <item>
         <title>jquery 선택자</title>
@@ -1401,85 +1464,6 @@ awk &lt;span class=&quot;s1&quot;&gt;'BEGIN {FS=&quot;\t&quot;; OFS =&quot;-&quo
         <pubDate>Sun, 23 Oct 2016 10:04:00 +0900</pubDate>
         <link>http://joswlv.github.io/2016/10/23/awk/</link>
         <guid isPermaLink="true">http://joswlv.github.io/2016/10/23/awk/</guid>
-        
-        
-        <category>Unix/Linux</category>
-        
-      </item>
-    
-      <item>
-        <title>scp 와 rsync - 원격파일정송방법</title>
-        <description>&lt;p&gt;원격으로 파일을 전송하기 위해사용 되는 명령어!&lt;/p&gt;
-
-&lt;p&gt;scp와 rsync의 차이점은 symbolic link를 처리하는데 차이가 있다.&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;scp는 전송하려 하는 파일중에 symbolic link 가 있으면 링크된 원본파일이 전송된다. 즉 symlink가 유지 되지 않는다.!!&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h1 id=&quot;section&quot;&gt;사용법&lt;/h1&gt;
-
-&lt;h2 id=&quot;scp&quot;&gt;scp&lt;/h2&gt;
-
-&lt;p&gt;&lt;strong&gt;scp -[옵션][보낼파일][받는서버 계정 아이디]@[받는서버 URL]:[받을 위치 절대 경로]&lt;/strong&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;section-1&quot;&gt;예)&lt;/h3&gt;
-
-&lt;p&gt;scp -pr ./send joswlv@20.20.20.20:./receive&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;옵션:&lt;/p&gt;
-
-  &lt;p&gt;-r = recusive 하위 폴더 포함 모두 복사&lt;/p&gt;
-
-  &lt;p&gt;-p = preserve 권한 및 속성 유지&lt;/p&gt;
-
-  &lt;p&gt;-C = compression 압축&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;h2 id=&quot;rsync&quot;&gt;rsync&lt;/h2&gt;
-
-&lt;h2 id=&quot;rsync-1&quot;&gt;rsync&lt;/h2&gt;
-
-&lt;p&gt;&lt;strong&gt;rsync -[옵션][보낼파일][받을위치]&lt;/strong&gt;&lt;/p&gt;
-
-&lt;p&gt;받을위치는 [서버계정 아이디]@[파일URL]:[받을 경로]로 사용가능&lt;/p&gt;
-
-&lt;h3 id=&quot;section-2&quot;&gt;예)&lt;/h3&gt;
-
-&lt;p&gt;rsync -avzP ./send joswlv@20.20.20.20:./receive&lt;/p&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;옵션:&lt;/p&gt;
-
-  &lt;p&gt;-v = 진행상황을 상세히 보여줌&lt;/p&gt;
-
-  &lt;p&gt;-r = 지정한 디렉토리의 하위 디렉토리까지 재귀적으로 실행&lt;/p&gt;
-
-  &lt;p&gt;-p = 버전속성 보존&lt;/p&gt;
-
-  &lt;p&gt;-z = 데이터압축 전송&lt;/p&gt;
-
-  &lt;p&gt;-u = 추가된 파일만 전송&lt;/p&gt;
-
-  &lt;p&gt;-b = 낡은 파일은 ~가 붙음&lt;/p&gt;
-
-  &lt;p&gt;-u = 새로운 파일을 덮어쓰지 않음&lt;/p&gt;
-
-  &lt;p&gt;-e = ssh(rsh) 전송암호화&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;reference&quot;&gt;Reference&lt;/h3&gt;
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;http://ra2kstar.tistory.com/175&quot;&gt;초보개발자 이야기&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-
-</description>
-        <pubDate>Sun, 23 Oct 2016 09:04:00 +0900</pubDate>
-        <link>http://joswlv.github.io/2016/10/23/spc_rsync/</link>
-        <guid isPermaLink="true">http://joswlv.github.io/2016/10/23/spc_rsync/</guid>
         
         
         <category>Unix/Linux</category>

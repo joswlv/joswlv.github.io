@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Short-circuit evaluation</title>
+    <meta name="description" content="Short-circuit evaluation이란                    and, or논리 연산에서 인자 하나만 보고 결과를 확실히 알 수 있을 때, 뒤에 ㄴ오는 인자를 확인하지 않고 바로 답을 내는 방법이다. &amp;&amp; 연산일 때, 하나라도 false이면 무조건...">
+
+    <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="stylesheet" href="/css/fontawesome/css/font-awesome.min.css ">
+    <link rel="stylesheet" href="/css/main.css ">
+    <link rel="canonical" href="http://joswlv.github.io/2016/11/18/Shortcircuitevaluation/">
+    <link rel="alternate" type="application/rss+xml" title="Joswlv" href="http://joswlv.github.io/feed.xml ">
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-83868242-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</head>
+
+
+  <body>
+
+    <header id="top">
+    <div class="wrapper">
+        <a href="/" class="brand">Joswlv</a>
+        <small></small>
+        <button id="headerMenu" class="menu"><i class="fa fa-bars"></i></button>
+        <nav id="headerNav">
+            <ul>
+                <li>
+                    
+                    <a href="/">
+                    
+                        <i class="fa fa-home"></i>Home
+                    </a>
+                </li>
+
+                
+                    
+                    <li>
+                        
+                        <a href="/archive/">
+                        
+                            <i class="fa fa-archive"></i>Archives
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/category/">
+                        
+                            <i class="fa fa-th-list"></i>Categories
+                        </a>
+                    </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        </nav>
+    </div>
+</header>
+
+
+        <div class="page clearfix" post>
+    <div class="left">
+        <h1>Short-circuit evaluation</h1>
+        <div class="label">
+
+            <div class="label-card">
+                <i class="fa fa-calendar"></i>2016-11-18
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+            
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#Java" title="Category: Java" rel="category">Java</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+            </div>
+
+        </div>
+        <hr>
+        <article itemscope itemtype="http://schema.org/BlogPosting">
+        <h1 id="short-circuit-evaluation">Short-circuit evaluation이란</h1>
+
+<blockquote>
+  <table>
+    <tbody>
+      <tr>
+        <td><code class="highlighter-rouge">and</code>, <code class="highlighter-rouge">or</code>논리 연산에서 인자 하나만 보고 결과를 확실히 알 수 있을 때, 뒤에 ㄴ오는 인자를 확인하지 않고 바로 답을 내는 방법이다. <code class="highlighter-rouge">&amp;&amp;</code> 연산일 때, 하나라도 false이면 무조건 답이 false이고</td>
+        <td> </td>
+        <td>연산일 땐, 하나라도 true이면 무조건 답이 true이다. 지원하는 언어는 <a href="https://en.wikipedia.org/wiki/Short-circuit_evaluation#Support_in_common_programming_languages">여기</a></td>
+      </tr>
+    </tbody>
+  </table>
+</blockquote>
+
+<p>예를 보면 다음과 같다.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>조건식 1 &amp;&amp; 조건식 2
+조건식 1 이 false 이면, 조건식 2 를 건너뜀
+</code></pre>
+</div>
+
+<h4 id="section">설명</h4>
+
+<p><code class="highlighter-rouge">&amp;&amp;</code>연산자에서는 두 조건식이 모두 true가 되어야 전체 결과가 true가 되는데, <code class="highlighter-rouge">조건식1</code>이 <code class="highlighter-rouge">false</code>가되면 <code class="highlighter-rouge">조건식2</code>을 보지 않아도 전체가 <code class="highlighter-rouge">false</code>가 되므로 <code class="highlighter-rouge">조건식2</code>를 체크하지 않는다.</p>
+
+<h1 id="section-1">적용한 예</h1>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="k">if</span> <span class="o">(</span><span class="n">check1</span> <span class="o">==</span> <span class="err">''</span> <span class="o">&amp;&amp;</span> <span class="n">check2</span> <span class="o">==</span> <span class="kc">null</span><span class="o">){</span>
+	<span class="n">blabla</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>위 경우에서 <code class="highlighter-rouge">''</code>을 먼저 체크하는 것보다 <code class="highlighter-rouge">null</code>인 경우를 먼저 체크하는 것이 안전하다고 한다.</p>
+
+<p>수정하면 아래와 같다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="k">if</span> <span class="o">(</span><span class="n">check2</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">check1</span> <span class="o">==</span> <span class="err">''</span><span class="o">){</span>
+	<span class="n">blabla</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p><br /></p>
+
+<h3 id="reference">Reference</h3>
+
+<ul>
+  <li><a href="http://ohyecloudy.com/pnotes/archives/542/">ohyecloudy pnotes</a></li>
+  <li><a href="http://kkikkodev.tistory.com/284">kkikkodev</a></li>
+</ul>
+
+        </article>
+        <hr>
+
+        
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+        
+
+        <div class="post-recent">
+    <div class="pre">
+        
+        <p><strong>prev</strong> <a href="/2016/11/10/JQuery_findnode/">jquery 선택자</a></p>
+        
+    </div>
+    <div class="nex">
+
+        
+    </div>
+</div>
+
+
+        <h2 id="comments">Comments</h2>
+        
+
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+     * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+
+    var disqus_config = function() {
+        this.page.url = 'http://joswlv.github.io/2016/11/18/Shortcircuitevaluation/'; // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://joswlv.github.io/2016/11/18/Shortcircuitevaluation/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document,
+            s = d.createElement('script');
+
+        s.src = '//joswlv.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+
+    </div>
+    <button class="anchor"><i class="fa fa-anchor"></i></button>
+    <div class="right">
+        <div class="wrap">
+
+            <!-- Content -->
+            <div class="side content">
+                <div>
+                    Content
+                </div>
+                <ul id="content-side" class="content-ul">
+                    <li><a href="#similar_posts">Similar Posts</a></li>
+                    <li><a href="#comments">Comments</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+/**
+ * target _blank
+ */
+(function() {
+    var aTags = document.querySelectorAll('article a:not([id])')
+    for (var i = 0; i < aTags.length; i++) {
+        aTags[i].setAttribute('target', '_blank')
+    }
+}());
+</script>
+<script src="/js/pageContent.js " charset="utf-8"></script>
+
+
+    <footer class="site-footer">
+
+
+    <div class="wrapper">
+
+        <p class="description">
+            
+        </p>
+        <p class="contact">
+            Contact me at: 
+            <a href="https://github.com/joswlv" title="GitHub"><i class="fa fa-github" aria-hidden="true"></i></a>  
+            <a href="mailto:wh7923@gmail.com" title="email"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>     
+            <a href="https://www.facebook.com/wsj7923" title="Facebook"><i class="fa fa-facebook-official" aria-hidden="true"></i></a>    
+        </p>
+        <p>
+        </p>
+        <p class="power">
+            <span>
+                Site powered by <a href="https://jekyllrb.com/">Jekyll</a> & <a href="https://pages.github.com/">Github Pages</a>.
+            </span>
+        </p>
+    </div>
+</footer>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <div class="back-to-top">
+    <a href="#top" class="scroll">
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    </a>
+</div>
+
+    <script src=" /js/main.js " charset="utf-8"></script>
+    <script src=" /js/scroll.min.js " charset="utf-8"></script>
+  </body>
+
+</html>

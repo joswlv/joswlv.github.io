@@ -103,6 +103,164 @@
             
               <li>
                 <h2>
+                  <a class="post-link" href="/2016/07/08/Angularjs_promise_and_q/">AngularJS_Promise객체 와 $q서비스</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-07-08
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#js" title="Category: js" rel="category">js</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h2 id="promise">Promise객체</h2>
+<p>promise 객체는 약속을 표현하는 자바스크립트 객체이다.</p>
+
+<p>AngularJS에서 <code class="highlighter-rouge">$http</code>,<code class="highlighter-rouge">$tiemoute</code>,<code class="highlighter-rouge">$resource</code>,<code class="highlighter-rouge">$route</code>등 여러 서비스에서 promise객체를 반환한다.</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">fetchData</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">cb</span><span class="p">){</span>
+  <span class="nx">getDataFromServer</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">){</span>
+    <span class="k">if</span><span class="p">(</span><span class="nx">err</span><span class="p">){</span>
+      <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="kc">null</span><span class="p">);</span>
+    <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+      <span class="nx">transformData</span><span class="p">(</span><span class="nx">result</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">transformedResult</span><span class="p">){</span>
+        <span class="k">if</span><span class="p">(</span><span class="nx">err</span><span class="p">){</span>
+          <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="kc">null</span><span class="p">);</span>
+        <span class="p">}</span><span class="k">else</span><span class="p">{</span>
+          <span class="nx">saveToIndexDB</span><span class="p">(</span><span class="nx">result</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">savedData</span><span class="p">){</span>
+            <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">savedData</span><span class="p">);</span>
+          <span class="p">});</span>
+        <span class="p">}</span>
+      <span class="p">});</span>
+    <span class="p">}</span>
+  <span class="p">});</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+<p>위 코드는 콜백지옥이다. promise객체를 사용하면 다음과 같다.</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">fetchData</span><span class="p">(</span><span class="nx">id</span><span class="p">){</span>
+  <span class="k">return</span> <span class="nx">getDataFromServer</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">transformData</span><span class="p">)</span>
+          <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">saveToIndexDB</span><span class="p">);</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+<p>then으로 묶어 주면 된다. 코드가 예뻐졌다. 그리고 <code class="highlighter-rouge">error</code>처리도 쉬워진다.</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nx">fetchData</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">result</span><span class="p">){</span>
+
+  <span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">){</span>
+    <span class="c1">// exceptions in transformData, or saveToIndexDB</span>
+    <span class="c1">// will result in this error callback being called.</span>
+  <span class="p">});</span>
+</code></pre>
+</div>
+
+<h2 id="deferred">Deferred객체</h2>
+<p>약속을 정의했으면 누군가는 약속을 지키거나 거절해야 한다. 이러한 일을 하는 것이 <code class="highlighter-rouge">deferred</code>객체이다. <code class="highlighter-rouge">deferred</code>객체는 약속을 만들고 만든 약속의 상태를 변경한다.</p>
+
+<p>AngluarJS는 <code class="highlighter-rouge">$q.deferred()</code>를 이용하여 <code class="highlighter-rouge">deferred</code>객체를 생성할 수 있다. (<code class="highlighter-rouge">deferred</code>객체 생성은 곧 <code class="highlighter-rouge">Promise</code>객체 생성이기도 하다.)</p>
+
+<p><code class="highlighter-rouge">deferred</code>객체는 <code class="highlighter-rouge">resolve</code>,<code class="highlighter-rouge">reject</code>,<code class="highlighter-rouge">notify</code>를 통하여 약속으 지키거나 거절/취소하여 진행 상태를 알려준다.</p>
+
+<p><code class="highlighter-rouge">deferred</code>객체는 주로 별도의 서비스를 만들고 해당 서비스에서 생성하여 해당 객체의 약속을 반환하는 식으로 많이 사용된다.</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">'demo-app'</span><span class="p">,</span> <span class="p">[])</span>
+  <span class="p">.</span><span class="nx">factory</span><span class="p">(</span><span class="s1">'userService'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$http</span><span class="p">,</span> <span class="nx">$log</span><span class="p">,</span> <span class="nx">$q</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">{</span>
+     <span class="na">getUser</span><span class="p">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">userId</span><span class="p">)</span> <span class="p">{</span>
+       <span class="c1">//deferred 객체를 생성한다.</span>
+       <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">$q</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
+       <span class="nx">$http</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'/api/users/'</span> <span class="o">+</span> <span class="nx">userID</span><span class="p">)</span>
+         <span class="p">.</span><span class="nx">success</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">//요청이 성공하면 약속을 지키고 별도 데이터를 전달한다.</span>
+            <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">({</span>
+               <span class="na">name</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span>
+               <span class="na">address</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">address</span><span class="p">});</span>
+         <span class="p">}).</span><span class="nx">error</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">msg</span><span class="p">,</span> <span class="nx">code</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">//요청이 실패하면 약속을 취소하고 메시지를 전달한다.</span>
+            <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span><span class="p">(</span><span class="nx">msg</span><span class="p">);</span>
+            <span class="nx">$log</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">msg</span><span class="p">,</span> <span class="nx">code</span><span class="p">);</span>
+         <span class="p">});</span>
+       <span class="c1">//해당 deferred 객체의 약속을 반환한다.</span>
+       <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+     <span class="p">}</span>
+    <span class="p">}</span>
+	<span class="p">});</span>
+</code></pre>
+</div>
+
+<h2 id="promise-qall">여러 Promise 묶어주기($q.all)</h2>
+<p>$q 서비스는 미래에 지켜지거나 지켜지지 않을 여러 약속을 하나의 약속으로 처리할 수 있는 API도 제공한다.</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nx">factory</span><span class="p">(</span><span class="s1">'asyncService'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$http</span><span class="p">,</span> <span class="nx">$q</span><span class="p">)</span> <span class="p">{</span>
+  <span class="k">return</span> <span class="p">{</span>
+    <span class="na">loadDataFromTwoReq</span><span class="p">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+      <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">$q</span><span class="p">.</span><span class="nx">defer</span><span class="p">(),</span>
+          <span class="nx">httpPromise1</span> <span class="o">=</span> <span class="nx">$http</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'/api/req1'</span><span class="p">),</span>
+          <span class="nx">httpPromise2</span> <span class="o">=</span> <span class="nx">$http</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'/api/req2'</span><span class="p">);</span>
+
+      <span class="c1">//두 약속을 $q.all 메서드를 이용해 새로운 약속을 만든다.</span>
+      <span class="nx">$q</span><span class="p">.</span><span class="nx">all</span><span class="p">(</span><span class="nx">httpPromise1</span><span class="p">,</span> <span class="nx">httpPromise2</span><span class="p">)</span>
+        <span class="p">.</span><span class="nx">then</span><span class="p">(</span>
+          <span class="kd">function</span><span class="p">(</span><span class="nx">results</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">//두 약속이 모두 지켜지면 asyncService서비스가 반한하는 약속을 지키고 두 약속이 전달하는 결과를 묶은 배열로 전달한다.</span>
+            <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">results</span><span class="p">)</span>
+          <span class="p">},</span>
+          <span class="kd">function</span><span class="p">(</span><span class="nx">errors</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span><span class="p">(</span><span class="nx">errors</span><span class="p">);</span>
+          <span class="p">},</span>
+          <span class="kd">function</span><span class="p">(</span><span class="nx">updates</span><span class="p">)</span> <span class="p">{</span>
+          <span class="nx">deferred</span><span class="p">.</span><span class="nx">update</span><span class="p">(</span><span class="nx">updates</span><span class="p">);</span>
+        <span class="p">});</span>
+      <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
+    <span class="p">}</span>
+  <span class="p">};</span>
+<span class="p">});</span>
+</code></pre>
+</div>
+
+<p>위 코드는 일반적인 콜백 방식으로 작성하게 되면 첫 번째 요청의 성공 콜백에서 다른 요청을 하고 그 요청의 성공 콜백에서 두 요청에 대한 성공 처리를 하는 코드를 작성하게 된다.</p>
+
+<p>하지만!! $q 서비스는 $q.all 메서드를 이용해 약속을 바환하는 여러 비동기적인 일이 병렬적으로 행해지고 있다.
+약속을 하나로 묶어 성공/실패 처리를 할 수 있게 해준다.</p>
+
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/07/08/Angularjs_promise_and_q/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
                   <a class="post-link" href="/2016/07/07/Angularjs_how_to_ues_filter_and_watch/">AngularJS_How to use filter & $watch</a>
                 </h2>
                 <div class="label">
@@ -381,7 +539,7 @@
                             <span class="name">
                                 Java
                             </span>
-                            <span class="badge">2</span>
+                            <span class="badge">3</span>
                         </a>
                     </li>
                     
@@ -421,6 +579,8 @@
                 </div>
                 <ul class="content-ul" recent>
                     
+                        <li><a href="/2016/11/18/Shortcircuitevaluation/">Short-circuit evaluation</a></li>
+                    
                         <li><a href="/2016/11/10/JQuery_findnode/">jquery 선택자</a></li>
                     
                         <li><a href="/2016/11/07/jqueryselector/">jquery :last 선택자</a></li>
@@ -438,8 +598,6 @@
                         <li><a href="/2016/10/24/optional/">Optional</a></li>
                     
                         <li><a href="/2016/10/23/awk/">awk 사용법</a></li>
-                    
-                        <li><a href="/2016/10/23/spc_rsync/">scp 와 rsync - 원격파일정송방법</a></li>
                     
                 </ul>
             </div>
