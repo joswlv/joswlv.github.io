@@ -5,8 +5,8 @@
     <description></description>
     <link>http://joswlv.github.io/</link>
     <atom:link href="http://joswlv.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Fri, 18 Nov 2016 18:25:20 +0900</pubDate>
-    <lastBuildDate>Fri, 18 Nov 2016 18:25:20 +0900</lastBuildDate>
+    <pubDate>Fri, 18 Nov 2016 18:27:22 +0900</pubDate>
+    <lastBuildDate>Fri, 18 Nov 2016 18:27:22 +0900</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
     
       <item>
@@ -14,16 +14,10 @@
         <description>&lt;h1 id=&quot;short-circuit-evaluation&quot;&gt;Short-circuit evaluation이란&lt;/h1&gt;
 
 &lt;blockquote&gt;
-  &lt;table&gt;
-    &lt;tbody&gt;
-      &lt;tr&gt;
-        &lt;td&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;and&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;or&lt;/code&gt;논리 연산에서 인자 하나만 보고 결과를 확실히 알 수 있을 때, 뒤에 ㄴ오는 인자를 확인하지 않고 바로 답을 내는 방법이다. &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;amp;&amp;amp;&lt;/code&gt; 연산일 때, 하나라도 false이면 무조건 답이 false이고&lt;/td&gt;
-        &lt;td&gt; &lt;/td&gt;
-        &lt;td&gt;연산일 땐, 하나라도 true이면 무조건 답이 true이다. 지원하는 언어는 &lt;a href=&quot;https://en.wikipedia.org/wiki/Short-circuit_evaluation#Support_in_common_programming_languages&quot;&gt;여기&lt;/a&gt;&lt;/td&gt;
-      &lt;/tr&gt;
-    &lt;/tbody&gt;
-  &lt;/table&gt;
+  &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;and&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;or&lt;/code&gt;논리 연산에서 인자 하나만 보고 결과를 확실히 알 수 있을 때, 뒤에 나오는 인자를 확인하지 않고 바로 답을 내는 방법이다. &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;amp;&amp;amp;&lt;/code&gt; 연산일 때, 하나라도 false이면 무조건 답이 false이고 &lt;code class=&quot;highlighter-rouge&quot;&gt;||&lt;/code&gt; 연산일 땐, 하나라도 true이면 무조건 답이 true이다.&lt;/p&gt;
 &lt;/blockquote&gt;
+
+&lt;p&gt;지원하는 언어는 &lt;a href=&quot;https://en.wikipedia.org/wiki/Short-circuit_evaluation#Support_in_common_programming_languages&quot;&gt;여기&lt;/a&gt;&lt;/p&gt;
 
 &lt;p&gt;예를 보면 다음과 같다.&lt;/p&gt;
 

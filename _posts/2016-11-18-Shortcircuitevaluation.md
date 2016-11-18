@@ -7,7 +7,9 @@ categories: Java
 
 # Short-circuit evaluation이란
 
-> `and`, `or`논리 연산에서 인자 하나만 보고 결과를 확실히 알 수 있을 때, 뒤에 ㄴ오는 인자를 확인하지 않고 바로 답을 내는 방법이다. `&&` 연산일 때, 하나라도 false이면 무조건 답이 false이고 || 연산일 땐, 하나라도 true이면 무조건 답이 true이다. 지원하는 언어는 [여기](https://en.wikipedia.org/wiki/Short-circuit_evaluation#Support_in_common_programming_languages)
+>  `and`, `or`논리 연산에서 인자 하나만 보고 결과를 확실히 알 수 있을 때, 뒤에 나오는 인자를 확인하지 않고 바로 답을 내는 방법이다. `&&` 연산일 때, 하나라도 false이면 무조건 답이 false이고 `||` 연산일 땐, 하나라도 true이면 무조건 답이 true이다. 
+
+지원하는 언어는 [여기](https://en.wikipedia.org/wiki/Short-circuit_evaluation#Support_in_common_programming_languages)
 
 예를 보면 다음과 같다.
 
