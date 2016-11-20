@@ -103,6 +103,58 @@
             
               <li>
                 <h2>
+                  <a class="post-link" href="/2016/09/17/reflection_property/">리플렉션API와 프로퍼티를 이용한 객체관리</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-09-17
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#web" title="Category: web" rel="category">web</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="reflection-api">1. Reflection API</h1>
+
+<p>리플렉션이란 객체를 통해 클래스의 정보를 분석해 내는 프로그램 기법을 말한다. 투영, 반사 라는 사전적인 의미를 지니고 있다.</p>
+
+<p>자바는 스크립트 언어가 아닌 컴파일 언어이다. 물론 .java -&gt; .class -&gt; 실행이라는 2단계의 메커니즘을 가지고 있지만 컴파일 언어로 분리하는 게 옳다. 원래 자바에서는 동적으로 객체를 생성하는 기술이 없었다. 그리고 동적으로 인스턴스를 생성하는 Reflection으로 그 역활을 대신하게 된다.</p>
+
+<p>즉 클래스나 메서드의 내부 구조를 들여다 볼 때 사용하는 도구라는 뜻이다.<br /></p>
+
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/09/17/reflection_property/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
                   <a class="post-link" href="/2016/09/16/frontcontroller_dietc/">프런트 컨트롤러 패턴과 의존성주입</a>
                 </h2>
                 <div class="label">
@@ -1059,106 +1111,6 @@ for(Member member : members) {
                 <hr>
               </li>
             
-              <li>
-                <h2>
-                  <a class="post-link" href="/2016/09/12/MVC/">MVC 이해하기</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-09-12
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#web" title="Category: web" rel="category">web</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                </div>
-                <div class="excerpt">
-                    <h1 id="mvc-">1. MVC 아키텍처</h1>
-
-<p><img src="http://joswlv.github.io/images/mvc.png" alt="" /></p>
-
-<h3 id="controller-">컨트롤러(controller)컴포넌트의 역할</h3>
-
-<p>클라이언트의 요청을 받았을 때 그 요청에 대해 실제 업무를 수행하는 모델 컴포넌트를 호출하는 일을 한다. 또 클라이언트가 보낸 데이터가 있다면, 모델을 호출할 때 전달하기 쉽게 데이터를 적절히 가공하는 일을 한다. 모델이 업무를 수행을 완료하면, 그 결과를 가지고 화면을 생성하도록 뷰에게 전달한다.</p>
-
-<p>즉 클라이언트 요청에 대해 모델과 뷰를 결정하여 전달하는 일을 한다.</p>
-
-<h3 id="model-">모델(model)컴포넌트의 역할</h3>
-
-<p>데이터 저장소와 연동하여 사용자가 입력한 데이터나 사용자에게 출력할 데이터를 다루는 일을 한다. 특히 여러개의 데이터 변경 작업(추가, 변경, 삭제)을 하나의 작업으로 묵는 트랜잭션을 다루는 일도 한다.</p>
-
-<h3 id="view--">뷰(view) 컴포넌트의 역할</h3>
-
-<p>모델이 처리한 데이터나 그 작업 결과를 가지고 사용자에게 출력할 화면을 만드는 일을 한다. 이렇게 생성된 화면은 웹브라우저가 출력한다.</p>
-
-<p>즉 뷰 컴포넌트는 HTML과 CSS, JavaScript를 사용하여 웹 브라우저가 출력할 UI를 만든다.</p>
-
-<h1 id="mcv-">2. MCV의 이점</h1>
-
-<h3 id="section">높은 재사용성, 넓은 융통성</h3>
-
-<ul>
-  <li><code class="highlighter-rouge">look and feel</code>을 쉽게 교채할 수 있다.</li>
-  <li><code class="highlighter-rouge">on source multi use</code>를 쉽게 구현할 수 있다.</li>
-  <li>코드를 재사용할 수 있다.</li>
-</ul>
-
-<h3 id="section-1">빠른 개발, 저렴한 비용</h3>
-
-<ul>
-  <li>다른 프로젝트에서도 모델 컴포넌트를 재사용할 수 있기 때문에 개발 속도가 빨라진다.</li>
-  <li>소스 코드를 역할에 따라 여러 컴포넌트로 쪼개게 되면, 그 컴포넌트의 나니도에 따라 좀 더 낮은 수준의 개발자를 투입하여 개발 및 유지보수 비용 감소</li>
-</ul>
-
-<h1 id="mvc--">3. MVC 구동 원리</h1>
-
-<p>아래 그림은 클라이언트 요청에서 화면 출력까지 과정을 나타낸다.</p>
-
-<p><img src="http://joswlv.github.io/images/mvca.png" alt="" /></p>
-
-<ol>
-  <li>웹 브라우저가 웹어플리케이션을 실행을 요청하면, 웹서버가 그 요청을 받아서 서블릿 컨테이너에게 넘겨준다. 서블릿 컨테이너는 URL을 확인하여 그 요청을 처리할 서브릿을 찾아 실행한다.</li>
-  <li>서블릿은 실제 업무를 처리하는 모델 자바 객체의 메서드를 호출한다. 만약 웹 브라우저가 보낸 데이터를 저장하거나 변경해야 한다면 그 데이터를 가공하여 VO(Value Object)를 생성하고, 모델 객체의 메서드를 호출할 때 인자값을 넘긴다.</li>
-  <li>모델 객체는 JDBC를 사용하여 매개변수로 넘어온 VO를 데이터베이스에 저장하거나, 데이터베이스로부터 질의 결과를 가져와 VO로 만들어 반환한다. 이렇게 VO는 객체와 객체 사이에 데이터를 전달하는 용도로 사용하기 때문에 <code class="highlighter-rouge">데이터 전송객체(DTO : Data Transfer Object)</code>라고 한다.</li>
-  <li>서블릿은 모델 객체로부터 반환받은 값을 JSP에 전달한다.</li>
-  <li>JSP는 서블릿으로부터 전달받은 VO를 참조하여 웹브라우저가 출력할 결과 화면을 만들고 웹브라우저에 출력함으로써 요청 처리를 완료한다.</li>
-  <li>웹브라우저는 서버로부터 받은 응답 내용을 화면에 출력한다.</li>
-</ol>
-
-<h3 id="reference">Reference</h3>
-<ul>
-  <li><a href="http://www.yes24.com/24/Goods/13159413?Acode=101">열혈강의 자바 웹 개발 워크북</a></li>
-</ul>
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2016/09/12/MVC/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
         </ul>
 
 
@@ -1246,7 +1198,7 @@ for(Member member : members) {
                             <span class="name">
                                 Etc
                             </span>
-                            <span class="badge">3</span>
+                            <span class="badge">4</span>
                         </a>
                     </li>
                     
@@ -1277,6 +1229,8 @@ for(Member member : members) {
                 </div>
                 <ul class="content-ul" recent>
                     
+                        <li><a href="/2016/11/20/realtimeweb/">Real-time web tec List</a></li>
+                    
                         <li><a href="/2016/11/18/Shortcircuitevaluation/">Short-circuit evaluation</a></li>
                     
                         <li><a href="/2016/11/10/JQuery_findnode/">jquery 선택자</a></li>
@@ -1294,8 +1248,6 @@ for(Member member : members) {
                         <li><a href="/2016/10/29/directorylisting/">Apache Directory listing 제거</a></li>
                     
                         <li><a href="/2016/10/24/optional/">Optional</a></li>
-                    
-                        <li><a href="/2016/10/23/awk/">awk 사용법</a></li>
                     
                 </ul>
             </div>

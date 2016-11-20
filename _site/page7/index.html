@@ -103,6 +103,159 @@
             
               <li>
                 <h2>
+                  <a class="post-link" href="/2016/08/07/Angularjs_if/">AngularJS_AngularJS_if</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-08-07
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#js" title="Category: js" rel="category">js</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <p>AngularJS의 조건문은 4가지가 존재한다.</p>
+
+<ul>
+  <li>ng-switch</li>
+  <li>ng-hide, ng-show</li>
+  <li>ng-class</li>
+  <li>ng-if</li>
+</ul>
+
+<h2 id="ng-switch">1. ng-switch</h2>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">ng-switch</span> <span class="na">on=</span><span class="s">"fruits"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">ng-switch-when=</span><span class="s">"apple"</span><span class="nt">&gt;</span>
+        <span class="c">&lt;!-- fruits값이 apple일 때 해당 태그가 실행됩니다.--&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+    <span class="nt">&lt;div</span> <span class="na">ng-switch-default</span><span class="nt">&gt;</span>
+        <span class="c">&lt;!-- code to render the regular video block --&gt;</span>
+    <span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre>
+</div>
+<p><code class="highlighter-rouge">on</code>에 <code class="highlighter-rouge">switch</code>의 대상이 되는 변수를 적어준다.</p>
+
+<h3 id="ng-switch-">ng-switch 예제</h3>
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">ng-app=</span><span class="s">""</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">ng-model=</span><span class="s">"fruits"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;p&gt;</span>입력한 값: <span class="nt">&lt;/p&gt;</span>
+	<span class="nt">&lt;div</span> <span class="na">ng-switch=</span><span class="s">""</span> <span class="na">on=</span><span class="s">"fruits"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;div</span> <span class="na">ng-switch-when=</span><span class="s">"appel"</span><span class="nt">&gt;</span>
+			apple을 입력!
+		<span class="nt">&lt;/div&gt;</span>
+		<span class="nt">&lt;div</span> <span class="na">ng-switch-default</span><span class="nt">&gt;</span>
+			아무것도 입력하지 않음
+		<span class="nt">&lt;/div&gt;</span>
+	<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre>
+</div>
+
+<h2 id="ng-hide--ng-show">2. ng-hide / ng-show</h2>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">ng-hide=</span><span class="s">"isBlockedMember"</span><span class="nt">&gt;</span>
+    <span class="c">&lt;!-- isBlockedMember가 true값을 가지면 해당 &lt;div&gt;태그는 보이지 않습니다.--&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">ng-show=</span><span class="s">"isLogged"</span><span class="nt">&gt;</span>
+    <span class="c">&lt;!-- isLogged가 true값을 가지면 해당 &lt;div&gt;가 보이게 됩니다. --&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre>
+</div>
+
+<p>특정 조건에 있어 show/hide를 할 수 있는 <code class="highlighter-rouge">directive</code> 이다.</p>
+
+<h3 id="ng-hide--ng-show-">ng-hide / ng-show 예제</h3>
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;div&gt;</span>
+	<span class="nt">&lt;spand&gt;</span>isMember:<span class="nt">&lt;/span&gt;</span>
+	<span class="nt">&lt;select</span> <span class="na">ng-model=</span><span class="s">"isMember"</span><span class="nt">&gt;</span>
+		<span class="nt">&lt;option</span> <span class="na">value=</span><span class="s">"true"</span><span class="nt">&gt;</span>YES<span class="nt">&lt;/option&gt;</span>
+		<span class="nt">&lt;option</span> <span class="na">value=</span><span class="s">"false"</span><span class="nt">&gt;</span>NO<span class="nt">&lt;/option&gt;</span>
+	<span class="nt">&lt;/select&gt;</span>
+
+	<span class="nt">&lt;p&gt;</span>isMember : <span class="nt">&lt;/p&gt;</span>
+	<span class="nt">&lt;div</span> <span class="na">ng-show=</span><span class="s">"isMember=='true'"</span><span class="nt">&gt;</span>
+		회원입니다.
+	<span class="nt">&lt;/div&gt;</span>
+	<span class="nt">&lt;div</span> <span class="na">ng-hide=</span><span class="s">"!(isMember=='false')"</span><span class="nt">&gt;</span>
+		회원이 아닙니다.
+	<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre>
+</div>
+
+<h2 id="ng-class">3. ng-class</h2>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">ng-class=</span><span class="s">"{block-member: member.isBlocked}"</span><span class="nt">&gt;</span>
+    <span class="c">&lt;!-- member객체의 isBlocked의 값이 true이면 해당 태그에 block-member클래스가 등록됩니다. --&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre>
+</div>
+<p>css와 함께 태그를 컨트롤하기에 좋음</p>
+
+<h3 id="ng-class-">ng-class 예제</h3>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">style=</span><span class="s">"width:100%; background-color:#eee"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;span&gt;</span>chang Background color: <span class="nt">&lt;/span&gt;</span>
+	<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">ng-model=</span><span class="s">"bgColor"</span> <span class="na">placeholder=</span><span class="s">"red를 입력해보세요."</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;div</span> <span class="na">style=</span><span class="s">"width:200px; height:100px;"</span> <span class="na">ng-class=</span><span class="s">"{'red: bgColor=='red'}"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre>
+</div>
+
+<h2 id="ng-if">4. ng-if</h2>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">ng-if=</span><span class="s">"lastLogged == today"</span><span class="nt">&gt;</span>
+    <span class="c">&lt;!-- 변수의 값이 today와 일치할 때 이 태그가 보여지게 됩니다.--&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+<span class="nt">&lt;div</span> <span class="na">ng-if=</span><span class="s">"lastLogged != today"</span><span class="nt">&gt;</span>
+    <span class="c">&lt;!-- 변수의 값이 today와 일치하지 않을 때 이 태그가 보여지게 됩니다. --&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">ng-else</code>는 존재하지 않는다!!</p>
+
+<h3 id="reference">Reference</h3>
+<ul>
+  <li><a href="http://rhammer.tistory.com/55">고무망치</a></li>
+  <li><a href="https://www.angularjs.org">angularJs</a></li>
+</ul>
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/08/07/Angularjs_if/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
                   <a class="post-link" href="/2016/07/08/Angularjs_promise_and_q/">AngularJS_Promise객체 와 $q서비스</a>
                 </h2>
                 <div class="label">
@@ -548,7 +701,7 @@
                             <span class="name">
                                 Etc
                             </span>
-                            <span class="badge">3</span>
+                            <span class="badge">4</span>
                         </a>
                     </li>
                     
@@ -579,6 +732,8 @@
                 </div>
                 <ul class="content-ul" recent>
                     
+                        <li><a href="/2016/11/20/realtimeweb/">Real-time web tec List</a></li>
+                    
                         <li><a href="/2016/11/18/Shortcircuitevaluation/">Short-circuit evaluation</a></li>
                     
                         <li><a href="/2016/11/10/JQuery_findnode/">jquery 선택자</a></li>
@@ -596,8 +751,6 @@
                         <li><a href="/2016/10/29/directorylisting/">Apache Directory listing 제거</a></li>
                     
                         <li><a href="/2016/10/24/optional/">Optional</a></li>
-                    
-                        <li><a href="/2016/10/23/awk/">awk 사용법</a></li>
                     
                 </ul>
             </div>
