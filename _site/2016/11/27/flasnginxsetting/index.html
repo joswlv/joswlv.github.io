@@ -6,14 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Real-time web tec List</title>
-    <meta name="description" content="Real-time web Tec ListYou can find a comprehensive and updated list of real-time solutions that can be considered alternatives to pusher in this Real-Time We...">
+    <title>Flask + Nginx 설정</title>
+    <meta name="description" content="Flask + Nginx 설치 방법환경데비안 계열 중 우분투 서버여기서 접근하는 모든 디렉토리는 권한이 있어야함.설치apt-get install nginx # Nginxapt-get install uwsgi # uWSGIapt-get install uwsgi-plugin-pytho...">
 
     <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
     <link rel="icon" href="/favicon.ico?" type="image/x-icon">
     <link rel="stylesheet" href="/css/fontawesome/css/font-awesome.min.css ">
     <link rel="stylesheet" href="/css/main.css ">
-    <link rel="canonical" href="http://joswlv.github.io/2016/11/20/realtimeweb/">
+    <link rel="canonical" href="http://joswlv.github.io/2016/11/27/flasnginxsetting/">
     <link rel="alternate" type="application/rss+xml" title="Joswlv" href="http://joswlv.github.io/feed.xml ">
 
 
@@ -96,11 +96,11 @@
 
         <div class="page clearfix" post>
     <div class="left">
-        <h1>Real-time web tec List</h1>
+        <h1>Flask + Nginx 설정</h1>
         <div class="label">
 
             <div class="label-card">
-                <i class="fa fa-calendar"></i>2016-11-20
+                <i class="fa fa-calendar"></i>2016-11-27
             </div>
 
             <div class="label-card">
@@ -120,7 +120,7 @@
   <i class="fa fa-th-list"></i>
   
     
-        <a href="/category/#Etc" title="Category: Etc" rel="category">Etc</a>
+        <a href="/category/#python" title="Category: python" rel="category">python</a>
     
   
 
@@ -133,63 +133,65 @@
         </div>
         <hr>
         <article itemscope itemtype="http://schema.org/BlogPosting">
-        <h1 id="real-time-web-tec-list">Real-time web Tec List</h1>
+        <h1 id="flask--nginx--">Flask + Nginx 설치 방법</h1>
 
-<p>You can find a comprehensive and updated list of real-time solutions that can be considered alternatives to pusher in this Real-Time Web Technologies Guide.</p>
+<h2 id="section">환경</h2>
+<p>데비안 계열 중 우분투 서버<br />
+여기서 접근하는 모든 디렉토리는 권한이 있어야함.</p>
 
-<h3 id="hosted">Hosted</h3>
+<h2 id="section-1">설치</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code>apt-get install nginx # Nginx
+apt-get install uwsgi # uWSGI
+apt-get install uwsgi-plugin-python # python과 uWSGI를 연결하는 플러그인
+</code></pre>
+</div>
 
-<ul>
-  <li>Ably: https://www.ably.io   <strong>(완전 편리함!!)</strong></li>
-  <li>Fanout: http://fanout.io/</li>
-  <li>Firebase https://www.firebase.com</li>
-  <li>Gamooga: http://www.gamooga.com/</li>
-  <li>Google App Engine with Channels API: http://code.google.com/appengine…</li>
-  <li>Google Drive Real Time: https://developers.google.com/dr…</li>
-  <li>Hydna: https://www.hydna.com/</li>
-  <li>ScaleDrone https://www.scaledrone.com</li>
-  <li>Baasil https://baasil.io</li>
-  <li>PubNub: http://pubnub.com</li>
-  <li>Reappt: Data-Efficient Realtime Messaging</li>
-  <li>Simperium: Simperium</li>
-  <li>Tambur: https://www.tambur.io/</li>
-  <li>WebSync on-demand: http://www.frozenmountain.com/we…</li>
-  <li>Xtremepush: Xtremepush - Mobile Marketing Automation Software</li>
-</ul>
+<h2 id="nginx-">Nginx 세팅</h2>
+<p>디폴트 파일로 설정하는 방법
+<code class="highlighter-rouge">vi /etc/nginx/sites-available/default</code></p>
 
-<h3 id="self-hosted">Self Hosted</h3>
+<div class="highlighter-rouge"><pre class="highlight"><code>server {
+       listen       80; # 연결할 포트
+       server_name  0.0.0.0;
+       location / { try_files $uri @app; }
+       location @app {
+           include uwsgi_params;
+           uwsgi_pass unix:socket파일이 위치할 경로;
+           # ex) /home/server/uwsgi.sock
+       }
+}
+</code></pre>
+</div>
 
-<ul>
-  <li>http://github.com/Atmosphere : http://async-io.org/</li>
-  <li>http://faye.jcoglan.com/</li>
-  <li>http://firehose.io/</li>
-  <li>Jetty: http://blogs.webtide.com/gregw/e…</li>
-  <li>Kaazing: http://kaazing.com/</li>
-  <li>Lightstreamer: http://lightstreamer.com</li>
-  <li>Diffusion - http://www.pushtechnology.com</li>
-  <li>http://pusheo.com</li>
-  <li>http://code.google.com/p/pywebso…</li>
-  <li>Ruby EventMachine WebSocket server: https://github.com/igrigorik/em-…</li>
-  <li>SignalR (.NET) https://github.com/SignalR/SignalR</li>
-  <li>Slanger. Open source reimplementation of Pusher. Compatible with Pusher libraries: https://github.com/stevegraham/s…</li>
-  <li>http://socky.org/</li>
-  <li>http://socket.io/</li>
-  <li>http://sockjs.org/</li>
-  <li>http://socketcluster.io/</li>
-  <li>Thunderpush: https://github.com/thunderpush/t…</li>
-  <li>https://www.meteor.com/</li>
-</ul>
+<h2 id="uwsgi-">uWSGI 세팅</h2>
+<p><code class="highlighter-rouge">vi /etc/uwsgi/apps-available/uwsgi.ini</code></p>
 
-<p>Pushpin</p>
-<ul>
-  <li>MigratoryData: http://migratorydata.com</li>
-</ul>
+<div class="highlighter-rouge"><pre class="highlight"><code>[uwsgi]
+chdir = 프로젝트 경로
+uid = 실행할계정
+gid = 실행할계정
+chmod-socket = 666
+socket = socket파일이 위치할 경로
+module = 모듈이름(실행할 파일 이름)
+callable = 연결될 Flask 모듈이름
+virtualenv = python 가상 환경 경로(virtualenv)
+</code></pre>
+</div>
 
-<h3 id="reference">Reference</h3>
+<p>참고로 프로젝트 경로는 root를 포함하지 않는 것이 좋다 (권한 문제 때문에)</p>
 
-<ul>
-  <li><a href="https://www.quora.com/What-are-alternatives-to-pusher-com">Quora</a></li>
-</ul>
+<p>허용하는 파일로 등록하기위해 apps-enabled 디렉토리에 link함
+<code class="highlighter-rouge">ln -s /etc/uwsgi/apps-available/uwsgi.ini /etc/uwsgi/apps-enabled/</code></p>
+
+<h2 id="section-2">실행 방법</h2>
+<p>세팅 후 재시작을 한다.</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo service nginx restart
+sudo service uwsgi restart
+</code></pre>
+</div>
+
+<p>설정한 uwsgi에 맞춰서 실행
+<code class="highlighter-rouge">uwsgi /etc/uwsgi/apps-available/uwsgi.ini &amp;</code></p>
 
         </article>
         <hr>
@@ -231,13 +233,11 @@
         <div class="post-recent">
     <div class="pre">
         
-        <p><strong>prev</strong> <a href="/2016/11/18/Shortcircuitevaluation/">Short-circuit evaluation</a></p>
+        <p><strong>prev</strong> <a href="/2016/11/20/realtimeweb/">Real-time web tec List</a></p>
         
     </div>
     <div class="nex">
 
-        
-        <p><strong>next</strong> <a href="/2016/11/27/flasnginxsetting/">Flask + Nginx 설정</a></p>
         
     </div>
 </div>
@@ -255,8 +255,8 @@
      */
 
     var disqus_config = function() {
-        this.page.url = 'http://joswlv.github.io/2016/11/20/realtimeweb/'; // Replace PAGE_URL with your page's canonical URL variable
-        this.page.identifier = 'http://joswlv.github.io/2016/11/20/realtimeweb/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        this.page.url = 'http://joswlv.github.io/2016/11/27/flasnginxsetting/'; // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://joswlv.github.io/2016/11/27/flasnginxsetting/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
     };
 
     (function() { // DON'T EDIT BELOW THIS LINE

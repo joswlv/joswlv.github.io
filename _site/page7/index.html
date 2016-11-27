@@ -103,6 +103,102 @@
             
               <li>
                 <h2>
+                  <a class="post-link" href="/2016/08/28/run_to_same_server/">Apache2웹서버와 Node.js어플리케이션을 함께 사용하기!</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-08-28
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#web" title="Category: web" rel="category">web</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h3 id="section">순서</h3>
+<ol>
+  <li>내부적으로 다른 포트에 nodejs기반의 서버를 실행한다.</li>
+  <li>apache의 VirtualHosts 설정에서 ProxyPass를 설정한다.</li>
+  <li>특정 url로 접근식 1번으로 갈 수 있게 설정한다.</li>
+</ol>
+
+<h3 id="section-1">과정</h3>
+<ol>
+  <li>mod_proxy, mod_proxy_http가 필요하다. (ubuntu apache서버는 기본적으로 설치되어있음. <code class="highlighter-rouge">/etc/apache2/mods-available</code>안에 있음 <code class="highlighter-rouge">a2enmod proxy</code>,<code class="highlighter-rouge">a2enmod proxy_http</code>로 설정함</li>
+  <li>가상호스트를 설정함 ./sites-available 내부에 기존파일 또는 신규파일을 추가한다.</li>
+</ol>
+
+<div class="language-powershell highlighter-rouge"><pre class="highlight"><code>&lt;VirtualHost <span class="k">*</span>:80&gt;
+	DocumentRoot /var/www/example.com/public_html
+	ServerName  www.example.com
+
+	<span class="c1"># Index file and Document Root (where the public files are located)</span>
+	DirectoryIndex index.html index.php
+
+	<span class="c1"># Log file locations</span>
+	LogLevel warn
+	ErrorLog  /var/www/amazeapp.com/log/error.log
+	CustomLog /var/www/amazeapp.com/log/access.log combined
+
+
+	<span class="c1"># 아래가 핵심이다.</span>
+
+	ProxyRequests off
+
+	&lt;Proxy <span class="k">*</span>&gt;
+	    Order deny,allow    <span class="c1"># 이부분의 경우, 콤마(,) 사이에 공백 없어야 함!</span>
+	    Allow <span class="k">from </span>all
+	&lt;/Proxy&gt;
+
+	&lt;Location /&gt; <span class="c1"># 내부적으로 접속 노드를 늘리고 싶다면 여기에 추가.</span>
+	    ProxyPass http://localhost:3000/
+	    ProxyPassReverse http://localhost:3000/
+	&lt;/Location&gt;
+
+&lt;/VirtualHost&gt;
+</code></pre>
+</div>
+
+<ol>
+  <li>아파치 재시작</li>
+</ol>
+
+<p>끝~</p>
+
+<h3 id="reference">Reference</h3>
+<p><a href="https://github.com/sindresorhus/guides/blob/master/run-node-server-alongside-apache.md">https://github.com/sindresorhus/guides/blob/master/run-node-server-alongside-apache.md</a></p>
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/08/28/run_to_same_server/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
                   <a class="post-link" href="/2016/08/07/Angularjs_if/">AngularJS_AngularJS_if</a>
                 </h2>
                 <div class="label">
@@ -665,7 +761,7 @@
                             <span class="name">
                                 python
                             </span>
-                            <span class="badge">1</span>
+                            <span class="badge">2</span>
                         </a>
                     </li>
                     
@@ -732,6 +828,8 @@
                 </div>
                 <ul class="content-ul" recent>
                     
+                        <li><a href="/2016/11/27/flasnginxsetting/">Flask + Nginx 설정</a></li>
+                    
                         <li><a href="/2016/11/20/realtimeweb/">Real-time web tec List</a></li>
                     
                         <li><a href="/2016/11/18/Shortcircuitevaluation/">Short-circuit evaluation</a></li>
@@ -749,8 +847,6 @@
                         <li><a href="/2016/11/02/imagepixelget/">이미지 픽셀다루기</a></li>
                     
                         <li><a href="/2016/10/29/directorylisting/">Apache Directory listing 제거</a></li>
-                    
-                        <li><a href="/2016/10/24/optional/">Optional</a></li>
                     
                 </ul>
             </div>
