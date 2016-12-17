@@ -103,6 +103,77 @@
             
               <li>
                 <h2>
+                  <a class="post-link" href="/2016/12/17/truncateanddelete/">TRUNCATE와 DELETE</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-12-17
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#MYSQL" title="Category: MYSQL" rel="category">MYSQL</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="truncate--delete">TRUNCATE 와 DELETE</h1>
+
+<h3 id="truncate">TRUNCATE</h3>
+
+<p>테이블의 데이터를 삭제하는 DDL명령어 이다.</p>
+
+<p>데이터를 삭제 방식은 talbe의 명세만 남기고 <strong>DROP 후 CREATE</strong>한다. 즉 데이터가 존재하던 공간마저 제거하기 위한 명령어이다.</p>
+
+<p>이런 방식으로 테이블의 데이터를 삭제하기 때문에 수행 속도는 DELETE보다 빠르지만, 데이터 복구가 불가능하다는 제한사항이 존재한다.</p>
+
+<p>또 auto_increment까지 초기화 시켜준다.(5.0.13버전부터) 즉 table의 옵션을 초기상태로 돌려준다.</p>
+
+<p>삭제하다가 외부키와의 의존관계 때문에 삭제할 수 없다는 메시지가 나오면 다음과 같이하면 된다.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>SET foreign_key_checks = 0; 
+truncate TABLE_NAME;
+SET foreign_key_checks = 1;
+</code></pre>
+</div>
+
+<p>0은 해제 1은 다시 설정을 의미한다.</p>
+
+<h3 id="delete">DELETE</h3>
+
+<p>테이블의 데이터를 삭제하기 위한 명령어이다. <code class="highlighter-rouge">WHERE</code>절을 통해 조건을 부여 할 수 있다.</p>
+
+<p>데이터 삭제 방식은 한줄씩 순차적으로 삭제한다.</p>
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/12/17/truncateanddelete/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
                   <a class="post-link" href="/2016/11/27/flasnginxsetting/">Flask + Nginx 설정</a>
                 </h2>
                 <div class="label">
@@ -712,126 +783,6 @@ sudo service uwsgi restart
                 <hr>
               </li>
             
-              <li>
-                <h2>
-                  <a class="post-link" href="/2016/11/04/regexp/">정규표현식</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-11-04
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#js" title="Category: js" rel="category">js</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                </div>
-                <div class="excerpt">
-                    <h1 id="section">들어가기 전에</h1>
-
-<p>정규식은 문자열에서 문자 조합에 일치 시키기 위해 사용되는 패턴이다.</p>
-
-<p>자바스크립트에서, 정규식은 객체이다.</p>
-
-<p>이 패턴들은 <code class="highlighter-rouge">RegExp</code>의 <code class="highlighter-rouge">exec</code>메소드와 <code class="highlighter-rouge">test</code>  메소드 그리고 <code class="highlighter-rouge">String</code>의 <code class="highlighter-rouge">match</code>메소드, <code class="highlighter-rouge">replace</code>메소드, <code class="highlighter-rouge">search</code>메소드, <code class="highlighter-rouge">split</code>메소드와 함께 쓰인다.</p>
-
-<h1 id="section-1">정규식 만들기</h1>
-
-<p>정규식은 두가지 방법으로 만들 수 있다.</p>
-
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">re</span> <span class="o">=</span> <span class="sr">/abc+d/</span><span class="p">;</span>
-</code></pre>
-</div>
-
-<p>정규식 리터럴은 스크립트가 로드될때 정규식의 컴파일이 작동한다. 정규식이 계속 사용될 때는 위와 같은 형식으로 사용하는 것이 좋다.</p>
-
-<p>또다른 방법은 <code class="highlighter-rouge">RegExp</code>객체의 생성자 함수를 호출하는 것이다.</p>
-
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">re</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="s2">"abc+d"</span><span class="p">);</span>
-</code></pre>
-</div>
-
-<p>생성자 함수를 사용하면 정규식의 런타임 컴파일을 제공한다.</p>
-
-<h1 id="section-2">정규식 패턴 작성하기</h1>
-
-<h2 id="section-3">단순한 패턴 사용하기</h2>
-
-<p>단순한 패턴은 찾고자하는 문자들로 구성된다. 예를 들어 /abc/라는 패턴은 문자열에서 정확히 ‘abc’라는 문자들이 모두 함께 순서대로 나타나야지 일치한다.</p>
-
-<h2 id="section-4">특수 문자를 사용하기</h2>
-
-<p>단순 패턴보다 더 복잡한 경우 특수문자를 사용하여 패턴을 만든다.</p>
-
-<h2 id="section-5">정규식 사용하기</h2>
-
-<p><strong>JavaScript에서 정규식에서 쓰이는 메소드</strong></p>
-
-<table>
-  <thead>
-    <tr>
-      <th>Method</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>exec</td>
-      <td>일치하는 문자열을 찾는 RegExp메소드이다. 정보를 가지고 있는 배열을 반환한다.</td>
-    </tr>
-    <tr>
-      <td>test</td>
-      <td>일치하는 문자열을 검사하는 RegExp 메소드이다. true나 false를 반환한다.</td>
-    </tr>
-    <tr>
-      <td>match</td>
-      <td>일치하는 문자열을 찾는 String메소드이다. 정보를 가지고 있는 배열을 반환하거나 일치하지 않는 부분을 null로 반환한다.</td>
-    </tr>
-    <tr>
-      <td>search</td>
-      <td>일치하는 문자열을 검사하는 String메소드이다. 일치하는 인덱스를 반환하거나 검색에 실패할 시 -1을 반환한다.</td>
-    </tr>
-    <tr>
-      <td>replace</td>
-      <td>일치하는 문자열을 찾는 String메소드이다. 일치하는 문자열을 replacement로 대체한다.</td>
-    </tr>
-  </tbody>
-</table>
-
-<h3 id="reference">Reference</h3>
-
-<ul>
-  <li><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Guide/%EC%A0%95%EA%B7%9C%EC%8B%9D">MDN</a></li>
-</ul>
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2016/11/04/regexp/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
         </ul>
 
 
@@ -941,6 +892,15 @@ sudo service uwsgi restart
                         </a>
                     </li>
                     
+                    <li>
+                        <a href="/category/#MYSQL" class="categories-list-item" cate="MYSQL">
+                            <span class="name">
+                                MYSQL
+                            </span>
+                            <span class="badge">1</span>
+                        </a>
+                    </li>
+                    
                 </ul>
             </div>
             <div class="side">
@@ -949,6 +909,8 @@ sudo service uwsgi restart
                     Recent Posts
                 </div>
                 <ul class="content-ul" recent>
+                    
+                        <li><a href="/2016/12/17/truncateanddelete/">TRUNCATE와 DELETE</a></li>
                     
                         <li><a href="/2016/11/27/flasnginxsetting/">Flask + Nginx 설정</a></li>
                     
@@ -967,8 +929,6 @@ sudo service uwsgi restart
                         <li><a href="/2016/11/02/gitaddpgitcommitv/">git add -p와 git commit -v</a></li>
                     
                         <li><a href="/2016/11/02/imagepixelget/">이미지 픽셀다루기</a></li>
-                    
-                        <li><a href="/2016/10/29/directorylisting/">Apache Directory listing 제거</a></li>
                     
                 </ul>
             </div>

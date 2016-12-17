@@ -6,14 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>Flask + Nginx 설정</title>
-    <meta name="description" content="Flask + Nginx 설치 방법환경데비안 계열 중 우분투 서버여기서 접근하는 모든 디렉토리는 권한이 있어야함.설치apt-get install nginx # Nginxapt-get install uwsgi # uWSGIapt-get install uwsgi-plugin-pytho...">
+    <title>TRUNCATE와 DELETE</title>
+    <meta name="description" content="TRUNCATE 와 DELETETRUNCATE테이블의 데이터를 삭제하는 DDL명령어 이다.데이터를 삭제 방식은 talbe의 명세만 남기고 DROP 후 CREATE한다. 즉 데이터가 존재하던 공간마저 제거하기 위한 명령어이다.이런 방식으로 테이블의 데이터를 삭제하기 때문에 수행 속도...">
 
     <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
     <link rel="icon" href="/favicon.ico?" type="image/x-icon">
     <link rel="stylesheet" href="/css/fontawesome/css/font-awesome.min.css ">
     <link rel="stylesheet" href="/css/main.css ">
-    <link rel="canonical" href="http://joswlv.github.io/2016/11/27/flasnginxsetting/">
+    <link rel="canonical" href="http://joswlv.github.io/2016/12/17/truncateanddelete/">
     <link rel="alternate" type="application/rss+xml" title="Joswlv" href="http://joswlv.github.io/feed.xml ">
 
 
@@ -96,11 +96,11 @@
 
         <div class="page clearfix" post>
     <div class="left">
-        <h1>Flask + Nginx 설정</h1>
+        <h1>TRUNCATE와 DELETE</h1>
         <div class="label">
 
             <div class="label-card">
-                <i class="fa fa-calendar"></i>2016-11-27
+                <i class="fa fa-calendar"></i>2016-12-17
             </div>
 
             <div class="label-card">
@@ -120,7 +120,7 @@
   <i class="fa fa-th-list"></i>
   
     
-        <a href="/category/#python" title="Category: python" rel="category">python</a>
+        <a href="/category/#MYSQL" title="Category: MYSQL" rel="category">MYSQL</a>
     
   
 
@@ -133,65 +133,33 @@
         </div>
         <hr>
         <article itemscope itemtype="http://schema.org/BlogPosting">
-        <h1 id="flask--nginx--">Flask + Nginx 설치 방법</h1>
+        <h1 id="truncate--delete">TRUNCATE 와 DELETE</h1>
 
-<h2 id="section">환경</h2>
-<p>데비안 계열 중 우분투 서버<br />
-여기서 접근하는 모든 디렉토리는 권한이 있어야함.</p>
+<h3 id="truncate">TRUNCATE</h3>
 
-<h2 id="section-1">설치</h2>
-<div class="highlighter-rouge"><pre class="highlight"><code>apt-get install nginx # Nginx
-apt-get install uwsgi # uWSGI
-apt-get install uwsgi-plugin-python # python과 uWSGI를 연결하는 플러그인
+<p>테이블의 데이터를 삭제하는 DDL명령어 이다.</p>
+
+<p>데이터를 삭제 방식은 talbe의 명세만 남기고 <strong>DROP 후 CREATE</strong>한다. 즉 데이터가 존재하던 공간마저 제거하기 위한 명령어이다.</p>
+
+<p>이런 방식으로 테이블의 데이터를 삭제하기 때문에 수행 속도는 DELETE보다 빠르지만, 데이터 복구가 불가능하다는 제한사항이 존재한다.</p>
+
+<p>또 auto_increment까지 초기화 시켜준다.(5.0.13버전부터) 즉 table의 옵션을 초기상태로 돌려준다.</p>
+
+<p>삭제하다가 외부키와의 의존관계 때문에 삭제할 수 없다는 메시지가 나오면 다음과 같이하면 된다.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>SET foreign_key_checks = 0; 
+truncate TABLE_NAME;
+SET foreign_key_checks = 1;
 </code></pre>
 </div>
 
-<h2 id="nginx-">Nginx 세팅</h2>
-<p>디폴트 파일로 설정하는 방법
-<code class="highlighter-rouge">vi /etc/nginx/sites-available/default</code></p>
+<p>0은 해제 1은 다시 설정을 의미한다.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>server {
-       listen       80; # 연결할 포트
-       server_name  0.0.0.0;
-       location / { try_files $uri @app; }
-       location @app {
-           include uwsgi_params;
-           uwsgi_pass unix:socket파일이 위치할 경로;
-           # ex) /home/server/uwsgi.sock
-       }
-}
-</code></pre>
-</div>
+<h3 id="delete">DELETE</h3>
 
-<h2 id="uwsgi-">uWSGI 세팅</h2>
-<p><code class="highlighter-rouge">vi /etc/uwsgi/apps-available/uwsgi.ini</code></p>
+<p>테이블의 데이터를 삭제하기 위한 명령어이다. <code class="highlighter-rouge">WHERE</code>절을 통해 조건을 부여 할 수 있다.</p>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[uwsgi]
-chdir = 프로젝트 경로
-uid = 실행할계정
-gid = 실행할계정
-chmod-socket = 666
-socket = socket파일이 위치할 경로
-module = 모듈이름(실행할 파일 이름)
-callable = 연결될 Flask 모듈이름
-virtualenv = python 가상 환경 경로(virtualenv)
-</code></pre>
-</div>
-
-<p>참고로 프로젝트 경로는 root를 포함하지 않는 것이 좋다 (권한 문제 때문에)</p>
-
-<p>허용하는 파일로 등록하기위해 apps-enabled 디렉토리에 link함
-<code class="highlighter-rouge">ln -s /etc/uwsgi/apps-available/uwsgi.ini /etc/uwsgi/apps-enabled/</code></p>
-
-<h2 id="section-2">실행 방법</h2>
-<p>세팅 후 재시작을 한다.</p>
-<div class="highlighter-rouge"><pre class="highlight"><code>sudo service nginx restart
-sudo service uwsgi restart
-</code></pre>
-</div>
-
-<p>설정한 uwsgi에 맞춰서 실행
-<code class="highlighter-rouge">uwsgi /etc/uwsgi/apps-available/uwsgi.ini &amp;</code></p>
+<p>데이터 삭제 방식은 한줄씩 순차적으로 삭제한다.</p>
 
         </article>
         <hr>
@@ -233,13 +201,11 @@ sudo service uwsgi restart
         <div class="post-recent">
     <div class="pre">
         
-        <p><strong>prev</strong> <a href="/2016/11/20/realtimeweb/">Real-time web tec List</a></p>
+        <p><strong>prev</strong> <a href="/2016/11/27/flasnginxsetting/">Flask + Nginx 설정</a></p>
         
     </div>
     <div class="nex">
 
-        
-        <p><strong>next</strong> <a href="/2016/12/17/truncateanddelete/">TRUNCATE와 DELETE</a></p>
         
     </div>
 </div>
@@ -257,8 +223,8 @@ sudo service uwsgi restart
      */
 
     var disqus_config = function() {
-        this.page.url = 'http://joswlv.github.io/2016/11/27/flasnginxsetting/'; // Replace PAGE_URL with your page's canonical URL variable
-        this.page.identifier = 'http://joswlv.github.io/2016/11/27/flasnginxsetting/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        this.page.url = 'http://joswlv.github.io/2016/12/17/truncateanddelete/'; // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://joswlv.github.io/2016/12/17/truncateanddelete/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
     };
 
     (function() { // DON'T EDIT BELOW THIS LINE
