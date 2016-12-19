@@ -88,6 +88,8 @@
                 
                     
                 
+                    
+                
             </ul>
         </nav>
     </div>
@@ -100,6 +102,288 @@
         <small></small> -->
         <hr>
         <ul>
+            
+              <li>
+                <h2>
+                  <a class="post-link" href="/2016/12/18/groupconcat/">GROUP_CONCAT</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-12-18
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#MYSQL" title="Category: MYSQL" rel="category">MYSQL</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="mysql-groupconcat-">[MySQL] GROUP_CONCAT에 대해</h1>
+
+<p><code class="highlighter-rouge">GROUP_CONCAT</code>은 서로 다른 결과를 한줄로 합쳐서 보여줘야 할 경우 사용하는 MySQL 명령어이다.</p>
+
+<p>이는 전체 결과를 서버로 들고와서 for문을 돌려 문자열을 붙여도 되지만 SELECT쿼리를 사용하여 합쳐져 있는 문자열을 받는게 더 편하다.</p>
+
+<div class="language-sql highlighter-rouge"><pre class="highlight"><code><span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">test</span><span class="p">;</span>
+</code></pre>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>key</th>
+      <th>value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>가구</td>
+      <td>편한가구</td>
+    </tr>
+    <tr>
+      <td>가구</td>
+      <td>싼 가구</td>
+    </tr>
+    <tr>
+      <td>가구</td>
+      <td>신혼집 가구</td>
+    </tr>
+    <tr>
+      <td>가구</td>
+      <td>신혼부부 가구</td>
+    </tr>
+    <tr>
+      <td>가구</td>
+      <td>신혼부부 가구</td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>이런 결과를 <code class="highlighter-rouge">GROUP_CONCAT</code>을 사용하면 다음과 같다.</li>
+</ul>
+
+<div class="language-sql highlighter-rouge"><pre class="highlight"><code><span class="k">SELECT</span> <span class="k">key</span><span class="p">,</span> <span class="n">GROUP_CONCAT</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">test</span> <span class="k">GROUP</span> <span class="k">BY</span> <span class="k">key</span><span class="p">;</span>
+</code></pre>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>key</th>
+      <th>value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>가구</td>
+      <td>편한가구,싼 가구,신혼집 가구,신혼부부 가구, 신혼부부 가구</td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li><code class="highlighter-rouge">GROUP_CONCAT</code>의 기본적으로 문자열 사이에 쉼표(,)가 붙게 된다. 구분자를 변경하고 싶을 때에는 <code class="highlighter-rouge">SEPARATOR '구분자'</code>를 함께 사용하면 된다.</li>
+</ul>
+
+<div class="language-sql highlighter-rouge"><pre class="highlight"><code><span class="k">SELECT</span> <span class="n">kye</span><span class="p">,</span> <span class="n">GROUP_CONCAT</span><span class="p">(</span><span class="n">value</span> <span class="n">SEPARATOR</span> <span class="s1">'/'</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">test</span> <span class="k">GROUP</span> <span class="k">BY</span> <span class="k">key</span><span class="p">;</span>
+</code></pre>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>key</th>
+      <th>value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>가구</td>
+      <td>편한가구/싼 가구/신혼집 가구/신혼부부 가구/ 신혼부부 가구</td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>합쳐지는 문자열에 중복되는 문자열을 제거 할때는 <code class="highlighter-rouge">DISTINCT</code>를 사용한다.</li>
+</ul>
+
+<div class="language-sql highlighter-rouge"><pre class="highlight"><code><span class="k">SELECT</span> <span class="k">key</span><span class="p">,</span> <span class="n">GROUP_CONCAT</span><span class="p">(</span><span class="k">DISTINCT</span> <span class="n">value</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">test</span> <span class="k">GROUP</span> <span class="k">BY</span> <span class="k">key</span><span class="p">;</span>
+</code></pre>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>key</th>
+      <th>value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>가구</td>
+      <td>편한가구,싼 가구,신혼집 가구,신혼부부 가구</td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>문자열을 정렬하여 나타내고 싶으면 <code class="highlighter-rouge">order by</code>를 사용한다.</li>
+</ul>
+
+<div class="language-sql highlighter-rouge"><pre class="highlight"><code><span class="k">SELECT</span> <span class="k">key</span><span class="p">,</span> <span class="n">GROUP_CONCAT</span><span class="p">(</span><span class="k">DISTINCT</span> <span class="n">value</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">valeu</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">test</span> <span class="k">GROUP</span> <span class="k">BY</span> <span class="k">key</span><span class="p">;</span>
+</code></pre>
+</div>
+
+<h3 id="section">정리</h3>
+
+<p>MySQL에서 group by 로 문자열을 합칠땐 group_concat 을 이용한다.</p>
+
+<ol>
+  <li>기본형 : group_concat(필드명)</li>
+  <li>구분자 변경 : group_concat(필드명 separator ‘구분자’)</li>
+  <li>중복제거 : group_concat(distinct 필드명)</li>
+  <li>문자열 정렬 : group_concat(필드명 order by 필드명)</li>
+</ol>
+
+<h3 id="section-1">참고</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td>AVG()</td>
+      <td>Return the average value of the argument</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>BIT_AND()</td>
+      <td>Return bitwise AND</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>BIT_OR()</td>
+      <td>Return bitwise OR</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>BIT_XOR()</td>
+      <td>Return bitwise XOR</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>COUNT()</td>
+      <td>Return a count of the number of rows returned</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>COUNT(DISTINCT)</td>
+      <td>Return the count of a number of different values</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>GROUP_CONCAT()</td>
+      <td>Return a concatenated string</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>MAX()</td>
+      <td>Return the maximum value</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>MIN()</td>
+      <td>Return the minimum value</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>STD()</td>
+      <td>Return the population standard deviation</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>STDDEV()</td>
+      <td>Return the population standard deviation</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>STDDEV_POP()</td>
+      <td>Return the population standard deviation</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>STDDEV_SAMP()</td>
+      <td>Return the sample standard deviation</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>SUM()</td>
+      <td>Return the sum</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>VAR_POP()</td>
+      <td>Return the population standard variance</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>VAR_SAMP()</td>
+      <td>Return the sample variance</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>VARIANCE()</td>
+      <td>Return the population standard variance</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>표 : <a href="http://dev.mysql.com/doc/refman/5.7/en/group-by-functions.html#function_avg">MySQL_Doc</a></p>
+
+<h4 id="tip">[tip]</h4>
+
+<ul>
+  <li>오라클의 경우 mysql의 group_concat을 아래와 같이 대체하여 사용이 가능하다.</li>
+  <li>오라클 10G : WM_CONCAT()</li>
+  <li>오라클 11G : LISTAGG()</li>
+</ul>
+
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/12/18/groupconcat/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
             
               <li>
                 <h2>
@@ -711,78 +995,6 @@ sudo service uwsgi restart
                 <hr>
               </li>
             
-              <li>
-                <h2>
-                  <a class="post-link" href="/2016/11/07/jqueryselector/">jquery :last 선택자</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-11-07
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#js" title="Category: js" rel="category">js</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                </div>
-                <div class="excerpt">
-                    <div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;table</span> <span class="na">id =</span><span class="err"> </span><span class="s">"table1"</span><span class="nt">&gt;</span> ---<span class="nt">&lt;/table&gt;</span>
-<span class="nt">&lt;table</span> <span class="na">id =</span><span class="err"> </span><span class="s">"table2"</span><span class="nt">&gt;</span> ---<span class="nt">&lt;/table&gt;</span>
-<span class="nt">&lt;table</span> <span class="na">id =</span><span class="err"> </span><span class="s">"table3"</span><span class="nt">&gt;</span> ---<span class="nt">&lt;/table&gt;</span>
-<span class="nt">&lt;table</span> <span class="na">id =</span><span class="err"> </span><span class="s">"table4"</span><span class="nt">&gt;</span> 
-	<span class="nt">&lt;tr&gt;</span>---<span class="nt">&lt;/tr&gt;</span>
-	<span class="nt">&lt;tr&gt;</span>
-		<span class="nt">&lt;td&gt;</span>asd<span class="nt">&lt;td&gt;</span>
-		<span class="nt">&lt;td&gt;&lt;input</span> <span class="na">class=</span><span class="s">"inputs"</span><span class="nt">&gt;&lt;/td&gt;</span>
-	<span class="nt">&lt;/tr&gt;</span>
-<span class="nt">&lt;/table&gt;</span>
-</code></pre>
-</div>
-
-<p>위와 같은 환경이 있고 <code class="highlighter-rouge">#table4</code>는 파일을 추가 할때마다 <code class="highlighter-rouge">tr</code>이 추가되는 상황이라고 하자!</p>
-
-<p>(추가 될때는 모든 속성이 같다.)</p>
-
-<h4 id="inputs-">이때 가장 마지막에 생성된 <code class="highlighter-rouge">#inputs</code>에 접근할려면…</h4>
-
-<p><code class="highlighter-rouge">$('#table4 tr:last .inputs').val();</code></p>
-
-<p>이런 식으로 <code class="highlighter-rouge">:last</code>선택자를 사용하면 된다.</p>
-
-<h3 id="reference">Reference</h3>
-
-<ul>
-  <li><a href="http://api.jquery.com/last-selector/">jqueryDoc</a></li>
-</ul>
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2016/11/07/jqueryselector/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
         </ul>
 
 
@@ -793,10 +1005,10 @@ sudo service uwsgi restart
             <span class="previous disable"><i class="fa fa-angle-double-left"></i></span>
             <span class="previous disable"><i class="fa fa-angle-left"></i></span>
           
-          <span class="page_number ">1/7</span>
+          <span class="page_number ">1/8</span>
           
             <a href="/page2" class="next"><i class="fa fa-angle-right"></i></a>
-            <a href="/page7" class="next"><i class="fa fa-angle-double-right"></i></a>
+            <a href="/page8" class="next"><i class="fa fa-angle-double-right"></i></a>
           
         </div>
     </div>
@@ -897,7 +1109,7 @@ sudo service uwsgi restart
                             <span class="name">
                                 MYSQL
                             </span>
-                            <span class="badge">1</span>
+                            <span class="badge">2</span>
                         </a>
                     </li>
                     
@@ -909,6 +1121,8 @@ sudo service uwsgi restart
                     Recent Posts
                 </div>
                 <ul class="content-ul" recent>
+                    
+                        <li><a href="/2016/12/18/groupconcat/">GROUP_CONCAT</a></li>
                     
                         <li><a href="/2016/12/17/truncateanddelete/">TRUNCATE와 DELETE</a></li>
                     
@@ -927,8 +1141,6 @@ sudo service uwsgi restart
                         <li><a href="/2016/11/03/CORS/">CORS</a></li>
                     
                         <li><a href="/2016/11/02/gitaddpgitcommitv/">git add -p와 git commit -v</a></li>
-                    
-                        <li><a href="/2016/11/02/imagepixelget/">이미지 픽셀다루기</a></li>
                     
                 </ul>
             </div>

@@ -88,6 +88,8 @@
                 
                     
                 
+                    
+                
             </ul>
         </nav>
     </div>
@@ -100,6 +102,226 @@
         <small></small> -->
         <hr>
         <ul>
+            
+              <li>
+                <h2>
+                  <a class="post-link" href="/2016/10/24/optional/">Optional</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-10-24
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#Swift" title="Category: Swift" rel="category">Swift</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="nil-">nil 의미</h1>
+
+<blockquote>
+  <p>nil of Swift : 값이 없다 in 모든 타입 (Reference or Value Type)</p>
+</blockquote>
+
+<p>즉, Swift에서는 어떤 타입이든 값이 없는 것을 표현하기 위해 nil을 사용한다.</p>
+
+<p>아래와 같은 경우는 에러가 난다.</p>
+
+<div class="language-swift highlighter-rouge"><pre class="highlight"><code><span class="k">var</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"Seungwan"</span>
+<span class="n">name</span> <span class="o">=</span> <span class="kc">nil</span>		<span class="c1">//컴파일 에러!</span>
+</code></pre>
+</div>
+
+<h1 id="optional-type">Optional Type</h1>
+
+<p>값이 있을 수도 있고 없을 수도 있는 변수를 정의할 때에는 타입 어노테이션에 <code class="highlighter-rouge">?</code>을 붙여서 표현한다. 이렇게 정의한 변수를 Optional이라고 한다. Optional에 초깃값을 지정하지 않으면 기본값은 <code class="highlighter-rouge">nil</code>이다.</p>
+
+<div class="language-swift highlighter-rouge"><pre class="highlight"><code><span class="k">var</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>		<span class="c1">//nil</span>
+
+<span class="n">name</span> <span class="o">=</span> <span class="s">"wowowo"</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>		<span class="c1">//wowowo</span>
+</code></pre>
+</div>
+
+<p>Optional로 정한 변수는 아래와 같은 바인딩이 안된다.</p>
+
+<div class="language-swift highlighter-rouge"><pre class="highlight"><code><span class="k">let</span> <span class="nv">optional</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="s">"this is option"</span>
+<span class="k">let</span> <span class="nv">notoptional</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="kd">optional</span>		<span class="c1">//error</span>
+</code></pre>
+</div>
+<p><code class="highlighter-rouge">notoptional</code>변수는 Optional이 아닌 <code class="highlighter-rouge">String</code>이기 때문에 항상 값을 가지고 있어야하는데, <code class="highlighter-rouge">optional</code>변수는 실제 코드가 실행되기 전까지는 값이 있는지 없는지 알 수 없기 때문에 Swift에서는 저런식의 바인딩은 안된다.</p>
+
+<p>Optional은 개념적으로 <code class="highlighter-rouge">어떤값</code> 또는 <code class="highlighter-rouge">nil</code>을 가지고 있는 변수기 때문에 불완전한 변수라고 생각하면 쉽다.</p>
+
+<h1 id="optional-binding">Optional Binding</h1>
+
+<p>Optional 바인딩은 Optional의 값이 존재하느지를 검사한 뒤, 존재한다면  그 값을 다른 변수에 대입시켜준다. <code class="highlighter-rouge">if let</code> 또는 <code class="highlighter-rouge">if var</code>를 사용해서 한다. Optional변수에 값이 존재하면 if안에서 처리하고 nil이면 그냥 if문을 통과한다.</p>
+
+<p>그리고 하나의 <code class="highlighter-rouge">if</code>문에서 콤마(,)로 구분해서 여러개의 Optional을 바인딩할 수 있다.</p>
+
+<div class="language-swift highlighter-rouge"><pre class="highlight"><code><span class="k">var</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="s">"seunwan"</span>
+<span class="k">var</span> <span class="nv">email</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="s">"wh7923@gmail.com"</span>
+
+<span class="k">if</span> <span class="k">let</span> <span class="nv">name</span> <span class="o">=</span> <span class="n">name</span><span class="p">,</span> <span class="n">email</span> <span class="o">=</span> <span class="n">email</span><span class="p">{</span>
+	<span class="c1">// name과 email 값이 존재</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+<p>저게 너무 길어지면 아래와 같이 해도 된다.</p>
+
+<div class="language-swift highlighter-rouge"><pre class="highlight"><code><span class="k">if</span> <span class="k">let</span> <span class="nv">name</span> <span class="o">=</span> <span class="n">name</span><span class="p">,</span>
+	<span class="n">email</span> <span class="o">=</span> <span class="n">email</span><span class="p">{</span>
+	<span class="c1">//name과 email존재</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+<p>조건도 넣을 수 있다.</p>
+
+<div class="language-swift highlighter-rouge"><pre class="highlight"><code><span class="k">var</span> <span class="nv">optionAge</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?</span> <span class="o">=</span> <span class="mi">25</span>
+
+<span class="k">if</span> <span class="k">let</span> <span class="nv">age</span> <span class="o">=</span> <span class="n">optionAge</span><span class="p">,</span> <span class="n">age</span> <span class="o">&gt;=</span> <span class="mi">20</span> <span class="p">{</span>
+	<span class="c1">//age 값이 존재하고, 20이상이다.</span>
+<span class="p">}</span>
+
+<span class="c1">//아래와 같다.</span>
+<span class="k">if</span> <span class="k">let</span> <span class="nv">age</span> <span class="o">=</span> <span class="n">optionAge</span> <span class="p">{</span>
+	<span class="k">if</span> <span class="n">age</span> <span class="o">&gt;=</span> <span class="mi">20</span> <span class="p">{</span>
+		<span class="c1">//age의 값이 존재하고, 20 이상이다.</span>
+	<span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<h1 id="optional-chaining">Optional Chaining</h1>
+
+<p>Swift 코드를 간결하게 만들어주는 요소이다.</p>
+
+<p>Optional로 선언된 어떤 배열이 있다. 이 배열이 ‘빈 배열’인지를 검사할려면 다음과 같다.</p>
+
+<div class="language-swift highlighter-rouge"><pre class="highlight"><code><span class="k">let</span> <span class="nv">array</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">]?</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">var</span> <span class="nv">isEmptyArray</span> <span class="o">=</span> <span class="kc">false</span>
+
+<span class="k">if</span> <span class="k">let</span> <span class="nv">array</span> <span class="o">=</span> <span class="n">array</span> <span class="k">where</span> <span class="n">array</span><span class="o">.</span><span class="n">isEmpty</span> <span class="p">{</span>
+    <span class="n">isEmptyArray</span> <span class="o">=</span> <span class="kc">true</span>
+<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
+    <span class="n">isEmptyArray</span> <span class="o">=</span> <span class="kc">false</span>
+<span class="p">}</span>
+
+<span class="n">isEmptyArray</span>
+</code></pre>
+</div>
+
+<p>Optional 체이닝을 사용하면 간결하게 표현이 가능하다.</p>
+
+<div class="language-swift highlighter-rouge"><pre class="highlight"><code><span class="k">let</span> <span class="nv">isEmptyArray</span> <span class="o">=</span> <span class="n">array</span><span class="p">?</span><span class="o">.</span><span class="n">isEmpty</span> <span class="o">==</span> <span class="kc">true</span>
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">?</code>키워도로 코드를 줄여주는 역할을 한다.</p>
+
+<p>한가지 예를 더 들면 다음과 같다.</p>
+
+<div class="language-swift highlighter-rouge"><pre class="highlight"><code><span class="kd">class</span> <span class="kt">Person</span><span class="p">{</span>
+    <span class="k">var</span> <span class="nv">live</span><span class="p">:</span> <span class="kt">Home</span><span class="p">?</span>
+<span class="p">}</span>
+<span class="kd">class</span> <span class="kt">Home</span><span class="p">{</span>
+    <span class="k">var</span> <span class="nv">adress</span><span class="p">:</span> <span class="kt">Location</span><span class="p">?</span>
+<span class="p">}</span>
+<span class="kd">class</span> <span class="kt">Location</span><span class="p">{</span>
+    <span class="k">var</span> <span class="nv">zipnum</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span>
+<span class="p">}</span>
+
+<span class="k">let</span> <span class="nv">seungwan</span> <span class="o">=</span> <span class="kt">Person</span><span class="p">()</span>
+
+<span class="n">seungwan</span><span class="o">.</span><span class="n">live</span> <span class="o">=</span> <span class="kt">Home</span><span class="p">()</span>
+<span class="n">seungwan</span><span class="o">.</span><span class="n">live</span><span class="p">?</span><span class="o">.</span><span class="n">adress</span> <span class="o">=</span> <span class="kt">Location</span><span class="p">()</span>
+<span class="n">seungwan</span><span class="o">.</span><span class="n">live</span><span class="p">?</span><span class="o">.</span><span class="n">adress</span><span class="p">?</span><span class="o">.</span><span class="n">zipnum</span> <span class="o">=</span> <span class="s">"171717"</span>
+
+<span class="k">if</span> <span class="k">let</span> <span class="nv">home</span> <span class="o">=</span> <span class="n">seungwan</span><span class="o">.</span><span class="n">live</span><span class="p">{</span>
+    <span class="k">if</span> <span class="k">let</span> <span class="nv">zip</span> <span class="o">=</span> <span class="n">home</span><span class="o">.</span><span class="n">adress</span><span class="p">{</span>
+        <span class="k">if</span> <span class="k">let</span> <span class="nv">num</span> <span class="o">=</span> <span class="n">zip</span><span class="o">.</span><span class="n">zipnum</span><span class="p">{</span>
+            <span class="nf">print</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>	<span class="c1">//171717</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="k">if</span> <span class="k">let</span> <span class="nv">num</span> <span class="o">=</span> <span class="n">seungwan</span><span class="o">.</span><span class="n">live</span><span class="p">?</span><span class="o">.</span><span class="n">adress</span><span class="p">?</span><span class="o">.</span><span class="n">zipnum</span><span class="p">{</span>
+    <span class="nf">print</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>	<span class="c1">//171717</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+<p>코드가 간결해 지는 것을 알 수 있다.</p>
+
+<h1 id="unwrapped-optional">Unwrapped Optional</h1>
+
+<div class="language-swift highlighter-rouge"><pre class="highlight"><code><span class="nf">print</span><span class="p">(</span><span class="n">optionEmail</span><span class="p">)</span>	<span class="c1">// Optional("wh7923@gmail.com")</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">optionEmail</span><span class="o">!</span><span class="p">)</span> <span class="c1">// wh7923@gmail.com</span>
+</code></pre>
+</div>
+
+<p>여기서 주의 할 점은 <code class="highlighter-rouge">!</code>을 사용할 때 Optional값이 <code class="highlighter-rouge">nil</code>인 경우에는 런타임 에러가 발생한다.</p>
+
+<div class="language-swift highlighter-rouge"><pre class="highlight"><code><span class="k">var</span> <span class="nv">optionEmail</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">optionEmail</span><span class="o">!</span><span class="p">)</span>	<span class="c1">//런타임 에러!</span>
+</code></pre>
+</div>
+
+<h1 id="implicitly-unwrapped-optional">Implicitly Unwrapped Optional</h1>
+
+<p>Optional을 정의할 때 <code class="highlighter-rouge">?</code> 대신 <code class="highlighter-rouge">!</code>을 사용하면 <code class="highlighter-rouge">ImplicitylyUnwrappedOptional</code>이라는 Optional로 정의 된다.</p>
+
+<div class="language-swift highlighter-rouge"><pre class="highlight"><code><span class="k">var</span> <span class="nv">email</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span> <span class="o">=</span> <span class="s">"wh7923@gmail.com"</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">email</span><span class="p">)</span>	<span class="c1">//wh7923@gmail.com</span>
+</code></pre>
+</div>
+
+<p>이렇게 정의된 Optional은 <code class="highlighter-rouge">nil</code>을 포함할 수 있는 Optional이긴 한데, 접근할 때 Optional 바인딩이나 Optional을 벗기는 과정을 거치지 않고도 바로 값에 접근할 수 있다는 점에서 다르다.</p>
+
+<p>Optional 벗기기와 마찬가지로, 값이 없는데 접근을 시도하면 런타임 에러가 발생한다.</p>
+
+<div class="language-swift highlighter-rouge"><pre class="highlight"><code><span class="k">var</span> <span class="nv">email</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span>
+<span class="nf">print</span><span class="p">(</span><span class="n">email</span><span class="p">)</span> <span class="c1">//런타임에러!</span>
+</code></pre>
+</div>
+
+<p><br /></p>
+
+<h3 id="reference">Reference</h3>
+<ul>
+  <li><a href="https://devxoul.gitbooks.io/ios-with-swift-in-40-hours/content/Chapter-2/optionals.html">40시간만에 Swift로 iOS앱 만들기</a></li>
+  <li><a href="http://ionkr.tistory.com/entry/swift-Optional-in-Swift">그냥저냥</a></li>
+</ul>
+
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/10/24/optional/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
             
               <li>
                 <h2>
@@ -1317,203 +1539,6 @@ awk <span class="s1">'BEGIN {FS="\t"; OFS ="-"} {print $1 ,  $2} END {print "총
                 <hr>
               </li>
             
-              <li>
-                <h2>
-                  <a class="post-link" href="/2016/10/07/Predicate/">Java 8 Predicate</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-10-07
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#Java" title="Category: Java" rel="category">Java</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                </div>
-                <div class="excerpt">
-                    <h1 id="predicate">Predicate</h1>
-
-<p>삼항연산자은 <code class="highlighter-rouge">X ? {true,false}</code>라고 적는다. 이를 Predicate로 표현하면 <code class="highlighter-rouge">preicate on X</code>라고 말해주면 된다.</p>
-
-<p><code class="highlighter-rouge">java 8</code>에서는 Predicate 함수를 인터페이스로 만들어 lambda 표현식이나 method reference로 사용할 수 있게 하였다.</p>
-
-<h2 id="collection-predicate">Collection에서 Predicate사용</h2>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">predicateExample</span><span class="o">;</span>
- 
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Employee</span> <span class="o">{</span>
-    
-   <span class="kd">public</span> <span class="nf">Employee</span><span class="o">(</span><span class="n">Integer</span> <span class="n">id</span><span class="o">,</span> <span class="n">Integer</span> <span class="n">age</span><span class="o">,</span> <span class="n">String</span> <span class="n">gender</span><span class="o">,</span> <span class="n">String</span> <span class="n">fName</span><span class="o">,</span> <span class="n">String</span> <span class="n">lName</span><span class="o">){</span>
-       <span class="k">this</span><span class="o">.</span><span class="na">id</span> <span class="o">=</span> <span class="n">id</span><span class="o">;</span>
-       <span class="k">this</span><span class="o">.</span><span class="na">age</span> <span class="o">=</span> <span class="n">age</span><span class="o">;</span>
-       <span class="k">this</span><span class="o">.</span><span class="na">gender</span> <span class="o">=</span> <span class="n">gender</span><span class="o">;</span>
-       <span class="k">this</span><span class="o">.</span><span class="na">firstName</span> <span class="o">=</span> <span class="n">fName</span><span class="o">;</span>
-       <span class="k">this</span><span class="o">.</span><span class="na">lastName</span> <span class="o">=</span> <span class="n">lName</span><span class="o">;</span>
-   <span class="o">}</span> 
-     
-   <span class="kd">private</span> <span class="n">Integer</span> <span class="n">id</span><span class="o">;</span>
-   <span class="kd">private</span> <span class="n">Integer</span> <span class="n">age</span><span class="o">;</span>
-   <span class="kd">private</span> <span class="n">String</span> <span class="n">gender</span><span class="o">;</span>
-   <span class="kd">private</span> <span class="n">String</span> <span class="n">firstName</span><span class="o">;</span>
-   <span class="kd">private</span> <span class="n">String</span> <span class="n">lastName</span><span class="o">;</span>
- 
-   <span class="c1">//Please generate Getter and Setters</span>
- 
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="n">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="k">this</span><span class="o">.</span><span class="na">id</span><span class="o">.</span><span class="na">toString</span><span class="o">()+</span><span class="s">" - "</span><span class="o">+</span><span class="k">this</span><span class="o">.</span><span class="na">age</span><span class="o">.</span><span class="na">toString</span><span class="o">();</span> <span class="c1">//To change body of generated methods, choose Tools | Templates.</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre>
-</div>
-
-<p>직원 객체를 만들었다. 자 이제 <code class="highlighter-rouge">Predicate</code>를 사용해보자!!</p>
-
-<h3 id="section">1) 직원 중 남자이고 나이가 21살이상인 사람 찾기!</h3>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code>
-<span class="kd">public</span> <span class="kd">static</span> <span class="n">Predicate</span><span class="o">&lt;</span><span class="n">Employee</span><span class="o">&gt;</span> <span class="nf">isAdultMale</span><span class="o">()</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="n">p</span> <span class="o">-&gt;</span> <span class="n">p</span><span class="o">.</span><span class="na">getAge</span><span class="o">()</span> <span class="o">&gt;</span> <span class="mi">21</span> <span class="o">&amp;&amp;</span> <span class="n">p</span><span class="o">.</span><span class="na">getGender</span><span class="o">().</span><span class="na">equalsIgnoreCase</span><span class="o">(</span><span class="s">"M"</span><span class="o">);</span>
-<span class="o">}</span>
-</code></pre>
-</div>
-
-<h3 id="section-1">2) 직원 중 여자이고 나이가 18살이상인 사람 찾기!</h3>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="n">Predicate</span><span class="o">&lt;</span><span class="n">Employee</span><span class="o">&gt;</span> <span class="nf">isAdultFemale</span><span class="o">()</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="n">p</span> <span class="o">-&gt;</span> <span class="n">p</span><span class="o">.</span><span class="na">getAge</span><span class="o">()</span> <span class="o">&gt;</span> <span class="mi">18</span> <span class="o">&amp;&amp;</span> <span class="n">p</span><span class="o">.</span><span class="na">getGender</span><span class="o">().</span><span class="na">equalsIgnoreCase</span><span class="o">(</span><span class="s">"F"</span><span class="o">);</span>
-<span class="o">}</span>
-</code></pre>
-</div>
-
-<h3 id="section-2">3) 직원 중 주어진 나이보다 많은 사람 찾기!!</h3>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="n">Predicate</span><span class="o">&lt;</span><span class="n">Employee</span><span class="o">&gt;</span> <span class="nf">isAgeMoreThan</span><span class="o">(</span><span class="n">Integer</span> <span class="n">age</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="n">p</span> <span class="o">-&gt;</span> <span class="n">p</span><span class="o">.</span><span class="na">getAge</span><span class="o">()</span> <span class="o">&gt;</span> <span class="n">age</span><span class="o">;</span>
-<span class="o">}</span>
-</code></pre>
-</div>
-
-<p>세가지 Predicate를 하나의 클래스로 만들어 관리하자</p>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">predicateExample</span><span class="o">;</span>
- 
-<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.function.Predicate</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.stream.Collectors</span><span class="o">;</span>
- 
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">EmployeePredicates</span> 
-<span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="n">Predicate</span><span class="o">&lt;</span><span class="n">Employee</span><span class="o">&gt;</span> <span class="nf">isAdultMale</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">p</span> <span class="o">-&gt;</span> <span class="n">p</span><span class="o">.</span><span class="na">getAge</span><span class="o">()</span> <span class="o">&gt;</span> <span class="mi">21</span> <span class="o">&amp;&amp;</span> <span class="n">p</span><span class="o">.</span><span class="na">getGender</span><span class="o">().</span><span class="na">equalsIgnoreCase</span><span class="o">(</span><span class="s">"M"</span><span class="o">);</span>
-    <span class="o">}</span>
-     
-    <span class="kd">public</span> <span class="kd">static</span> <span class="n">Predicate</span><span class="o">&lt;</span><span class="n">Employee</span><span class="o">&gt;</span> <span class="nf">isAdultFemale</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">p</span> <span class="o">-&gt;</span> <span class="n">p</span><span class="o">.</span><span class="na">getAge</span><span class="o">()</span> <span class="o">&gt;</span> <span class="mi">18</span> <span class="o">&amp;&amp;</span> <span class="n">p</span><span class="o">.</span><span class="na">getGender</span><span class="o">().</span><span class="na">equalsIgnoreCase</span><span class="o">(</span><span class="s">"F"</span><span class="o">);</span>
-    <span class="o">}</span>
-     
-    <span class="kd">public</span> <span class="kd">static</span> <span class="n">Predicate</span><span class="o">&lt;</span><span class="n">Employee</span><span class="o">&gt;</span> <span class="nf">isAgeMoreThan</span><span class="o">(</span><span class="n">Integer</span> <span class="n">age</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">p</span> <span class="o">-&gt;</span> <span class="n">p</span><span class="o">.</span><span class="na">getAge</span><span class="o">()</span> <span class="o">&gt;</span> <span class="n">age</span><span class="o">;</span>
-    <span class="o">}</span>
-     
-    <span class="kd">public</span> <span class="kd">static</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Employee</span><span class="o">&gt;</span> <span class="nf">filterEmployees</span> <span class="o">(</span><span class="n">List</span><span class="o">&lt;</span><span class="n">Employee</span><span class="o">&gt;</span> <span class="n">employees</span><span class="o">,</span> <span class="n">Predicate</span><span class="o">&lt;</span><span class="n">Employee</span><span class="o">&gt;</span> <span class="n">predicate</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">return</span> <span class="n">employees</span><span class="o">.</span><span class="na">stream</span><span class="o">().</span><span class="na">filter</span><span class="o">(</span> <span class="n">predicate</span> <span class="o">).</span><span class="na">collect</span><span class="o">(</span><span class="n">Collectors</span><span class="o">.&lt;</span><span class="n">Employee</span><span class="o">&gt;</span><span class="n">toList</span><span class="o">());</span>
-    <span class="o">}</span>
-<span class="o">}</span>   
-</code></pre>
-</div>
-
-<p>여기서 <code class="highlighter-rouge">filterEmployees()</code> method를 볼 수 있다. 간단하게 filter를 구현하고 코드가 if문을 남발하지 않아도 되는 예쁜코드를 작성할 수 있게 되었다.</p>
-
-<p>이를 사용한 예를 보자!!</p>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">predicateExample</span><span class="o">;</span>
- 
-<span class="kn">import</span> <span class="nn">java.util.ArrayList</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.Arrays</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">java.util.List</span><span class="o">;</span>
-<span class="kn">import</span> <span class="nn">static</span> <span class="n">predicateExample</span><span class="o">.</span><span class="na">EmployeePredicates</span><span class="o">.*;</span>
- 
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">TestEmployeePredicates</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">){</span>
-        <span class="n">Employee</span> <span class="n">e1</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Employee</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span><span class="mi">23</span><span class="o">,</span><span class="s">"M"</span><span class="o">,</span><span class="s">"Rick"</span><span class="o">,</span><span class="s">"Beethovan"</span><span class="o">);</span>
-        <span class="n">Employee</span> <span class="n">e2</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Employee</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span><span class="mi">13</span><span class="o">,</span><span class="s">"F"</span><span class="o">,</span><span class="s">"Martina"</span><span class="o">,</span><span class="s">"Hengis"</span><span class="o">);</span>
-        <span class="n">Employee</span> <span class="n">e3</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Employee</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span><span class="mi">43</span><span class="o">,</span><span class="s">"M"</span><span class="o">,</span><span class="s">"Ricky"</span><span class="o">,</span><span class="s">"Martin"</span><span class="o">);</span>
-        <span class="n">Employee</span> <span class="n">e4</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Employee</span><span class="o">(</span><span class="mi">4</span><span class="o">,</span><span class="mi">26</span><span class="o">,</span><span class="s">"M"</span><span class="o">,</span><span class="s">"Jon"</span><span class="o">,</span><span class="s">"Lowman"</span><span class="o">);</span>
-        <span class="n">Employee</span> <span class="n">e5</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Employee</span><span class="o">(</span><span class="mi">5</span><span class="o">,</span><span class="mi">19</span><span class="o">,</span><span class="s">"F"</span><span class="o">,</span><span class="s">"Cristine"</span><span class="o">,</span><span class="s">"Maria"</span><span class="o">);</span>
-        <span class="n">Employee</span> <span class="n">e6</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Employee</span><span class="o">(</span><span class="mi">6</span><span class="o">,</span><span class="mi">15</span><span class="o">,</span><span class="s">"M"</span><span class="o">,</span><span class="s">"David"</span><span class="o">,</span><span class="s">"Feezor"</span><span class="o">);</span>
-        <span class="n">Employee</span> <span class="n">e7</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Employee</span><span class="o">(</span><span class="mi">7</span><span class="o">,</span><span class="mi">68</span><span class="o">,</span><span class="s">"F"</span><span class="o">,</span><span class="s">"Melissa"</span><span class="o">,</span><span class="s">"Roy"</span><span class="o">);</span>
-        <span class="n">Employee</span> <span class="n">e8</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Employee</span><span class="o">(</span><span class="mi">8</span><span class="o">,</span><span class="mi">79</span><span class="o">,</span><span class="s">"M"</span><span class="o">,</span><span class="s">"Alex"</span><span class="o">,</span><span class="s">"Gussin"</span><span class="o">);</span>
-        <span class="n">Employee</span> <span class="n">e9</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Employee</span><span class="o">(</span><span class="mi">9</span><span class="o">,</span><span class="mi">15</span><span class="o">,</span><span class="s">"F"</span><span class="o">,</span><span class="s">"Neetu"</span><span class="o">,</span><span class="s">"Singh"</span><span class="o">);</span>
-        <span class="n">Employee</span> <span class="n">e10</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Employee</span><span class="o">(</span><span class="mi">10</span><span class="o">,</span><span class="mi">45</span><span class="o">,</span><span class="s">"M"</span><span class="o">,</span><span class="s">"Naveen"</span><span class="o">,</span><span class="s">"Jain"</span><span class="o">);</span>
-         
-        <span class="n">List</span><span class="o">&lt;</span><span class="n">Employee</span><span class="o">&gt;</span> <span class="n">employees</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Employee</span><span class="o">&gt;();</span>
-        <span class="n">employees</span><span class="o">.</span><span class="na">addAll</span><span class="o">(</span><span class="n">Arrays</span><span class="o">.</span><span class="na">asList</span><span class="o">(</span><span class="k">new</span> <span class="n">Employee</span><span class="o">[]{</span><span class="n">e1</span><span class="o">,</span><span class="n">e2</span><span class="o">,</span><span class="n">e3</span><span class="o">,</span><span class="n">e4</span><span class="o">,</span><span class="n">e5</span><span class="o">,</span><span class="n">e6</span><span class="o">,</span><span class="n">e7</span><span class="o">,</span><span class="n">e8</span><span class="o">,</span><span class="n">e9</span><span class="o">,</span><span class="n">e10</span><span class="o">}));</span>
-                
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">filterEmployees</span><span class="o">(</span><span class="n">employees</span><span class="o">,</span> <span class="n">isAdultMale</span><span class="o">()));</span>
-         
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">filterEmployees</span><span class="o">(</span><span class="n">employees</span><span class="o">,</span> <span class="n">isAdultFemale</span><span class="o">()));</span>
-         
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">filterEmployees</span><span class="o">(</span><span class="n">employees</span><span class="o">,</span> <span class="n">isAgeMoreThan</span><span class="o">(</span><span class="mi">35</span><span class="o">)));</span>
-         
-        <span class="c1">//Employees other than above collection of "isAgeMoreThan(35)" can be get using negate()</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">filterEmployees</span><span class="o">(</span><span class="n">employees</span><span class="o">,</span> <span class="n">isAgeMoreThan</span><span class="o">(</span><span class="mi">35</span><span class="o">).</span><span class="na">negate</span><span class="o">()));</span>
-    <span class="o">}</span>
-<span class="o">}</span>
- 
-<span class="nl">Output:</span>
- 
-<span class="o">[</span><span class="mi">1</span> <span class="o">-</span> <span class="mi">23</span><span class="o">,</span> <span class="mi">3</span> <span class="o">-</span> <span class="mi">43</span><span class="o">,</span> <span class="mi">4</span> <span class="o">-</span> <span class="mi">26</span><span class="o">,</span> <span class="mi">8</span> <span class="o">-</span> <span class="mi">79</span><span class="o">,</span> <span class="mi">10</span> <span class="o">-</span> <span class="mi">45</span><span class="o">]</span>
-<span class="o">[</span><span class="mi">5</span> <span class="o">-</span> <span class="mi">19</span><span class="o">,</span> <span class="mi">7</span> <span class="o">-</span> <span class="mi">68</span><span class="o">]</span>
-<span class="o">[</span><span class="mi">3</span> <span class="o">-</span> <span class="mi">43</span><span class="o">,</span> <span class="mi">7</span> <span class="o">-</span> <span class="mi">68</span><span class="o">,</span> <span class="mi">8</span> <span class="o">-</span> <span class="mi">79</span><span class="o">,</span> <span class="mi">10</span> <span class="o">-</span> <span class="mi">45</span><span class="o">]</span>
-<span class="o">[</span><span class="mi">1</span> <span class="o">-</span> <span class="mi">23</span><span class="o">,</span> <span class="mi">2</span> <span class="o">-</span> <span class="mi">13</span><span class="o">,</span> <span class="mi">4</span> <span class="o">-</span> <span class="mi">26</span><span class="o">,</span> <span class="mi">5</span> <span class="o">-</span> <span class="mi">19</span><span class="o">,</span> <span class="mi">6</span> <span class="o">-</span> <span class="mi">15</span><span class="o">,</span> <span class="mi">9</span> <span class="o">-</span> <span class="mi">15</span><span class="o">]</span>
-</code></pre>
-</div>
-
-<h2 id="java8-predicates-">java8에서 Predicates의 지향점</h2>
-
-<ol>
-  <li>
-    <p>They move your conditions (sometimes business logic) to a central place. This helps in unit-testing them separately.</p>
-  </li>
-  <li>
-    <p>Any change need not be duplicated into multiple places. It improves manageability of code.</p>
-  </li>
-  <li>
-    <p>The code e.g. <code class="highlighter-rouge">filterEmployees(employees, isAdultFemale())</code> is very much readable than writing a if-else block.</p>
-  </li>
-</ol>
-
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2016/10/07/Predicate/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
         </ul>
 
 
@@ -1524,10 +1549,10 @@ awk <span class="s1">'BEGIN {FS="\t"; OFS ="-"} {print $1 ,  $2} END {print "총
             <a href="/index.html" class="previous"><i class="fa fa-angle-double-left"></i></a>
             <a href="/page2" class="previous"><i class="fa fa-angle-left"></i></a>
           
-          <span class="page_number ">3/7</span>
+          <span class="page_number ">3/8</span>
           
             <a href="/page4" class="next"><i class="fa fa-angle-right"></i></a>
-            <a href="/page7" class="next"><i class="fa fa-angle-double-right"></i></a>
+            <a href="/page8" class="next"><i class="fa fa-angle-double-right"></i></a>
           
         </div>
     </div>
@@ -1628,7 +1653,7 @@ awk <span class="s1">'BEGIN {FS="\t"; OFS ="-"} {print $1 ,  $2} END {print "총
                             <span class="name">
                                 MYSQL
                             </span>
-                            <span class="badge">1</span>
+                            <span class="badge">2</span>
                         </a>
                     </li>
                     
@@ -1640,6 +1665,8 @@ awk <span class="s1">'BEGIN {FS="\t"; OFS ="-"} {print $1 ,  $2} END {print "총
                     Recent Posts
                 </div>
                 <ul class="content-ul" recent>
+                    
+                        <li><a href="/2016/12/18/groupconcat/">GROUP_CONCAT</a></li>
                     
                         <li><a href="/2016/12/17/truncateanddelete/">TRUNCATE와 DELETE</a></li>
                     
@@ -1658,8 +1685,6 @@ awk <span class="s1">'BEGIN {FS="\t"; OFS ="-"} {print $1 ,  $2} END {print "총
                         <li><a href="/2016/11/03/CORS/">CORS</a></li>
                     
                         <li><a href="/2016/11/02/gitaddpgitcommitv/">git add -p와 git commit -v</a></li>
-                    
-                        <li><a href="/2016/11/02/imagepixelget/">이미지 픽셀다루기</a></li>
                     
                 </ul>
             </div>
