@@ -5,9 +5,341 @@
     <description></description>
     <link>http://joswlv.github.io/</link>
     <atom:link href="http://joswlv.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Mon, 19 Dec 2016 18:09:36 +0900</pubDate>
-    <lastBuildDate>Mon, 19 Dec 2016 18:09:36 +0900</lastBuildDate>
+    <pubDate>Mon, 19 Dec 2016 21:44:01 +0900</pubDate>
+    <lastBuildDate>Mon, 19 Dec 2016 21:44:01 +0900</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
+    
+      <item>
+        <title>curl</title>
+        <description>&lt;h1 id=&quot;curl----http-getpost-rest-api&quot;&gt;curl 설치 및 사용법 (HTTP GET/POST REST API)&lt;/h1&gt;
+
+&lt;h3 id=&quot;section&quot;&gt;개요&lt;/h3&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;curl&lt;/code&gt;은 command line용 data transfer tool이다. download/upload 모두 가능하며 &lt;code class=&quot;highlighter-rouge&quot;&gt;HTTP/HTTPS/FTP/LDAP/SCP/TELNET/SMTP/POP3&lt;/code&gt; 등 주요한 프로토콜을 지원하며 Linux/Unix 계열 및 Windows 등 주요한 OS 에서 구동되므로
+여러 플랫폼과 OS에서 유용하게 사용할 수 있다. 또 libcurl 이라는 C 기반의 library 가 제공되므로 C/C++ 프로그램 개발시 위의 protocol 과 연계가 필요하다면 libcurl 을 사용하여 손쉽게 연계할 수 있다. 또 libcurl은 PHP, ruby, PERL 및 여러 언어에 바인딩되어 있으므로 사용하는 언어나 개발환경에 맞게 libcurl 을 사용할 수 있다.&lt;/p&gt;
+
+&lt;h3 id=&quot;section-1&quot;&gt;설치&lt;/h3&gt;
+
+&lt;p&gt;Linux나 Mac OS X 에는 기본 탑재되어 있다. 
+&lt;code class=&quot;highlighter-rouge&quot;&gt;sudo brew install curl&lt;/code&gt;로 설치하면 된다.&lt;/p&gt;
+
+&lt;h3 id=&quot;section-2&quot;&gt;사용법&lt;/h3&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;curl [options...] &amp;lt;url&amp;gt;&lt;/code&gt;형식으로 사용하면 된다.&lt;/p&gt;
+
+&lt;p&gt;option 처리는 GNU getopt를 사용하므로 하이픈(-)하나를 붙이는 short형식의 옵션과 하이픈두개(–)두개로 시작되는 long 형식의 options이 있다.&lt;/p&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;short&lt;/th&gt;
+      &lt;th&gt;long&lt;/th&gt;
+      &lt;th&gt;설명&lt;/th&gt;
+      &lt;th&gt;비고&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;-v&lt;/td&gt;
+      &lt;td&gt;–verbose &lt;/td&gt;
+      &lt;td&gt;동작하면서 자세한 옵션을 출력한다.&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;-s&lt;/td&gt;
+      &lt;td&gt;–silent&lt;/td&gt;
+      &lt;td&gt;정숙 모드. 진행 내역이나 메시지등을 출력하지 않는다. -o 옵션으로 remote data 도 /dev/null 로 보내면 결과물도 출력되지 않는다&lt;/td&gt;
+      &lt;td&gt;HTTP response code 만 가져오거나 할 경우 유리&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;-o&lt;/td&gt;
+      &lt;td&gt;–output FILE&lt;/td&gt;
+      &lt;td&gt;curl 은 remote 에서 받아온 데이타를 기본적으로는 콘솔에 출력한다. -o 옵션 뒤에 FILE 을 적어주면 해당 FILE 로 저장한다. (download 시 유용)&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;-O&lt;/td&gt;
+      &lt;td&gt;–remote-name&lt;/td&gt;
+      &lt;td&gt;file 저장시 remote 의 file 이름으로 저장한다. -o 옵션보다 편리하다.&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;-l&lt;/td&gt;
+      &lt;td&gt;–head&lt;/td&gt;
+      &lt;td&gt;HTTP header 만 보여주고 content 는 표시하지 않는다&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;-L&lt;/td&gt;
+      &lt;td&gt;–location&lt;/td&gt;
+      &lt;td&gt;서버에서 &lt;a href=&quot;http://en.wikipedia.org/wiki/HTTP_301&quot;&gt;HTTP 301 &lt;/a&gt;이나 &lt;a href=&quot;http://en.wikipedia.org/wiki/HTTP_302&quot;&gt;HTTP 302&lt;/a&gt; 응답이 왔을 경우 redirection URL 로 따라간다.&lt;br /&gt;–max-redirs 뒤에 숫자로 redirection 을 몇 번 따라갈지 지정할 수 있다. 기본 값은 50이다&lt;/td&gt;
+      &lt;td&gt;curl -v daum.net 을 실행하면 결과값으로 다음과 같이 HTTP 302 가 리턴된다.&lt;br /&gt;&amp;lt; HTTP/1.1 302 Object Moved&lt;br /&gt; Location: &lt;a href=&quot;http://www.daum.net/&quot;&gt;http://www.daum.net/&lt;/a&gt;&lt;br /&gt;-L 옵션을 추가하면 &lt;a href=&quot;http://www.daum.net/&quot;&gt;www.daum.net&lt;/a&gt; 으로 재접속하여 결과를 받아오게 된다.&amp;lt;/span&amp;gt;&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;-k&lt;/td&gt;
+      &lt;td&gt;–insecure&lt;/td&gt;
+      &lt;td&gt;https 사이트를 SSL certificate 검증없이 연결한다.&lt;/td&gt;
+      &lt;td&gt;wget 의 –no-check-certificate 과 비슷한 역할 수행&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;-J&lt;/td&gt;
+      &lt;td&gt;–remote-header-name&lt;/td&gt;
+      &lt;td&gt;어떤 웹서비스는 파일 다운로드시 &lt;a href=&quot;http://www.w3.org/Protocols/rfc2616/rfc2616-sec19.html&quot;&gt;Content-Disposition Header&lt;/a&gt; 를 파싱해야 정확한 파일이름을 알 수 있을 경우가 있다. -J 옵션을 주면 헤더에 있는 파일 이름으로 저장한다.&lt;/td&gt;
+      &lt;td&gt;curl 7.20 이상부터 추가된 옵션&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;-D&lt;/td&gt;
+      &lt;td&gt;–dump-header &amp;lt;file&amp;gt;&lt;/td&gt;
+      &lt;td&gt;&amp;lt;file&amp;gt; 에 HTTP header 를 기록한다.&lt;/td&gt;
+      &lt;td&gt; &lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;-d&lt;/td&gt;
+      &lt;td&gt;–data&lt;/td&gt;
+      &lt;td&gt;HTTP Post data&lt;/td&gt;
+      &lt;td&gt;FORM 을 POST 하는 HTTP나 JSON 으로 데이타를 주고받는 REST 기반의 웹서비스 디버깅시 유용한 옵션이다&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h2 id=&quot;section-3&quot;&gt;사용예&lt;/h2&gt;
+
+&lt;h3 id=&quot;httphttps-download&quot;&gt;HTTP/HTTPS Download&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;다운로드 받은 파일을 콘솔로 출력&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl http://www.gnu.org/software/bash/manual/html_node/index.html
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;지정한 이름으로 저장&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl -o index.html http://www.gnu.org/software/bash/manual/html_node/index.html
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;서버의 filename으로 저장&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl -O  http://www.gnu.org/software/bash/manual/html_node/index.html
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;여러 url에서 동시에 다운로드&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl -O  http://www.gnu.org/software/bash/manual/html_node/index.html -O http://www.gnu.org/savannah-checkouts/gnu/libiconv/documentation/libiconv-1.13/iconv.1.html
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;section-4&quot;&gt;이어받기&lt;/h3&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;-C / --continue-at &amp;lt;offset&amp;gt;&lt;/code&gt; 
+옵션을 주면 이어받기 가능 (offset에 - 를 주면 전송이후 부분부터 이어받음)&lt;/p&gt;
+
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl -C - -O  http://www.gnu.org/software/bash/manual/html_node/index.html
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;section-5&quot;&gt;특정일 이전/이후 변경되었으면 받기&lt;/h3&gt;
+
+&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;-z / --time-cond &amp;lt;time&amp;gt;&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;HTTP 헤더에 If-Modified-Since: 헤더를 추가하여 특정일 이후에 변경되었으면 다운로드 수행
+아래 예제는 2011년 12월 21일 &lt;strong&gt;이후에&lt;/strong&gt; 변경되었으면 다운로드 수행&lt;/p&gt;
+
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl -z 21-Dec-11 http://www.example.com/yy.html
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+&lt;p&gt;날자앞에 - 를 추가하면 If-Unmodified-Since: 헤더를 추가하여 특정일 이전에 변경되었으면 다운로드 수행
+아래 예제는 2011년 12월 21일 &lt;strong&gt;이전에&lt;/strong&gt; 변경되었으면 다운로드함 (날자에 - 추가)&lt;/p&gt;
+
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl -z -21-Dec-11 http://www.example.com/yy.html
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;http-response-code-&quot;&gt;http response code만 출력&lt;/h3&gt;
+
+&lt;p&gt;HTTP Header 나 contents 는 빼고 &lt;a href=&quot;https://en.wikipedia.org/wiki/List_of_HTTP_status_codes&quot;&gt;HTTP Response code&lt;/a&gt; 만 출력한다. 서버의 정상 작동 여부 점검때 유용하다.&lt;/p&gt;
+
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl -s -o /dev/null -w &quot;%{http_code}\n&quot; http://www.example.com/yy.html
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;http&quot;&gt;HTTP인증&lt;/h3&gt;
+
+&lt;p&gt;id/pwd 가 필요한 사이트의 경우 -u(– user) 옵션 뒤에 userid:password 를 지정하여 인증할 수 있다&lt;/p&gt;
+
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl -v -u userid:password http://www.example.com/user.html
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;http-header-&quot;&gt;결과값에 HTTP Header 포함&lt;/h3&gt;
+
+&lt;p&gt;-i 옵션을 사용하면 서버의 응답에 서버가 보낸 HTTP 헤더를 추가하여 출력한다. 디버깅에 유용한다.&lt;/p&gt;
+
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl -i https://api.github.com -u valid_username:valid_password
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;httphttps-post&quot;&gt;HTTP/HTTPS POST&lt;/h3&gt;
+
+&lt;p&gt;-X POST 옵션을 추가하거나 -d( –data) 옵션을 지정하면 기본값으로 POST 로 설정됨&lt;/p&gt;
+
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;form&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;method=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;POST&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;action=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;post.php&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;input&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;text&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;first_name&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;input&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;text&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;last_name&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+    &lt;span class=&quot;nt&quot;&gt;&amp;lt;input&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;submit&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;press&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot; OK &quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+ &lt;span class=&quot;nt&quot;&gt;&amp;lt;/form&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;POST 데이타는 “param1=value1&amp;amp;param2=value2” 형식으로 전달&lt;/p&gt;
+
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl -d &quot;first_name=Bruce&amp;amp;last_name=Wayne&amp;amp;press=%20OK%20&quot; http://posttestserver.com/post.php
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;데이타에 공백이나 기타 특수 문자가 있을 경우 URL encoding 을 해야 한다.
+공백일 경우 일일이 + 로 변환해서 전송해야 하지만 최신 버전의 curl(7.18.0 이후) 은 FORM 파라미터를 URL Encoding 해주는 –data-urlencode 옵션을 사용하면 별도로 인코딩을 해주지 않아도 된다.&lt;/p&gt;
+
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl --data-urlencode &quot;first_name=Bruce&quot; --data-urlencode &quot;last_name=Wayne&quot; --data-urlencode &quot;press= OK &quot; http://posttestserver.com/post.php
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;blockquote&gt;
+  &lt;p&gt;Hidden field 전송시 일반 필드처럼 name=value 형식으로 전송하면 된다.&lt;/p&gt;
+&lt;/blockquote&gt;
+
+&lt;h3 id=&quot;http-post-file&quot;&gt;HTTP POST File&lt;/h3&gt;
+
+&lt;p&gt;file POST할 경우 file name 앞에 @ 를 붙여줌&lt;/p&gt;
+
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl -d @myPostfile http://posttestserver.com/post.php
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;http-post-binary-file&quot;&gt;HTTP POST Binary File&lt;/h3&gt;
+
+&lt;p&gt;curl 은 POST 시 데이타를 text 로 취급하므로 binary 데이타는 깨질 수 있다. 제대로 전송하려면 –data-binary 옵션을 추가해야 한다.&lt;/p&gt;
+
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl --data-binary @myBinary.jpg http://posttestserver.com/post.php
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;http-file-upload-form&quot;&gt;HTTP File Upload Form&lt;/h3&gt;
+
+&lt;p&gt;다음과 같은 파일 업로드 FORM이 있을 때&lt;/p&gt;
+
+&lt;div class=&quot;language-html highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;nt&quot;&gt;&amp;lt;form&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;method=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;POST&quot;&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;enctype=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;'multipart/form-data'&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;action=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;upload.php&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+ &lt;span class=&quot;nt&quot;&gt;&amp;lt;input&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;file&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;upload&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+ &lt;span class=&quot;nt&quot;&gt;&amp;lt;input&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;type=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;submit&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;name=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;press&lt;/span&gt; &lt;span class=&quot;na&quot;&gt;value=&lt;/span&gt;&lt;span class=&quot;s&quot;&gt;&quot;OK&quot;&lt;/span&gt;&lt;span class=&quot;nt&quot;&gt;&amp;gt;&lt;/span&gt;
+&lt;span class=&quot;nt&quot;&gt;&amp;lt;/form&amp;gt;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;localfilename은 upload 할 파일명, submit은 press=OK&lt;/p&gt;
+
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl --form upload=@localfilename --form press=OK http://localhost/upload.php
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;http-header--1&quot;&gt;HTTP Header 설정&lt;/h3&gt;
+
+&lt;p&gt;특정한 HTTP Header를 설정해서 보내야 할 경우(Ex: json data등) -H (–header) 옵션으로 헤더를 설정할 수 있다.&lt;/p&gt;
+
+&lt;h4 id=&quot;content-type-header-&quot;&gt;Content-Type Header 설정&lt;/h4&gt;
+
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl -d @myJson.js -H &quot;Content-Type: application/json&quot; http://localhost:8080/jsonEcho
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h4 id=&quot;user-agent-&quot;&gt;User-Agent 설정&lt;/h4&gt;
+
+&lt;p&gt;특정 브라우저인(Browser) 것처럼 동작하기 위해서는 -A ( –user-agent) 옵션을 사용할 수 있다.&lt;/p&gt;
+
+&lt;h3 id=&quot;chrome-240-user-agent&quot;&gt;Chrome 24.0으로 User-Agent설정&lt;/h3&gt;
+
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl -d @myJson.js -H &quot;Content-Type: application/json&quot; --user-agent &quot;Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.14 (KHTML, like Gecko) Chrome/24.0.1292.0 Safari/537.14&quot; http://localhost:8080/jsonEcho
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;ie10-user-agnet&quot;&gt;IE10으로 User-Agnet설정&lt;/h3&gt;
+
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl -d @myJson.js -H &quot;Content-Type: application/json&quot; --user-agent &quot;Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; WOW64; Trident/6.0)&quot; http://localhost:8080/jsonEcho
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;firefodx-290-user-agent-&quot;&gt;Firefodx 29.0으로 User-Agent 설정&lt;/h3&gt;
+
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl -d @myJson.js -H &quot;Content-Type: application/json&quot; --user-agent &quot;Mozilla/5.0 (Windows NT 6.1; WOW64; rv:29.0) Gecko/20120101 Firefox/29.0&quot; http://localhost:8080/jsonEcho
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;referer&quot;&gt;Referer설정&lt;/h3&gt;
+
+&lt;p&gt;Referer 를 체크하는 사이트일 경우 -e ( –referer) 옵션으로 Referer URL 을 설정할 수 있다.&lt;/p&gt;
+
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl --referer http://www.example.come/from  http://www.example.com/to
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;p&gt;아니면 -H 옵션으로 referer 헤더를 지정해도 된다.&lt;/p&gt;
+
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl -H &quot;Referer: http://www.example.come/from&quot;  http://www.example.com/to
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;ssltls&quot;&gt;SSL/TLS옵션&lt;/h3&gt;
+
+&lt;h3 id=&quot;tls-version-&quot;&gt;TLS Version 지정&lt;/h3&gt;
+
+&lt;p&gt;SSL의 후속 버전인 TLS의 버전을 지정할 수 있다. 지정하지 않을 경우 서버와 negotiation하여 결정한다.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;-1, –tlsv1     Use =&amp;gt; TLSv1 (SSL)&lt;/li&gt;
+  &lt;li&gt;–tlsv1.0       Use TLSv1.0 (SSL)&lt;/li&gt;
+  &lt;li&gt;–tlsv1.1       Use TLSv1.1 (SSL)&lt;/li&gt;
+  &lt;li&gt;–tlsv1.2       Use TLSv1.2 (SSL)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl --tlsv1.2 https://www.example.come
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;ssl-version-&quot;&gt;SSL Version 지정&lt;/h3&gt;
+
+&lt;p&gt;다음 옵션으로 사용할 SSL 의 버전을 지정할 수 있다. 지정하지 않을 경우 서버와 negotiation하여 결정한다. SSL 은 오래 됐으니 SSL 보다는 TLS 를 사용하는게 좋다.&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;-2, –sslv2         Use SSLv2 (SSL)&lt;/li&gt;
+  &lt;li&gt;-3, –sslv3         Use SSLv3 (SSL)&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;div class=&quot;language-console highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;curl --sslv3 https://www.example.come
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/div&gt;
+
+&lt;h3 id=&quot;reference&quot;&gt;Reference&lt;/h3&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;&lt;a href=&quot;https://www.lesstif.com/pages/viewpage.action?pageId=14745703#curl설치및사용법-HTTPGET/POST,RESTAPI연계등-curl로AtlassianJIRARESTAPI연계하기&quot;&gt;lesstif&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+</description>
+        <pubDate>Sun, 18 Dec 2016 11:00:00 +0900</pubDate>
+        <link>http://joswlv.github.io/2016/12/18/curl/</link>
+        <guid isPermaLink="true">http://joswlv.github.io/2016/12/18/curl/</guid>
+        
+        
+        <category>Etc</category>
+        
+      </item>
     
       <item>
         <title>GROUP_CONCAT</title>
@@ -1328,28 +1660,6 @@ sudo service uwsgi restart
         
         
         <category>web</category>
-        
-      </item>
-    
-      <item>
-        <title>git add -p와 git commit -v</title>
-        <description>&lt;h1 id=&quot;section&quot;&gt;참고 링크&lt;/h1&gt;
-
-&lt;p&gt;&lt;a href=&quot;https://blog.outsider.ne.kr/1247&quot;&gt;Outsider’s Dev Story&lt;/a&gt;&lt;/p&gt;
-
-&lt;h1 id=&quot;section-1&quot;&gt;간단한 설명&lt;/h1&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;git add -p&lt;/code&gt; 를 하면 수정된 부분을 하나의 hock으로 보여주면서 추가할 것인지 말것인지를 물어본다.&lt;/p&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;git commit -v&lt;/code&gt; 을 사용하면 커밋메시지를 입력할 때 화면 아래에 diff가 한번 더 나온다.&lt;/p&gt;
-
-</description>
-        <pubDate>Wed, 02 Nov 2016 09:05:00 +0900</pubDate>
-        <link>http://joswlv.github.io/2016/11/02/gitaddpgitcommitv/</link>
-        <guid isPermaLink="true">http://joswlv.github.io/2016/11/02/gitaddpgitcommitv/</guid>
-        
-        
-        <category>Etc</category>
         
       </item>
     

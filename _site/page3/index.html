@@ -105,6 +105,76 @@
             
               <li>
                 <h2>
+                  <a class="post-link" href="/2016/10/29/directorylisting/">Apache Directory listing 제거</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-10-29
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#Etc" title="Category: Etc" rel="category">Etc</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <p>Apache설치한경로에서  httpd.conf를 수정한다.</p>
+
+<blockquote>
+  <p>/etc/httpd/conf/httpd.conf	(RPM 설치)</p>
+
+  <p>/usr/local/apach/conf/httpd.conf	(tar 설치)</p>
+</blockquote>
+
+<p><strong>Options Indexes FollowSymLinks Includes</strong></p>
+
+<p>또는</p>
+
+<p><strong>Options All Indexes FollowSymLinks MultiViews</strong></p>
+
+<p>위 두문구중에서 하나는 있을 것이다.</p>
+
+<p>거기서 <code class="highlighter-rouge">Indexes</code>구문을 제거하고 아래와 같이 수정하고 저장한다.</p>
+
+<p><strong>Options FollowSymLinks Includes</strong></p>
+
+<p>또는</p>
+
+<p><strong>Options All FollowSymLinks MultiViews</strong></p>
+
+<p>그리고 apache를 재시작하면 끝~!!</p>
+
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/10/29/directorylisting/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
                   <a class="post-link" href="/2016/10/24/optional/">Optional</a>
                 </h2>
                 <div class="label">
@@ -1255,290 +1325,6 @@ awk <span class="s1">'BEGIN {FS="\t"; OFS ="-"} {print $1 ,  $2} END {print "총
                 <hr>
               </li>
             
-              <li>
-                <h2>
-                  <a class="post-link" href="/2016/10/11/readingoodcode/"><읽기좋은코드> 요약</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-10-11
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#Etc" title="Category: Etc" rel="category">Etc</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                </div>
-                <div class="excerpt">
-                    <h1 id="section">원본</h1>
-
-<ul>
-  <li><a href="http://www.hanbit.co.kr/book/look.html?isbn=978-89-7914-914-2">&lt;읽기 좋은 코드가 좋은 코드다&gt;</a></li>
-  <li><a href="https://nhnent.dooray.com/share/posts/1kprIA7VR3S4lwuMCa4D9Q">NHN신입강의</a></li>
-</ul>
-
-<h1 id="section-1">코드는 이해하기 쉬워야한다.</h1>
-
-<h2 id="section-2">간결한 코드가 좋다.</h2>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="k">for</span> <span class="o">(</span><span class="n">Node</span><span class="o">*</span> <span class="n">node</span> <span class="o">=</span> <span class="n">list</span><span class="o">-&gt;</span><span class="n">head</span><span class="o">;</span> <span class="n">node</span> <span class="o">!=</span> <span class="n">NULL</span><span class="o">;</span> <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">)</span>
-    <span class="n">Print</span><span class="o">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="o">);</span>
-</code></pre>
-</div>
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">Node</span><span class="o">*</span> <span class="n">node</span> <span class="o">=</span> <span class="n">list</span><span class="o">-&gt;</span><span class="n">head</span><span class="o">;</span>
-<span class="k">if</span> <span class="o">(</span><span class="n">node</span> <span class="o">==</span> <span class="n">NULL</span><span class="o">)</span> <span class="k">return</span><span class="o">;</span>
-
-<span class="k">while</span><span class="o">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">next</span> <span class="o">!=</span> <span class="n">NULL</span><span class="o">)</span> <span class="o">{</span>
-    <span class="n">Print</span><span class="o">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="o">);</span>
-    <span class="n">node</span> <span class="o">=</span> <span class="n">node</span><span class="o">-&gt;</span><span class="n">next</span><span class="o">;</span>
-<span class="o">}</span>
-<span class="k">if</span> <span class="o">(</span><span class="n">node</span> <span class="o">!=</span> <span class="n">NULL</span><span class="o">)</span> <span class="n">Print</span><span class="o">(</span><span class="n">node</span><span class="o">-&gt;</span><span class="n">data</span><span class="o">);</span>
-</code></pre>
-</div>
-
-<h2 id="section-3">!= 적은 줄</h2>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="k">return</span> <span class="n">exponent</span><span class="o">&gt;=</span><span class="mi">0</span> <span class="o">?</span> <span class="n">mantissa</span> <span class="o">=</span> <span class="o">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">exponent</span><span class="o">)</span> <span class="o">:</span> <span class="n">mantissa</span> <span class="o">/</span> <span class="o">(</span><span class="mi">1</span> <span class="o">&lt;&lt;-</span><span class="n">exponent</span><span class="o">);</span>
-</code></pre>
-</div>
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="k">if</span> <span class="o">(</span><span class="n">exponent</span> <span class="o">&gt;=</span> <span class="mi">0</span><span class="o">)</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="n">mantissa</span> <span class="o">*</span> <span class="o">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">exponent</span><span class="o">);</span>
-<span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
-    <span class="k">return</span> <span class="n">mantissa</span> <span class="o">/</span> <span class="o">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="o">-</span><span class="n">exponent</span><span class="o">);</span>
-<span class="o">}</span>
-</code></pre>
-</div>
-
-<p><strong>핵심</strong></p>
-
-<p><code class="highlighter-rouge">코드는 "다른 사람"이 그것을 "이해"하는 데 들이는 시간을 최소화하는 방식으로 작성해야한다.</code></p>
-
-<ul>
-  <li>“이해”
-    <ul>
-      <li>코드를 자유롭게 수정하고</li>
-      <li>버그를 짚어내고</li>
-      <li>수정한 내용이 여러분이 작성한 다른 부분의 코드와 어떻게 상호작용하는지 알 수 있어야</li>
-    </ul>
-  </li>
-  <li>“다른 사람”
-    <ul>
-      <li>“지금의 나”와 “6개월 뒤의 나”는 다른 사람</li>
-    </ul>
-  </li>
-</ul>
-
-<h1 id="section-4">이름에 정보 담기!!</h1>
-
-<h2 id="section-5">특정 단어 고르기</h2>
-
-<p><code class="highlighter-rouge">GetPage()</code></p>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">def</span> <span class="nf">GetPage</span><span class="o">(</span><span class="n">url</span><span class="o">):</span>
-    <span class="o">...</span>
-</code></pre>
-</div>
-
-<ul>
-  <li>get은 지나치게 보편적</li>
-  <li>로컬 캐쉬에서? 인터넷에서?!
-    <ul>
-      <li><code class="highlighter-rouge">FetchPage()</code>, <code class="highlighter-rouge">DownloadPage()</code></li>
-    </ul>
-  </li>
-</ul>
-
-<p><code class="highlighter-rouge">Size()</code></p>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">BinaryTree</span><span class="o">{</span>
-    <span class="kt">int</span> <span class="nf">Size</span><span class="o">();</span>
-    <span class="o">...</span>
-<span class="o">}</span>
-</code></pre>
-</div>
-
-<ul>
-  <li>트리의 높이? Height()</li>
-  <li>노드 개수? NumNodes()</li>
-  <li>트리의 메모리? MemoryBytes()</li>
-</ul>
-
-<p><code class="highlighter-rouge">Stop()</code></p>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">Thread</span> <span class="o">{</span>
-    <span class="kt">void</span> <span class="nf">Stop</span><span class="o">();</span>
-<span class="o">}</span>
-</code></pre>
-</div>
-
-<ul>
-  <li>더 정확한 이름을 고를 수 있음</li>
-  <li>되돌릴 수 없는 최종 동작이라면 <code class="highlighter-rouge">Kill()</code></li>
-  <li><code class="highlighter-rouge">Resume()</code>등으로 다시 돌이킬 수 있다면 <code class="highlighter-rouge">Pause()</code></li>
-</ul>
-
-<p><strong>보다 다양한 단어를 활용</strong></p>
-
-<table>
-  <thead>
-    <tr>
-      <th>단어</th>
-      <th>유의어</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>send</td>
-      <td>deliver, dispatch, announce, distribute, route</td>
-    </tr>
-    <tr>
-      <td>find</td>
-      <td>search, extract, locate, recover</td>
-    </tr>
-    <tr>
-      <td>start</td>
-      <td>launch, create, begin, open</td>
-    </tr>
-    <tr>
-      <td>make</td>
-      <td>create, set up, build, generate, compose, add, new</td>
-    </tr>
-  </tbody>
-</table>
-
-<h1 id="tmp-retval---">tmp, retval같은 보편적 이름 피하기</h1>
-
-<p><code class="highlighter-rouge">retval</code></p>
-
-<ul>
-  <li>리턴값이라고 무조건 <code class="highlighter-rouge">retval</code>을 쓰지 않기</li>
-  <li>그 변수가 의미하는 바를 이름으로</li>
-</ul>
-
-<p><code class="highlighter-rouge">tmp</code></p>
-
-<blockquote>
-  <p>tmp라는 이름은 대상이 짧게 임시적으로만 존재하고, 임시적 존재 자체가 변수의 가장 중요한 용도일 때 한해서 사용해야한다.</p>
-</blockquote>
-
-<p><code class="highlighter-rouge">i</code>,<code class="highlighter-rouge">j</code>,<code class="highlighter-rouge">k</code></p>
-
-<ul>
-  <li>반복자라는 의미를 충분히 전달. 그래서 다른 목적으로 사용하면 헷갈릴 수 있음</li>
-  <li>다음과 같이 중첩해서 사용할 때 헷갈리지 않도록 유의. 조금 더 명확하게</li>
-</ul>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="n">clubs</span><span class="o">.</span><span class="na">size</span><span class="o">();</span> <span class="n">i</span><span class="o">++)</span>
-  <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="n">clubs</span><span class="o">[</span><span class="n">i</span><span class="o">].</span><span class="na">members</span><span class="o">.</span><span class="na">size</span><span class="o">();</span> <span class="n">j</span><span class="o">++)</span>
-      <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span> <span class="n">k</span> <span class="o">&lt;</span> <span class="n">users</span><span class="o">.</span><span class="na">size</span><span class="o">();</span> <span class="n">k</span><span class="o">++)</span>
-          <span class="k">if</span> <span class="o">(</span><span class="n">clubs</span><span class="o">[</span><span class="n">i</span><span class="o">].</span><span class="na">members</span><span class="o">[</span><span class="n">k</span><span class="o">]</span> <span class="o">==</span> <span class="n">users</span><span class="o">[</span><span class="n">j</span><span class="o">])</span>
-              <span class="o">...</span>
-</code></pre>
-</div>
-<p>이런 경우는</p>
-
-<p><code class="highlighter-rouge">i</code> –&gt; <code class="highlighter-rouge">club_i</code>, <code class="highlighter-rouge">j</code> –&gt; <code class="highlighter-rouge">members_j</code>, <code class="highlighter-rouge">k</code> –&gt; <code class="highlighter-rouge">users_k</code></p>
-
-<p>이런 식으로 명확하게 한다.</p>
-
-<blockquote>
-  <p>tmp, it, retval 같은 보편적인 이름을 사용하려면, 꼭 그렇게 해야하는 이유가 있어야 한다.</p>
-</blockquote>
-
-<h1 id="section-6">추상적인 이름보다 구체적인 이름을 선호하라</h1>
-
-<h1 id="section-7">드모르간의 법칙 사용</h1>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="k">if</span> <span class="o">(!(</span><span class="n">file_exists</span> <span class="o">&amp;&amp;</span> <span class="o">!</span><span class="n">is_protected</span><span class="o">))</span> <span class="n">Error</span><span class="o">(</span><span class="s">"..."</span><span class="o">);</span>
-</code></pre>
-</div>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="k">if</span><span class="o">(!</span><span class="n">file_exists</span> <span class="o">||</span> <span class="n">is_protected</span><span class="o">))</span> <span class="n">Error</span><span class="o">(</span><span class="s">"..."</span><span class="o">);</span>
-</code></pre>
-</div>
-
-<blockquote>
-  <p>영리하게 작성한 코드에 유의하라. 나중에 다른 사람이 읽으면 그런 코드가 종종 혼란을 초래한다.</p>
-</blockquote>
-
-<h1 id="section-8">변수와 가독성</h1>
-
-<ul>
-  <li>변수의 수가 많을수록 기억하고 다루기 더 어려워진다.</li>
-  <li>변수의 범위가 넓어질수록 기억하고 다루는 시간이 더 길어진다</li>
-  <li>변수값이 자주 바뀔수록 현재값을 기억하고 다루기가 더 어려워진다.</li>
-</ul>
-
-<blockquote>
-  <p>변수가 적용되는 범위를 최대한 좁게 만들어라</p>
-</blockquote>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">LargeClass</span> <span class="o">{</span>
-    <span class="n">string</span> <span class="n">str_</span><span class="o">;</span>
-
-    <span class="kt">void</span> <span class="nf">Method1</span><span class="o">()</span> <span class="o">{</span>
-        <span class="n">str_</span> <span class="o">=</span> <span class="o">...;</span>
-        <span class="n">Method2</span><span class="o">();</span>
-    <span class="o">}</span>
-
-    <span class="kt">void</span> <span class="nf">Method2</span><span class="o">()</span> <span class="o">{</span>
-        <span class="c1">// str_ 변수 사용하기</span>
-    <span class="o">}</span>
-
-    <span class="c1">// str_을 사용하지 않는 다른 메소드...</span>
-<span class="o">};</span>
-</code></pre>
-</div>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kd">class</span> <span class="nc">LargeClass</span> <span class="o">{</span>
-    <span class="kt">void</span> <span class="nf">Method1</span><span class="o">()</span> <span class="o">{</span>
-        <span class="n">string</span> <span class="n">str</span> <span class="o">=</span> <span class="o">...;</span>
-        <span class="n">Method2</span><span class="o">(</span><span class="n">str</span><span class="o">);</span>
-    <span class="o">}</span>
-
-    <span class="kt">void</span> <span class="nf">Method2</span><span class="o">(</span><span class="n">string</span> <span class="n">str</span><span class="o">)</span> <span class="o">{</span>
-        <span class="c1">// str 변수 사용하기</span>
-    <span class="o">}</span>
-<span class="o">};</span>
-</code></pre>
-</div>
-
-<h1 id="section-9">라이브러리와 주변 도구에 대한 충분한 이해가 필요하다.</h1>
-
-<ul>
-  <li>Java 7,8에서 추가된 API에 대한 이해</li>
-  <li>Spring 버전 업 정보 확인</li>
-</ul>
-
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2016/10/11/readingoodcode/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
         </ul>
 
 
@@ -1626,7 +1412,7 @@ awk <span class="s1">'BEGIN {FS="\t"; OFS ="-"} {print $1 ,  $2} END {print "총
                             <span class="name">
                                 Etc
                             </span>
-                            <span class="badge">4</span>
+                            <span class="badge">5</span>
                         </a>
                     </li>
                     
@@ -1666,6 +1452,8 @@ awk <span class="s1">'BEGIN {FS="\t"; OFS ="-"} {print $1 ,  $2} END {print "총
                 </div>
                 <ul class="content-ul" recent>
                     
+                        <li><a href="/2016/12/18/curl/">curl</a></li>
+                    
                         <li><a href="/2016/12/18/groupconcat/">GROUP_CONCAT</a></li>
                     
                         <li><a href="/2016/12/17/truncateanddelete/">TRUNCATE와 DELETE</a></li>
@@ -1683,8 +1471,6 @@ awk <span class="s1">'BEGIN {FS="\t"; OFS ="-"} {print $1 ,  $2} END {print "총
                         <li><a href="/2016/11/04/regexp/">정규표현식</a></li>
                     
                         <li><a href="/2016/11/03/CORS/">CORS</a></li>
-                    
-                        <li><a href="/2016/11/02/gitaddpgitcommitv/">git add -p와 git commit -v</a></li>
                     
                 </ul>
             </div>

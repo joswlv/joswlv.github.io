@@ -105,6 +105,83 @@
             
               <li>
                 <h2>
+                  <a class="post-link" href="/2016/07/07/Angularjs_how_to_ues_filter_and_watch/">AngularJS_How to use filter & $watch</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-07-07
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#js" title="Category: js" rel="category">js</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <p><code class="highlighter-rouge">ng-Repeat</code>는 기본적으로 필터기능을 지원한다. completed, active, all 세개 버튼을 만들어서 각각을 클릭할때 필터링 로직이 작동하도록 만들어 보자.</p>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"btn-group"</span> <span class="na">role=</span><span class="s">"group"</span> <span class="na">aria-label=</span><span class="s">"..."</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"button"</span> <span class="na">ng-click=</span><span class="s">"status='completed'"</span><span class="nt">&gt;</span>Completed<span class="nt">&lt;/button&gt;</span>
+  <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"button"</span> <span class="na">ng-click=</span><span class="s">"status='active'"</span><span class="nt">&gt;</span>Active<span class="nt">&lt;/button&gt;</span>
+  <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"button"</span> <span class="na">ng-click=</span><span class="s">"status=''"</span><span class="nt">&gt;</span>All<span class="nt">&lt;/button&gt;</span>
+<span class="nt">&lt;/div&gt;</span>
+</code></pre>
+</div>
+
+<p>어떤 버튼을 클릭했는지 상태를 저장하는 스코프변수 <code class="highlighter-rouge">$scope.status</code>에 저장한다.</p>
+
+<p>필터에 따라 동적으로 <code class="highlighter-rouge">ng-repeat</code>가 동작해야 한다.</p>
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;ul</span> <span class="na">ng-repeat=</span><span class="s">"todo in todos | filter:statusFilter"</span>
+</code></pre>
+</div>
+<p>버튼을 누를 때 마다 <code class="highlighter-rouge">statusFilter</code>값이 변할 것이다.</p>
+
+<h3 id="watch">$watch</h3>
+<p>이것은 스코프 변수의 변경을 감지하고 그때마다 사용자가 설정한 함수를 실행한다. (주의! 많이 사용하면 메모리 자원을 많이 먹는다.)</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="c1">// 필터버튼을 클릭하고 status 값이 변경되면 $watch()에 등록한 함수가 동작한다.</span>
+<span class="nx">$scope</span><span class="p">.</span><span class="nx">$watch</span><span class="p">(</span><span class="s1">'status'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
+  <span class="k">if</span> <span class="p">(</span><span class="nx">$scope</span><span class="p">.</span><span class="nx">status</span> <span class="o">===</span> <span class="s1">'completed'</span><span class="p">)</span> <span class="p">{</span>        <span class="c1">// Completed 클릭시</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">statusFilter</span> <span class="o">=</span> <span class="p">{</span><span class="na">completed</span><span class="p">:</span> <span class="kc">true</span><span class="p">};</span>  <span class="c1">// 필터를 설정한다.</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">$scope</span><span class="p">.</span><span class="nx">status</span> <span class="o">===</span> <span class="s1">'active'</span><span class="p">)</span> <span class="p">{</span>    <span class="c1">// Active 클릭시</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">statusFilter</span> <span class="o">=</span> <span class="p">{</span><span class="na">completed</span><span class="p">:</span> <span class="kc">false</span><span class="p">};</span> <span class="c1">// 필터를 설정한다.</span>
+  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>                                    <span class="c1">// All 클릭시</span>
+    <span class="nx">$scope</span><span class="p">.</span><span class="nx">statusFilter</span> <span class="o">=</span> <span class="p">{};</span>                 <span class="c1">// 필터를 해제한다.</span>
+  <span class="p">}</span>
+<span class="p">})</span>
+</code></pre>
+</div>
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/07/07/Angularjs_how_to_ues_filter_and_watch/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
                   <a class="post-link" href="/2016/07/07/Angularjs_Directive/">AngularJS_Directive</a>
                 </h2>
                 <div class="label">
@@ -315,7 +392,7 @@
                             <span class="name">
                                 Etc
                             </span>
-                            <span class="badge">4</span>
+                            <span class="badge">5</span>
                         </a>
                     </li>
                     
@@ -355,6 +432,8 @@
                 </div>
                 <ul class="content-ul" recent>
                     
+                        <li><a href="/2016/12/18/curl/">curl</a></li>
+                    
                         <li><a href="/2016/12/18/groupconcat/">GROUP_CONCAT</a></li>
                     
                         <li><a href="/2016/12/17/truncateanddelete/">TRUNCATE와 DELETE</a></li>
@@ -372,8 +451,6 @@
                         <li><a href="/2016/11/04/regexp/">정규표현식</a></li>
                     
                         <li><a href="/2016/11/03/CORS/">CORS</a></li>
-                    
-                        <li><a href="/2016/11/02/gitaddpgitcommitv/">git add -p와 git commit -v</a></li>
                     
                 </ul>
             </div>
