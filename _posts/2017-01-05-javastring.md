@@ -1,6 +1,6 @@
 ---
 layout: post
-title: TRUNCATE와 DELETE
+title: Java String에 대해..
 date: 2017-01-05 10:00
 categories: Java
 ---
