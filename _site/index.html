@@ -109,6 +109,132 @@
             
               <li>
                 <h2>
+                  <a class="post-link" href="/2017/01/09/mysqlprocedureinsert/">Stored Procedure으로 Insert</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2017-01-09
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#MYSQL" title="Category: MYSQL" rel="category">MYSQL</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="mysql-stored-procedure-insert">MySQL Stored Procedure으로 Insert</h1>
+
+<p>쿼리테스트를 위한 테스트 데이터 1000만건을 insert을 해야한다. 이런 미션을 해결하기 위해 procedure를 사용했다.</p>
+
+<h2 id="section">1. 저장 프로시저란?</h2>
+
+<p>여러 SQL문을 하나의 SQL문 처럼 정리하여 <code class="highlighter-rouge">CALL procedure명</code>라는 명령어로 실행할 수 있게 만든 것을 저장프로시저(Stored Procedure)라고 한다.</p>
+
+<p>저장프로시저는 MySQL버전 5.0이상에서 사용할 수 있다.</p>
+
+<h2 id="no-using-transaction">2. 첫번째 시도! (no using TRANSACTION)</h2>
+
+<div class="language-sql highlighter-rouge"><pre class="highlight"><code><span class="k">DELIMITER</span> <span class="err">$$</span>
+<span class="k">DROP</span> <span class="k">PROCEDURE</span> <span class="n">IF</span> <span class="k">EXISTS</span> <span class="n">FILL_RATE_TEST_DATA</span><span class="err">$$</span>
+<span class="k">CREATE</span> <span class="k">PROCEDURE</span> <span class="n">myTEST</span><span class="p">()</span>
+<span class="k">BEGIN</span>
+	<span class="k">DECLARE</span> <span class="n">i</span> <span class="n">INT</span> <span class="k">DEFAULT</span> <span class="mi">1</span><span class="p">;</span>
+	<span class="k">DECLARE</span> <span class="n">j</span> <span class="n">INT</span> <span class="k">DEFAULT</span> <span class="mi">1</span><span class="p">;</span>
+	<span class="k">DECLARE</span> <span class="n">log_date</span> <span class="n">VARCHAR</span><span class="p">(</span><span class="mi">255</span><span class="p">);</span>	
+		
+	<span class="n">WHILE</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="mi">30</span> <span class="k">DO</span>
+		<span class="k">SET</span> <span class="n">log_date</span> <span class="o">=</span> <span class="n">DATE_FORMAT</span><span class="p">(</span><span class="n">DATE_SUB</span><span class="p">(</span><span class="n">NOW</span><span class="p">(),</span> <span class="n">INTERVAL</span> <span class="n">i</span> <span class="k">DAY</span><span class="p">),</span> <span class="s1">'%Y%m%d'</span><span class="p">);</span>
+		<span class="n">WHILE</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="mi">30000</span> <span class="k">DO</span>
+			<span class="k">INSERT</span> <span class="k">INTO</span> <span class="err">테이블</span> <span class="p">(</span><span class="n">LOG_DATE</span><span class="p">,</span> <span class="n">ID</span><span class="p">,</span> <span class="n">REQ_CNT</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="n">log_date</span><span class="p">,</span> <span class="s1">'0x2011'</span><span class="p">,</span> <span class="mi">3000000</span><span class="p">);</span>
+			<span class="k">SET</span> <span class="n">j</span> <span class="o">=</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+		<span class="k">END</span> <span class="n">WHILE</span><span class="p">;</span>
+	<span class="k">END</span> <span class="n">WHILE</span><span class="p">;</span>
+<span class="k">END</span><span class="err">$$</span>
+<span class="k">DELIMITER</span> <span class="err">$$</span>
+
+<span class="k">CALL</span> <span class="n">myTEST</span><span class="p">()</span>
+</code></pre>
+</div>
+
+<blockquote>
+  <p><code class="highlighter-rouge">DELIMITER</code>는 저장프로시저에서 구분문자를 <code class="highlighter-rouge">세미콜론(;)</code>이 아닌 다른 문자로 변경해준다. 위의 예에서는 <code class="highlighter-rouge">$$</code>을 사용했다.</p>
+</blockquote>
+
+<p>90만건을 insert를 하는 데 <code class="highlighter-rouge">236s</code>을 기다려야한다.</p>
+
+<h2 id="using-transaction">3. 두번째 시도(using TRANSACTION)</h2>
+
+<p>다음으로 시도한 방버은 쿼리실행을 <code class="highlighter-rouge">TRANSCATION</code>안에 넣는 것이다.</p>
+
+<div class="language-sql highlighter-rouge"><pre class="highlight"><code><span class="k">DELIMITER</span> <span class="err">$$</span>
+<span class="k">DROP</span> <span class="k">PROCEDURE</span> <span class="n">IF</span> <span class="k">EXISTS</span> <span class="n">FILL_RATE_TEST_DATA</span><span class="err">$$</span>
+<span class="k">CREATE</span> <span class="k">PROCEDURE</span> <span class="n">myTEST</span><span class="p">()</span>
+<span class="k">BEGIN</span>
+	<span class="k">DECLARE</span> <span class="n">i</span> <span class="n">INT</span> <span class="k">DEFAULT</span> <span class="mi">1</span><span class="p">;</span>
+	<span class="k">DECLARE</span> <span class="n">j</span> <span class="n">INT</span> <span class="k">DEFAULT</span> <span class="mi">1</span><span class="p">;</span>
+	<span class="k">DECLARE</span> <span class="n">log_date</span> <span class="n">VARCHAR</span><span class="p">(</span><span class="mi">255</span><span class="p">);</span>	
+	<span class="k">START</span> <span class="n">TRANSACTION</span><span class="p">;</span>	
+	<span class="n">WHILE</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="mi">30</span> <span class="k">DO</span>
+		<span class="k">SET</span> <span class="n">log_date</span> <span class="o">=</span> <span class="n">DATE_FORMAT</span><span class="p">(</span><span class="n">DATE_SUB</span><span class="p">(</span><span class="n">NOW</span><span class="p">(),</span> <span class="n">INTERVAL</span> <span class="n">i</span> <span class="k">DAY</span><span class="p">),</span> <span class="s1">'%Y%m%d'</span><span class="p">);</span>
+		<span class="n">WHILE</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="mi">30000</span> <span class="k">DO</span>
+			<span class="k">INSERT</span> <span class="k">INTO</span> <span class="err">테이블</span> <span class="p">(</span><span class="n">LOG_DATE</span><span class="p">,</span> <span class="n">ID</span><span class="p">,</span> <span class="n">REQ_CNT</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="n">log_date</span><span class="p">,</span> <span class="s1">'0x2011'</span><span class="p">,</span> <span class="mi">3000000</span><span class="p">);</span>
+			<span class="k">SET</span> <span class="n">j</span> <span class="o">=</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
+		<span class="k">END</span> <span class="n">WHILE</span><span class="p">;</span>
+	<span class="k">END</span> <span class="n">WHILE</span><span class="p">;</span>
+	<span class="k">COMMIT</span><span class="p">;</span>
+<span class="k">END</span><span class="err">$$</span>
+<span class="k">DELIMITER</span> <span class="err">$$</span>
+
+<span class="k">CALL</span> <span class="n">myTEST</span><span class="p">()</span>
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">START TRANSACTION</code>과 <code class="highlighter-rouge">COMMIT;</code>사이에 쿼리문을 넣어주면 된다.</p>
+
+<p>실행속도는 <code class="highlighter-rouge">68s</code> 거의 4배 빨라진 것을 알 수 있다.</p>
+
+<h2 id="section-1">3. 더 나아가기</h2>
+
+<p>Procedure에서 cursor와 trigger 등을 응용 사용하는 법이 있다.</p>
+
+<p>다음 사이트를 참조하면 된다.</p>
+
+<ul>
+  <li><a href="http://recoveryman.tistory.com/186">저장 프로시저 활용하기</a></li>
+  <li><a href="http://yookeun.github.io/database/2015/04/10/mysql-procedure/">프로시저/커서사용</a></li>
+  <li><a href="http://bizadmin.tistory.com/entry/MySQL-Fetch-Cursor-%EB%AC%B8-%EC%82%AC%EC%9A%A9%EB%B0%A9%EB%B2%95">프로시저/커서사용2</a></li>
+</ul>
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2017/01/09/mysqlprocedureinsert/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
                   <a class="post-link" href="/2017/01/05/javastring/">Java String에 대해..</a>
                 </h2>
                 <div class="label">
@@ -1068,107 +1194,6 @@ sudo service uwsgi restart
                 <hr>
               </li>
             
-              <li>
-                <h2>
-                  <a class="post-link" href="/2016/11/20/realtimeweb/">Real-time web tec List</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-11-20
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#Etc" title="Category: Etc" rel="category">Etc</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                </div>
-                <div class="excerpt">
-                    <h1 id="real-time-web-tec-list">Real-time web Tec List</h1>
-
-<p>You can find a comprehensive and updated list of real-time solutions that can be considered alternatives to pusher in this Real-Time Web Technologies Guide.</p>
-
-<h3 id="hosted">Hosted</h3>
-
-<ul>
-  <li>Ably: https://www.ably.io   <strong>(완전 편리함!!)</strong></li>
-  <li>Fanout: http://fanout.io/</li>
-  <li>Firebase https://www.firebase.com</li>
-  <li>Gamooga: http://www.gamooga.com/</li>
-  <li>Google App Engine with Channels API: http://code.google.com/appengine…</li>
-  <li>Google Drive Real Time: https://developers.google.com/dr…</li>
-  <li>Hydna: https://www.hydna.com/</li>
-  <li>ScaleDrone https://www.scaledrone.com</li>
-  <li>Baasil https://baasil.io</li>
-  <li>PubNub: http://pubnub.com</li>
-  <li>Reappt: Data-Efficient Realtime Messaging</li>
-  <li>Simperium: Simperium</li>
-  <li>Tambur: https://www.tambur.io/</li>
-  <li>WebSync on-demand: http://www.frozenmountain.com/we…</li>
-  <li>Xtremepush: Xtremepush - Mobile Marketing Automation Software</li>
-</ul>
-
-<h3 id="self-hosted">Self Hosted</h3>
-
-<ul>
-  <li>http://github.com/Atmosphere : http://async-io.org/</li>
-  <li>http://faye.jcoglan.com/</li>
-  <li>http://firehose.io/</li>
-  <li>Jetty: http://blogs.webtide.com/gregw/e…</li>
-  <li>Kaazing: http://kaazing.com/</li>
-  <li>Lightstreamer: http://lightstreamer.com</li>
-  <li>Diffusion - http://www.pushtechnology.com</li>
-  <li>http://pusheo.com</li>
-  <li>http://code.google.com/p/pywebso…</li>
-  <li>Ruby EventMachine WebSocket server: https://github.com/igrigorik/em-…</li>
-  <li>SignalR (.NET) https://github.com/SignalR/SignalR</li>
-  <li>Slanger. Open source reimplementation of Pusher. Compatible with Pusher libraries: https://github.com/stevegraham/s…</li>
-  <li>http://socky.org/</li>
-  <li>http://socket.io/</li>
-  <li>http://sockjs.org/</li>
-  <li>http://socketcluster.io/</li>
-  <li>Thunderpush: https://github.com/thunderpush/t…</li>
-  <li>https://www.meteor.com/</li>
-</ul>
-
-<p>Pushpin</p>
-<ul>
-  <li>MigratoryData: http://migratorydata.com</li>
-</ul>
-
-<h3 id="reference">Reference</h3>
-
-<ul>
-  <li><a href="https://www.quora.com/What-are-alternatives-to-pusher-com">Quora</a></li>
-</ul>
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2016/11/20/realtimeweb/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
         </ul>
 
 
@@ -1283,7 +1308,7 @@ sudo service uwsgi restart
                             <span class="name">
                                 MYSQL
                             </span>
-                            <span class="badge">2</span>
+                            <span class="badge">3</span>
                         </a>
                     </li>
                     
@@ -1295,6 +1320,8 @@ sudo service uwsgi restart
                     Recent Posts
                 </div>
                 <ul class="content-ul" recent>
+                    
+                        <li><a href="/2017/01/09/mysqlprocedureinsert/">Stored Procedure으로 Insert</a></li>
                     
                         <li><a href="/2017/01/05/javastring/">Java String에 대해..</a></li>
                     
@@ -1313,8 +1340,6 @@ sudo service uwsgi restart
                         <li><a href="/2016/11/10/JQuery_findnode/">jquery 선택자</a></li>
                     
                         <li><a href="/2016/11/07/jqueryselector/">jquery :last 선택자</a></li>
-                    
-                        <li><a href="/2016/11/04/regexp/">정규표현식</a></li>
                     
                 </ul>
             </div>

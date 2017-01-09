@@ -109,6 +109,60 @@
             
               <li>
                 <h2>
+                  <a class="post-link" href="/2016/11/02/gitaddpgitcommitv/">git add -p와 git commit -v</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-11-02
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#Etc" title="Category: Etc" rel="category">Etc</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="section">참고 링크</h1>
+
+<p><a href="https://blog.outsider.ne.kr/1247">Outsider’s Dev Story</a></p>
+
+<h1 id="section-1">간단한 설명</h1>
+
+<p><code class="highlighter-rouge">git add -p</code> 를 하면 수정된 부분을 하나의 hock으로 보여주면서 추가할 것인지 말것인지를 물어본다.</p>
+
+<p><code class="highlighter-rouge">git commit -v</code> 을 사용하면 커밋메시지를 입력할 때 화면 아래에 diff가 한번 더 나온다.</p>
+
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/11/02/gitaddpgitcommitv/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
                   <a class="post-link" href="/2016/11/02/imagepixelget/">이미지 픽셀다루기</a>
                 </h2>
                 <div class="label">
@@ -886,206 +940,6 @@ awk <span class="s1">'BEGIN {FS="\t"; OFS ="-"} {print $1 ,  $2} END {print "총
                 <hr>
               </li>
             
-              <li>
-                <h2>
-                  <a class="post-link" href="/2016/10/14/sqoop/">Sqoop</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-10-14
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#Hadoop" title="Category: Hadoop" rel="category">Hadoop</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                </div>
-                <div class="excerpt">
-                    <h1 id="sqoop">Sqoop이란</h1>
-
-<p>스쿱은 관계형 데이터베이스와 하둡 사이에서 데이터 이관을 지원하는 툴이다. 스쿱을 이용하면 관계형 데이터베이스의 데이터를 HDFS, 하이브, H베이스, Accumulo에 임포트하거나 반대로 익스포트할 수 있다. 스쿱은 클라우데라에서 개발했으며, 현재 아파치 오픈소스 프로젝트로 공개되었다. <strong><a href="http://sqoop.apache.org">Sqoop</a></strong></p>
-
-<h1 id="sqoop-1">Sqoop아키텍처</h1>
-
-<p>스쿱은 관계형 데이터베이스를 읽고 쓸 수 있는 커넥터라는 개념을 사용한다. 커넥터는 각 데이터베이스별로 구현돼 있으며, JDBC 드라이버를 이용해 데이터베이스 접속 및 질의 실행을 요청한다.</p>
-
-<h1 id="section">데이터 임포트 동작 방식</h1>
-
-<ol>
-  <li>클라이언트가 스쿱에 임포트를 요청한다. 이때 클라이언트는 데이터베이스 접속 정보, 임포트 대상 테이블, 임프토 질의, 실행할 맵 태스크 개수 등을 설정한다.</li>
-  <li>스쿱은 데이터베이스에서 해당 테이블의 메타데이터를 조회해 ORM(Object Relational Mapping)클래스에는 익스포트 대상 테이블의 칼럼을 자바 변수로 매핑하고, 맵리듀스 잡 실행에 필요한 직렬화 메서드가 생성된다.</li>
-  <li>스쿱은 ORM 클래스가 정상적으로 생성되면 맵리듀스 잡 실행을 요청한다. 그리고 스쿱은 맵 테스크의 출력 결과를 임포트에 사용하기 때문에 리듀스 태스크는 실행하지 않는다.</li>
-  <li>맵 태스크는 데이터베이스에 JDBC로 접속한 후 SELECT질의를 실행한다.</li>
-  <li>맵태스크는 질의문을 실행한 결과를 HDFS에 저장한다. 전체 맵 태스크가 종료되면 스쿱은 클라이언트에게 작업이 정상적으로 종료됐다고 알려준다.</li>
-</ol>
-
-<h1 id="section-1">데이터 익스포트 동작방식</h1>
-
-<ol>
-  <li>클라이언트는 스쿱에 익스포트를 요청한다.</li>
-  <li>스쿱은 데이터베이스에서 메타데이터를 조회한 후 맵리듀스 잡에서 사용할 ORM클래스를 생성한다.</li>
-  <li>스쿱은 데이터베이스의 중간 테이블의 데이터를 모두 삭제한 후 맵리듀스 잡을 실행한다.</li>
-  <li>맵 태스크는 HDFS에서 데이터를 조회한 후 INSERT 질의문을 만들어 중간 테이블에 데이터를 입력한다. 이때 질의문은 레코드당 한 번씩 실행하는 것이 아니라 천개 단위로 배치로 실행한다. 참고로 중간 테이블 사용여부와 배치단위는 sqoop.export.records.per.statement 옵션으로 수정할 수 있다.</li>
-  <li>스쿱은 맵리듀스 잡이 정상적으로 종료되면 중간 테이블의 결과를 최종 테이블에 입력한다.</li>
-</ol>
-
-<h1 id="section-2">데이터 임포트</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>옵션</th>
-      <th>내용</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>–usename</td>
-      <td>데이터베이스 접속 계정</td>
-    </tr>
-    <tr>
-      <td>–password</td>
-      <td>데이터베이스 접속 암호</td>
-    </tr>
-    <tr>
-      <td>–connect</td>
-      <td>JDBC 접속 URL</td>
-    </tr>
-    <tr>
-      <td>–table</td>
-      <td>임포트 대상 테이블</td>
-    </tr>
-    <tr>
-      <td>–columns</td>
-      <td>특정 칼럼만 임포트할 경우 칼럼명을 설정. 이 옵션을 설정하지 않을 경우 전체 칼럼을 임포트</td>
-    </tr>
-    <tr>
-      <td>–target-dir</td>
-      <td>임포트 결과를 저장할 HDFS 디렉터리. 별도로 설정하지 않을 경우 “/user/계졍명/테이블명”에 데이터가 저장됨</td>
-    </tr>
-    <tr>
-      <td>–query</td>
-      <td>특정 테이블을 설정하지 않고 질의문 실행 결과를 임포트. 단 이 옵션을 사용할 경우 $CONDITIONS를 반드시 WHERE절에 사용해야 함. $CONDITIONS는 스쿱이 자동으로 생성하는 WHERE 조건을 나타내는 키워드임</td>
-    </tr>
-    <tr>
-      <td>-m,–num-mappers</td>
-      <td>실행할 맵 태스크 개수, 데이터베이스에 부하를 줄 수 있으므로 적절한 태스크 개수를 설정해야함.</td>
-    </tr>
-    <tr>
-      <td>–where</td>
-      <td>임포트할 때 사용할 WHERE절</td>
-    </tr>
-    <tr>
-      <td>-z, –comppress</td>
-      <td>임포트 결과를 압축</td>
-    </tr>
-    <tr>
-      <td>–compression-codec</td>
-      <td>하둡 압축 코덱, 기본값으로 Gzip을 사용함</td>
-    </tr>
-    <tr>
-      <td>–as-textfile</td>
-      <td>임포트 결과를 텍스트 파일로 저장. 스쿱은 텍스트 파일을 기본값으로 사용함</td>
-    </tr>
-    <tr>
-      <td>–as-sequencefile</td>
-      <td>임포트 결과를 시퀀스파일로 저장</td>
-    </tr>
-    <tr>
-      <td>–null-string<널갑문자열></널갑문자열></td>
-      <td>문자열 칼럼에서 널 값 대신 사용할 문자열</td>
-    </tr>
-    <tr>
-      <td>–null-non-string<널값 문자열=""></널값></td>
-      <td>문자열이 아닌 칼럼에서 널 값 대신 사용할 문자열</td>
-    </tr>
-    <tr>
-      <td>–direct</td>
-      <td>고속 커넥터를 이용할 경우 사용</td>
-    </tr>
-  </tbody>
-</table>
-
-<h1 id="mysql--">MySQL로 데이터 익스포트</h1>
-
-<table>
-  <thead>
-    <tr>
-      <th>옵션</th>
-      <th>내용</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>–export-dir</td>
-      <td>익스포트 대상 HDFS 디렉터리</td>
-    </tr>
-    <tr>
-      <td>-m, –num-mappers</td>
-      <td>실행할 맵 태스크 개수, 데이터베이스에 부하를 줄 수 있으므로 적절한 태스크 개수를 설정해야함</td>
-    </tr>
-    <tr>
-      <td>–table</td>
-      <td>데이터베이스 최종 대상 테이블</td>
-    </tr>
-    <tr>
-      <td>–staging-table</td>
-      <td>데이터베이스 중간 데이터 저장용 테이블</td>
-    </tr>
-    <tr>
-      <td>–clear-staging-table</td>
-      <td>중간 데이터용 데이블 데이터 삭제 여부</td>
-    </tr>
-    <tr>
-      <td>-null-string<널값 문자열=""></널값></td>
-      <td>문자열 칼럼에서 널 값 대신 사용할 문자열</td>
-    </tr>
-    <tr>
-      <td>–null-non-string<널값문자열></널값문자열></td>
-      <td>문자열이 아닌 칼럼에서 널 값 대신 사용할 문자열</td>
-    </tr>
-    <tr>
-      <td>–direct</td>
-      <td>고속커넥터를 이용할 경우 사용</td>
-    </tr>
-  </tbody>
-</table>
-
-<p><br /></p>
-
-<h3 id="reference">Reference</h3>
-<ul>
-  <li><a href="http://www.yes24.com/24/Goods/26903681?Acode=101">시작하세요! 하둡 프로그래밍 : 빅데이터 분석을 위한 하둡 기초부터 YARN까지</a></li>
-</ul>
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2016/10/14/sqoop/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
         </ul>
 
 
@@ -1200,7 +1054,7 @@ awk <span class="s1">'BEGIN {FS="\t"; OFS ="-"} {print $1 ,  $2} END {print "총
                             <span class="name">
                                 MYSQL
                             </span>
-                            <span class="badge">2</span>
+                            <span class="badge">3</span>
                         </a>
                     </li>
                     
@@ -1212,6 +1066,8 @@ awk <span class="s1">'BEGIN {FS="\t"; OFS ="-"} {print $1 ,  $2} END {print "총
                     Recent Posts
                 </div>
                 <ul class="content-ul" recent>
+                    
+                        <li><a href="/2017/01/09/mysqlprocedureinsert/">Stored Procedure으로 Insert</a></li>
                     
                         <li><a href="/2017/01/05/javastring/">Java String에 대해..</a></li>
                     
@@ -1230,8 +1086,6 @@ awk <span class="s1">'BEGIN {FS="\t"; OFS ="-"} {print $1 ,  $2} END {print "총
                         <li><a href="/2016/11/10/JQuery_findnode/">jquery 선택자</a></li>
                     
                         <li><a href="/2016/11/07/jqueryselector/">jquery :last 선택자</a></li>
-                    
-                        <li><a href="/2016/11/04/regexp/">정규표현식</a></li>
                     
                 </ul>
             </div>
