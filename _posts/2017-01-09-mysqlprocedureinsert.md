@@ -34,6 +34,7 @@ BEGIN
 			INSERT INTO 테이블 (LOG_DATE, ID, REQ_CNT) VALUES (log_date, '0x2011', 3000000);
 			SET j = j + 1;
 		END WHILE;
+		SET j = 0;
 	END WHILE;
 END$$
 DELIMITER $$
@@ -64,6 +65,7 @@ BEGIN
 			INSERT INTO 테이블 (LOG_DATE, ID, REQ_CNT) VALUES (log_date, '0x2011', 3000000);
 			SET j = j + 1;
 		END WHILE;
+		SET j = 0;
 	END WHILE;
 	COMMIT;
 END$$
