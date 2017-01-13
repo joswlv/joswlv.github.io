@@ -88,3 +88,4 @@ Procedure에서 cursor와 trigger 등을 응용 사용하는 법이 있다.
 * [프로시저/커서사용](http://yookeun.github.io/database/2015/04/10/mysql-procedure/)
 * [프로시저/커서사용2](http://bizadmin.tistory.com/entry/MySQL-Fetch-Cursor-%EB%AC%B8-%EC%82%AC%EC%9A%A9%EB%B0%A9%EB%B2%95)
 * [프로시저/예외처리](https://msdn.microsoft.com/ko-kr/library/ms175976.aspx)
+* [프로시저/erro처리](http://www.mysqltutorial.org/mysql-error-handling-in-stored-procedures/)
