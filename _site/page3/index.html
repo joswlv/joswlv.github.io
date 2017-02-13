@@ -109,6 +109,149 @@
             
               <li>
                 <h2>
+                  <a class="post-link" href="/2016/11/03/CORS/">CORS</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-11-03
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#web" title="Category: web" rel="category">web</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="http---cors">HTTP 접근 제어 (CORS)</h1>
+
+<h2 id="cross-origin-resource-sharingcors">Cross Origin Resource Sharing(CORS)</h2>
+
+<p>HTTP요청은 기본적으로 Cross-Site-HTTP Requests가 가능하다.</p>
+
+<p>다시말하면, <code class="highlighter-rouge">&lt;img&gt;</code>, <code class="highlighter-rouge">&lt;link&gt;</code>, <code class="highlighter-rouge">&lt;script&gt;</code>태그로 다른 도메인의 리소스를 가져오는 것이 가능하다.</p>
+
+<p>그런데!</p>
+
+<p>스크립트에서 생성된 Cross-Site HTTP Requests는 <a href="https://developer.mozilla.org/ko/docs/Web/Security/Same-origin_policy">Same Origin Policy</a>를 적용 받기 때문에 Cross-Site HTTP Requests가 불가능하다.</p>
+
+<p>ajax가 많이 사용되면서 스크립트에서 생성되는 <code class="highlighter-rouge">XMLHttpRequest</code>에 대해서도 Cross-Site HTTP Requests가 가능해야 한다는 요구가 많이 나왔고 W3C에서 CORS라는 이름의 권고안이 나왔다.</p>
+
+<h2 id="cors--">CORS 요청의 종류</h2>
+
+<ul>
+  <li>Simple</li>
+  <li>Preflight</li>
+  <li>Credential</li>
+  <li>Non-Credential</li>
+</ul>
+
+<p>브라우저가 요청 내용을 분석하여 4가지 방식 중 해당하는 방식으로 서버에 요청을 날린다.</p>
+
+<h2 id="section">실무에서..</h2>
+
+<p>얼마전 이미지의 다른 도메인에서 불러와서 켄버스에 그려 이미지의 픽셀값을 가져오는 일이 있었다.</p>
+
+<p><img src="http://joswlv.github.io/images/cors_erro.png" alt="" /></p>
+
+<p>이런 에러가 발생하였다.</p>
+
+<p>처음에는 이미지 CORS 속성을 <code class="highlighter-rouge">anonymous</code>로 지정을 했다.</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nx">img</span><span class="p">.</span><span class="nx">crossOrigin</span> <span class="o">=</span> <span class="s2">"anonymous"</span><span class="p">;</span>
+</code></pre>
+</div>
+
+<p>그래도 계속되었다.</p>
+
+<p>이미지가 저장되어 있는 서버에서 이미지를 보내줄 때 헤더에 crossOrigin내용을 첨부해서 보내주면 되지만, 현실적으로 불가능해 클라이언트 측에서 처리하기로 했고 아래와 같이 이미지를 DOM스토리지에 저장하고 DOM스토리지에서 이미지를 불러오는 방식으로 문제를 해결 했다.</p>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;IfModule</span> <span class="na">mod_setenvif</span><span class="err">.</span><span class="na">c</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;IfModule</span> <span class="na">mod_headers</span><span class="err">.</span><span class="na">c</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;FilesMatch</span> <span class="err">"\.(</span><span class="na">cur</span><span class="err">|</span><span class="na">gif</span><span class="err">|</span><span class="na">ico</span><span class="err">|</span><span class="na">jpe</span><span class="err">?</span><span class="na">g</span><span class="err">|</span><span class="na">png</span><span class="err">|</span><span class="na">svgz</span><span class="err">?|</span><span class="na">webp</span><span class="err">)$"</span><span class="nt">&gt;</span>
+            SetEnvIf Origin ":" IS_CORS
+            Header set Access-Control-Allow-Origin "*" env=IS_CORS
+        <span class="nt">&lt;/FilesMatch&gt;</span>
+    <span class="nt">&lt;/IfModule&gt;</span>
+<span class="nt">&lt;/IfModule&gt;</span>
+</code></pre>
+</div>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">img</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Image</span><span class="p">,</span>
+    <span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">"canvas"</span><span class="p">),</span>
+    <span class="nx">ctx</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s2">"2d"</span><span class="p">),</span>
+    <span class="nx">src</span> <span class="o">=</span> <span class="s2">"http://example.com/image"</span><span class="p">;</span> <span class="c1">// insert image url here</span>
+
+<span class="nx">img</span><span class="p">.</span><span class="nx">crossOrigin</span> <span class="o">=</span> <span class="s2">"Anonymous"</span><span class="p">;</span>
+
+<span class="nx">img</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">img</span><span class="p">.</span><span class="nx">width</span><span class="p">;</span>
+    <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span> <span class="o">=</span> <span class="nx">img</span><span class="p">.</span><span class="nx">height</span><span class="p">;</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">drawImage</span><span class="p">(</span> <span class="nx">img</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>
+    <span class="nx">localStorage</span><span class="p">.</span><span class="nx">setItem</span><span class="p">(</span> <span class="s2">"savedImageData"</span><span class="p">,</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">toDataURL</span><span class="p">(</span><span class="s2">"image/png"</span><span class="p">)</span> <span class="p">);</span>
+<span class="p">}</span>
+<span class="nx">img</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">src</span><span class="p">;</span>
+<span class="c1">// make sure the load event fires for cached images too</span>
+<span class="k">if</span> <span class="p">(</span> <span class="nx">img</span><span class="p">.</span><span class="nx">complete</span> <span class="o">||</span> <span class="nx">img</span><span class="p">.</span><span class="nx">complete</span> <span class="o">===</span> <span class="kc">undefined</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="nx">img</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="s2">"data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="</span><span class="p">;</span>
+    <span class="nx">img</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">src</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p><strong>Browser compatibility</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Chrom</th>
+      <th>Firefox</th>
+      <th>IE</th>
+      <th>Opera</th>
+      <th>Safari</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>13</td>
+      <td>8</td>
+      <td>No support</td>
+      <td>No support</td>
+      <td>?</td>
+    </tr>
+  </tbody>
+</table>
+
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/11/03/CORS/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
                   <a class="post-link" href="/2016/11/02/gitaddpgitcommitv/">git add -p와 git commit -v</a>
                 </h2>
                 <div class="label">
@@ -836,110 +979,6 @@ awk <span class="s1">'BEGIN {FS="\t"; OFS ="-"} {print $1 ,  $2} END {print "총
                 <hr>
               </li>
             
-              <li>
-                <h2>
-                  <a class="post-link" href="/2016/10/23/spc_rsync/">scp 와 rsync - 원격파일정송방법</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-10-23
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#Unix/Linux" title="Category: Unix/Linux" rel="category">Unix/Linux</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                </div>
-                <div class="excerpt">
-                    <p>원격으로 파일을 전송하기 위해사용 되는 명령어!</p>
-
-<p>scp와 rsync의 차이점은 symbolic link를 처리하는데 차이가 있다.</p>
-
-<blockquote>
-  <p>scp는 전송하려 하는 파일중에 symbolic link 가 있으면 링크된 원본파일이 전송된다. 즉 symlink가 유지 되지 않는다.!!</p>
-</blockquote>
-
-<h1 id="section">사용법</h1>
-
-<h2 id="scp">scp</h2>
-
-<p><strong>scp -[옵션][보낼파일][받는서버 계정 아이디]@[받는서버 URL]:[받을 위치 절대 경로]</strong></p>
-
-<h3 id="section-1">예)</h3>
-
-<p>scp -pr ./send joswlv@20.20.20.20:./receive</p>
-
-<blockquote>
-  <p>옵션:</p>
-
-  <p>-r = recusive 하위 폴더 포함 모두 복사</p>
-
-  <p>-p = preserve 권한 및 속성 유지</p>
-
-  <p>-C = compression 압축</p>
-</blockquote>
-
-<h2 id="rsync">rsync</h2>
-
-<h2 id="rsync-1">rsync</h2>
-
-<p><strong>rsync -[옵션][보낼파일][받을위치]</strong></p>
-
-<p>받을위치는 [서버계정 아이디]@[파일URL]:[받을 경로]로 사용가능</p>
-
-<h3 id="section-2">예)</h3>
-
-<p>rsync -avzP ./send joswlv@20.20.20.20:./receive</p>
-
-<blockquote>
-  <p>옵션:</p>
-
-  <p>-v = 진행상황을 상세히 보여줌</p>
-
-  <p>-r = 지정한 디렉토리의 하위 디렉토리까지 재귀적으로 실행</p>
-
-  <p>-p = 버전속성 보존</p>
-
-  <p>-z = 데이터압축 전송</p>
-
-  <p>-u = 추가된 파일만 전송</p>
-
-  <p>-b = 낡은 파일은 ~가 붙음</p>
-
-  <p>-u = 새로운 파일을 덮어쓰지 않음</p>
-
-  <p>-e = ssh(rsh) 전송암호화</p>
-</blockquote>
-
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2016/10/23/spc_rsync/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
         </ul>
 
 
@@ -1058,6 +1097,15 @@ awk <span class="s1">'BEGIN {FS="\t"; OFS ="-"} {print $1 ,  $2} END {print "총
                         </a>
                     </li>
                     
+                    <li>
+                        <a href="/category/#BigData" class="categories-list-item" cate="BigData">
+                            <span class="name">
+                                BigData
+                            </span>
+                            <span class="badge">1</span>
+                        </a>
+                    </li>
+                    
                 </ul>
             </div>
             <div class="side">
@@ -1066,6 +1114,8 @@ awk <span class="s1">'BEGIN {FS="\t"; OFS ="-"} {print $1 ,  $2} END {print "총
                     Recent Posts
                 </div>
                 <ul class="content-ul" recent>
+                    
+                        <li><a href="/2017/02/13/rdmsvsnosql/">RDBMS vs NOSQL</a></li>
                     
                         <li><a href="/2017/01/09/mysqlprocedureinsert/">Stored Procedure으로 Insert</a></li>
                     
@@ -1084,8 +1134,6 @@ awk <span class="s1">'BEGIN {FS="\t"; OFS ="-"} {print $1 ,  $2} END {print "총
                         <li><a href="/2016/11/18/Shortcircuitevaluation/">Short-circuit evaluation</a></li>
                     
                         <li><a href="/2016/11/10/JQuery_findnode/">jquery 선택자</a></li>
-                    
-                        <li><a href="/2016/11/07/jqueryselector/">jquery :last 선택자</a></li>
                     
                 </ul>
             </div>

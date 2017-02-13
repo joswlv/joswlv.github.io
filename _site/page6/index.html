@@ -109,6 +109,677 @@
             
               <li>
                 <h2>
+                  <a class="post-link" href="/2016/09/18/mybatis/">mybatis 개론</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-09-18
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#web" title="Category: web" rel="category">web</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="mybatis">1. mybatis소개</h1>
+
+<h3 id="persistence">퍼시스턴스(Persistence)프레임워크</h3>
+
+<p>퍼시스턴스라는 용어는 개발 분야에서 많이 사용하는 용어이다. 데이터의 지속성을 의마하는 용어로 어플리케이션을 종료하고 다시 실행하더라도 이전에 저장한 데이터를 다시 불러올 수 있는 기술이다.</p>
+
+<p>퍼시스턴스 프레임워크는 데이터의 저장, 조회, 변경, 삭제를 다루는 클래스 및 설정 파일들의 집합니다. 이를 사용하면 JDBC 프로그래밍의 복잡함이나 번거로움 없이 간단한 작업 만으로 데이터베이스와 연동되는 시스템을 빠르고 안전적으로 구동되게 개발할 수 있다.</p>
+
+<p>퍼시스턴스 프레임워크에는 SQL문장으로 직접 DB데이터를 다루는 <code class="highlighter-rouge">SQL맵퍼(mapper)</code>와 자바객체를 통해 간접적으로 DB데이터를 다루는 <code class="highlighter-rouge">객체 관계 맵퍼(Object-Relational mapper)</code>가 있다.</p>
+
+<p>SQL맵퍼에 대표적으로 `mybatis가 있고, 객체 관계 맵퍼에는 Hibernate와 TopLink가 있다.</p>
+
+<p>객체관계맵퍼는 프레임워크에서 제공하는 API와 전용 객체 질의어를 사용하여 데이터를 다룬다. 그래서 이를 사용할려면 데이터베이스의 정규화가 잘돼 있어야 한다. 그래야만 테이블을 객체와 연결하기 쉽고, 객체를 통해 테이블의 데이터를 다루기가 쉽다. 근데, 유지보수 단계에 들어가면 잦은 기는 변경과 추가로 데이터베이스구조가 흐트러지게 되어 실무에서는 잘 사용하지 않는다.</p>
+
+<p>mybatis의 핵심은 개발과 유지보수가 쉽도록 소스코드에 박혀있는 SQL을 별도의 파일로 분리하는 것이다. 또 단순하고 반복적인 JDBC코드를 캡슐화하여 데이터베이스 프로그래밍을 간결하게 하는것이다.</p>
+
+<p>라이브러리 파일은 <a href="http://github.com/mybatis">http://github.com/mybatis</a>에서 <code class="highlighter-rouge">mybatis-3</code>로 가서 다운 받는다.</p>
+
+<p><br /></p>
+
+<h1 id="mybatis-">2. mybatis 구동하기</h1>
+
+<h3 id="mybatis-----">mybatis를 이용한 프로젝트 목록 가져오기 시나리오</h3>
+
+<ol>
+  <li>MySqlProjectDao는 SqlSessionFactory에게 SQL을 실행할 객체를 요구한다.</li>
+  <li>SqlSessionFactory는 SqlSession 객체를 생성하여 반환한다.</li>
+  <li>MySqlProjectDao는 SqlSession객체에게 SQL 실행을 요청한다.</li>
+  <li>SqlSession객체는 SQL이 저장된 맵퍼 파일에서 SQL을 찾는다.</li>
+  <li>SqlSession은 JDBC드라이버를 통해 데이터베이스에 질의를 실행한다.</li>
+  <li>SqlSession은 데이터베이스로부터 가져온 데이터로 Project목록을 생성하여 반환한다.</li>
+  <li>MySqlProjectDao는 사용이 끝난 SqlSession을 닫는다.
+<br /></li>
+</ol>
+
+<h3 id="mybatis---">mybatis 프레임워크의 핵심 컴포넌트</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>컴포넌트</th>
+      <th>설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>SqlSession</td>
+      <td>실제 SQL을 실행하는 객체. 이 객체는 SQL을 처리하기 위해 JDBC 드라이버를 사용함</td>
+    </tr>
+    <tr>
+      <td>SqlSessionFactory</td>
+      <td>SqlSession 객체를 생성함</td>
+    </tr>
+    <tr>
+      <td>SqlSessionFactoryBuilder</td>
+      <td>mysql설정 파일의 내용을 토대로 SqlSessionFactory를 생성함.</td>
+    </tr>
+    <tr>
+      <td>mybatis설정파일</td>
+      <td>데이터베이스 연결정보, 트갠잭션정보,  mybatis제어 정보 등의 설정 내용을 포함하고 있음. SqlSessionFactory를 만들 때 사용됨.</td>
+    </tr>
+    <tr>
+      <td>SQL 맵퍼 파일</td>
+      <td>SQL문을 담고 있는 파일. SqlSession객체가 참조함.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><br /></p>
+
+<h3 id="sqlsession--">SqlSession의 주요 메서드</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>메서드</th>
+      <th>설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>selectList()</td>
+      <td>SELECT문을 실행. 값객체(Value Object) 목록을 반환함</td>
+    </tr>
+    <tr>
+      <td>selectOne()</td>
+      <td>SELECT문을 실행. 하나의 값 객체를 반환함</td>
+    </tr>
+    <tr>
+      <td>insert()</td>
+      <td>INSERT문을 실행. 반환값은 입력 데이터 개수.</td>
+    </tr>
+    <tr>
+      <td>update()</td>
+      <td>UPDATE문을 실행. 반환값은 변경한 데이터 개수.</td>
+    </tr>
+    <tr>
+      <td>delete()</td>
+      <td>DELETE문을 실행. 반환값은 삭제한 데이터 개수.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><br /></p>
+
+<p><strong>예&gt;</strong></p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@Component</span><span class="o">(</span><span class="s">"projectDao"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MySqlProjectDao</span> <span class="kd">implements</span> <span class="n">ProjectDao</span> <span class="o">{</span>
+  <span class="n">SqlSessionFactory</span> <span class="n">sqlSessionFactory</span><span class="o">;</span>
+
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setSqlSessionFactory</span><span class="o">(</span><span class="n">SqlSessionFactory</span> <span class="n">sqlSessionFactory</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">sqlSessionFactory</span> <span class="o">=</span> <span class="n">sqlSessionFactory</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Project</span><span class="o">&gt;</span> <span class="nf">selectList</span><span class="o">(</span><span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">Object</span><span class="o">&gt;</span> <span class="n">paramMap</span><span class="o">)</span> 
+  		<span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+    <span class="n">SqlSession</span> <span class="n">sqlSession</span> <span class="o">=</span> <span class="n">sqlSessionFactory</span><span class="o">.</span><span class="na">openSession</span><span class="o">();</span>
+    <span class="k">try</span> <span class="o">{</span>
+      <span class="k">return</span> <span class="n">sqlSession</span><span class="o">.</span><span class="na">selectList</span><span class="o">(</span><span class="s">"spms.dao.ProjectDao.selectList"</span><span class="o">,</span> <span class="n">paramMap</span><span class="o">);</span>
+    <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+      <span class="n">sqlSession</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+
+  <span class="kd">public</span> <span class="kt">int</span> <span class="nf">insert</span><span class="o">(</span><span class="n">Project</span> <span class="n">project</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span>  <span class="o">{</span>
+    <span class="n">SqlSession</span> <span class="n">sqlSession</span> <span class="o">=</span> <span class="n">sqlSessionFactory</span><span class="o">.</span><span class="na">openSession</span><span class="o">();</span>
+    <span class="k">try</span> <span class="o">{</span>
+      <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="n">sqlSession</span><span class="o">.</span><span class="na">insert</span><span class="o">(</span><span class="s">"spms.dao.ProjectDao.insert"</span><span class="o">,</span> <span class="n">project</span><span class="o">);</span>
+      <span class="n">sqlSession</span><span class="o">.</span><span class="na">commit</span><span class="o">();</span>
+      <span class="k">return</span> <span class="n">count</span><span class="o">;</span>
+    <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+      <span class="n">sqlSession</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+  
+  <span class="kd">public</span> <span class="n">Project</span> <span class="nf">selectOne</span><span class="o">(</span><span class="kt">int</span> <span class="n">no</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span> 
+    <span class="n">SqlSession</span> <span class="n">sqlSession</span> <span class="o">=</span> <span class="n">sqlSessionFactory</span><span class="o">.</span><span class="na">openSession</span><span class="o">();</span>
+    <span class="k">try</span> <span class="o">{</span>
+      <span class="k">return</span> <span class="n">sqlSession</span><span class="o">.</span><span class="na">selectOne</span><span class="o">(</span><span class="s">"spms.dao.ProjectDao.selectOne"</span><span class="o">,</span> <span class="n">no</span><span class="o">);</span>
+    <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+      <span class="n">sqlSession</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+  <span class="o">....</span>
+  
+</code></pre>
+</div>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code>//MySqlProjectDao.xml -&gt; 맵퍼파일
+<span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="cp">&lt;!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd"&gt;</span>
+<span class="nt">&lt;mapper</span> <span class="na">namespace=</span><span class="s">"spms.dao.ProjectDao"</span><span class="nt">&gt;</span>
+  <span class="nt">&lt;resultMap</span> <span class="na">type=</span><span class="s">"project"</span> <span class="na">id=</span><span class="s">"projectResultMap"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;id</span> <span class="na">column=</span><span class="s">"PNO"</span> <span class="na">property=</span><span class="s">"no"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">"PNAME"</span>    <span class="na">property=</span><span class="s">"title"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">"CONTENT"</span>  <span class="na">property=</span><span class="s">"content"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">"STA_DATE"</span> <span class="na">property=</span><span class="s">"startDate"</span> <span class="na">javaType=</span><span class="s">"java.sql.Date"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">"END_DATE"</span> <span class="na">property=</span><span class="s">"endDate"</span> <span class="na">javaType=</span><span class="s">"java.sql.Date"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">"STATE"</span>    <span class="na">property=</span><span class="s">"state"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">"CRE_DATE"</span> <span class="na">property=</span><span class="s">"createdDate"</span> <span class="na">javaType=</span><span class="s">"java.sql.Date"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">"TAGS"</span>     <span class="na">property=</span><span class="s">"tags"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/resultMap&gt;</span>
+  
+  <span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">"selectList"</span> <span class="na">parameterType=</span><span class="s">"map"</span> <span class="na">resultMap=</span><span class="s">"projectResultMap"</span><span class="nt">&gt;</span>
+    select PNO, PNAME, STA_DATE, END_DATE, STATE
+    from PROJECTS
+    order by
+    <span class="nt">&lt;choose&gt;</span> 
+        <span class="nt">&lt;when</span> <span class="na">test=</span><span class="s">"orderCond == 'TITLE_ASC'"</span><span class="nt">&gt;</span>PNAME asc<span class="nt">&lt;/when&gt;</span>
+        <span class="nt">&lt;when</span> <span class="na">test=</span><span class="s">"orderCond == 'TITLE_DESC'"</span><span class="nt">&gt;</span>PNAME desc<span class="nt">&lt;/when&gt;</span>
+        <span class="nt">&lt;when</span> <span class="na">test=</span><span class="s">"orderCond == 'STARTDATE_ASC'"</span><span class="nt">&gt;</span>STA_DATE asc<span class="nt">&lt;/when&gt;</span>
+        <span class="nt">&lt;when</span> <span class="na">test=</span><span class="s">"orderCond == 'STARTDATE_DESC'"</span><span class="nt">&gt;</span>STA_DATE desc<span class="nt">&lt;/when&gt;</span>
+        <span class="nt">&lt;when</span> <span class="na">test=</span><span class="s">"orderCond == 'ENDDATE_ASC'"</span><span class="nt">&gt;</span>END_DATE asc<span class="nt">&lt;/when&gt;</span>
+        <span class="nt">&lt;when</span> <span class="na">test=</span><span class="s">"orderCond == 'ENDDATE_DESC'"</span><span class="nt">&gt;</span>END_DATE desc<span class="nt">&lt;/when&gt;</span>
+        <span class="nt">&lt;when</span> <span class="na">test=</span><span class="s">"orderCond == 'STATE_ASC'"</span><span class="nt">&gt;</span>STATE asc<span class="nt">&lt;/when&gt;</span>
+        <span class="nt">&lt;when</span> <span class="na">test=</span><span class="s">"orderCond == 'STATE_DESC'"</span><span class="nt">&gt;</span>STATE desc<span class="nt">&lt;/when&gt;</span>
+        <span class="nt">&lt;when</span> <span class="na">test=</span><span class="s">"orderCond == 'PNO_ASC'"</span><span class="nt">&gt;</span>PNO asc<span class="nt">&lt;/when&gt;</span>
+        <span class="nt">&lt;otherwise&gt;</span>PNO desc<span class="nt">&lt;/otherwise&gt;</span>
+    <span class="nt">&lt;/choose&gt;</span>
+  <span class="nt">&lt;/select&gt;</span>
+  
+  <span class="nt">&lt;insert</span> <span class="na">id=</span><span class="s">"insert"</span> <span class="na">parameterType=</span><span class="s">"project"</span><span class="nt">&gt;</span>
+    insert into PROJECTS(PNAME,CONTENT,STA_DATE,END_DATE,STATE,CRE_DATE,TAGS)
+    values (#{title},#{content},#{startDate},#{endDate},0,now(),#{tags})
+  <span class="nt">&lt;/insert&gt;</span>
+  
+  <span class="nt">&lt;select</span> <span class="na">id=</span><span class="s">"selectOne"</span> <span class="na">parameterType=</span><span class="s">"int"</span> <span class="na">resultMap=</span><span class="s">"projectResultMap"</span><span class="nt">&gt;</span>
+    select PNO, PNAME, CONTENT, STA_DATE, END_DATE, STATE, CRE_DATE, TAGS
+    from PROJECTS 
+    where PNO=#{value}
+  <span class="nt">&lt;/select&gt;</span>
+  
+  ...
+  
+</code></pre>
+</div>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">spms</span><span class="o">.</span><span class="na">listeners</span><span class="o">;</span>
+
+<span class="c1">// SqlSessionFactory 객체 준비</span>
+<span class="nd">@WebListener</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ContextLoaderListener</span> <span class="kd">implements</span> <span class="n">ServletContextListener</span> <span class="o">{</span>
+  <span class="kd">static</span> <span class="n">ApplicationContext</span> <span class="n">applicationContext</span><span class="o">;</span>
+  
+  <span class="kd">public</span> <span class="kd">static</span> <span class="n">ApplicationContext</span> <span class="nf">getApplicationContext</span><span class="o">()</span> <span class="o">{</span>
+    <span class="k">return</span> <span class="n">applicationContext</span><span class="o">;</span>
+  <span class="o">}</span>
+   
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">contextInitialized</span><span class="o">(</span><span class="n">ServletContextEvent</span> <span class="n">event</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">try</span> <span class="o">{</span>
+      <span class="n">applicationContext</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ApplicationContext</span><span class="o">();</span>
+      
+      <span class="n">String</span> <span class="n">resource</span> <span class="o">=</span> <span class="s">"spms/dao/mybatis-config.xml"</span><span class="o">;</span>
+      <span class="n">InputStream</span> <span class="n">inputStream</span> <span class="o">=</span> <span class="n">Resources</span><span class="o">.</span><span class="na">getResourceAsStream</span><span class="o">(</span><span class="n">resource</span><span class="o">);</span>
+      <span class="n">SqlSessionFactory</span> <span class="n">sqlSessionFactory</span> <span class="o">=</span> 
+          <span class="k">new</span> <span class="nf">SqlSessionFactoryBuilder</span><span class="o">().</span><span class="na">build</span><span class="o">(</span><span class="n">inputStream</span><span class="o">);</span>	
+      <span class="c1">//SqlSessionFactory객체를 mybatis설정파일(설계도)를 통해 빌드 시킴</span>
+      <span class="c1">//이런식의 객체 생성 패턴을 빌더 패턴(Builder Pattern)이라고 한다.</span>
+      
+      <span class="n">applicationContext</span><span class="o">.</span><span class="na">addBean</span><span class="o">(</span><span class="s">"sqlSessionFactory"</span><span class="o">,</span> <span class="n">sqlSessionFactory</span><span class="o">);</span>
+      
+      <span class="n">ServletContext</span> <span class="n">sc</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="na">getServletContext</span><span class="o">();</span>
+      <span class="n">String</span> <span class="n">propertiesPath</span> <span class="o">=</span> <span class="n">sc</span><span class="o">.</span><span class="na">getRealPath</span><span class="o">(</span>
+          <span class="n">sc</span><span class="o">.</span><span class="na">getInitParameter</span><span class="o">(</span><span class="s">"contextConfigLocation"</span><span class="o">));</span>
+      
+      <span class="n">applicationContext</span><span class="o">.</span><span class="na">prepareObjectsByProperties</span><span class="o">(</span><span class="n">propertiesPath</span><span class="o">);</span>
+      
+      <span class="n">applicationContext</span><span class="o">.</span><span class="na">prepareObjectsByAnnotation</span><span class="o">(</span><span class="s">""</span><span class="o">);</span>
+      
+      <span class="n">applicationContext</span><span class="o">.</span><span class="na">injectDependency</span><span class="o">();</span>
+      
+    <span class="o">}</span> <span class="k">catch</span><span class="o">(</span><span class="n">Throwable</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+  
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">contextDestroyed</span><span class="o">(</span><span class="n">ServletContextEvent</span> <span class="n">event</span><span class="o">)</span> <span class="o">{}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code>//mybatis 설정파일
+<span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="cp">&lt;!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd"&gt;</span>
+<span class="nt">&lt;configuration&gt;</span>
+  <span class="nt">&lt;settings&gt;</span>
+    <span class="nt">&lt;setting</span> <span class="na">name=</span><span class="s">"logImpl"</span> <span class="na">value=</span><span class="s">"LOG4J"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/settings&gt;</span>
+      
+  <span class="nt">&lt;typeAliases&gt;</span>
+    <span class="nt">&lt;typeAlias</span> <span class="na">type=</span><span class="s">"spms.vo.Project"</span> <span class="na">alias=</span><span class="s">"project"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;typeAlias</span> <span class="na">type=</span><span class="s">"spms.vo.Member"</span> <span class="na">alias=</span><span class="s">"member"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/typeAliases&gt;</span>
+  
+  <span class="nt">&lt;environments</span> <span class="na">default=</span><span class="s">"development"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;environment</span> <span class="na">id=</span><span class="s">"development"</span><span class="nt">&gt;</span>
+      <span class="nt">&lt;transactionManager</span> <span class="na">type=</span><span class="s">"JDBC"</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;dataSource</span> <span class="na">type=</span><span class="s">"JNDI"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"data_source"</span> <span class="na">value=</span><span class="s">"java:comp/env/jdbc/studydb"</span><span class="nt">/&gt;</span>
+      <span class="nt">&lt;/dataSource&gt;</span>
+    <span class="nt">&lt;/environment&gt;</span>
+  <span class="nt">&lt;/environments&gt;</span>
+  
+  <span class="nt">&lt;mappers&gt;</span>
+    <span class="nt">&lt;mapper</span> <span class="na">resource=</span><span class="s">"spms/dao/MySqlProjectDao.xml"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;mapper</span> <span class="na">resource=</span><span class="s">"spms/dao/MySqlMemberDao.xml"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/mappers&gt;</span>
+<span class="nt">&lt;/configuration&gt;</span>
+</code></pre>
+</div>
+
+<p><br /></p>
+
+<h5 id="commit-rollback">commit()과 rollback()메서드</h5>
+
+<p>DBMS는 INSERT, UPDATE, DELETE문을 실행하면 그 작업 결과를 임시 데이터베이스에 보관한다. 클라이언트 요청이 있어야만 임시 데이터베이스의 작업물을 운영 데이터베이스에 반영한다.</p>
+
+<p><code class="highlighter-rouge">commit()</code>은 임시 데이터베이스에 보관된 작업 결과를 운영 데이터베이스에 적용하라고 요청할 때 사용하는 메서드이다.</p>
+
+<p><code class="highlighter-rouge">rollback()</code>은 임시 데이터베이스의 작업 결과를 운영 데이터베이스에 반영하지 않고 취소할 때 호출한다.</p>
+
+<h3 id="sql-">SQL맵퍼 파일</h3>
+
+<p><strong>DTD선언</strong></p>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="cp">&lt;!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd"&gt;</span>
+</code></pre>
+</div>
+
+<h4 id="mapper--"><code class="highlighter-rouge">&lt;mapper&gt;</code> 루트 엘리먼트</h4>
+
+<p>SQL 맵퍼 파일은 루트 엘리먼트 <code class="highlighter-rouge">&lt;mapper&gt;</code>를 작성하는 것으로 시작한다. <code class="highlighter-rouge">namespace</code>속성은 자바의 패키지처럼 SQL문을 묶는 용도로 사용한다.</p>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;mapper</span> <span class="na">namespace =</span><span class="s">"spms.dao.ProjectDao"</span><span class="nt">&gt;</span>
+
+...
+
+<span class="nt">&lt;/mapper&gt;</span>
+</code></pre>
+</div>
+
+<h4 id="select-insert-update-delete-"><code class="highlighter-rouge">&lt;select&gt;</code>, <code class="highlighter-rouge">&lt;insert&gt;</code>, <code class="highlighter-rouge">&lt;update&gt;</code>, <code class="highlighter-rouge">&lt;delete&gt;</code> 엘리먼트</h4>
+
+<p>SQL문을 작성할 때 명령어에 맞는 태그를 사용한다.</p>
+
+<p><strong>id속성</strong> -&gt; SQL문을 작성할때 각각의 SQL문을 구분하기 위해 id 속성을 사용한다.</p>
+
+<p><strong>resultType속성</strong> -&gt; select문을 실행하면 결과가 생성되는데, 이 결과를 담을 객체를 지정하는 속성이 resultType속성이다. 값으로는 클래스 이름(패키지 이름 포함)이 온다.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;select id="selectList" resultType="spms.vo.Project"&gt;
+</code></pre>
+</div>
+
+<p>만약 mybatis 설정 파일에 다음과 같이 spms.vo.Project에 대한 별명이 정의 되여 있다면 resultType의 값으로 그 별명을 사용할 수 있다.</p>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code>//mybatis설정 파일의 일부분
+  <span class="nt">&lt;typeAliases&gt;</span>
+    <span class="nt">&lt;typeAlias</span> <span class="na">type=</span><span class="s">"spms.vo.Project"</span> <span class="na">alias=</span><span class="s">"project"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;typeAlias</span> <span class="na">type=</span><span class="s">"spms.vo.Member"</span> <span class="na">alias=</span><span class="s">"member"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/typeAliases&gt;</span>
+</code></pre>
+</div>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>&lt;select id="selectList" resultType="project"&gt;
+</code></pre>
+</div>
+
+<p><br /></p>
+
+<p>위 방법에 약간의 번거러움이 있다. mybatis는 SELECT 결과를 저장하고자 resultTpye에 선언된 클래스의 인스턴스를 생성한다. 그리고 각 칼럼에 대응하는 값객체의 셋터 메서드를 찾아서 호출한다. 이때 셋터메서드는 대소문자 구분없이 set을 뺀 메서드의 이름이과 칼럼의 이름이 같아야지만 인스턴스가 생성된다.</p>
+
+<p>만약 칼럼의 이름과 일치하는 셋터가 없다면, 해당 칼럼의 값은 인스턴스에 저장되지 않는다.
+이런 점이 매우 번거럽다. 이를 해결하기 위해 다음 엘리먼트를 사용한다.</p>
+
+<p><br /></p>
+
+<h4 id="resultmap-"><code class="highlighter-rouge">&lt;resultMap&gt;</code> 엘리먼트</h4>
+
+<p>다음과 같이 <code class="highlighter-rouge">&lt;resultMap&gt;</code>태그에 칼럼과 연결될 값객체의 셋터 메서드를 정의한다.</p>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code>  <span class="nt">&lt;resultMap</span> <span class="na">type=</span><span class="s">"project"</span> <span class="na">id=</span><span class="s">"projectResultMap"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;id</span> <span class="na">column=</span><span class="s">"PNO"</span> <span class="na">property=</span><span class="s">"no"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">"PNAME"</span>    <span class="na">property=</span><span class="s">"title"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">"CONTENT"</span>  <span class="na">property=</span><span class="s">"content"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">"STA_DATE"</span> <span class="na">property=</span><span class="s">"startDate"</span> <span class="na">javaType=</span><span class="s">"java.sql.Date"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">"END_DATE"</span> <span class="na">property=</span><span class="s">"endDate"</span> <span class="na">javaType=</span><span class="s">"java.sql.Date"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">"STATE"</span>    <span class="na">property=</span><span class="s">"state"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">"CRE_DATE"</span> <span class="na">property=</span><span class="s">"createdDate"</span> <span class="na">javaType=</span><span class="s">"java.sql.Date"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;result</span> <span class="na">column=</span><span class="s">"TAGS"</span>     <span class="na">property=</span><span class="s">"tags"</span><span class="nt">/&gt;</span>
+  <span class="nt">&lt;/resultMap&gt;</span>
+</code></pre>
+</div>
+
+<p>`<resultMap>태그의 type 값은 칼럼 데이터를 저장할 클래스 이름 또는 클래스의 별명이다. 클래스에 대한 별명은 mybatis설정파일에 정의 했다. 앞의 소스에서는 type 값을 project라고 하였는데, spms.vo.Project 클래스를 가리키는 별명이다.</resultMap></p>
+
+<blockquote>
+  <p><strong><code class="highlighter-rouge">&lt;result&gt;</code> 엘리먼트</strong></p>
+
+  <p><code class="highlighter-rouge">&lt;resultMap&gt;</code> 태그의 자식 태그로서 칼럼과 셋터 메서드의 연결을 정의한다. column 속성에는 칼럼 이름을 지정하고, property 속성에는 객체의 프로퍼티 이름을 지정한다.</p>
+  <blockquote>
+    <div class="highlighter-rouge"><pre class="highlight"><code>&lt;result column="PNAME" property="title"/&gt;
+</code></pre>
+    </div>
+    <p><code class="highlighter-rouge">&lt;result&gt;</code>태그를 사용하여 PNAME 칼럼 값을 setTitle()메서드와 연결시킨것을 보았다.</p>
+  </blockquote>
+</blockquote>
+
+<p><br /></p>
+
+<blockquote>
+  <p><strong>javaType속성</strong></p>
+
+  <p><code class="highlighter-rouge">&lt;result&gt;</code>에서 javaType을 사용하면, 칼럼의 값을 특정 자바 객체로 변환할 수 있다. 다음과 같이 STA_DATE 칼럼에 대해 javaType을 java.sql.Date으로 설정하면, 칼럼 값을 꺼낼 때 그 객체로 변환된다.</p>
+</blockquote>
+
+<p><br /></p>
+
+<blockquote>
+  <p><strong><code class="highlighter-rouge">&lt;id&gt;</code> 엘리먼트</strong></p>
+
+  <p><code class="highlighter-rouge">&lt;id&gt;</code>태그는 <code class="highlighter-rouge">&lt;result&gt;</code>태그와 작성법이 같다. 다만 <code class="highlighter-rouge">&lt;id&gt;</code>태그에서 지정한 프로퍼티는 객체 식별자로 사용된다. SELECT문을 실행하면 레코드 값을 저장하기 위해 결과 객체가 생성되는데, SELECT문을 실행할 때마다 매번 결과 객체를 생성한다면 실행 성능이 나빠진다. 이를 해결하기위해 SELECT를 통해 생성된 결과 객체들은 별도의 보관소에 저장(캐싱, chaching)해두고 재사용한다. 이때 보관소에 저장된 객체를 구분하는 값으로 <code class="highlighter-rouge">&lt;id&gt;</code>에서 지정한 프로퍼티를 사용한다.</p>
+</blockquote>
+
+<h4 id="sql---">SQL문의 입력 매개변수 처리</h4>
+
+<p>mybatis에서는 입력 매개벼수를 <code class="highlighter-rouge">#{프로퍼티명}</code>으로 표시한다.</p>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;insert</span> <span class="na">id=</span><span class="s">"insert"</span> <span class="na">parameterType=</span><span class="s">"project"</span><span class="nt">&gt;</span>
+    insert into PROJECTS(PNAME,CONTENT,STA_DATE,END_DATE,STATE,CRE_DATE,TAGS)
+    values (#{title},#{content},#{startDate},#{endDate},0,now(),#{tags})
+  <span class="nt">&lt;/insert&gt;</span>
+</code></pre>
+</div>
+
+<p><br /></p>
+
+<p><code class="highlighter-rouge">#{프로퍼티명}</code>이 가리키는 값은 <code class="highlighter-rouge">&lt;insert&gt;</code>의 paramerType에 지정한 객체의 프로퍼티 값(겟터 메서드의 반환값)이다. 즉 #{title} 자리에는 Project객체의 getTitle() 반환값이 놓인다.</p>
+
+<p><br /></p>
+
+<h4 id="section">입력매개변수에 값 공급</h4>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kt">int</span> <span class="nf">insert</span><span class="o">(</span><span class="n">Project</span> <span class="n">project</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span>  <span class="o">{</span>
+    <span class="n">SqlSession</span> <span class="n">sqlSession</span> <span class="o">=</span> <span class="n">sqlSessionFactory</span><span class="o">.</span><span class="na">openSession</span><span class="o">();</span>
+    <span class="k">try</span> <span class="o">{</span>
+      <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="n">sqlSession</span><span class="o">.</span><span class="na">insert</span><span class="o">(</span><span class="s">"spms.dao.ProjectDao.insert"</span><span class="o">,</span> <span class="n">project</span><span class="o">);</span>
+      <span class="n">sqlSession</span><span class="o">.</span><span class="na">commit</span><span class="o">();</span>
+      <span class="k">return</span> <span class="n">count</span><span class="o">;</span>
+    <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+      <span class="n">sqlSession</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">sqlSession.insert()</code>를 호출하면 SQL 맵퍼 파일에서 <code class="highlighter-rouge">spms.dao.ProjectDao.insert</code>아이디를가진 SQL문을 찾아 실행한다. 물론 <code class="highlighter-rouge">spms.dao.ProjectDao</code>는 SQL 맵퍼 파일의 네임스페이스 이름을 가리키고 insert는 SQL 아이드를 가리킨다. project는 INSERT문을 실행할 때 입력 매개변수에 값을 공급할 객체이다.</p>
+
+<p>만약 다음과 같이 공급하는 객체가 기본 타입 객체(랩퍼클래스,wrapper class)인 경우, 자바는 해당 타입에 대응하는 랩퍼 객체를 생성하여 자동포장 한다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code>  <span class="kd">public</span> <span class="kt">int</span> <span class="nf">delete</span><span class="o">(</span><span class="kt">int</span> <span class="n">no</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>  
+    <span class="n">SqlSession</span> <span class="n">sqlSession</span> <span class="o">=</span> <span class="n">sqlSessionFactory</span><span class="o">.</span><span class="na">openSession</span><span class="o">();</span>
+    <span class="k">try</span> <span class="o">{</span>
+      <span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="n">sqlSession</span><span class="o">.</span><span class="na">delete</span><span class="o">(</span><span class="s">"spms.dao.ProjectDao.delete"</span><span class="o">,</span> <span class="n">no</span><span class="o">);</span>
+      <span class="n">sqlSession</span><span class="o">.</span><span class="na">commit</span><span class="o">();</span>
+      <span class="k">return</span> <span class="n">count</span><span class="o">;</span>
+    <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+      <span class="n">sqlSession</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+</code></pre>
+</div>
+
+<p>즉 컴파일 할때 다음과 같이 변한다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kt">int</span> <span class="n">count</span> <span class="o">=</span> <span class="n">sqlSEssion</span><span class="o">.</span><span class="na">delete</span><span class="o">(</span><span class="s">"spms.dao.ProjectDao.delete"</span><span class="o">,</span><span class="k">new</span> <span class="n">Integer</span><span class="o">(</span><span class="n">no</span><span class="o">));</span>
+</code></pre>
+</div>
+
+<p><br /></p>
+
+<h3 id="mybatis--">mybatis 설정 파일</h3>
+
+<p><strong>DTD선언</strong></p>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
+<span class="cp">&lt;!DOCTYPE configuration
+  PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-config.dtd"&gt;</span>
+</code></pre>
+</div>
+<p><br /></p>
+
+<h4 id="configuration--"><code class="highlighter-rouge">&lt;configuration&gt;</code> 루트 엘리먼트</h4>
+
+<p><strong>configuration의 주요 자식 엘리먼트</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>엘리먼트</th>
+      <th>용도</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>properties</td>
+      <td>프로퍼티 파일이 있는 경로 설정. <property>를 사용하여 개별 프로퍼티 정의 가능</property></td>
+    </tr>
+    <tr>
+      <td>settings</td>
+      <td>프레임워크의 실행 환경을 설정</td>
+    </tr>
+    <tr>
+      <td>typeAliases</td>
+      <td>자바 클래스 이름(패키지 이름 포함)에 대한 별명 설저</td>
+    </tr>
+    <tr>
+      <td>typeHandler</td>
+      <td>칼럼의 값을 자바 객체로, 자바 객체를 칼럼의 값으로 변환해 주는 클래스를 설정</td>
+    </tr>
+    <tr>
+      <td>environments</td>
+      <td>프레임워크에서 사용할 데이터베이스 정보(트랜젝션 관리자, 데이터 소스)를 설정.</td>
+    </tr>
+    <tr>
+      <td>mappers</td>
+      <td>SQL맵퍼 파일들이 있는 경로 설정</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><br /></p>
+
+<blockquote>
+  <p>mybatis는 기본 데이터 형(byte, short, int, long,float, double, boolean, char)이나 랩퍼클래스에 대해 미리 별명을 정의했다.</p>
+</blockquote>
+
+<h4 id="environments-"><code class="highlighter-rouge">&lt;environments&gt;</code> 엘리먼트</h4>
+
+<p><code class="highlighter-rouge">&lt;environments&gt;</code>태그는 데이터베이스 환경 정보를 설정할 때 사용하는 태그이다. 이 태그를 이용하면 여러개의 데이터베이스 접속 정보를 설정할 수 있다. 설정된 DB정보 중에서 하나를 선택할 때는 default속성을 사용한다.</p>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;environments</span> <span class="na">defaul=</span><span class="s">"development"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;environment</span> <span class="na">id=</span><span class="s">"development"</span><span class="nt">&gt;</span>...<span class="nt">&lt;/environment&gt;</span>
+	<span class="nt">&lt;environment</span> <span class="na">id=</span><span class="s">"test"</span><span class="nt">&gt;</span>...<span class="nt">&lt;/environment&gt;</span>
+	<span class="nt">&lt;environment</span> <span class="na">id=</span><span class="s">"real"</span><span class="nt">&gt;</span>...<span class="nt">&lt;/environment&gt;</span>
+<span class="nt">&lt;/environments&gt;</span>
+</code></pre>
+</div>
+
+<p>각각의 데이터베이스 접속 정보는 <code class="highlighter-rouge">&lt;environment&gt;</code>태그를 이용하여 정의 한다. id속성은 <code class="highlighter-rouge">&lt;environment&gt;</code>를 구분할 때 사용하는 식별자이다.</p>
+
+<h4 id="environment-"><code class="highlighter-rouge">&lt;environment&gt;</code> 엘리먼트</h4>
+
+<p><code class="highlighter-rouge">&lt;environment&gt;</code>는 트랜잭션 관리 및 데이터 소스를 설정하는 태그이다.</p>
+
+<p><strong>트랜잭션 관리 방식 설정</strong></p>
+
+<p>트랜잭션(Transaction)이란, 여러개의 데이터 변경작업을 하나의 작업으로 묶은 것이다.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>트랜잭션 관리 유형</th>
+      <th>설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>JDBC</td>
+      <td>직접 JDBC의 커밋, 롤백기능을 사용하여 mybatis 자체에서 트랜잭션을 관리</td>
+    </tr>
+    <tr>
+      <td>MANAGED</td>
+      <td>서버의 트랜잭션 관리 기능을 이용. 즉 Java EE애플리케이션 서버(JBoss, WebLogic, WebSphere등)나 서블릿 컨테이너(톰캣서버 등)에서 트랜잭션을 관리</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;transactionManager</span> <span class="na">type=</span><span class="s">"JDBC"</span><span class="nt">&gt;</span>
+</code></pre>
+</div>
+
+<p><br /></p>
+
+<p><strong>데이터소스설정</strong></p>
+
+<p>mybatis는 JDBC 표준 인터페이스인 javax.sql.DataSource구현체를 이용하여 DB 커넥션을 다룬다.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>데이터소스 유형</th>
+      <th>설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>UNPOOLED</td>
+      <td>DB커넥션을 요청할 때마다 매번 커넥션 객체를 생성한다. 높은 성능을 요구하지 않는 단순한 어플리케이션에 적합하다.</td>
+    </tr>
+    <tr>
+      <td>POOLED</td>
+      <td>미리 DB커넥션 객체를 생성해두고, 요청하면 즉시 반환한다. 데이터베이스에 연결하는 과정 즉 연결을 초기화하고 사용자를 인증하는 과정이 없기 때문에 속도가 빠르다.</td>
+    </tr>
+    <tr>
+      <td>JNDI</td>
+      <td>Java EE 어플리케이션 서버나 서블릿 컨테이너에서 제공하는 데이터 소스를 사용한다.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code>//<span class="nt">&lt;properties&gt;</span>태그에서 설정된 파일을 참조해서 사용함
+
+<span class="nt">&lt;dataSource</span> <span class="na">type=</span><span class="s">"POOLED"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"driver"</span> <span class="na">value=</span><span class="s">"${driver}"</span><span class="nt">/&gt;</span>
+	<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"url"</span> <span class="na">value=</span><span class="s">"${url}"</span><span class="nt">/&gt;</span>
+	<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"username"</span> <span class="na">value=</span><span class="s">"${username}"</span><span class="nt">/&gt;</span>
+	<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"password"</span> <span class="na">value=</span><span class="s">"${password}"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/dataSource&gt;</span>
+</code></pre>
+</div>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;dataSource</span> <span class="na">type=</span><span class="s">"JNDI"</span><span class="nt">&gt;</span>
+	<span class="nt">&lt;property</span> <span class="na">name=</span><span class="s">"data_source"</span> <span class="na">value=</span><span class="s">"java:comp/env/jdbc/studydb"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/dataSource&gt;</span>
+</code></pre>
+</div>
+
+<p><br /></p>
+
+<h4 id="mappers-"><code class="highlighter-rouge">&lt;mappers&gt;</code> 엘리먼트</h4>
+
+<p><code class="highlighter-rouge">&lt;mappers&gt;</code>태그는 SQL 맵퍼 파일들의 정보를 설정할 때 사용한다. 각각의 SQL 맵퍼 파일의 정보는 <code class="highlighter-rouge">&lt;mapper&gt;</code>태그로 정의한다.</p>
+
+<p>SQL맵퍼 파일의 경로를 설정할 때, 두가지 방법이 있다. 자바 클래스 경로를 사용하는 방법과 운영체제의 파일 시스템 경로를 사용하는 방법이 있다.</p>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code>//클래스 경로를 사용할 경우
+<span class="nt">&lt;mappers&gt;</span>
+    <span class="nt">&lt;mapper</span> <span class="na">resource=</span><span class="s">"spms/dao/MySqlProjectDao.xml"</span><span class="nt">/&gt;</span>
+    <span class="nt">&lt;mapper</span> <span class="na">resource=</span><span class="s">"spms/dao/MySqlMemberDao.xml"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/mappers&gt;</span>
+</code></pre>
+</div>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code>//파일 시스템 경로를 사용할 경우
+<span class="nt">&lt;mappers&gt;</span>
+	<span class="nt">&lt;mapper</span> <span class="na">url=</span><span class="s">"file:///c:/dao/MySqlProjectDao.xml"</span><span class="nt">/&gt;</span>
+<span class="nt">&lt;/mappers&gt;</span>
+</code></pre>
+</div>
+
+<p><br /></p>
+
+<h3 id="reference">Reference</h3>
+<ul>
+  <li><a href="http://www.yes24.com/24/Goods/13159413?Acode=101">열혈강의 자바 웹 개발 워크북</a></li>
+</ul>
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/09/18/mybatis/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
                   <a class="post-link" href="/2016/09/17/reflection_property/">리플렉션API와 프로퍼티를 이용한 객체관리</a>
                 </h2>
                 <div class="label">
@@ -722,401 +1393,6 @@
                 <hr>
               </li>
             
-              <li>
-                <h2>
-                  <a class="post-link" href="/2016/09/12/view_and_jsp/">뷰 컴포넌트와 JSP</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-09-12
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#web" title="Category: web" rel="category">web</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                </div>
-                <div class="excerpt">
-                    <h1 id="jspjava-server-pages">1. JSP(Java Server Pages)</h1>
-
-<p>JSP 기술의 가장 중요한 목적은 콘텐츠를 출력하는 코딩을 단순화 하는 것이다.</p>
-
-<h3 id="jsp-">JSP 구동원리</h3>
-
-<ol>
-  <li>개발자는 서버에 JSP 파일은 작성한다. 클라이언트가 JSP를 실행해 달라고 요청을 하면, 서블릿 컨테이너는 JSP파일에 대응하는 자바 서블릿을 찾아서 실행한다.</li>
-  <li>만약 JSP에 대응하는 서블릿이 없거나 JSP파일이 변경되었다면, <code class="highlighter-rouge">JSP엔진</code>을 통해서 JSP파일을 해석하여 서블릿 자바소스를 생성한다.</li>
-  <li>서블릿 자바 소스는 자바 컴파일러를 통해 서블릿 클래스 파일로 컴파일된다. JSP파일을 바꿀 때마다 이 과정을 반복한다.</li>
-  <li>JSP로부터 생성된 서블릿은 서블릿 구동 방식에 다라 실행된다. 즉 서블릿의 <code class="highlighter-rouge">service()</code>메서드가 호출되고, 출력 메서드를 통해 서블릿이 생성한 HTML 화면을 웹브라우저로 보낸다.</li>
-</ol>
-
-<blockquote>
-  <p>결론은 JSP가 직접 실행되는 것이 아니라 JSP로부터 만들어진 서블릿이 실행된다.</p>
-</blockquote>
-
-<h3 id="httpjsppage-">HttpJspPage 인터페이스</h3>
-
-<p>JSP엔진은 JSP 파일로 부터 서블릿 클래스를 생성할 때 <code class="highlighter-rouge">HttpJspPage</code> 인터페이스를 구현한 클래스를 만든다.</p>
-
-<p>상속관계는 다음과 같다.</p>
-
-<blockquote>
-  <ul>
-    <li>Servlet(Interface)
-      <ul>
-        <li>init()</li>
-        <li>service()</li>
-        <li>destory()</li>
-        <li>getServletConfig()</li>
-        <li>getServletInfo()</li>
-      </ul>
-    </li>
-    <li>JspPage(Interface)
-      <ul>
-        <li>jspInit()</li>
-        <li>jspDestory()</li>
-      </ul>
-    </li>
-    <li>HttpJspPage(Interface)
-      <ul>
-        <li>_jspSerivce()</li>
-      </ul>
-    </li>
-  </ul>
-
-</blockquote>
-
-<p><strong>결론적으로 HttpJspPage는 Servlet 인터페이스도 구현한다는 것이기 때문에 해당 클래스는 서블릿이 될 수 있다.</strong></p>
-
-<ul>
-  <li>
-    <p>jspInit()</p>
-
-    <ul>
-      <li>JspPage에 선언된 jspInit()는 JSP객체가 생성될 때 호출된다. 자동 생성된 서블릿 소스 코드에서 init()가 호출될 때 jspInit()를 호출하도록 코딩되어 있다. 그래서 JSP 페이지에서 init()를 오버라이딩 할 일이 있다면 init() 대신 jspInit()를 오버라이딩하면된다.</li>
-    </ul>
-  </li>
-  <li>
-    <p>jspDestory()</p>
-
-    <ul>
-      <li>jspInit()과 마찬가지로 JSP페이지에서 destory()를 오버라이딩 할 일이 있으면 jspDestory()를 오버라이딩 해서 사용하면된다.</li>
-    </ul>
-  </li>
-  <li>
-    <p>_jspService()</p>
-
-    <ul>
-      <li>HttpJspPage에 선언된 _jspService()는 JSP 페이지가 해야 할 작업이 들어 있는 메서드이다. 서블릿 컨테이너가 service()를 호출하면 service() 메서드 내부에서는 바로 이 메서드를 호출함으로써 JSP 페이지에 작성했던 코드가 실행된다.</li>
-    </ul>
-  </li>
-</ul>
-
-<h3 id="jsp---">JSP의 주요 구성 요소</h3>
-
-<h4 id="section">지시자 태그</h4>
-
-<p><code class="highlighter-rouge">page</code>지시자는 JSP페이지와 관련된 속성을 정의할 때 사용하는 태그이다. JSP 지시자에는 <code class="highlighter-rouge">page</code>, <code class="highlighter-rouge">taglib</code>, <code class="highlighter-rouge">include</code>가 있다.</p>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="o">&lt;%</span><span class="nd">@page</span> <span class="kn">import</span><span class="err">="</span><span class="nn">spms.vo.Member</span><span class="s">"%&gt;
-&lt;%@page import="</span><span class="n">java</span><span class="o">.</span><span class="na">util</span><span class="o">.</span><span class="na">ArrayList</span><span class="s">"%&gt;
-&lt;%@ page 
-	language="</span><span class="n">java</span><span class="s">" 
-	contentType="</span><span class="n">text</span><span class="o">/</span><span class="n">html</span><span class="o">;</span> <span class="n">charset</span><span class="o">=</span><span class="n">UTF</span><span class="o">-</span><span class="mi">8</span><span class="s">"
-    pageEncoding="</span><span class="n">UTF</span><span class="o">-</span><span class="mi">8</span><span class="err">"</span><span class="o">%&gt;</span>
-</code></pre>
-</div>
-
-<ul>
-  <li><code class="highlighter-rouge">language속성</code>은 스크립트릿(Scriptlet)이나, 표현식(Expression element), 선언부(Declaration element)를 작성할때 사용한다.</li>
-  <li><code class="highlighter-rouge">contenttype속성</code>은 출력할 데이터의 MIME타입과 문자 집합을 지정한다.</li>
-  <li><code class="highlighter-rouge">pageEncoding속성</code>은 출력할 데이터의 문자 집합을 지정한다. 기본값은 <code class="highlighter-rouge">ISO-8859-1</code>이다. 만약 이속성을 생략하면 <code class="highlighter-rouge">contentType</code>에 설정된 값을 사용한다. <code class="highlighter-rouge">contentType속성</code>에도 없다면 기본값 <code class="highlighter-rouge">ISO-8859-1</code>을 사용한다.</li>
-</ul>
-
-<h4 id="section-1">스크립트릿 태그</h4>
-
-<p>JSP 페이지 안에서 자바코드를 넣을 때는 스크립트릿(Scriptlet Elements)태그 <code class="highlighter-rouge">&lt;% %&gt;</code>안에 작성한다. <code class="highlighter-rouge">&lt;% 자바 코드 %&gt;</code></p>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="o">&lt;%</span>
-<span class="n">String</span> <span class="n">v1</span> <span class="o">=</span> <span class="s">""</span><span class="o">;</span>
-<span class="n">String</span> <span class="n">v2</span> <span class="o">=</span> <span class="s">""</span><span class="o">;</span>
-<span class="n">String</span> <span class="n">result</span> <span class="o">=</span> <span class="s">""</span><span class="o">;</span>
-<span class="n">String</span><span class="o">[]</span> <span class="n">selected</span> <span class="o">=</span> <span class="o">{</span><span class="s">""</span><span class="o">,</span> <span class="s">""</span><span class="o">,</span> <span class="s">""</span><span class="o">,</span> <span class="s">""</span><span class="o">};</span>
-
-<span class="c1">//값이 있을 때만 꺼낸다.</span>
-<span class="k">if</span> <span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"v1"</span><span class="o">)</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
-	<span class="n">v1</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"v1"</span><span class="o">);</span>
-	<span class="n">v2</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"v2"</span><span class="o">);</span>
-	<span class="n">String</span> <span class="n">op</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"op"</span><span class="o">);</span>
-	
-	<span class="n">result</span> <span class="o">=</span> <span class="n">calculate</span><span class="o">(</span>
-				<span class="n">Integer</span><span class="o">.</span><span class="na">parseInt</span><span class="o">(</span><span class="n">v1</span><span class="o">),</span> 
-				<span class="n">Integer</span><span class="o">.</span><span class="na">parseInt</span><span class="o">(</span><span class="n">v2</span><span class="o">),</span> 
-				<span class="n">op</span><span class="o">);</span>
-	
-	<span class="k">if</span> <span class="o">(</span><span class="s">"+"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">op</span><span class="o">))</span> <span class="o">{</span>
-		<span class="n">selected</span><span class="o">[</span><span class="mi">0</span><span class="o">]</span> <span class="o">=</span> <span class="s">"selected"</span><span class="o">;</span>
-	<span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="s">"-"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">op</span><span class="o">))</span> <span class="o">{</span>
-		<span class="n">selected</span><span class="o">[</span><span class="mi">1</span><span class="o">]</span> <span class="o">=</span> <span class="s">"selected"</span><span class="o">;</span>
-	<span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="s">"*"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">op</span><span class="o">))</span> <span class="o">{</span>
-		<span class="n">selected</span><span class="o">[</span><span class="mi">2</span><span class="o">]</span> <span class="o">=</span> <span class="s">"selected"</span><span class="o">;</span>
-	<span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="s">"/"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">op</span><span class="o">))</span> <span class="o">{</span>
-		<span class="n">selected</span><span class="o">[</span><span class="mi">3</span><span class="o">]</span> <span class="o">=</span> <span class="s">"selected"</span><span class="o">;</span>
-	<span class="o">}</span>
-<span class="o">}</span>
-<span class="o">%&gt;</span> 
-</code></pre>
-</div>
-
-<p>위 코드의 자바 서블릿 소스에서 _jspService() 메서드를 보면 스크립트릿 태그안의 자바소스가 그대로 입력된 것을 알 수 있다.</p>
-
-<h4 id="jsp--">JSP 내장 객체</h4>
-
-<p>JSP페이지에서 스크립트릿 <code class="highlighter-rouge">&lt;% %&gt;</code>이나 표현식 <code class="highlighter-rouge">&lt;%= %&gt;</code>을 작성할 때 별도의 선언 없이 사용하는 자바 객체를 JSP 내장객체(Implicit Objects)라 한다. <code class="highlighter-rouge">_jspService()</code>는 <code class="highlighter-rouge">javax.servlet.jsp.HttpJspPage</code> 인터페이스에 선언된 메서드이다. JSP페이지로 서블릿을 만들때 반드시 이 인터페이스를 구현하도록 정의 되어 있다.</p>
-
-<p>JSP 기술 사양서는 JSP페이지 작성자가 별도 선언 없이 즉시 이용할 수 있는 9개 객체를 정의 한다.</p>
-
-<p><code class="highlighter-rouge">request</code>, <code class="highlighter-rouge">response</code>, <code class="highlighter-rouge">pageContext</code>, <code class="highlighter-rouge">session</code>, <code class="highlighter-rouge">application</code>, <code class="highlighter-rouge">config</code>, <code class="highlighter-rouge">out</code>, <code class="highlighter-rouge">page</code>, <code class="highlighter-rouge">exception</code> 객체가 <code class="highlighter-rouge">_jspservice()</code>메서드에 선언되어 있어 별도의 선언 없이 스크립트릿과 표현식에 JSP내장객체를 사용할 수 있다.</p>
-
-<h4 id="section-2">선언문 태그</h4>
-
-<p>JSP 선언문(Declarations) <code class="highlighter-rouge">&lt;%! %&gt;</code>은 서블릿 클래스의 맴버(변수나 메서드)를 선언 할 때 사용하는 태그이다. JSP페이지에서 선언문 <code class="highlighter-rouge">&lt;%! %&gt;</code>을 작성하는 위치는 위, 아래, 가운데 어디든 상관 없다. 왜나햐면 선언문은 <code class="highlighter-rouge">_jspService()</code>메서드 안에 복사되는 것이 아니라, <code class="highlighter-rouge">_jspService()</code>밖의 클래스 블록 안에 복사 되기 때문이다.</p>
-
-<p><code class="highlighter-rouge">&lt;%! 맴버 변수 및 메서드 선언 %&gt;</code></p>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="o">&lt;%!</span> 
-<span class="kd">private</span> <span class="n">String</span> <span class="nf">calculate</span><span class="o">(</span><span class="kt">int</span> <span class="n">a</span><span class="o">,</span> <span class="kt">int</span> <span class="n">b</span><span class="o">,</span> <span class="n">String</span> <span class="n">op</span><span class="o">)</span> <span class="o">{</span>
-	<span class="kt">int</span> <span class="n">r</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-		<span class="k">if</span> <span class="o">(</span><span class="s">"+"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">op</span><span class="o">))</span> <span class="o">{</span>
-		<span class="n">r</span> <span class="o">=</span> <span class="n">a</span> <span class="o">+</span> <span class="n">b</span><span class="o">;</span>	
-	<span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="s">"-"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">op</span><span class="o">))</span> <span class="o">{</span>
-		<span class="n">r</span> <span class="o">=</span> <span class="n">a</span> <span class="o">-</span> <span class="n">b</span><span class="o">;</span>
-	<span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="s">"*"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">op</span><span class="o">))</span> <span class="o">{</span>
-		<span class="n">r</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="n">b</span><span class="o">;</span>
-	<span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="s">"/"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">op</span><span class="o">))</span> <span class="o">{</span>
-		<span class="n">r</span> <span class="o">=</span> <span class="n">a</span> <span class="o">/</span> <span class="n">b</span><span class="o">;</span>
-	<span class="o">}</span>
-	<span class="k">return</span> <span class="n">Integer</span><span class="o">.</span><span class="na">toString</span><span class="o">(</span><span class="n">r</span><span class="o">);</span>
-<span class="o">}</span>
-<span class="o">%&gt;</span>
-</code></pre>
-</div>
-
-<h4 id="section-3">표현식 태그</h4>
-
-<p>표현식(Expressions)태그는 문자열을 출력할 때 사용한다. <code class="highlighter-rouge">&lt;%= %&gt;</code>안에는 결과를 반환하는 자바코드가 와야한다. 표현식도 스크립트릿과 같이 <code class="highlighter-rouge">_jspService()</code>안에 순서대로 복사한다.</p>
-
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;body&gt;</span>
-<span class="nt">&lt;h2&gt;</span>JSP 계산기<span class="nt">&lt;/h2&gt;</span>
-<span class="nt">&lt;form</span> <span class="na">action=</span><span class="s">"Calculator.jsp"</span> <span class="na">method=</span><span class="s">"get"</span><span class="nt">&gt;</span>
-	<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">name=</span><span class="s">"v1"</span> <span class="na">size=</span><span class="s">"4"</span> <span class="na">value=</span><span class="s">"&lt;%=v1%&gt;"</span><span class="nt">&gt;</span> 
-	<span class="nt">&lt;select</span> <span class="na">name=</span><span class="s">"op"</span><span class="nt">&gt;</span>
-		<span class="nt">&lt;option</span> <span class="na">value=</span><span class="s">"+"</span> <span class="err">&lt;%=</span><span class="na">selected</span><span class="err">[</span><span class="na">0</span><span class="err">]%</span><span class="nt">&gt;</span>&gt;+<span class="nt">&lt;/option&gt;</span>
-		<span class="nt">&lt;option</span> <span class="na">value=</span><span class="s">"-"</span> <span class="err">&lt;%=</span><span class="na">selected</span><span class="err">[</span><span class="na">1</span><span class="err">]%</span><span class="nt">&gt;</span>&gt;-<span class="nt">&lt;/option&gt;</span>
-		<span class="nt">&lt;option</span> <span class="na">value=</span><span class="s">"*"</span> <span class="err">&lt;%=</span><span class="na">selected</span><span class="err">[</span><span class="na">2</span><span class="err">]%</span><span class="nt">&gt;</span>&gt;*<span class="nt">&lt;/option&gt;</span>
-		<span class="nt">&lt;option</span> <span class="na">value=</span><span class="s">"/"</span> <span class="err">&lt;%=</span><span class="na">selected</span><span class="err">[</span><span class="na">3</span><span class="err">]%</span><span class="nt">&gt;</span>&gt;/<span class="nt">&lt;/option&gt;</span>
-	<span class="nt">&lt;/select&gt;</span> 
-	<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">name=</span><span class="s">"v2"</span> <span class="na">size=</span><span class="s">"4"</span> <span class="na">value=</span><span class="s">"&lt;%=v2%&gt;"</span><span class="nt">&gt;</span> 
-	<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"submit"</span> <span class="na">value=</span><span class="s">"="</span><span class="nt">&gt;</span>
-	<span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">size=</span><span class="s">"8"</span> <span class="na">value=</span><span class="s">"&lt;%=result%&gt;"</span><span class="nt">&gt;&lt;br&gt;</span>
-<span class="nt">&lt;/form&gt;</span> 
-<span class="nt">&lt;/body&gt;</span>
-</code></pre>
-</div>
-
-<p>표현식 태그에 작성한 자바코드가 서블릿 파일안에서는 <code class="highlighter-rouge">out.print()</code>출력의 인자값(argument)으로 복사된다. 출력문을 만들 때 <code class="highlighter-rouge">out.print()</code>만 사용하는 것은 아니다. <code class="highlighter-rouge">out.write()</code>도 가능하다 즉 JSP엔진에 따라 만들어지는 자바코드가 달라 질 수 있다. 톰켓에서는 JSP 표현식에 대해 <code class="highlighter-rouge">out.print()</code>메서드를 만든다.</p>
-
-<h1 id="view">2. 뷰(View)</h1>
-
-<h3 id="value-object">Value Object</h3>
-
-<p>데이터베이스에서 가져온 정보를 JSP페이지에 전달하려면 그 정보를 담을 객체가 필요하다. 이렇게 값을 담는 용도로 사용하는 객체를 <code class="highlighter-rouge">값 객체(value object)</code>라고한다. VO는 계층간 또는 객체 간에 데이터를 전달하는 데 용이하므로 <code class="highlighter-rouge">데이터 수송 객체(Data Transfer Object)</code>라고도 한다. 
-보통 데이터베이스 테이블에 대응하여 값 객체를 정의한다.</p>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kn">package</span> <span class="n">spms</span><span class="o">.</span><span class="na">vo</span><span class="o">;</span>
-
-<span class="kn">import</span> <span class="nn">java.util.Date</span><span class="o">;</span>
-
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Member</span> <span class="o">{</span>
-	<span class="kd">protected</span> <span class="kt">int</span> 		<span class="n">no</span><span class="o">;</span>
-	<span class="kd">protected</span> <span class="n">String</span> 	<span class="n">name</span><span class="o">;</span>
-	<span class="kd">protected</span> <span class="n">String</span> 	<span class="n">email</span><span class="o">;</span>
-	<span class="kd">protected</span> <span class="n">String</span> 	<span class="n">password</span><span class="o">;</span>
-	<span class="kd">protected</span> <span class="n">Date</span>		<span class="n">createdDate</span><span class="o">;</span>
-	<span class="kd">protected</span> <span class="n">Date</span>		<span class="n">modifiedDate</span><span class="o">;</span>
-	
-	<span class="kd">public</span> <span class="kt">int</span> <span class="nf">getNo</span><span class="o">()</span> <span class="o">{</span>
-		<span class="k">return</span> <span class="n">no</span><span class="o">;</span>
-	<span class="o">}</span>
-	<span class="kd">public</span> <span class="n">Member</span> <span class="nf">setNo</span><span class="o">(</span><span class="kt">int</span> <span class="n">no</span><span class="o">)</span> <span class="o">{</span>
-		<span class="k">this</span><span class="o">.</span><span class="na">no</span> <span class="o">=</span> <span class="n">no</span><span class="o">;</span>
-		<span class="k">return</span> <span class="k">this</span><span class="o">;</span>
-	<span class="o">}</span>
-	<span class="kd">public</span> <span class="n">String</span> <span class="nf">getName</span><span class="o">()</span> <span class="o">{</span>
-		<span class="k">return</span> <span class="n">name</span><span class="o">;</span>
-	<span class="o">}</span>
-	<span class="kd">public</span> <span class="n">Member</span> <span class="nf">setName</span><span class="o">(</span><span class="n">String</span> <span class="n">name</span><span class="o">)</span> <span class="o">{</span>
-		<span class="k">this</span><span class="o">.</span><span class="na">name</span> <span class="o">=</span> <span class="n">name</span><span class="o">;</span>
-		<span class="k">return</span> <span class="k">this</span><span class="o">;</span>
-	<span class="o">}</span>
-	<span class="kd">public</span> <span class="n">String</span> <span class="nf">getEmail</span><span class="o">()</span> <span class="o">{</span>
-		<span class="k">return</span> <span class="n">email</span><span class="o">;</span>
-	<span class="o">}</span>
-	<span class="kd">public</span> <span class="n">Member</span> <span class="nf">setEmail</span><span class="o">(</span><span class="n">String</span> <span class="n">email</span><span class="o">)</span> <span class="o">{</span>
-		<span class="k">this</span><span class="o">.</span><span class="na">email</span> <span class="o">=</span> <span class="n">email</span><span class="o">;</span>
-		<span class="k">return</span> <span class="k">this</span><span class="o">;</span>
-	<span class="o">}</span>
-<span class="o">}</span>
-</code></pre>
-</div>
-
-<p><code class="highlighter-rouge">setXXX()</code>메소드의 return값을 this로 하는 이유는 다음과 같다.</p>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code>
-	<span class="c1">//return this를 사용한 경우</span>
-	<span class="k">while</span><span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="na">next</span><span class="o">())</span> <span class="o">{</span>
-		<span class="n">members</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">Member</span><span class="o">()</span>
-			<span class="o">.</span><span class="na">setNo</span><span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="na">getInt</span><span class="o">(</span><span class="s">"MNO"</span><span class="o">))</span>
-			<span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">"MNAME"</span><span class="o">))</span>
-	<span class="o">}</span>
-
-	<span class="c1">//set메서드 반환값이 없는 경우</span>
-	<span class="n">Member</span> <span class="n">member</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Member</span><span class="o">();</span>
-	<span class="n">member</span><span class="o">.</span><span class="na">setNo</span><span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="na">getInt</span><span class="o">(</span><span class="s">"MNO"</span><span class="o">));</span>
-	<span class="n">member</span><span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">"MNAME"</span><span class="o">));</span>
-	<span class="n">member</span><span class="o">.</span><span class="na">setEmail</span><span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">"EMAIL"</span><span class="o">));</span>
-</code></pre>
-</div>
-
-<p>객체를 생성한 즉시, setter메서드를 연속으로 호출하여 값을 할당한다. 이런 코딩 방식은 스크립팅 언어에서 널리 사용되는 방식이다.</p>
-
-<h3 id="requestdispatcher-forward-include">RequestDispatcher, forward, include</h3>
-
-<p>화면생성을 위해 JSP로 작업을 위임해야한다. 이렇게 다른 서블릿이나 JSP로 작업을 위임할 때 사용하는 객체가 <code class="highlighter-rouge">RequestDispatcher</code>이다. 이 객체는 <code class="highlighter-rouge">HttpservletRequest</code>를 통해서 얻을 수 있다.</p>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">RequestDispatcher</span> <span class="n">rd</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getRequestDispatcher</span><span class="o">(</span>
-			<span class="s">"/member/MemberList.jsp"</span><span class="o">);</span>
-</code></pre>
-</div>
-
-<p>예)</p>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="c1">// request에 회원 목록 데이터 보관한다.</span>
-<span class="n">request</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="s">"members"</span><span class="o">,</span> <span class="n">members</span><span class="o">);</span>
-			
-<span class="c1">// JSP로 출력을 위임한다.</span>
-<span class="n">RequestDispatcher</span> <span class="n">rd</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getRequestDispatcher</span><span class="o">(</span>
-		<span class="s">"/member/MemberList.jsp"</span><span class="o">);</span>
-<span class="n">rd</span><span class="o">.</span><span class="na">include</span><span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">);</span>
-</code></pre>
-</div>
-
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="err">&lt;</span>%@page import="spms.vo.Member"%&gt;
-<span class="err">&lt;</span>%@page import="java.util.ArrayList"%&gt;
-<span class="err">&lt;</span>%@ page 
-	language="java" 
-	contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%&gt;
-<span class="cp">&lt;!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" 
-	"http://www.w3.org/TR/html4/loose.dtd"&gt;</span>
-<span class="nt">&lt;html&gt;</span>
-<span class="nt">&lt;head&gt;</span>
-<span class="nt">&lt;meta</span> <span class="na">http-equiv=</span><span class="s">"Content-Type"</span> <span class="na">content=</span><span class="s">"text/html; charset=UTF-8"</span><span class="nt">&gt;</span>
-<span class="nt">&lt;title&gt;</span>회원 목록<span class="nt">&lt;/title&gt;</span>
-<span class="nt">&lt;/head&gt;</span>
-<span class="nt">&lt;body&gt;</span>
-<span class="nt">&lt;h1&gt;</span>회원목록<span class="nt">&lt;/h1&gt;</span>
-<span class="nt">&lt;p&gt;&lt;a</span> <span class="na">href=</span><span class="s">'add'</span><span class="nt">&gt;</span>신규 회원<span class="nt">&lt;/a&gt;&lt;/p&gt;</span>
-<span class="err">&lt;</span>%
-ArrayList<span class="nt">&lt;Member&gt;</span> members = (ArrayList<span class="nt">&lt;Member&gt;</span>)request.getAttribute(
-								"members");
-for(Member member : members) {
-%&gt;
-<span class="err">&lt;</span>%=member.getNo()%&gt;,
-<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">'update?no=&lt;%=member.getNo()%&gt;'</span><span class="nt">&gt;</span><span class="err">&lt;</span>%=member.getName()%&gt;<span class="nt">&lt;/a&gt;</span>,
-<span class="err">&lt;</span>%=member.getEmail()%&gt;,
-<span class="err">&lt;</span>%=member.getCreatedDate()%&gt;
-<span class="nt">&lt;a</span> <span class="na">href=</span><span class="s">'delete?no=&lt;%=member.getNo()%&gt;'</span><span class="nt">&gt;</span>[삭제]<span class="nt">&lt;/a&gt;&lt;br&gt;</span>
-<span class="err">&lt;</span>%} %&gt;
-<span class="nt">&lt;/body&gt;</span>
-<span class="nt">&lt;/html&gt;</span>
-</code></pre>
-</div>
-
-<p><code class="highlighter-rouge">page</code> 지시자로 <code class="highlighter-rouge">import</code>를 처리한다. 그리고 <code class="highlighter-rouge">setAttribute</code>로 넘겨준 값을 <code class="highlighter-rouge">getAttribute()</code>를 호출하여 사용한다.</p>
-
-<h4 id="forward">forward</h4>
-
-<p>포워드 방식은 작업을 한 번 위임하면 다시 이전 서블릿으로 제어권이 돌아오지 않는다.
-포워딩은 예외가 발생하면 화면 내용보다 좀 더 부드러운 안내 문구를 출력하는데 보통 사용한다.</p>
-
-<ul>
-  <li>포워딩(Servlet에서 사용하는 경우)</li>
-</ul>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">RequestDispatcher</span> <span class="n">rd</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getRequestDispatcher</span><span class="o">(</span><span class="s">"/error.jsp"</span><span class="o">);</span>
-<span class="n">rd</span><span class="o">.</span><span class="na">forward</span><span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">);</span>
-</code></pre>
-</div>
-
-<ul>
-  <li>포워딩(JSP에서 사용하는 경우)</li>
-</ul>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="o">&lt;</span><span class="nl">jsp:</span><span class="n">forward</span> <span class="n">page</span><span class="o">=</span><span class="s">"/header.jsp"</span><span class="o">/&gt;</span>
-</code></pre>
-</div>
-
-<h4 id="include">include</h4>
-
-<p>인클루드 방식은 다른 서블릿으로 작업을 위임한 후 , 그 서블릿의 실행이 끝나면 다시 이전 서블릿으로 제어권이 넘어온다. 한 jsp에 여러 페이지를 포함할 때 사용한다.</p>
-
-<ul>
-  <li>인클루딩(Servlet에서 사용하는 경우)</li>
-</ul>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">RequestDispatcher</span> <span class="n">rd</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getRequestDispatcher</span><span class="o">(</span><span class="s">"/Header.jsp"</span><span class="o">);</span>
-<span class="n">rd</span><span class="o">.</span><span class="na">include</span><span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">);</span>
-</code></pre>
-</div>
-
-<ul>
-  <li>인클루딩(JSP에서 사용하는 경우)</li>
-</ul>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="o">&lt;</span><span class="nl">jsp:</span><span class="n">include</span> <span class="n">page</span><span class="o">=</span><span class="s">"/header.jsp"</span><span class="o">/&gt;</span>
-</code></pre>
-</div>
-
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2016/09/12/view_and_jsp/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
         </ul>
 
 
@@ -1235,6 +1511,15 @@ for(Member member : members) {
                         </a>
                     </li>
                     
+                    <li>
+                        <a href="/category/#BigData" class="categories-list-item" cate="BigData">
+                            <span class="name">
+                                BigData
+                            </span>
+                            <span class="badge">1</span>
+                        </a>
+                    </li>
+                    
                 </ul>
             </div>
             <div class="side">
@@ -1243,6 +1528,8 @@ for(Member member : members) {
                     Recent Posts
                 </div>
                 <ul class="content-ul" recent>
+                    
+                        <li><a href="/2017/02/13/rdmsvsnosql/">RDBMS vs NOSQL</a></li>
                     
                         <li><a href="/2017/01/09/mysqlprocedureinsert/">Stored Procedure으로 Insert</a></li>
                     
@@ -1261,8 +1548,6 @@ for(Member member : members) {
                         <li><a href="/2016/11/18/Shortcircuitevaluation/">Short-circuit evaluation</a></li>
                     
                         <li><a href="/2016/11/10/JQuery_findnode/">jquery 선택자</a></li>
-                    
-                        <li><a href="/2016/11/07/jqueryselector/">jquery :last 선택자</a></li>
                     
                 </ul>
             </div>

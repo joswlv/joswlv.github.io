@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="Jo Blog">
+    <meta property="og:description" content="Jo Seungwan Blog!~~!">
+    <meta property="og:image" content="https://raw.githubusercontent.com/joswlv/joswlv.github.io/master/bg.jpg">
+    <meta property="og:url" content="https://joswlv.github.io">
+
+    <title>RDBMS vs NOSQL</title>
+    <meta name="description" content="RDBMS? NOSQL?  데이터의 읽기 쓰기 등 퍼포먼스에 치중한다면 NOSQL, 트랜잭션과 같은 정합성 위주의 시스템을 사용한다면 RDBMS  RDBMS 컬럼 변경 용이하지 않음, NOSQL 컬럼 변경 용이  NOSQL의 경우 sorting, join, grouping, ran...">
+
+    <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="stylesheet" href="/css/fontawesome/css/font-awesome.min.css ">
+    <link rel="stylesheet" href="/css/main.css ">
+    <link rel="canonical" href="http://joswlv.github.io/2017/02/13/rdmsvsnosql/">
+    <link rel="alternate" type="application/rss+xml" title="Joswlv" href="http://joswlv.github.io/feed.xml ">
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-83868242-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</head>
+
+
+  <body>
+
+    <header id="top">
+    <div class="wrapper">
+        <a href="/" class="brand">Joswlv</a>
+        <small></small>
+        <button id="headerMenu" class="menu"><i class="fa fa-bars"></i></button>
+        <nav id="headerNav">
+            <ul>
+                <li>
+                    
+                    <a href="/">
+                    
+                        <i class="fa fa-home"></i>Home
+                    </a>
+                </li>
+
+                
+                    
+                    <li>
+                        
+                        <a href="/archive/">
+                        
+                            <i class="fa fa-archive"></i>Archives
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/category/">
+                        
+                            <i class="fa fa-th-list"></i>Categories
+                        </a>
+                    </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        </nav>
+    </div>
+</header>
+
+
+        <div class="page clearfix" post>
+    <div class="left">
+        <h1>RDBMS vs NOSQL</h1>
+        <div class="label">
+
+            <div class="label-card">
+                <i class="fa fa-calendar"></i>2017-02-13
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+            
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#BigData" title="Category: BigData" rel="category">BigData</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+            </div>
+
+        </div>
+        <hr>
+        <article itemscope itemtype="http://schema.org/BlogPosting">
+        <h4 id="rdbms-nosql">RDBMS? NOSQL?</h4>
+
+<ul>
+  <li>데이터의 읽기 쓰기 등 퍼포먼스에 치중한다면 NOSQL, 트랜잭션과 같은 정합성 위주의 시스템을 사용한다면 RDBMS</li>
+  <li>RDBMS 컬럼 변경 용이하지 않음, NOSQL 컬럼 변경 용이</li>
+  <li>NOSQL의 경우 sorting, join, grouping, range query, index 매우 취약</li>
+  <li>RDBMS 학습 비용 x</li>
+  <li>NOSQL 학습 비용 소요 (운영시 어떤 장애상황이 생길지 예측이 어려움)</li>
+  <li>NOSQL 가장 큰 장점 (Scale-Out, RDBMS보다 상대적으로 빠른 쓰기/읽기)</li>
+</ul>
+
+<p><br /></p>
+
+<p><em>NOSQL 분류</em></p>
+
+<p>[ 키 밸류형 ] redis, memcached, Oracle Coherence</p>
+
+<p>[ 컬럼형   ] Cassandra, HBASE, Cloud Datastore</p>
+
+<p>[ 문서형   ] MongoDB, Couchbase, MarkLogic, PostgreSQL, MySQL, DynamoDB MS-DocumentDB</p>
+
+<p>[ 그래프형  ] Neo4j</p>
+
+<p><br /></p>
+
+<table>
+  <thead>
+    <tr>
+      <th><em>DataStore</em></th>
+      <th><em>설 명</em></th>
+      <th><em>장 점</em></th>
+      <th><em>단 점</em></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cassandra</td>
+      <td>- Facebook에 의해 2008년 아파치 오픈소스로 공개된 분산 데이터 베이스 (자바 언어 기반)<br /> - 컬럼 단위로 관리되어 컬럼형으로 분류<br /> - 대용량의 데이터 트랜잭션에 대해 고성능 처리가 가능(실제 트위터 MYSQL -&gt; Cassandra로 전환)</td>
+      <td>- 대량으로 쓰기가 발생하는 서비스에 좋음<br /> - 확장성이 뛰어남<br /> - Apache Foundation에서 개발중이며커뮤니티 활발<br /> - Scale-Out</td>
+      <td>- 최소 3대 이상 구성(클러스터 환경)<br /> - 복잡한 조건 검색 불가<br /> - 데이터 갱신 및 입력시 Atomic한 처리가 힘듬</td>
+    </tr>
+    <tr>
+      <td>HBase</td>
+      <td>- 대량 데이터를 우수한 성능으로 데이터 일관성을 보장하면서 다뤄야 할 때 주로 사용<br /> - 대량 데이터 분석 및 처리를 위해 사용되는 Hadoop의 산하 프로젝트로 시작된 데이터베이스 (HDFS 및 MapReduce등과 함께 사용하기에 최적화) <br /> - 수십 테러바이트가 넘는 빅데이터에 적합</td>
+      <td>- 하둡 기반에서 동작하고 다양한 하둡 의 도구들과 상호 운영성이 좋음<br /> - 데이터 일관성 보장 우수(상대적)</td>
+      <td>- 5대 미만에서는 사용할 수 없다(대규모 전용)<br /> - 성능이 좋진 않다 (상대적)</td>
+    </tr>
+    <tr>
+      <td>MongoDB</td>
+      <td>- MongoDB는 10gen 사에서 개발된 높은 성능과 확장성을 가지고 있는 데이터베이스<br /> - NoSQL 데이터베이스에서는 문서형 데이터베이스로 분류(C언어 기반)<br /> - 데이터를 입력할때 데이터 구조 정보를 포함하여 BSON(JSON을 바이너리화한것)형식으로 저장하고, key value로 사용<br /> - NON-SCHEMA<br /> -비정형 데이터, 파일 데이터등의 스키마프리(Scheme free)모델에서 적합<br /> - SQL 과 비슷한 방식의 쿼리 사용</td>
+      <td>- 스키마 없이 사용 가능 <br /> - SQL 과 비슷한 방식의 쿼리 사용<br /> - 몽고는 쓰기할때 메모리에 먼저 Write 후에 1분 단위로 Flushing하는 Write back 방식을 사용한기 때문에 write성능이 좋음<br /> - Read시에는 파일의 Index를 메모리에 로딩해   놓고 찾는다(memory mapped file) <br /> - 빠름<br /> - 다양한 기능 제공<br /></td>
+      <td>- JOIN이나 트랜잭션 처리가 불가능<br /> - 디스크에 쓰기가 비동기식으로 이루어진다. 때문에 경우에 따라 데이터가 유실될 가능성도 있다.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="cassandra--hbase-">[ Cassandra &amp; HBase ]</h4>
+
+<ul>
+  <li>카산드라 클러스터 설정 및 구성이 HBase 클러스터 구성보다 훨씬 쉽다.</li>
+  <li>카산드라가 일반적으로 write시 5배 이상의 더 나은 성능, read시 4배 이상의 성능을 보인다.</li>
+</ul>
+
+<h4 id="cassandra--mongodb-">[ Cassandra &amp; MongoDB ]</h4>
+
+<ul>
+  <li>Cassandra 노드가 추가될수록 MonogoDB 보다 훨씬 나은 선형적인 성능 향상을 보인다.</li>
+  <li>다중 Index가 필요한 구조라면 MongoDB를 선택하고, 데이터 항목 변경이 많고 unique access가 많은 경우라면 Cassandra가 적합</li>
+  <li><a href="http://db-engines.com/en/system/Cassandra;MongoDB">http://db-engines.com/en/system/Cassandra;MongoDB</a></li>
+</ul>
+
+<h4 id="section">성능비교</h4>
+
+<ul>
+  <li><a href="https://academy.datastax.com/planet-cassandra/nosql-performance-benchmarks">https://academy.datastax.com/planet-cassandra/nosql-performance-benchmarks</a></li>
+  <li><a href="https://www.datastax.com/nosql-databases/benchmarks-cassandra-vs-mongodb-vs-hbase">https://www.datastax.com/nosql-databases/benchmarks-cassandra-vs-mongodb-vs-hbase</a></li>
+</ul>
+
+        </article>
+        <hr>
+
+        
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+        
+
+        <div class="post-recent">
+    <div class="pre">
+        
+        <p><strong>prev</strong> <a href="/2017/01/09/mysqlprocedureinsert/">Stored Procedure으로 Insert</a></p>
+        
+    </div>
+    <div class="nex">
+
+        
+    </div>
+</div>
+
+
+        <h2 id="comments">Comments</h2>
+        
+
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+     * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+
+    var disqus_config = function() {
+        this.page.url = 'http://joswlv.github.io/2017/02/13/rdmsvsnosql/'; // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://joswlv.github.io/2017/02/13/rdmsvsnosql/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document,
+            s = d.createElement('script');
+
+        s.src = '//joswlv.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+
+    </div>
+    <button class="anchor"><i class="fa fa-anchor"></i></button>
+    <div class="right">
+        <div class="wrap">
+
+            <!-- Content -->
+            <div class="side content">
+                <div>
+                    Content
+                </div>
+                <ul id="content-side" class="content-ul">
+                    <li><a href="#similar_posts">Similar Posts</a></li>
+                    <li><a href="#comments">Comments</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+/**
+ * target _blank
+ */
+(function() {
+    var aTags = document.querySelectorAll('article a:not([id])')
+    for (var i = 0; i < aTags.length; i++) {
+        aTags[i].setAttribute('target', '_blank')
+    }
+}());
+</script>
+<script src="/js/pageContent.js " charset="utf-8"></script>
+
+
+    <footer class="site-footer">
+
+
+    <div class="wrapper">
+
+        <p class="description">
+            
+        </p>
+        <p class="contact">
+            Contact me at: 
+            <a href="https://github.com/joswlv" title="GitHub"><i class="fa fa-github" aria-hidden="true"></i></a>  
+            <a href="mailto:wh7923@gmail.com" title="email"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>     
+            <a href="https://www.facebook.com/wsj7923" title="Facebook"><i class="fa fa-facebook-official" aria-hidden="true"></i></a>    
+        </p>
+        <p>
+        </p>
+        <p class="power">
+            <span>
+                Site powered by <a href="https://jekyllrb.com/">Jekyll</a> & <a href="https://pages.github.com/">Github Pages</a>.
+            </span>
+        </p>
+    </div>
+</footer>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <div class="back-to-top">
+    <a href="#top" class="scroll">
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    </a>
+</div>
+
+    <script src=" /js/main.js " charset="utf-8"></script>
+    <script src=" /js/scroll.min.js " charset="utf-8"></script>
+  </body>
+
+</html>

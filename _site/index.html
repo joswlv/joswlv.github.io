@@ -109,6 +109,127 @@
             
               <li>
                 <h2>
+                  <a class="post-link" href="/2017/02/13/rdmsvsnosql/">RDBMS vs NOSQL</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2017-02-13
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#BigData" title="Category: BigData" rel="category">BigData</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h4 id="rdbms-nosql">RDBMS? NOSQL?</h4>
+
+<ul>
+  <li>데이터의 읽기 쓰기 등 퍼포먼스에 치중한다면 NOSQL, 트랜잭션과 같은 정합성 위주의 시스템을 사용한다면 RDBMS</li>
+  <li>RDBMS 컬럼 변경 용이하지 않음, NOSQL 컬럼 변경 용이</li>
+  <li>NOSQL의 경우 sorting, join, grouping, range query, index 매우 취약</li>
+  <li>RDBMS 학습 비용 x</li>
+  <li>NOSQL 학습 비용 소요 (운영시 어떤 장애상황이 생길지 예측이 어려움)</li>
+  <li>NOSQL 가장 큰 장점 (Scale-Out, RDBMS보다 상대적으로 빠른 쓰기/읽기)</li>
+</ul>
+
+<p><br /></p>
+
+<p><em>NOSQL 분류</em></p>
+
+<p>[ 키 밸류형 ] redis, memcached, Oracle Coherence</p>
+
+<p>[ 컬럼형   ] Cassandra, HBASE, Cloud Datastore</p>
+
+<p>[ 문서형   ] MongoDB, Couchbase, MarkLogic, PostgreSQL, MySQL, DynamoDB MS-DocumentDB</p>
+
+<p>[ 그래프형  ] Neo4j</p>
+
+<p><br /></p>
+
+<table>
+  <thead>
+    <tr>
+      <th><em>DataStore</em></th>
+      <th><em>설 명</em></th>
+      <th><em>장 점</em></th>
+      <th><em>단 점</em></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Cassandra</td>
+      <td>- Facebook에 의해 2008년 아파치 오픈소스로 공개된 분산 데이터 베이스 (자바 언어 기반)<br /> - 컬럼 단위로 관리되어 컬럼형으로 분류<br /> - 대용량의 데이터 트랜잭션에 대해 고성능 처리가 가능(실제 트위터 MYSQL -&gt; Cassandra로 전환)</td>
+      <td>- 대량으로 쓰기가 발생하는 서비스에 좋음<br /> - 확장성이 뛰어남<br /> - Apache Foundation에서 개발중이며커뮤니티 활발<br /> - Scale-Out</td>
+      <td>- 최소 3대 이상 구성(클러스터 환경)<br /> - 복잡한 조건 검색 불가<br /> - 데이터 갱신 및 입력시 Atomic한 처리가 힘듬</td>
+    </tr>
+    <tr>
+      <td>HBase</td>
+      <td>- 대량 데이터를 우수한 성능으로 데이터 일관성을 보장하면서 다뤄야 할 때 주로 사용<br /> - 대량 데이터 분석 및 처리를 위해 사용되는 Hadoop의 산하 프로젝트로 시작된 데이터베이스 (HDFS 및 MapReduce등과 함께 사용하기에 최적화) <br /> - 수십 테러바이트가 넘는 빅데이터에 적합</td>
+      <td>- 하둡 기반에서 동작하고 다양한 하둡 의 도구들과 상호 운영성이 좋음<br /> - 데이터 일관성 보장 우수(상대적)</td>
+      <td>- 5대 미만에서는 사용할 수 없다(대규모 전용)<br /> - 성능이 좋진 않다 (상대적)</td>
+    </tr>
+    <tr>
+      <td>MongoDB</td>
+      <td>- MongoDB는 10gen 사에서 개발된 높은 성능과 확장성을 가지고 있는 데이터베이스<br /> - NoSQL 데이터베이스에서는 문서형 데이터베이스로 분류(C언어 기반)<br /> - 데이터를 입력할때 데이터 구조 정보를 포함하여 BSON(JSON을 바이너리화한것)형식으로 저장하고, key value로 사용<br /> - NON-SCHEMA<br /> -비정형 데이터, 파일 데이터등의 스키마프리(Scheme free)모델에서 적합<br /> - SQL 과 비슷한 방식의 쿼리 사용</td>
+      <td>- 스키마 없이 사용 가능 <br /> - SQL 과 비슷한 방식의 쿼리 사용<br /> - 몽고는 쓰기할때 메모리에 먼저 Write 후에 1분 단위로 Flushing하는 Write back 방식을 사용한기 때문에 write성능이 좋음<br /> - Read시에는 파일의 Index를 메모리에 로딩해   놓고 찾는다(memory mapped file) <br /> - 빠름<br /> - 다양한 기능 제공<br /></td>
+      <td>- JOIN이나 트랜잭션 처리가 불가능<br /> - 디스크에 쓰기가 비동기식으로 이루어진다. 때문에 경우에 따라 데이터가 유실될 가능성도 있다.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="cassandra--hbase-">[ Cassandra &amp; HBase ]</h4>
+
+<ul>
+  <li>카산드라 클러스터 설정 및 구성이 HBase 클러스터 구성보다 훨씬 쉽다.</li>
+  <li>카산드라가 일반적으로 write시 5배 이상의 더 나은 성능, read시 4배 이상의 성능을 보인다.</li>
+</ul>
+
+<h4 id="cassandra--mongodb-">[ Cassandra &amp; MongoDB ]</h4>
+
+<ul>
+  <li>Cassandra 노드가 추가될수록 MonogoDB 보다 훨씬 나은 선형적인 성능 향상을 보인다.</li>
+  <li>다중 Index가 필요한 구조라면 MongoDB를 선택하고, 데이터 항목 변경이 많고 unique access가 많은 경우라면 Cassandra가 적합</li>
+  <li><a href="http://db-engines.com/en/system/Cassandra;MongoDB">http://db-engines.com/en/system/Cassandra;MongoDB</a></li>
+</ul>
+
+<h4 id="section">성능비교</h4>
+
+<ul>
+  <li><a href="https://academy.datastax.com/planet-cassandra/nosql-performance-benchmarks">https://academy.datastax.com/planet-cassandra/nosql-performance-benchmarks</a></li>
+  <li><a href="https://www.datastax.com/nosql-databases/benchmarks-cassandra-vs-mongodb-vs-hbase">https://www.datastax.com/nosql-databases/benchmarks-cassandra-vs-mongodb-vs-hbase</a></li>
+</ul>
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2017/02/13/rdmsvsnosql/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
                   <a class="post-link" href="/2017/01/09/mysqlprocedureinsert/">Stored Procedure으로 Insert</a>
                 </h2>
                 <div class="label">
@@ -1091,109 +1212,6 @@ SET foreign_key_checks = 1;
                 <hr>
               </li>
             
-              <li>
-                <h2>
-                  <a class="post-link" href="/2016/11/27/flasnginxsetting/">Flask + Nginx 설정</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-11-27
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#python" title="Category: python" rel="category">python</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                </div>
-                <div class="excerpt">
-                    <h1 id="flask--nginx--">Flask + Nginx 설치 방법</h1>
-
-<h2 id="section">환경</h2>
-<p>데비안 계열 중 우분투 서버<br />
-여기서 접근하는 모든 디렉토리는 권한이 있어야함.</p>
-
-<h2 id="section-1">설치</h2>
-<div class="highlighter-rouge"><pre class="highlight"><code>apt-get install nginx # Nginx
-apt-get install uwsgi # uWSGI
-apt-get install uwsgi-plugin-python # python과 uWSGI를 연결하는 플러그인
-</code></pre>
-</div>
-
-<h2 id="nginx-">Nginx 세팅</h2>
-<p>디폴트 파일로 설정하는 방법
-<code class="highlighter-rouge">vi /etc/nginx/sites-available/default</code></p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>server {
-       listen       80; # 연결할 포트
-       server_name  0.0.0.0;
-       location / { try_files $uri @app; }
-       location @app {
-           include uwsgi_params;
-           uwsgi_pass unix:socket파일이 위치할 경로;
-           # ex) /home/server/uwsgi.sock
-       }
-}
-</code></pre>
-</div>
-
-<h2 id="uwsgi-">uWSGI 세팅</h2>
-<p><code class="highlighter-rouge">vi /etc/uwsgi/apps-available/uwsgi.ini</code></p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>[uwsgi]
-chdir = 프로젝트 경로
-uid = 실행할계정
-gid = 실행할계정
-chmod-socket = 666
-socket = socket파일이 위치할 경로
-module = 모듈이름(실행할 파일 이름)
-callable = 연결될 Flask 모듈이름
-virtualenv = python 가상 환경 경로(virtualenv)
-</code></pre>
-</div>
-
-<p>참고로 프로젝트 경로는 root를 포함하지 않는 것이 좋다 (권한 문제 때문에)</p>
-
-<p>허용하는 파일로 등록하기위해 apps-enabled 디렉토리에 link함
-<code class="highlighter-rouge">ln -s /etc/uwsgi/apps-available/uwsgi.ini /etc/uwsgi/apps-enabled/</code></p>
-
-<h2 id="section-2">실행 방법</h2>
-<p>세팅 후 재시작을 한다.</p>
-<div class="highlighter-rouge"><pre class="highlight"><code>sudo service nginx restart
-sudo service uwsgi restart
-</code></pre>
-</div>
-
-<p>설정한 uwsgi에 맞춰서 실행
-<code class="highlighter-rouge">uwsgi /etc/uwsgi/apps-available/uwsgi.ini &amp;</code></p>
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2016/11/27/flasnginxsetting/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
         </ul>
 
 
@@ -1312,6 +1330,15 @@ sudo service uwsgi restart
                         </a>
                     </li>
                     
+                    <li>
+                        <a href="/category/#BigData" class="categories-list-item" cate="BigData">
+                            <span class="name">
+                                BigData
+                            </span>
+                            <span class="badge">1</span>
+                        </a>
+                    </li>
+                    
                 </ul>
             </div>
             <div class="side">
@@ -1320,6 +1347,8 @@ sudo service uwsgi restart
                     Recent Posts
                 </div>
                 <ul class="content-ul" recent>
+                    
+                        <li><a href="/2017/02/13/rdmsvsnosql/">RDBMS vs NOSQL</a></li>
                     
                         <li><a href="/2017/01/09/mysqlprocedureinsert/">Stored Procedure으로 Insert</a></li>
                     
@@ -1338,8 +1367,6 @@ sudo service uwsgi restart
                         <li><a href="/2016/11/18/Shortcircuitevaluation/">Short-circuit evaluation</a></li>
                     
                         <li><a href="/2016/11/10/JQuery_findnode/">jquery 선택자</a></li>
-                    
-                        <li><a href="/2016/11/07/jqueryselector/">jquery :last 선택자</a></li>
                     
                 </ul>
             </div>
