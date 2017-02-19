@@ -109,6 +109,704 @@
             
               <li>
                 <h2>
+                  <a class="post-link" href="/2017/02/18/elasticsearchbasic/">ElasticSearch 기초</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2017-02-18
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#ElasticSearch" title="Category: ElasticSearch" rel="category">ElasticSearch</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="elasticsearch-">ElasticSearch 기초</h1>
+
+<h3 id="ubuntu">설치 (ubuntu)</h3>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>
+<span class="c">#fileName : ElasticSearchInstall.sh</span>
+<span class="c">#!/bin/bash</span>
+
+<span class="c">### USAGE</span>
+<span class="c">###</span>
+<span class="c">### ./ElasticSearch.sh 1.7 will install Elasticsearch 1.7</span>
+<span class="c">### ./ElasticSearch.sh will fail because no version was specified (exit code 1)</span>
+<span class="c">###</span>
+<span class="c">### CLI options Contributed by @janpieper</span>
+<span class="c">### Check http://www.elasticsearch.org/download/ for latest version of ElasticSearch</span>
+
+<span class="c">### ElasticSearch version</span>
+<span class="k">if</span> <span class="o">[</span> -z <span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span> <span class="o">]</span>; <span class="k">then
+  </span><span class="nb">echo</span> <span class="s2">""</span>
+  <span class="nb">echo</span> <span class="s2">"  Please specify the Elasticsearch version you want to install!"</span>
+  <span class="nb">echo</span> <span class="s2">""</span>
+  <span class="nb">echo</span> <span class="s2">"    </span><span class="nv">$ $0</span><span class="s2"> 1.7"</span>
+  <span class="nb">echo</span> <span class="s2">""</span>
+  <span class="nb">exit </span>1
+<span class="k">fi
+ 
+</span><span class="nv">ELASTICSEARCH_VERSION</span><span class="o">=</span><span class="nv">$1</span>
+ 
+<span class="k">if</span> <span class="o">[[</span> ! <span class="s2">"</span><span class="k">${</span><span class="nv">ELASTICSEARCH_VERSION</span><span class="k">}</span><span class="s2">"</span> <span class="o">=</span>~ ^[0-9]+<span class="se">\.</span><span class="o">[</span>0-9]+ <span class="o">]]</span>; <span class="k">then
+  </span><span class="nb">echo</span> <span class="s2">""</span>
+  <span class="nb">echo</span> <span class="s2">"  The specified Elasticsearch version isn't valid!"</span>
+  <span class="nb">echo</span> <span class="s2">""</span>
+  <span class="nb">echo</span> <span class="s2">"    </span><span class="nv">$ $0</span><span class="s2"> 1.7"</span>
+  <span class="nb">echo</span> <span class="s2">""</span>
+  <span class="nb">exit </span>2
+<span class="k">fi</span>
+ 
+<span class="c">### Install Java 8</span>
+<span class="nb">cd</span> ~
+sudo apt-get install python-software-properties -y
+sleep 1
+sudo add-apt-repository ppa:webupd8team/java -y
+sleep 1
+sudo apt-get update
+sleep 1
+sudo apt-get install oracle-java8-installer -y
+
+<span class="c">### Download and install the Public Signing Key</span>
+wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+
+<span class="c">### Setup Repository</span>
+<span class="nb">echo</span> <span class="s2">"deb http://packages.elastic.co/elasticsearch/</span><span class="k">${</span><span class="nv">ELASTICSEARCH_VERSION</span><span class="k">}</span><span class="s2">/debian stable main"</span> | sudo tee -a /etc/apt/sources.list.d/elk.list
+
+<span class="c">### Install Elasticsearch</span>
+sudo apt-get update <span class="o">&amp;&amp;</span> sudo apt-get install elasticsearch -y
+
+<span class="c">### Start ElasticSearch </span>
+sudo service elasticsearch start
+
+<span class="c">### Lets wait a little while ElasticSearch starts</span>
+sleep 5
+
+<span class="c">### Make sure service is running</span>
+curl http://localhost:9200
+
+<span class="c">### Should return something like this:</span>
+<span class="c"># {</span>
+<span class="c">#  "status" : 200,</span>
+<span class="c">#  "name" : "Storm",</span>
+<span class="c">#  "version" : {</span>
+<span class="c">#    "number" : "1.3.1",</span>
+<span class="c">#    "build_hash" : "2de6dc5268c32fb49b205233c138d93aaf772015",</span>
+<span class="c">#    "build_timestamp" : "2014-07-28T14:45:15Z",</span>
+<span class="c">#    "build_snapshot" : false,</span>
+<span class="c">#    "lucene_version" : "4.9"</span>
+<span class="c">#  },</span>
+<span class="c">#  "tagline" : "You Know, for Search"</span>
+<span class="c"># }</span>
+</code></pre>
+</div>
+
+<p>위 스크립트를 <code class="highlighter-rouge">./ElasticSearchInstall.sh [버전]</code>으로 실행 실행하면 된다.</p>
+
+<h3 id="section">기본 개념</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Elastic Search</th>
+      <th>Relational DB</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Index</td>
+      <td>Databases</td>
+    </tr>
+    <tr>
+      <td>Type</td>
+      <td>Table</td>
+    </tr>
+    <tr>
+      <td>Document</td>
+      <td>Row</td>
+    </tr>
+    <tr>
+      <td>Field</td>
+      <td>Column</td>
+    </tr>
+    <tr>
+      <td>Mapping</td>
+      <td>Schema</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>RESTfull 방식으로 사용된다.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Elastic Search</th>
+      <th>Relational DB</th>
+      <th>CRUD</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GET</td>
+      <td>Select</td>
+      <td>Read</td>
+    </tr>
+    <tr>
+      <td>PUT</td>
+      <td>Update</td>
+      <td>Update</td>
+    </tr>
+    <tr>
+      <td>Post</td>
+      <td>Insert</td>
+      <td>Create</td>
+    </tr>
+    <tr>
+      <td>DELETE</td>
+      <td>Delete</td>
+      <td>Delete</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><br />
+<strong>1) Index 조회</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>curl -XGET '[elasticsearch 주소]/[Index name]
+
+</code></pre>
+</div>
+
+<p><strong>결과</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[root@bigdataStudy]# curl -XGET localhost:9200/basketball?pretty
+{
+  "basketball" : {
+    "aliases" : { },
+    "mappings" : {
+      "record" : {
+        "properties" : {
+          "assists" : {
+            "type" : "long"
+          },
+          "blocks" : {
+            "type" : "long"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "points" : {
+            "type" : "long"
+          },
+          "rebounds" : {
+            "type" : "long"
+          },
+          "submit_date" : {
+            "type" : "date",
+            "format" : "yyyy-MM-dd"
+          },
+          "team" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "settings" : {
+      "index" : {
+        "creation_date" : "1487474066966",
+        "uuid" : "uFna9rNjR5S3vRKEZtEHvg",
+        "number_of_replicas" : "1",
+        "number_of_shards" : "5",
+        "version" : {
+          "created" : "2030399"
+        }
+      }
+    },
+    "warmers" : { }
+  }
+}
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">basketball</code> Index정보를 볼 수 있다. <code class="highlighter-rouge">record</code>라는 Type의 정보도 함께 나오는 것을 확인 할 수 있다.</p>
+
+<p><strong>2) <code class="highlighter-rouge">_update</code></strong></p>
+
+<p><code class="highlighter-rouge">_update</code>옵션은 Type의 Field를 추가할 때 사용한다.</p>
+
+<p>다음과 같은 Document가 있다</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[root@bigdataStudy]# curl -XGET localhost:9200/classes/class/1/?pretty
+{
+  "_index" : "classes",
+  "_type" : "class",
+  "_id" : "1",
+  "_version" : 1,
+  "found" : true,
+  "_source" : {
+    "title" : "Bigdata",
+    "professor" : "Jo"
+  }
+}
+</code></pre>
+</div>
+
+<p>다음과 같이 <code class="highlighter-rouge">point</code> Field를 추가하였다.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[root@bigdataStudy]# curl -XPOST localhost:9200/classes/class/1/_update?pretty -d '
+&gt; {"doc":{"point":1}}'
+{
+  "_index" : "classes",
+  "_type" : "class",
+  "_id" : "1",
+  "_version" : 2,
+  "_shards" : {
+    "total" : 2,
+    "successful" : 1,
+    "failed" : 0
+  }
+}
+</code></pre>
+</div>
+
+<p>결과를 확인하면 다음과 같다.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[root@ip-172-31-12-34 ch04]# curl -XGET localhost:9200/classes/class/1/?pretty
+{
+  "_index" : "classes",
+  "_type" : "class",
+  "_id" : "1",
+  "_version" : 2,
+  "found" : true,
+  "_source" : {
+    "title" : "Bigdata",
+    "professor" : "Jo",
+    "point" : 1
+  }
+}
+</code></pre>
+</div>
+<p>추가 된 것을 확인 할 수 있다.</p>
+
+<p><br /></p>
+
+<p><strong>3) <code class="highlighter-rouge">_bulk</code></strong></p>
+
+<p>여러개의 Document를 입력할 때 사용한다.</p>
+
+<p>다음은 파일에서 값을 가져오는 방법이다.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>culr -XPOST [elasticsearch 주소]/_bulk --data-binary @[파일명]
+</code></pre>
+</div>
+<p><br />
+<strong>4) Mapping</strong></p>
+
+<p>Index를 생성하면 mapping 정보가 빠져 있다.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code> [root@bigdataStudy]# curl -XGET localhost:9200/classes/?pretty
+{
+  "classes" : {
+    "aliases" : { },
+    "mappings" : { },
+    "settings" : {
+      "index" : {
+        "creation_date" : "1487477362931",
+        "uuid" : "Z3HY5liZToOyUiEgRL9J4g",
+        "number_of_replicas" : "1",
+        "number_of_shards" : "5",
+        "version" : {
+          "created" : "2030399"
+        }
+      }
+    },
+    "warmers" : { }
+  }
+}
+</code></pre>
+</div>
+
+<p>class라는 <code class="highlighter-rouge">Type</code>의 mapping 값을 다음과 같이 입력하겠다.</p>
+
+<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="err">classesRating_mapping.json</span><span class="w">
+</span><span class="p">{</span><span class="w">
+	</span><span class="nt">"class"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+		</span><span class="nt">"properties"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+			</span><span class="nt">"title"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+				</span><span class="nt">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w">
+			</span><span class="p">},</span><span class="w">
+			</span><span class="nt">"professor"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+				</span><span class="nt">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w">
+			</span><span class="p">},</span><span class="w">
+			</span><span class="nt">"major"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+				</span><span class="nt">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w">
+			</span><span class="p">},</span><span class="w">
+			</span><span class="nt">"semester"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+				</span><span class="nt">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w">
+			</span><span class="p">},</span><span class="w">
+			</span><span class="nt">"student_count"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+				</span><span class="nt">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"integer"</span><span class="w">
+			</span><span class="p">},</span><span class="w">
+			</span><span class="nt">"unit"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+				</span><span class="nt">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"integer"</span><span class="w">
+			</span><span class="p">},</span><span class="w">
+			</span><span class="nt">"rating"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+				</span><span class="nt">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"integer"</span><span class="w">
+			</span><span class="p">},</span><span class="w">
+			</span><span class="nt">"submit_date"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+				</span><span class="nt">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"date"</span><span class="p">,</span><span class="w">
+				</span><span class="nt">"format"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"yyyy-MM-dd"</span><span class="w">
+			</span><span class="p">},</span><span class="w">
+			</span><span class="nt">"school_location"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+				</span><span class="nt">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"geo_point"</span><span class="w">
+			</span><span class="p">}</span><span class="w">
+		</span><span class="p">}</span><span class="w">
+	</span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+</div>
+
+<p>입력을 다음과 같이 한다.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[root@bigdataStudy]# curl -XPUT localhost:9200/classes/class/_mapping?pretty -d @classesRating_mapping.json
+{
+  "acknowledged" : true
+}
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">Type</code>의 mapping값이 입력된 것을 확인 할 수 있다.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[root@bigdataStudy]# curl -XGET localhost:9200/classes/?pretty
+{
+  "classes" : {
+    "aliases" : { },
+    "mappings" : {
+      "class" : {
+        "properties" : {
+          "major" : {
+            "type" : "string"
+          },
+          "professor" : {
+            "type" : "string"
+          },
+          "rating" : {
+            "type" : "integer"
+          },
+          "school_location" : {
+            "type" : "geo_point"
+          },
+          "semester" : {
+            "type" : "string"
+          },
+          "student_count" : {
+            "type" : "integer"
+          },
+          "submit_date" : {
+            "type" : "date",
+            "format" : "yyyy-MM-dd"
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "unit" : {
+            "type" : "integer"
+          }
+        }
+      }
+    },
+    "settings" : {
+      "index" : {
+        "creation_date" : "1487477362931",
+        "uuid" : "Z3HY5liZToOyUiEgRL9J4g",
+        "number_of_replicas" : "1",
+        "number_of_shards" : "5",
+        "version" : {
+          "created" : "2030399"
+        }
+      }
+    },
+    "warmers" : { }
+  }
+}
+</code></pre>
+</div>
+
+<p><strong>5) <code class="highlighter-rouge">_search</code></strong></p>
+
+<p>RDBMS의 <code class="highlighter-rouge">where</code>조건 같은 느낌도 있다.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>curl -XGET localhost:9200/basketball/record/_search?q=points:30&amp;pretty
+</code></pre>
+</div>
+<p>위는 record <code class="highlighter-rouge">type</code>에서 points가 30인 <code class="highlighter-rouge">Document</code>를 출력하게 된다.</p>
+
+<p>더 많은 옵션은 <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/search.html">ElasticSearch API Doc</a>에서 확인 할 수 있다.</p>
+
+<p><br />
+<strong>6) Aggregation</strong></p>
+
+<ul>
+  <li>
+    <p>Metrics Aggregations - sum, min, max, avg을 구할 때 사용한다.</p>
+  </li>
+  <li>
+    <p>Bucket Aggregations - RDBMS의 <code class="highlighter-rouge">Group By</code>와 같은 기능을 제공한다.</p>
+  </li>
+</ul>
+
+<p><strong>사용법</strong></p>
+
+<p><code class="highlighter-rouge">_search</code>옵션과 함께 사용한다.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
+	</span><span class="nt">"size"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+	</span><span class="nt">"aggs"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+		</span><span class="nt">"avg_score"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+			</span><span class="nt">"avg"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+				</span><span class="nt">"field"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"points"</span><span class="w">
+			</span><span class="p">}</span><span class="w">
+		</span><span class="p">}</span><span class="w">
+	</span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+</div>
+
+<p>위와 같이 Metrics Aggregation 설정 json파일을 만든다.</p>
+
+<p>평균을 구하는 aggregation이다.</p>
+
+<ul>
+  <li><code class="highlighter-rouge">aggs</code>은 aggregation을 사용하겠다는 선언이다.</li>
+  <li><code class="highlighter-rouge">avg_score</code>은 alias같은 느낌이다. 검색 결과의 field이름 이다.</li>
+  <li><code class="highlighter-rouge">avg</code>는 Metrics Aggregation에서 평균을 구하는 옵션이다.</li>
+  <li><code class="highlighter-rouge">field</code>는 <code class="highlighter-rouge">avg</code>에 사용되는  <code class="highlighter-rouge">field</code>값이다.</li>
+</ul>
+
+<p>검색 결과는 다음과 같다.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[root@bigdataStudy]# curl -XGET localhost:9200/_search?pretty --data-binary @avg_points_aggs.json
+{
+  "took" : 9,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 15,
+    "successful" : 15,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : 2,
+    "max_score" : 0.0,
+    "hits" : [ ]
+  },
+  "aggregations" : {
+    "avg_score" : {
+      "value" : 25.0
+    }
+  }
+}
+</code></pre>
+</div>
+
+<p>평균값이 나온 것을 확인 할 수 있다.</p>
+
+<p>Metrics Aggregation에서 <code class="highlighter-rouge">stats</code>옵션을 사용하면 count, min, max, avg, sum을 한번에 출력한다.</p>
+
+<p>Bucket Aggregation예도 한번 보자</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+	"size" : 0,
+	"aggs" : {
+		"team_stats" : {
+			"terms" : {
+				"field" : "team"
+			},
+			"aggs" : {
+				"stats_score" : {
+					"stats" : {
+						"field" : "points"
+					}
+				}
+			}
+		}
+	}
+}
+</code></pre>
+</div>
+
+<p>이렇게 aggregation json파일을 만들었다.</p>
+
+<ul>
+  <li><code class="highlighter-rouge">aggs</code>를 사용한다고 선언했다.</li>
+  <li><code class="highlighter-rouge">terms</code>라는 bucket aggregation의 옵션을 사용한다. 이는 <code class="highlighter-rouge">team</code>이라는 필드로 <code class="highlighter-rouge">group by</code>하겠다라는 뜻이다.</li>
+  <li><code class="highlighter-rouge">sub aggs</code>를 선언하고 point로 Metrics정보를 출력한다.</li>
+</ul>
+
+<p>다음과 같이 4개의 Documents를 입력하였다.</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>[root@bigdataStudy]# curl -XGET localhost:9200/_search?pretty
+{
+  "took" : 4,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 15,
+    "successful" : 15,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : 4,
+    "max_score" : 1.0,
+    "hits" : [ {
+      "_index" : "basketball",
+      "_type" : "record",
+      "_id" : "2",
+      "_score" : 1.0,
+      "_source" : {
+        "team" : "Chicago",
+        "name" : "Michael Jordan",
+        "points" : 20,
+        "rebounds" : 5,
+        "assists" : 8,
+        "blocks" : 4,
+        "submit_date" : "1996-10-13"
+      }
+    }, {
+      "_index" : "basketball",
+      "_type" : "record",
+      "_id" : "4",
+      "_score" : 1.0,
+      "_source" : {
+        "team" : "LA",
+        "name" : "Kobe Bryant",
+        "points" : 40,
+        "rebounds" : 4,
+        "assists" : 8,
+        "blocks" : 6,
+        "submit_date" : "2014-11-13"
+      }
+    }, {
+      "_index" : "basketball",
+      "_type" : "record",
+      "_id" : "1",
+      "_score" : 1.0,
+      "_source" : {
+        "team" : "Chicago",
+        "name" : "Michael Jordan",
+        "points" : 30,
+        "rebounds" : 3,
+        "assists" : 4,
+        "blocks" : 3,
+        "submit_date" : "1996-10-11"
+      }
+    }, {
+      "_index" : "basketball",
+      "_type" : "record",
+      "_id" : "3",
+      "_score" : 1.0,
+      "_source" : {
+        "team" : "LA",
+        "name" : "Kobe Bryant",
+        "points" : 30,
+        "rebounds" : 2,
+        "assists" : 8,
+        "blocks" : 5,
+        "submit_date" : "2014-10-13"
+      }
+    } ]
+  }
+}
+</code></pre>
+</div>
+
+<p>그리고 위의 aggregation을 사용하여 검색을 해보았다.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[root@bigdataStudy]# curl -XGET localhost:9200/_search?pretty --data-binary @stats_by_team.json
+{
+  "took" : 13,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 15,
+    "successful" : 15,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : 4,
+    "max_score" : 0.0,
+    "hits" : [ ]
+  },
+  "aggregations" : {
+    "team_stats" : {
+      "doc_count_error_upper_bound" : 0,
+      "sum_other_doc_count" : 0,
+      "buckets" : [ {
+        "key" : "chicago",
+        "doc_count" : 2,
+        "stats_score" : {
+          "count" : 2,
+          "min" : 20.0,
+          "max" : 30.0,
+          "avg" : 25.0,
+          "sum" : 50.0
+        }
+      }, {
+        "key" : "la",
+        "doc_count" : 2,
+        "stats_score" : {
+          "count" : 2,
+          "min" : 30.0,
+          "max" : 40.0,
+          "avg" : 35.0,
+          "sum" : 70.0
+        }
+      } ]
+    }
+  }
+}
+</code></pre>
+</div>
+<p>위와 같이 <code class="highlighter-rouge">chicago</code>팀의 stats와 <code class="highlighter-rouge">la</code>팀의 stats가 출력되는 것을 확인 할 수 있다.</p>
+
+<h3 id="reference">Reference</h3>
+
+<ul>
+  <li><a href="https://www.inflearn.com/course/elk-%EC%8A%A4%ED%83%9D-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%B6%84%EC%84%9D/">Inflearn강의</a></li>
+  <li><a href="https://gist.github.com/ricardo-rossi/8265589463915837429d">ricardo-rossi-GitRepo</a></li>
+  <li><a href="https://www.elastic.co/guide/index.html">ElasticSearch Doc</a></li>
+</ul>
+
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2017/02/18/elasticsearchbasic/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
                   <a class="post-link" href="/2017/02/13/rdmsvsnosql/">RDBMS vs NOSQL</a>
                 </h2>
                 <div class="label">
@@ -290,6 +988,7 @@
 			<span class="k">INSERT</span> <span class="k">INTO</span> <span class="err">테이블</span> <span class="p">(</span><span class="n">LOG_DATE</span><span class="p">,</span> <span class="n">ID</span><span class="p">,</span> <span class="n">REQ_CNT</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="n">log_date</span><span class="p">,</span> <span class="s1">'0x2011'</span><span class="p">,</span> <span class="mi">3000000</span><span class="p">);</span>
 			<span class="k">SET</span> <span class="n">j</span> <span class="o">=</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
 		<span class="k">END</span> <span class="n">WHILE</span><span class="p">;</span>
+		<span class="k">SET</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 	<span class="k">END</span> <span class="n">WHILE</span><span class="p">;</span>
 <span class="k">END</span><span class="err">$$</span>
 <span class="k">DELIMITER</span> <span class="err">$$</span>
@@ -322,6 +1021,7 @@
 			<span class="k">INSERT</span> <span class="k">INTO</span> <span class="err">테이블</span> <span class="p">(</span><span class="n">LOG_DATE</span><span class="p">,</span> <span class="n">ID</span><span class="p">,</span> <span class="n">REQ_CNT</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="n">log_date</span><span class="p">,</span> <span class="s1">'0x2011'</span><span class="p">,</span> <span class="mi">3000000</span><span class="p">);</span>
 			<span class="k">SET</span> <span class="n">j</span> <span class="o">=</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
 		<span class="k">END</span> <span class="n">WHILE</span><span class="p">;</span>
+		<span class="k">SET</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 	<span class="k">END</span> <span class="n">WHILE</span><span class="p">;</span>
 	<span class="k">COMMIT</span><span class="p">;</span>
 <span class="k">END</span><span class="err">$$</span>
@@ -345,6 +1045,8 @@
   <li><a href="http://recoveryman.tistory.com/186">저장 프로시저 활용하기</a></li>
   <li><a href="http://yookeun.github.io/database/2015/04/10/mysql-procedure/">프로시저/커서사용</a></li>
   <li><a href="http://bizadmin.tistory.com/entry/MySQL-Fetch-Cursor-%EB%AC%B8-%EC%82%AC%EC%9A%A9%EB%B0%A9%EB%B2%95">프로시저/커서사용2</a></li>
+  <li><a href="https://msdn.microsoft.com/ko-kr/library/ms175976.aspx">프로시저/예외처리</a></li>
+  <li><a href="http://www.mysqltutorial.org/mysql-error-handling-in-stored-procedures/">프로시저/erro처리</a></li>
 </ul>
 
                 </div>
@@ -1141,77 +1843,6 @@
                 <hr>
               </li>
             
-              <li>
-                <h2>
-                  <a class="post-link" href="/2016/12/17/truncateanddelete/">TRUNCATE와 DELETE</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-12-17
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#MYSQL" title="Category: MYSQL" rel="category">MYSQL</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                </div>
-                <div class="excerpt">
-                    <h1 id="truncate--delete">TRUNCATE 와 DELETE</h1>
-
-<h3 id="truncate">TRUNCATE</h3>
-
-<p>테이블의 데이터를 삭제하는 DDL명령어 이다.</p>
-
-<p>데이터를 삭제 방식은 talbe의 명세만 남기고 <strong>DROP 후 CREATE</strong>한다. 즉 데이터가 존재하던 공간마저 제거하기 위한 명령어이다.</p>
-
-<p>이런 방식으로 테이블의 데이터를 삭제하기 때문에 수행 속도는 DELETE보다 빠르지만, 데이터 복구가 불가능하다는 제한사항이 존재한다.</p>
-
-<p>또 auto_increment까지 초기화 시켜준다.(5.0.13버전부터) 즉 table의 옵션을 초기상태로 돌려준다.</p>
-
-<p>삭제하다가 외부키와의 의존관계 때문에 삭제할 수 없다는 메시지가 나오면 다음과 같이하면 된다.</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>SET foreign_key_checks = 0; 
-truncate TABLE_NAME;
-SET foreign_key_checks = 1;
-</code></pre>
-</div>
-
-<p>0은 해제 1은 다시 설정을 의미한다.</p>
-
-<h3 id="delete">DELETE</h3>
-
-<p>테이블의 데이터를 삭제하기 위한 명령어이다. <code class="highlighter-rouge">WHERE</code>절을 통해 조건을 부여 할 수 있다.</p>
-
-<p>데이터 삭제 방식은 한줄씩 순차적으로 삭제한다.</p>
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2016/12/17/truncateanddelete/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
         </ul>
 
 
@@ -1339,6 +1970,15 @@ SET foreign_key_checks = 1;
                         </a>
                     </li>
                     
+                    <li>
+                        <a href="/category/#ElasticSearch" class="categories-list-item" cate="ElasticSearch">
+                            <span class="name">
+                                ElasticSearch
+                            </span>
+                            <span class="badge">1</span>
+                        </a>
+                    </li>
+                    
                 </ul>
             </div>
             <div class="side">
@@ -1347,6 +1987,8 @@ SET foreign_key_checks = 1;
                     Recent Posts
                 </div>
                 <ul class="content-ul" recent>
+                    
+                        <li><a href="/2017/02/18/elasticsearchbasic/">ElasticSearch 기초</a></li>
                     
                         <li><a href="/2017/02/13/rdmsvsnosql/">RDBMS vs NOSQL</a></li>
                     
@@ -1365,8 +2007,6 @@ SET foreign_key_checks = 1;
                         <li><a href="/2016/11/20/realtimeweb/">Real-time web tec List</a></li>
                     
                         <li><a href="/2016/11/18/Shortcircuitevaluation/">Short-circuit evaluation</a></li>
-                    
-                        <li><a href="/2016/11/10/JQuery_findnode/">jquery 선택자</a></li>
                     
                 </ul>
             </div>

@@ -165,6 +165,7 @@
 			<span class="k">INSERT</span> <span class="k">INTO</span> <span class="err">테이블</span> <span class="p">(</span><span class="n">LOG_DATE</span><span class="p">,</span> <span class="n">ID</span><span class="p">,</span> <span class="n">REQ_CNT</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="n">log_date</span><span class="p">,</span> <span class="s1">'0x2011'</span><span class="p">,</span> <span class="mi">3000000</span><span class="p">);</span>
 			<span class="k">SET</span> <span class="n">j</span> <span class="o">=</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
 		<span class="k">END</span> <span class="n">WHILE</span><span class="p">;</span>
+		<span class="k">SET</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 	<span class="k">END</span> <span class="n">WHILE</span><span class="p">;</span>
 <span class="k">END</span><span class="err">$$</span>
 <span class="k">DELIMITER</span> <span class="err">$$</span>
@@ -197,6 +198,7 @@
 			<span class="k">INSERT</span> <span class="k">INTO</span> <span class="err">테이블</span> <span class="p">(</span><span class="n">LOG_DATE</span><span class="p">,</span> <span class="n">ID</span><span class="p">,</span> <span class="n">REQ_CNT</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="n">log_date</span><span class="p">,</span> <span class="s1">'0x2011'</span><span class="p">,</span> <span class="mi">3000000</span><span class="p">);</span>
 			<span class="k">SET</span> <span class="n">j</span> <span class="o">=</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
 		<span class="k">END</span> <span class="n">WHILE</span><span class="p">;</span>
+		<span class="k">SET</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
 	<span class="k">END</span> <span class="n">WHILE</span><span class="p">;</span>
 	<span class="k">COMMIT</span><span class="p">;</span>
 <span class="k">END</span><span class="err">$$</span>
@@ -220,6 +222,8 @@
   <li><a href="http://recoveryman.tistory.com/186">저장 프로시저 활용하기</a></li>
   <li><a href="http://yookeun.github.io/database/2015/04/10/mysql-procedure/">프로시저/커서사용</a></li>
   <li><a href="http://bizadmin.tistory.com/entry/MySQL-Fetch-Cursor-%EB%AC%B8-%EC%82%AC%EC%9A%A9%EB%B0%A9%EB%B2%95">프로시저/커서사용2</a></li>
+  <li><a href="https://msdn.microsoft.com/ko-kr/library/ms175976.aspx">프로시저/예외처리</a></li>
+  <li><a href="http://www.mysqltutorial.org/mysql-error-handling-in-stored-procedures/">프로시저/erro처리</a></li>
 </ul>
 
         </article>

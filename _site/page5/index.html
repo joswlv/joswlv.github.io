@@ -109,6 +109,136 @@
             
               <li>
                 <h2>
+                  <a class="post-link" href="/2016/10/06/List_remvoeif-Method/">List.removeif Method</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-10-06
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#Java" title="Category: Java" rel="category">Java</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="listremvoeif-method">List.remvoeif Method</h1>
+
+<p><code class="highlighter-rouge">removeif()</code>메소드는 리스트내의 엘리먼트를 필터조건의 만족한는 것만을 골라 삭제할 때 사용된다.</p>
+
+<p><strong>Package:</strong> java.util</p>
+
+<p><strong>Java Platform:</strong> Java SE 8</p>
+
+<p><strong>Syntax:</strong></p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">removeif</span><span class="o">(</span><span class="n">Prdicate</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="n">E</span><span class="o">&gt;</span> <span class="n">filter</span><span class="o">)</span>
+</code></pre>
+</div>
+
+<p><strong>형태</strong></p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">removeIf</span><span class="o">(</span><span class="n">Predicate</span><span class="o">&lt;?</span> <span class="kd">super</span> <span class="n">E</span><span class="o">&gt;</span> <span class="n">filter</span><span class="o">)</span>
+</code></pre>
+</div>
+
+<p><strong>예</strong></p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.function.*</span><span class="o">;</span>  
+  
+<span class="kd">class</span> <span class="nc">SamplePredicate</span><span class="o">&lt;</span><span class="n">t</span><span class="o">&gt;</span> <span class="kd">implements</span> <span class="n">Predicate</span><span class="o">&lt;</span><span class="n">t</span><span class="o">&gt;{</span>  
+  <span class="n">T</span> <span class="n">varc1</span><span class="o">;</span>  
+  <span class="kd">public</span> <span class="kt">boolean</span> <span class="nf">test</span><span class="o">(</span><span class="n">T</span> <span class="n">varc</span><span class="o">){</span>  
+  <span class="k">if</span><span class="o">(</span><span class="n">varc1</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">varc</span><span class="o">)){</span>  
+   <span class="k">return</span> <span class="kc">true</span><span class="o">;</span>  
+  <span class="o">}</span>  
+  <span class="k">return</span> <span class="kc">false</span><span class="o">;</span>  
+  <span class="o">}</span>  
+<span class="o">}</span>  
+</code></pre>
+</div>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">java.util.*</span><span class="o">;</span>  
+  
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">test</span> <span class="o">{</span>  
+  <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>  
+   
+  <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">color_list</span><span class="o">;</span>  
+  <span class="n">SamplePredicate</span><span class="o">&lt;</span><span class="n">String</span><span class="o">&gt;</span> <span class="n">filter</span><span class="o">;</span>  
+    
+  <span class="n">color_list</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;&gt;</span> <span class="o">();</span>  
+  <span class="n">filter</span> <span class="o">=</span> <span class="k">new</span> <span class="n">SamplePredicate</span><span class="o">&lt;&gt;</span> <span class="o">();</span>  
+    
+  <span class="n">filter</span><span class="o">.</span><span class="na">varc1</span> <span class="o">=</span> <span class="s">"White"</span><span class="o">;</span>  
+    
+ <span class="c1">// use add() method to add values in the list  </span>
+    <span class="n">color_list</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"White"</span><span class="o">);</span>  
+    <span class="n">color_list</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"Black"</span><span class="o">);</span>  
+    <span class="n">color_list</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"Red"</span><span class="o">);</span>  
+    <span class="n">color_list</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"White"</span><span class="o">);</span>  
+    <span class="n">color_list</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"Yellow"</span><span class="o">);</span>  
+    <span class="n">color_list</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="s">"White"</span><span class="o">);</span>  
+    
+  <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"List of Colors"</span><span class="o">);</span>  
+  <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">color_list</span><span class="o">);</span>  
+    
+  <span class="c1">// Remove all White colors from color_list  </span>
+  <span class="n">color_list</span><span class="o">.</span><span class="na">removeIf</span><span class="o">(</span><span class="n">filter</span><span class="o">);</span>  
+    
+  <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Color list, after removing White colors :"</span><span class="o">);</span>  
+  <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">color_list</span><span class="o">);</span>  
+    
+ <span class="o">}</span>  
+<span class="o">}</span> 
+</code></pre>
+</div>
+
+<p><strong>결과</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>List of Colors
+[White, Black, Red, White, Yellow, White]
+Color list, after removing White colors :
+[Black, Red, Yellow]
+</code></pre>
+</div>
+
+<p><br /></p>
+
+<h3 id="reference">Reference</h3>
+<ul>
+  <li><a href="http://www.w3resource.com/java-tutorial/arraylist/arraylist_removeif.php">w3resource</a></li>
+</ul>
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/10/06/List_remvoeif-Method/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
                   <a class="post-link" href="/2016/10/02/Interceptor/">Interceptor</a>
                 </h2>
                 <div class="label">
@@ -1826,54 +1956,6 @@ engine != null
                 <hr>
               </li>
             
-              <li>
-                <h2>
-                  <a class="post-link" href="/2016/09/20/mybatis_log/">mybatis log출력</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-09-20
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#web" title="Category: web" rel="category">web</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                </div>
-                <div class="excerpt">
-                    <h1 id="mybatis--">1. mybatis 로그 출력</h1>
-
-<p>데이터베이스 입출력을 로그로 볼 수 있는 기능이 mybatis에 있다. mybatis설정 파일에 다음과 같이 편집을 한다.</p>
-
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2016/09/20/mybatis_log/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
         </ul>
 
 
@@ -2001,6 +2083,15 @@ engine != null
                         </a>
                     </li>
                     
+                    <li>
+                        <a href="/category/#ElasticSearch" class="categories-list-item" cate="ElasticSearch">
+                            <span class="name">
+                                ElasticSearch
+                            </span>
+                            <span class="badge">1</span>
+                        </a>
+                    </li>
+                    
                 </ul>
             </div>
             <div class="side">
@@ -2009,6 +2100,8 @@ engine != null
                     Recent Posts
                 </div>
                 <ul class="content-ul" recent>
+                    
+                        <li><a href="/2017/02/18/elasticsearchbasic/">ElasticSearch 기초</a></li>
                     
                         <li><a href="/2017/02/13/rdmsvsnosql/">RDBMS vs NOSQL</a></li>
                     
@@ -2027,8 +2120,6 @@ engine != null
                         <li><a href="/2016/11/20/realtimeweb/">Real-time web tec List</a></li>
                     
                         <li><a href="/2016/11/18/Shortcircuitevaluation/">Short-circuit evaluation</a></li>
-                    
-                        <li><a href="/2016/11/10/JQuery_findnode/">jquery 선택자</a></li>
                     
                 </ul>
             </div>

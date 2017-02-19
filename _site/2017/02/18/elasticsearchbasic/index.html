@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="Jo Blog">
+    <meta property="og:description" content="Jo Seungwan Blog!~~!">
+    <meta property="og:image" content="https://raw.githubusercontent.com/joswlv/joswlv.github.io/master/bg.jpg">
+    <meta property="og:url" content="https://joswlv.github.io">
+
+    <title>ElasticSearch 기초</title>
+    <meta name="description" content="ElasticSearch 기초설치 (ubuntu)#fileName : ElasticSearchInstall.sh#!/bin/bash### USAGE###### ./ElasticSearch.sh 1.7 will install Elasticsearch 1.7### ./ElasticSe...">
+
+    <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="stylesheet" href="/css/fontawesome/css/font-awesome.min.css ">
+    <link rel="stylesheet" href="/css/main.css ">
+    <link rel="canonical" href="http://joswlv.github.io/2017/02/18/elasticsearchbasic/">
+    <link rel="alternate" type="application/rss+xml" title="Joswlv" href="http://joswlv.github.io/feed.xml ">
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-83868242-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</head>
+
+
+  <body>
+
+    <header id="top">
+    <div class="wrapper">
+        <a href="/" class="brand">Joswlv</a>
+        <small></small>
+        <button id="headerMenu" class="menu"><i class="fa fa-bars"></i></button>
+        <nav id="headerNav">
+            <ul>
+                <li>
+                    
+                    <a href="/">
+                    
+                        <i class="fa fa-home"></i>Home
+                    </a>
+                </li>
+
+                
+                    
+                    <li>
+                        
+                        <a href="/archive/">
+                        
+                            <i class="fa fa-archive"></i>Archives
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/category/">
+                        
+                            <i class="fa fa-th-list"></i>Categories
+                        </a>
+                    </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        </nav>
+    </div>
+</header>
+
+
+        <div class="page clearfix" post>
+    <div class="left">
+        <h1>ElasticSearch 기초</h1>
+        <div class="label">
+
+            <div class="label-card">
+                <i class="fa fa-calendar"></i>2017-02-18
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+            
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#ElasticSearch" title="Category: ElasticSearch" rel="category">ElasticSearch</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+            </div>
+
+        </div>
+        <hr>
+        <article itemscope itemtype="http://schema.org/BlogPosting">
+        <h1 id="elasticsearch-">ElasticSearch 기초</h1>
+
+<h3 id="ubuntu">설치 (ubuntu)</h3>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>
+<span class="c">#fileName : ElasticSearchInstall.sh</span>
+<span class="c">#!/bin/bash</span>
+
+<span class="c">### USAGE</span>
+<span class="c">###</span>
+<span class="c">### ./ElasticSearch.sh 1.7 will install Elasticsearch 1.7</span>
+<span class="c">### ./ElasticSearch.sh will fail because no version was specified (exit code 1)</span>
+<span class="c">###</span>
+<span class="c">### CLI options Contributed by @janpieper</span>
+<span class="c">### Check http://www.elasticsearch.org/download/ for latest version of ElasticSearch</span>
+
+<span class="c">### ElasticSearch version</span>
+<span class="k">if</span> <span class="o">[</span> -z <span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span> <span class="o">]</span>; <span class="k">then
+  </span><span class="nb">echo</span> <span class="s2">""</span>
+  <span class="nb">echo</span> <span class="s2">"  Please specify the Elasticsearch version you want to install!"</span>
+  <span class="nb">echo</span> <span class="s2">""</span>
+  <span class="nb">echo</span> <span class="s2">"    </span><span class="nv">$ $0</span><span class="s2"> 1.7"</span>
+  <span class="nb">echo</span> <span class="s2">""</span>
+  <span class="nb">exit </span>1
+<span class="k">fi
+ 
+</span><span class="nv">ELASTICSEARCH_VERSION</span><span class="o">=</span><span class="nv">$1</span>
+ 
+<span class="k">if</span> <span class="o">[[</span> ! <span class="s2">"</span><span class="k">${</span><span class="nv">ELASTICSEARCH_VERSION</span><span class="k">}</span><span class="s2">"</span> <span class="o">=</span>~ ^[0-9]+<span class="se">\.</span><span class="o">[</span>0-9]+ <span class="o">]]</span>; <span class="k">then
+  </span><span class="nb">echo</span> <span class="s2">""</span>
+  <span class="nb">echo</span> <span class="s2">"  The specified Elasticsearch version isn't valid!"</span>
+  <span class="nb">echo</span> <span class="s2">""</span>
+  <span class="nb">echo</span> <span class="s2">"    </span><span class="nv">$ $0</span><span class="s2"> 1.7"</span>
+  <span class="nb">echo</span> <span class="s2">""</span>
+  <span class="nb">exit </span>2
+<span class="k">fi</span>
+ 
+<span class="c">### Install Java 8</span>
+<span class="nb">cd</span> ~
+sudo apt-get install python-software-properties -y
+sleep 1
+sudo add-apt-repository ppa:webupd8team/java -y
+sleep 1
+sudo apt-get update
+sleep 1
+sudo apt-get install oracle-java8-installer -y
+
+<span class="c">### Download and install the Public Signing Key</span>
+wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
+
+<span class="c">### Setup Repository</span>
+<span class="nb">echo</span> <span class="s2">"deb http://packages.elastic.co/elasticsearch/</span><span class="k">${</span><span class="nv">ELASTICSEARCH_VERSION</span><span class="k">}</span><span class="s2">/debian stable main"</span> | sudo tee -a /etc/apt/sources.list.d/elk.list
+
+<span class="c">### Install Elasticsearch</span>
+sudo apt-get update <span class="o">&amp;&amp;</span> sudo apt-get install elasticsearch -y
+
+<span class="c">### Start ElasticSearch </span>
+sudo service elasticsearch start
+
+<span class="c">### Lets wait a little while ElasticSearch starts</span>
+sleep 5
+
+<span class="c">### Make sure service is running</span>
+curl http://localhost:9200
+
+<span class="c">### Should return something like this:</span>
+<span class="c"># {</span>
+<span class="c">#  "status" : 200,</span>
+<span class="c">#  "name" : "Storm",</span>
+<span class="c">#  "version" : {</span>
+<span class="c">#    "number" : "1.3.1",</span>
+<span class="c">#    "build_hash" : "2de6dc5268c32fb49b205233c138d93aaf772015",</span>
+<span class="c">#    "build_timestamp" : "2014-07-28T14:45:15Z",</span>
+<span class="c">#    "build_snapshot" : false,</span>
+<span class="c">#    "lucene_version" : "4.9"</span>
+<span class="c">#  },</span>
+<span class="c">#  "tagline" : "You Know, for Search"</span>
+<span class="c"># }</span>
+</code></pre>
+</div>
+
+<p>위 스크립트를 <code class="highlighter-rouge">./ElasticSearchInstall.sh [버전]</code>으로 실행 실행하면 된다.</p>
+
+<h3 id="section">기본 개념</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Elastic Search</th>
+      <th>Relational DB</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Index</td>
+      <td>Databases</td>
+    </tr>
+    <tr>
+      <td>Type</td>
+      <td>Table</td>
+    </tr>
+    <tr>
+      <td>Document</td>
+      <td>Row</td>
+    </tr>
+    <tr>
+      <td>Field</td>
+      <td>Column</td>
+    </tr>
+    <tr>
+      <td>Mapping</td>
+      <td>Schema</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>RESTfull 방식으로 사용된다.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Elastic Search</th>
+      <th>Relational DB</th>
+      <th>CRUD</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>GET</td>
+      <td>Select</td>
+      <td>Read</td>
+    </tr>
+    <tr>
+      <td>PUT</td>
+      <td>Update</td>
+      <td>Update</td>
+    </tr>
+    <tr>
+      <td>Post</td>
+      <td>Insert</td>
+      <td>Create</td>
+    </tr>
+    <tr>
+      <td>DELETE</td>
+      <td>Delete</td>
+      <td>Delete</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><br />
+<strong>1) Index 조회</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>curl -XGET '[elasticsearch 주소]/[Index name]
+
+</code></pre>
+</div>
+
+<p><strong>결과</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[root@bigdataStudy]# curl -XGET localhost:9200/basketball?pretty
+{
+  "basketball" : {
+    "aliases" : { },
+    "mappings" : {
+      "record" : {
+        "properties" : {
+          "assists" : {
+            "type" : "long"
+          },
+          "blocks" : {
+            "type" : "long"
+          },
+          "name" : {
+            "type" : "string"
+          },
+          "points" : {
+            "type" : "long"
+          },
+          "rebounds" : {
+            "type" : "long"
+          },
+          "submit_date" : {
+            "type" : "date",
+            "format" : "yyyy-MM-dd"
+          },
+          "team" : {
+            "type" : "string"
+          }
+        }
+      }
+    },
+    "settings" : {
+      "index" : {
+        "creation_date" : "1487474066966",
+        "uuid" : "uFna9rNjR5S3vRKEZtEHvg",
+        "number_of_replicas" : "1",
+        "number_of_shards" : "5",
+        "version" : {
+          "created" : "2030399"
+        }
+      }
+    },
+    "warmers" : { }
+  }
+}
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">basketball</code> Index정보를 볼 수 있다. <code class="highlighter-rouge">record</code>라는 Type의 정보도 함께 나오는 것을 확인 할 수 있다.</p>
+
+<p><strong>2) <code class="highlighter-rouge">_update</code></strong></p>
+
+<p><code class="highlighter-rouge">_update</code>옵션은 Type의 Field를 추가할 때 사용한다.</p>
+
+<p>다음과 같은 Document가 있다</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[root@bigdataStudy]# curl -XGET localhost:9200/classes/class/1/?pretty
+{
+  "_index" : "classes",
+  "_type" : "class",
+  "_id" : "1",
+  "_version" : 1,
+  "found" : true,
+  "_source" : {
+    "title" : "Bigdata",
+    "professor" : "Jo"
+  }
+}
+</code></pre>
+</div>
+
+<p>다음과 같이 <code class="highlighter-rouge">point</code> Field를 추가하였다.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[root@bigdataStudy]# curl -XPOST localhost:9200/classes/class/1/_update?pretty -d '
+&gt; {"doc":{"point":1}}'
+{
+  "_index" : "classes",
+  "_type" : "class",
+  "_id" : "1",
+  "_version" : 2,
+  "_shards" : {
+    "total" : 2,
+    "successful" : 1,
+    "failed" : 0
+  }
+}
+</code></pre>
+</div>
+
+<p>결과를 확인하면 다음과 같다.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[root@ip-172-31-12-34 ch04]# curl -XGET localhost:9200/classes/class/1/?pretty
+{
+  "_index" : "classes",
+  "_type" : "class",
+  "_id" : "1",
+  "_version" : 2,
+  "found" : true,
+  "_source" : {
+    "title" : "Bigdata",
+    "professor" : "Jo",
+    "point" : 1
+  }
+}
+</code></pre>
+</div>
+<p>추가 된 것을 확인 할 수 있다.</p>
+
+<p><br /></p>
+
+<p><strong>3) <code class="highlighter-rouge">_bulk</code></strong></p>
+
+<p>여러개의 Document를 입력할 때 사용한다.</p>
+
+<p>다음은 파일에서 값을 가져오는 방법이다.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>culr -XPOST [elasticsearch 주소]/_bulk --data-binary @[파일명]
+</code></pre>
+</div>
+<p><br />
+<strong>4) Mapping</strong></p>
+
+<p>Index를 생성하면 mapping 정보가 빠져 있다.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code> [root@bigdataStudy]# curl -XGET localhost:9200/classes/?pretty
+{
+  "classes" : {
+    "aliases" : { },
+    "mappings" : { },
+    "settings" : {
+      "index" : {
+        "creation_date" : "1487477362931",
+        "uuid" : "Z3HY5liZToOyUiEgRL9J4g",
+        "number_of_replicas" : "1",
+        "number_of_shards" : "5",
+        "version" : {
+          "created" : "2030399"
+        }
+      }
+    },
+    "warmers" : { }
+  }
+}
+</code></pre>
+</div>
+
+<p>class라는 <code class="highlighter-rouge">Type</code>의 mapping 값을 다음과 같이 입력하겠다.</p>
+
+<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="err">classesRating_mapping.json</span><span class="w">
+</span><span class="p">{</span><span class="w">
+	</span><span class="nt">"class"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+		</span><span class="nt">"properties"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+			</span><span class="nt">"title"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+				</span><span class="nt">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w">
+			</span><span class="p">},</span><span class="w">
+			</span><span class="nt">"professor"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+				</span><span class="nt">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w">
+			</span><span class="p">},</span><span class="w">
+			</span><span class="nt">"major"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+				</span><span class="nt">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w">
+			</span><span class="p">},</span><span class="w">
+			</span><span class="nt">"semester"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+				</span><span class="nt">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w">
+			</span><span class="p">},</span><span class="w">
+			</span><span class="nt">"student_count"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+				</span><span class="nt">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"integer"</span><span class="w">
+			</span><span class="p">},</span><span class="w">
+			</span><span class="nt">"unit"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+				</span><span class="nt">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"integer"</span><span class="w">
+			</span><span class="p">},</span><span class="w">
+			</span><span class="nt">"rating"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+				</span><span class="nt">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"integer"</span><span class="w">
+			</span><span class="p">},</span><span class="w">
+			</span><span class="nt">"submit_date"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+				</span><span class="nt">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"date"</span><span class="p">,</span><span class="w">
+				</span><span class="nt">"format"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"yyyy-MM-dd"</span><span class="w">
+			</span><span class="p">},</span><span class="w">
+			</span><span class="nt">"school_location"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+				</span><span class="nt">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"geo_point"</span><span class="w">
+			</span><span class="p">}</span><span class="w">
+		</span><span class="p">}</span><span class="w">
+	</span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+</div>
+
+<p>입력을 다음과 같이 한다.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[root@bigdataStudy]# curl -XPUT localhost:9200/classes/class/_mapping?pretty -d @classesRating_mapping.json
+{
+  "acknowledged" : true
+}
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">Type</code>의 mapping값이 입력된 것을 확인 할 수 있다.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[root@bigdataStudy]# curl -XGET localhost:9200/classes/?pretty
+{
+  "classes" : {
+    "aliases" : { },
+    "mappings" : {
+      "class" : {
+        "properties" : {
+          "major" : {
+            "type" : "string"
+          },
+          "professor" : {
+            "type" : "string"
+          },
+          "rating" : {
+            "type" : "integer"
+          },
+          "school_location" : {
+            "type" : "geo_point"
+          },
+          "semester" : {
+            "type" : "string"
+          },
+          "student_count" : {
+            "type" : "integer"
+          },
+          "submit_date" : {
+            "type" : "date",
+            "format" : "yyyy-MM-dd"
+          },
+          "title" : {
+            "type" : "string"
+          },
+          "unit" : {
+            "type" : "integer"
+          }
+        }
+      }
+    },
+    "settings" : {
+      "index" : {
+        "creation_date" : "1487477362931",
+        "uuid" : "Z3HY5liZToOyUiEgRL9J4g",
+        "number_of_replicas" : "1",
+        "number_of_shards" : "5",
+        "version" : {
+          "created" : "2030399"
+        }
+      }
+    },
+    "warmers" : { }
+  }
+}
+</code></pre>
+</div>
+
+<p><strong>5) <code class="highlighter-rouge">_search</code></strong></p>
+
+<p>RDBMS의 <code class="highlighter-rouge">where</code>조건 같은 느낌도 있다.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>curl -XGET localhost:9200/basketball/record/_search?q=points:30&amp;pretty
+</code></pre>
+</div>
+<p>위는 record <code class="highlighter-rouge">type</code>에서 points가 30인 <code class="highlighter-rouge">Document</code>를 출력하게 된다.</p>
+
+<p>더 많은 옵션은 <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/search.html">ElasticSearch API Doc</a>에서 확인 할 수 있다.</p>
+
+<p><br />
+<strong>6) Aggregation</strong></p>
+
+<ul>
+  <li>
+    <p>Metrics Aggregations - sum, min, max, avg을 구할 때 사용한다.</p>
+  </li>
+  <li>
+    <p>Bucket Aggregations - RDBMS의 <code class="highlighter-rouge">Group By</code>와 같은 기능을 제공한다.</p>
+  </li>
+</ul>
+
+<p><strong>사용법</strong></p>
+
+<p><code class="highlighter-rouge">_search</code>옵션과 함께 사용한다.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
+	</span><span class="nt">"size"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
+	</span><span class="nt">"aggs"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+		</span><span class="nt">"avg_score"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+			</span><span class="nt">"avg"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
+				</span><span class="nt">"field"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"points"</span><span class="w">
+			</span><span class="p">}</span><span class="w">
+		</span><span class="p">}</span><span class="w">
+	</span><span class="p">}</span><span class="w">
+</span><span class="p">}</span><span class="w">
+</span></code></pre>
+</div>
+
+<p>위와 같이 Metrics Aggregation 설정 json파일을 만든다.</p>
+
+<p>평균을 구하는 aggregation이다.</p>
+
+<ul>
+  <li><code class="highlighter-rouge">aggs</code>은 aggregation을 사용하겠다는 선언이다.</li>
+  <li><code class="highlighter-rouge">avg_score</code>은 alias같은 느낌이다. 검색 결과의 field이름 이다.</li>
+  <li><code class="highlighter-rouge">avg</code>는 Metrics Aggregation에서 평균을 구하는 옵션이다.</li>
+  <li><code class="highlighter-rouge">field</code>는 <code class="highlighter-rouge">avg</code>에 사용되는  <code class="highlighter-rouge">field</code>값이다.</li>
+</ul>
+
+<p>검색 결과는 다음과 같다.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[root@bigdataStudy]# curl -XGET localhost:9200/_search?pretty --data-binary @avg_points_aggs.json
+{
+  "took" : 9,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 15,
+    "successful" : 15,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : 2,
+    "max_score" : 0.0,
+    "hits" : [ ]
+  },
+  "aggregations" : {
+    "avg_score" : {
+      "value" : 25.0
+    }
+  }
+}
+</code></pre>
+</div>
+
+<p>평균값이 나온 것을 확인 할 수 있다.</p>
+
+<p>Metrics Aggregation에서 <code class="highlighter-rouge">stats</code>옵션을 사용하면 count, min, max, avg, sum을 한번에 출력한다.</p>
+
+<p>Bucket Aggregation예도 한번 보자</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>
+	"size" : 0,
+	"aggs" : {
+		"team_stats" : {
+			"terms" : {
+				"field" : "team"
+			},
+			"aggs" : {
+				"stats_score" : {
+					"stats" : {
+						"field" : "points"
+					}
+				}
+			}
+		}
+	}
+}
+</code></pre>
+</div>
+
+<p>이렇게 aggregation json파일을 만들었다.</p>
+
+<ul>
+  <li><code class="highlighter-rouge">aggs</code>를 사용한다고 선언했다.</li>
+  <li><code class="highlighter-rouge">terms</code>라는 bucket aggregation의 옵션을 사용한다. 이는 <code class="highlighter-rouge">team</code>이라는 필드로 <code class="highlighter-rouge">group by</code>하겠다라는 뜻이다.</li>
+  <li><code class="highlighter-rouge">sub aggs</code>를 선언하고 point로 Metrics정보를 출력한다.</li>
+</ul>
+
+<p>다음과 같이 4개의 Documents를 입력하였다.</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>[root@bigdataStudy]# curl -XGET localhost:9200/_search?pretty
+{
+  "took" : 4,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 15,
+    "successful" : 15,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : 4,
+    "max_score" : 1.0,
+    "hits" : [ {
+      "_index" : "basketball",
+      "_type" : "record",
+      "_id" : "2",
+      "_score" : 1.0,
+      "_source" : {
+        "team" : "Chicago",
+        "name" : "Michael Jordan",
+        "points" : 20,
+        "rebounds" : 5,
+        "assists" : 8,
+        "blocks" : 4,
+        "submit_date" : "1996-10-13"
+      }
+    }, {
+      "_index" : "basketball",
+      "_type" : "record",
+      "_id" : "4",
+      "_score" : 1.0,
+      "_source" : {
+        "team" : "LA",
+        "name" : "Kobe Bryant",
+        "points" : 40,
+        "rebounds" : 4,
+        "assists" : 8,
+        "blocks" : 6,
+        "submit_date" : "2014-11-13"
+      }
+    }, {
+      "_index" : "basketball",
+      "_type" : "record",
+      "_id" : "1",
+      "_score" : 1.0,
+      "_source" : {
+        "team" : "Chicago",
+        "name" : "Michael Jordan",
+        "points" : 30,
+        "rebounds" : 3,
+        "assists" : 4,
+        "blocks" : 3,
+        "submit_date" : "1996-10-11"
+      }
+    }, {
+      "_index" : "basketball",
+      "_type" : "record",
+      "_id" : "3",
+      "_score" : 1.0,
+      "_source" : {
+        "team" : "LA",
+        "name" : "Kobe Bryant",
+        "points" : 30,
+        "rebounds" : 2,
+        "assists" : 8,
+        "blocks" : 5,
+        "submit_date" : "2014-10-13"
+      }
+    } ]
+  }
+}
+</code></pre>
+</div>
+
+<p>그리고 위의 aggregation을 사용하여 검색을 해보았다.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[root@bigdataStudy]# curl -XGET localhost:9200/_search?pretty --data-binary @stats_by_team.json
+{
+  "took" : 13,
+  "timed_out" : false,
+  "_shards" : {
+    "total" : 15,
+    "successful" : 15,
+    "failed" : 0
+  },
+  "hits" : {
+    "total" : 4,
+    "max_score" : 0.0,
+    "hits" : [ ]
+  },
+  "aggregations" : {
+    "team_stats" : {
+      "doc_count_error_upper_bound" : 0,
+      "sum_other_doc_count" : 0,
+      "buckets" : [ {
+        "key" : "chicago",
+        "doc_count" : 2,
+        "stats_score" : {
+          "count" : 2,
+          "min" : 20.0,
+          "max" : 30.0,
+          "avg" : 25.0,
+          "sum" : 50.0
+        }
+      }, {
+        "key" : "la",
+        "doc_count" : 2,
+        "stats_score" : {
+          "count" : 2,
+          "min" : 30.0,
+          "max" : 40.0,
+          "avg" : 35.0,
+          "sum" : 70.0
+        }
+      } ]
+    }
+  }
+}
+</code></pre>
+</div>
+<p>위와 같이 <code class="highlighter-rouge">chicago</code>팀의 stats와 <code class="highlighter-rouge">la</code>팀의 stats가 출력되는 것을 확인 할 수 있다.</p>
+
+<h3 id="reference">Reference</h3>
+
+<ul>
+  <li><a href="https://www.inflearn.com/course/elk-%EC%8A%A4%ED%83%9D-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%B6%84%EC%84%9D/">Inflearn강의</a></li>
+  <li><a href="https://gist.github.com/ricardo-rossi/8265589463915837429d">ricardo-rossi-GitRepo</a></li>
+  <li><a href="https://www.elastic.co/guide/index.html">ElasticSearch Doc</a></li>
+</ul>
+
+
+        </article>
+        <hr>
+
+        
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+        
+
+        <div class="post-recent">
+    <div class="pre">
+        
+        <p><strong>prev</strong> <a href="/2017/02/13/rdmsvsnosql/">RDBMS vs NOSQL</a></p>
+        
+    </div>
+    <div class="nex">
+
+        
+    </div>
+</div>
+
+
+        <h2 id="comments">Comments</h2>
+        
+
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+     * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+
+    var disqus_config = function() {
+        this.page.url = 'http://joswlv.github.io/2017/02/18/elasticsearchbasic/'; // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://joswlv.github.io/2017/02/18/elasticsearchbasic/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document,
+            s = d.createElement('script');
+
+        s.src = '//joswlv.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+
+    </div>
+    <button class="anchor"><i class="fa fa-anchor"></i></button>
+    <div class="right">
+        <div class="wrap">
+
+            <!-- Content -->
+            <div class="side content">
+                <div>
+                    Content
+                </div>
+                <ul id="content-side" class="content-ul">
+                    <li><a href="#similar_posts">Similar Posts</a></li>
+                    <li><a href="#comments">Comments</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+/**
+ * target _blank
+ */
+(function() {
+    var aTags = document.querySelectorAll('article a:not([id])')
+    for (var i = 0; i < aTags.length; i++) {
+        aTags[i].setAttribute('target', '_blank')
+    }
+}());
+</script>
+<script src="/js/pageContent.js " charset="utf-8"></script>
+
+
+    <footer class="site-footer">
+
+
+    <div class="wrapper">
+
+        <p class="description">
+            
+        </p>
+        <p class="contact">
+            Contact me at: 
+            <a href="https://github.com/joswlv" title="GitHub"><i class="fa fa-github" aria-hidden="true"></i></a>  
+            <a href="mailto:wh7923@gmail.com" title="email"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>     
+            <a href="https://www.facebook.com/wsj7923" title="Facebook"><i class="fa fa-facebook-official" aria-hidden="true"></i></a>    
+        </p>
+        <p>
+        </p>
+        <p class="power">
+            <span>
+                Site powered by <a href="https://jekyllrb.com/">Jekyll</a> & <a href="https://pages.github.com/">Github Pages</a>.
+            </span>
+        </p>
+    </div>
+</footer>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <div class="back-to-top">
+    <a href="#top" class="scroll">
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    </a>
+</div>
+
+    <script src=" /js/main.js " charset="utf-8"></script>
+    <script src=" /js/scroll.min.js " charset="utf-8"></script>
+  </body>
+
+</html>
