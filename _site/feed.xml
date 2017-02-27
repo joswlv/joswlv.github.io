@@ -5,9 +5,192 @@
     <description></description>
     <link>http://joswlv.github.io/</link>
     <atom:link href="http://joswlv.github.io/feed.xml" rel="self" type="application/rss+xml"/>
-    <pubDate>Sun, 19 Feb 2017 14:10:11 +0900</pubDate>
-    <lastBuildDate>Sun, 19 Feb 2017 14:10:11 +0900</lastBuildDate>
+    <pubDate>Mon, 27 Feb 2017 15:47:47 +0900</pubDate>
+    <lastBuildDate>Mon, 27 Feb 2017 15:47:47 +0900</lastBuildDate>
     <generator>Jekyll v3.2.1</generator>
+    
+      <item>
+        <title>기본 RDD연산들(트랜스포메이션, 액션)</title>
+        <description>&lt;h1 id=&quot;rdd-&quot;&gt;기본 RDD 트랜스포메이션&lt;/h1&gt;
+
+&lt;h3 id=&quot;rdd--rdd-&quot;&gt;&lt;strong&gt;{1,2,3,3}을 가지고 있는 RDD에 대한 RDD 트랜스포메이션&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;함수 이름&lt;/th&gt;
+      &lt;th&gt;용도&lt;/th&gt;
+      &lt;th&gt;예&lt;/th&gt;
+      &lt;th&gt;결과&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;map()&lt;/td&gt;
+      &lt;td&gt;RDD의 각 요소에 함수를 적용하고 결과 RDD를 되돌려준다.&lt;/td&gt;
+      &lt;td&gt;rdd.map(x -&amp;gt; x+1)&lt;/td&gt;
+      &lt;td&gt;{2,3,4,4}&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;flatMap()&lt;/td&gt;
+      &lt;td&gt;RDD의 각 요소에 함수를 적용하고 반환된 반복자의 내용들로 이루어진 RDD를 되될려준다. 종종 단어 분해를 위해 쓰인다.&lt;/td&gt;
+      &lt;td&gt;rdd.flatMap(x -&amp;gt; x.to(3))&lt;/td&gt;
+      &lt;td&gt;{1,2,3,2,3,3}&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;filter()&lt;/td&gt;
+      &lt;td&gt;filter()로 전달된 함수의 조건을 통과한 값으로만 이루어진 RDD를 되돌려 준다.&lt;/td&gt;
+      &lt;td&gt;rdd.filter(x -&amp;gt; x != 1)&lt;/td&gt;
+      &lt;td&gt;{2,3,3}&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;distinct()&lt;/td&gt;
+      &lt;td&gt;중복제거&lt;/td&gt;
+      &lt;td&gt;rdd.distinct()&lt;/td&gt;
+      &lt;td&gt;{1,2,3}&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;sample(withReplacement, fraction, [seed])&lt;/td&gt;
+      &lt;td&gt;복원 추출(withReplacement-true)이나 비복원 추출로 RDD에서 표본을 뽑아낸다.&lt;/td&gt;
+      &lt;td&gt;rdd.sample(false, 0.5)&lt;/td&gt;
+      &lt;td&gt;생략&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;h3 id=&quot;rdd--&quot;&gt;&lt;strong&gt;{1,2,3}과 {3,4,5}를 가진 두 RDD에 대한 트랜스포메이션&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;함수 이름&lt;/th&gt;
+      &lt;th&gt;용도&lt;/th&gt;
+      &lt;th&gt;예&lt;/th&gt;
+      &lt;th&gt;결과&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;union()&lt;/td&gt;
+      &lt;td&gt;두 RDD에 잇는 데이터들을 합한 RDD를 생성한다.&lt;/td&gt;
+      &lt;td&gt;rdd.union(other)&lt;/td&gt;
+      &lt;td&gt;{1,2,3,3,4,5}&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;intersection()&lt;/td&gt;
+      &lt;td&gt;양쪽 RDD에 모두 있는 데이터들만을 가진 RDD를 반환한다.&lt;/td&gt;
+      &lt;td&gt;rdd.intersection(other)&lt;/td&gt;
+      &lt;td&gt;{3}&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;subtract()&lt;/td&gt;
+      &lt;td&gt;한 RDD가 가진 데이터를 다른 쪽에서 삭제한다&lt;/td&gt;
+      &lt;td&gt;rdd.subtract(other)&lt;/td&gt;
+      &lt;td&gt;{1,2}&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;cartesian()&lt;/td&gt;
+      &lt;td&gt;두 RDD의 카테시안 곱&lt;/td&gt;
+      &lt;td&gt;rdd.cartesian(other)&lt;/td&gt;
+      &lt;td&gt;{{1,3},{1,4},{1,5} … ,{3,5}}&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
+
+&lt;h1 id=&quot;rdd--1&quot;&gt;기본 RDD 액션&lt;/h1&gt;
+
+&lt;h3 id=&quot;rdd---&quot;&gt;&lt;strong&gt;{1,2,3,3}을 갖고 있는 RDD에 대한 기본 액션&lt;/strong&gt;&lt;/h3&gt;
+
+&lt;table&gt;
+  &lt;thead&gt;
+    &lt;tr&gt;
+      &lt;th&gt;함수 이름&lt;/th&gt;
+      &lt;th&gt;용도&lt;/th&gt;
+      &lt;th&gt;예&lt;/th&gt;
+      &lt;th&gt;결과&lt;/th&gt;
+    &lt;/tr&gt;
+  &lt;/thead&gt;
+  &lt;tbody&gt;
+    &lt;tr&gt;
+      &lt;td&gt;collect()&lt;/td&gt;
+      &lt;td&gt;RDD의 모든 데이터요소 리턴&lt;/td&gt;
+      &lt;td&gt;rdd.collect()&lt;/td&gt;
+      &lt;td&gt;{1,2,3,3}&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;count()&lt;/td&gt;
+      &lt;td&gt;RDD의 요소 개수 리턴&lt;/td&gt;
+      &lt;td&gt;rdd.count()&lt;/td&gt;
+      &lt;td&gt;4&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;countByValue()&lt;/td&gt;
+      &lt;td&gt;RDD에 있는 각 값의 개수 리턴&lt;/td&gt;
+      &lt;td&gt;rdd.countByValue()&lt;/td&gt;
+      &lt;td&gt;{{1,1},{2,1},{3,2}}&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;take(num)&lt;/td&gt;
+      &lt;td&gt;RDD의 값들 중 num개 리턴&lt;/td&gt;
+      &lt;td&gt;rdd.take(2)&lt;/td&gt;
+      &lt;td&gt;{1,2}&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;top(num)&lt;/td&gt;
+      &lt;td&gt;RDD의 값들 중 상위 num개 리턴&lt;/td&gt;
+      &lt;td&gt;rdd.top(2)&lt;/td&gt;
+      &lt;td&gt;{3,3}&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;takeOrdered(num(ordering)&lt;/td&gt;
+      &lt;td&gt;제공된 ordering 기준으로 num개 값 리턴&lt;/td&gt;
+      &lt;td&gt;rdd.takeOrdered(2)(myOrdering)&lt;/td&gt;
+      &lt;td&gt;{3,3}&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;takeSample(withReplacement, num, [seed])&lt;/td&gt;
+      &lt;td&gt;무작위 값을 리턴&lt;/td&gt;
+      &lt;td&gt;rdd.takeSample(false,1)&lt;/td&gt;
+      &lt;td&gt;생략&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;reduce(func)&lt;/td&gt;
+      &lt;td&gt;RDD의 값들을 병렬로 병합 연산한다.&lt;/td&gt;
+      &lt;td&gt;rdd.reduce((x,y) -&amp;gt; x+y)&lt;/td&gt;
+      &lt;td&gt;9&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;fold(zero)(func)&lt;/td&gt;
+      &lt;td&gt;reduce()와 동일하나 제로 밸류를 넣어준다.&lt;/td&gt;
+      &lt;td&gt;rdd.fold(0)(x,y) -&amp;gt; x+y&lt;/td&gt;
+      &lt;td&gt;9&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;aggregate(zeroValue)(seqOP, combOp)&lt;/td&gt;
+      &lt;td&gt;reduce()와 유사하나 다른 타입을 리턴한다.&lt;/td&gt;
+      &lt;td&gt;rdd.aggregate((0,0))((x,y) -&amp;gt; (x._1 + y, x._2 +1), (x,y) -&amp;gt; (x._1 + y._1, x._2 + y._2))&lt;/td&gt;
+      &lt;td&gt;{9,4}&lt;/td&gt;
+    &lt;/tr&gt;
+    &lt;tr&gt;
+      &lt;td&gt;foreach(func)&lt;/td&gt;
+      &lt;td&gt;RDD의 각값에 func을 적용한다.&lt;/td&gt;
+      &lt;td&gt;rdd.foreach(func)&lt;/td&gt;
+      &lt;td&gt;없음&lt;/td&gt;
+    &lt;/tr&gt;
+  &lt;/tbody&gt;
+&lt;/table&gt;
+
+</description>
+        <pubDate>Sun, 26 Feb 2017 10:04:00 +0900</pubDate>
+        <link>http://joswlv.github.io/2017/02/26/basicrdd/</link>
+        <guid isPermaLink="true">http://joswlv.github.io/2017/02/26/basicrdd/</guid>
+        
+        
+        <category>Spark</category>
+        
+      </item>
     
       <item>
         <title>ElasticSearch 기초</title>
@@ -1736,63 +1919,6 @@ sudo service uwsgi restart
         
         
         <category>Etc</category>
-        
-      </item>
-    
-      <item>
-        <title>Short-circuit evaluation</title>
-        <description>&lt;h1 id=&quot;short-circuit-evaluation&quot;&gt;Short-circuit evaluation이란&lt;/h1&gt;
-
-&lt;blockquote&gt;
-  &lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;and&lt;/code&gt;, &lt;code class=&quot;highlighter-rouge&quot;&gt;or&lt;/code&gt;논리 연산에서 인자 하나만 보고 결과를 확실히 알 수 있을 때, 뒤에 나오는 인자를 확인하지 않고 바로 답을 내는 방법이다. &lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;amp;&amp;amp;&lt;/code&gt; 연산일 때, 하나라도 false이면 무조건 답이 false이고 &lt;code class=&quot;highlighter-rouge&quot;&gt;||&lt;/code&gt; 연산일 땐, 하나라도 true이면 무조건 답이 true이다.&lt;/p&gt;
-&lt;/blockquote&gt;
-
-&lt;p&gt;지원하는 언어는 &lt;a href=&quot;https://en.wikipedia.org/wiki/Short-circuit_evaluation#Support_in_common_programming_languages&quot;&gt;여기&lt;/a&gt;&lt;/p&gt;
-
-&lt;p&gt;예를 보면 다음과 같다.&lt;/p&gt;
-
-&lt;div class=&quot;highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;조건식 1 &amp;amp;&amp;amp; 조건식 2
-조건식 1 이 false 이면, 조건식 2 를 건너뜀
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;h4 id=&quot;section&quot;&gt;설명&lt;/h4&gt;
-
-&lt;p&gt;&lt;code class=&quot;highlighter-rouge&quot;&gt;&amp;amp;&amp;amp;&lt;/code&gt;연산자에서는 두 조건식이 모두 true가 되어야 전체 결과가 true가 되는데, &lt;code class=&quot;highlighter-rouge&quot;&gt;조건식1&lt;/code&gt;이 &lt;code class=&quot;highlighter-rouge&quot;&gt;false&lt;/code&gt;가되면 &lt;code class=&quot;highlighter-rouge&quot;&gt;조건식2&lt;/code&gt;을 보지 않아도 전체가 &lt;code class=&quot;highlighter-rouge&quot;&gt;false&lt;/code&gt;가 되므로 &lt;code class=&quot;highlighter-rouge&quot;&gt;조건식2&lt;/code&gt;를 체크하지 않는다.&lt;/p&gt;
-
-&lt;h1 id=&quot;section-1&quot;&gt;적용한 예&lt;/h1&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;check1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;''&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;check2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;blabla&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;위 경우에서 &lt;code class=&quot;highlighter-rouge&quot;&gt;''&lt;/code&gt;을 먼저 체크하는 것보다 &lt;code class=&quot;highlighter-rouge&quot;&gt;null&lt;/code&gt;인 경우를 먼저 체크하는 것이 안전하다고 한다.&lt;/p&gt;
-
-&lt;p&gt;수정하면 아래와 같다.&lt;/p&gt;
-
-&lt;div class=&quot;language-java highlighter-rouge&quot;&gt;&lt;pre class=&quot;highlight&quot;&gt;&lt;code&gt;&lt;span class=&quot;k&quot;&gt;if&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;(&lt;/span&gt;&lt;span class=&quot;n&quot;&gt;check2&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;kc&quot;&gt;null&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class=&quot;n&quot;&gt;check1&lt;/span&gt; &lt;span class=&quot;o&quot;&gt;==&lt;/span&gt; &lt;span class=&quot;err&quot;&gt;''&lt;/span&gt;&lt;span class=&quot;o&quot;&gt;){&lt;/span&gt;
-	&lt;span class=&quot;n&quot;&gt;blabla&lt;/span&gt;
-&lt;span class=&quot;o&quot;&gt;}&lt;/span&gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/div&gt;
-
-&lt;p&gt;&lt;br /&gt;&lt;/p&gt;
-
-&lt;h3 id=&quot;reference&quot;&gt;Reference&lt;/h3&gt;
-
-&lt;ul&gt;
-  &lt;li&gt;&lt;a href=&quot;http://ohyecloudy.com/pnotes/archives/542/&quot;&gt;ohyecloudy pnotes&lt;/a&gt;&lt;/li&gt;
-  &lt;li&gt;&lt;a href=&quot;http://kkikkodev.tistory.com/284&quot;&gt;kkikkodev&lt;/a&gt;&lt;/li&gt;
-&lt;/ul&gt;
-</description>
-        <pubDate>Fri, 18 Nov 2016 15:04:00 +0900</pubDate>
-        <link>http://joswlv.github.io/2016/11/18/Shortcircuitevaluation/</link>
-        <guid isPermaLink="true">http://joswlv.github.io/2016/11/18/Shortcircuitevaluation/</guid>
-        
-        
-        <category>Java</category>
         
       </item>
     

@@ -10,14 +10,14 @@
     <meta property="og:image" content="https://raw.githubusercontent.com/joswlv/joswlv.github.io/master/bg.jpg">
     <meta property="og:url" content="https://joswlv.github.io">
 
-    <title>MVC 이해하기</title>
-    <meta name="description" content="1. MVC 아키텍처컨트롤러(controller)컴포넌트의 역할클라이언트의 요청을 받았을 때 그 요청에 대해 실제 업무를 수행하는 모델 컴포넌트를 호출하는 일을 한다. 또 클라이언트가 보낸 데이터가 있다면, 모델을 호출할 때 전달하기 쉽게 데이터를 적절히 가공하는 일을 한다. 모델...">
+    <title>기본 RDD연산들(트랜스포메이션, 액션)</title>
+    <meta name="description" content="기본 RDD 트랜스포메이션{1,2,3,3}을 가지고 있는 RDD에 대한 RDD 트랜스포메이션            함수 이름      용도      예      결과                  map()      RDD의 각 요소에 함수를 적용하고 결과 RDD를 되돌려준다.   ...">
 
     <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
     <link rel="icon" href="/favicon.ico?" type="image/x-icon">
     <link rel="stylesheet" href="/css/fontawesome/css/font-awesome.min.css ">
     <link rel="stylesheet" href="/css/main.css ">
-    <link rel="canonical" href="http://joswlv.github.io/2016/09/12/MVC/">
+    <link rel="canonical" href="http://joswlv.github.io/2017/02/26/basicrdd/">
     <link rel="alternate" type="application/rss+xml" title="Joswlv" href="http://joswlv.github.io/feed.xml ">
 
 
@@ -104,11 +104,11 @@
 
         <div class="page clearfix" post>
     <div class="left">
-        <h1>MVC 이해하기</h1>
+        <h1>기본 RDD연산들(트랜스포메이션, 액션)</h1>
         <div class="label">
 
             <div class="label-card">
-                <i class="fa fa-calendar"></i>2016-09-12
+                <i class="fa fa-calendar"></i>2017-02-26
             </div>
 
             <div class="label-card">
@@ -128,7 +128,7 @@
   <i class="fa fa-th-list"></i>
   
     
-        <a href="/category/#web" title="Category: web" rel="category">web</a>
+        <a href="/category/#Spark" title="Category: Spark" rel="category">Spark</a>
     
   
 
@@ -141,62 +141,177 @@
         </div>
         <hr>
         <article itemscope itemtype="http://schema.org/BlogPosting">
-        <h1 id="mvc-">1. MVC 아키텍처</h1>
+        <h1 id="rdd-">기본 RDD 트랜스포메이션</h1>
 
-<p><img src="http://joswlv.github.io/images/mvc.png" alt="" /></p>
+<h3 id="rdd--rdd-"><strong>{1,2,3,3}을 가지고 있는 RDD에 대한 RDD 트랜스포메이션</strong></h3>
 
-<h3 id="controller-">컨트롤러(controller)컴포넌트의 역할</h3>
+<table>
+  <thead>
+    <tr>
+      <th>함수 이름</th>
+      <th>용도</th>
+      <th>예</th>
+      <th>결과</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>map()</td>
+      <td>RDD의 각 요소에 함수를 적용하고 결과 RDD를 되돌려준다.</td>
+      <td>rdd.map(x -&gt; x+1)</td>
+      <td>{2,3,4,4}</td>
+    </tr>
+    <tr>
+      <td>flatMap()</td>
+      <td>RDD의 각 요소에 함수를 적용하고 반환된 반복자의 내용들로 이루어진 RDD를 되될려준다. 종종 단어 분해를 위해 쓰인다.</td>
+      <td>rdd.flatMap(x -&gt; x.to(3))</td>
+      <td>{1,2,3,2,3,3}</td>
+    </tr>
+    <tr>
+      <td>filter()</td>
+      <td>filter()로 전달된 함수의 조건을 통과한 값으로만 이루어진 RDD를 되돌려 준다.</td>
+      <td>rdd.filter(x -&gt; x != 1)</td>
+      <td>{2,3,3}</td>
+    </tr>
+    <tr>
+      <td>distinct()</td>
+      <td>중복제거</td>
+      <td>rdd.distinct()</td>
+      <td>{1,2,3}</td>
+    </tr>
+    <tr>
+      <td>sample(withReplacement, fraction, [seed])</td>
+      <td>복원 추출(withReplacement-true)이나 비복원 추출로 RDD에서 표본을 뽑아낸다.</td>
+      <td>rdd.sample(false, 0.5)</td>
+      <td>생략</td>
+    </tr>
+  </tbody>
+</table>
 
-<p>클라이언트의 요청을 받았을 때 그 요청에 대해 실제 업무를 수행하는 모델 컴포넌트를 호출하는 일을 한다. 또 클라이언트가 보낸 데이터가 있다면, 모델을 호출할 때 전달하기 쉽게 데이터를 적절히 가공하는 일을 한다. 모델이 업무를 수행을 완료하면, 그 결과를 가지고 화면을 생성하도록 뷰에게 전달한다.</p>
+<h3 id="rdd--"><strong>{1,2,3}과 {3,4,5}를 가진 두 RDD에 대한 트랜스포메이션</strong></h3>
 
-<p>즉 클라이언트 요청에 대해 모델과 뷰를 결정하여 전달하는 일을 한다.</p>
+<table>
+  <thead>
+    <tr>
+      <th>함수 이름</th>
+      <th>용도</th>
+      <th>예</th>
+      <th>결과</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>union()</td>
+      <td>두 RDD에 잇는 데이터들을 합한 RDD를 생성한다.</td>
+      <td>rdd.union(other)</td>
+      <td>{1,2,3,3,4,5}</td>
+    </tr>
+    <tr>
+      <td>intersection()</td>
+      <td>양쪽 RDD에 모두 있는 데이터들만을 가진 RDD를 반환한다.</td>
+      <td>rdd.intersection(other)</td>
+      <td>{3}</td>
+    </tr>
+    <tr>
+      <td>subtract()</td>
+      <td>한 RDD가 가진 데이터를 다른 쪽에서 삭제한다</td>
+      <td>rdd.subtract(other)</td>
+      <td>{1,2}</td>
+    </tr>
+    <tr>
+      <td>cartesian()</td>
+      <td>두 RDD의 카테시안 곱</td>
+      <td>rdd.cartesian(other)</td>
+      <td>{{1,3},{1,4},{1,5} … ,{3,5}}</td>
+    </tr>
+  </tbody>
+</table>
 
-<h3 id="model-">모델(model)컴포넌트의 역할</h3>
+<p><br /></p>
 
-<p>데이터 저장소와 연동하여 사용자가 입력한 데이터나 사용자에게 출력할 데이터를 다루는 일을 한다. 특히 여러개의 데이터 변경 작업(추가, 변경, 삭제)을 하나의 작업으로 묵는 트랜잭션을 다루는 일도 한다.</p>
+<h1 id="rdd--1">기본 RDD 액션</h1>
 
-<h3 id="view--">뷰(view) 컴포넌트의 역할</h3>
+<h3 id="rdd---"><strong>{1,2,3,3}을 갖고 있는 RDD에 대한 기본 액션</strong></h3>
 
-<p>모델이 처리한 데이터나 그 작업 결과를 가지고 사용자에게 출력할 화면을 만드는 일을 한다. 이렇게 생성된 화면은 웹브라우저가 출력한다.</p>
+<table>
+  <thead>
+    <tr>
+      <th>함수 이름</th>
+      <th>용도</th>
+      <th>예</th>
+      <th>결과</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>collect()</td>
+      <td>RDD의 모든 데이터요소 리턴</td>
+      <td>rdd.collect()</td>
+      <td>{1,2,3,3}</td>
+    </tr>
+    <tr>
+      <td>count()</td>
+      <td>RDD의 요소 개수 리턴</td>
+      <td>rdd.count()</td>
+      <td>4</td>
+    </tr>
+    <tr>
+      <td>countByValue()</td>
+      <td>RDD에 있는 각 값의 개수 리턴</td>
+      <td>rdd.countByValue()</td>
+      <td>{{1,1},{2,1},{3,2}}</td>
+    </tr>
+    <tr>
+      <td>take(num)</td>
+      <td>RDD의 값들 중 num개 리턴</td>
+      <td>rdd.take(2)</td>
+      <td>{1,2}</td>
+    </tr>
+    <tr>
+      <td>top(num)</td>
+      <td>RDD의 값들 중 상위 num개 리턴</td>
+      <td>rdd.top(2)</td>
+      <td>{3,3}</td>
+    </tr>
+    <tr>
+      <td>takeOrdered(num(ordering)</td>
+      <td>제공된 ordering 기준으로 num개 값 리턴</td>
+      <td>rdd.takeOrdered(2)(myOrdering)</td>
+      <td>{3,3}</td>
+    </tr>
+    <tr>
+      <td>takeSample(withReplacement, num, [seed])</td>
+      <td>무작위 값을 리턴</td>
+      <td>rdd.takeSample(false,1)</td>
+      <td>생략</td>
+    </tr>
+    <tr>
+      <td>reduce(func)</td>
+      <td>RDD의 값들을 병렬로 병합 연산한다.</td>
+      <td>rdd.reduce((x,y) -&gt; x+y)</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <td>fold(zero)(func)</td>
+      <td>reduce()와 동일하나 제로 밸류를 넣어준다.</td>
+      <td>rdd.fold(0)(x,y) -&gt; x+y</td>
+      <td>9</td>
+    </tr>
+    <tr>
+      <td>aggregate(zeroValue)(seqOP, combOp)</td>
+      <td>reduce()와 유사하나 다른 타입을 리턴한다.</td>
+      <td>rdd.aggregate((0,0))((x,y) -&gt; (x._1 + y, x._2 +1), (x,y) -&gt; (x._1 + y._1, x._2 + y._2))</td>
+      <td>{9,4}</td>
+    </tr>
+    <tr>
+      <td>foreach(func)</td>
+      <td>RDD의 각값에 func을 적용한다.</td>
+      <td>rdd.foreach(func)</td>
+      <td>없음</td>
+    </tr>
+  </tbody>
+</table>
 
-<p>즉 뷰 컴포넌트는 HTML과 CSS, JavaScript를 사용하여 웹 브라우저가 출력할 UI를 만든다.</p>
-
-<h1 id="mcv-">2. MCV의 이점</h1>
-
-<h3 id="section">높은 재사용성, 넓은 융통성</h3>
-
-<ul>
-  <li><code class="highlighter-rouge">look and feel</code>을 쉽게 교채할 수 있다.</li>
-  <li><code class="highlighter-rouge">on source multi use</code>를 쉽게 구현할 수 있다.</li>
-  <li>코드를 재사용할 수 있다.</li>
-</ul>
-
-<h3 id="section-1">빠른 개발, 저렴한 비용</h3>
-
-<ul>
-  <li>다른 프로젝트에서도 모델 컴포넌트를 재사용할 수 있기 때문에 개발 속도가 빨라진다.</li>
-  <li>소스 코드를 역할에 따라 여러 컴포넌트로 쪼개게 되면, 그 컴포넌트의 나니도에 따라 좀 더 낮은 수준의 개발자를 투입하여 개발 및 유지보수 비용 감소</li>
-</ul>
-
-<h1 id="mvc--">3. MVC 구동 원리</h1>
-
-<p>아래 그림은 클라이언트 요청에서 화면 출력까지 과정을 나타낸다.</p>
-
-<p><img src="http://joswlv.github.io/images/mvca.png" alt="" /></p>
-
-<ol>
-  <li>웹 브라우저가 웹어플리케이션을 실행을 요청하면, 웹서버가 그 요청을 받아서 서블릿 컨테이너에게 넘겨준다. 서블릿 컨테이너는 URL을 확인하여 그 요청을 처리할 서브릿을 찾아 실행한다.</li>
-  <li>서블릿은 실제 업무를 처리하는 모델 자바 객체의 메서드를 호출한다. 만약 웹 브라우저가 보낸 데이터를 저장하거나 변경해야 한다면 그 데이터를 가공하여 VO(Value Object)를 생성하고, 모델 객체의 메서드를 호출할 때 인자값을 넘긴다.</li>
-  <li>모델 객체는 JDBC를 사용하여 매개변수로 넘어온 VO를 데이터베이스에 저장하거나, 데이터베이스로부터 질의 결과를 가져와 VO로 만들어 반환한다. 이렇게 VO는 객체와 객체 사이에 데이터를 전달하는 용도로 사용하기 때문에 <code class="highlighter-rouge">데이터 전송객체(DTO : Data Transfer Object)</code>라고 한다.</li>
-  <li>서블릿은 모델 객체로부터 반환받은 값을 JSP에 전달한다.</li>
-  <li>JSP는 서블릿으로부터 전달받은 VO를 참조하여 웹브라우저가 출력할 결과 화면을 만들고 웹브라우저에 출력함으로써 요청 처리를 완료한다.</li>
-  <li>웹브라우저는 서버로부터 받은 응답 내용을 화면에 출력한다.</li>
-</ol>
-
-<h3 id="reference">Reference</h3>
-<ul>
-  <li><a href="http://www.yes24.com/24/Goods/13159413?Acode=101">열혈강의 자바 웹 개발 워크북</a></li>
-</ul>
 
         </article>
         <hr>
@@ -238,13 +353,11 @@
         <div class="post-recent">
     <div class="pre">
         
-        <p><strong>prev</strong> <a href="/2016/09/10/servlet_and_JDBC/">HttpServlet와 JDBC, Refresh,Filter</a></p>
+        <p><strong>prev</strong> <a href="/2017/02/18/elasticsearchbasic/">ElasticSearch 기초</a></p>
         
     </div>
     <div class="nex">
 
-        
-        <p><strong>next</strong> <a href="/2016/09/12/view_and_jsp/">뷰 컴포넌트와 JSP</a></p>
         
     </div>
 </div>
@@ -262,8 +375,8 @@
      */
 
     var disqus_config = function() {
-        this.page.url = 'http://joswlv.github.io/2016/09/12/MVC/'; // Replace PAGE_URL with your page's canonical URL variable
-        this.page.identifier = 'http://joswlv.github.io/2016/09/12/MVC/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+        this.page.url = 'http://joswlv.github.io/2017/02/26/basicrdd/'; // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://joswlv.github.io/2017/02/26/basicrdd/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
     };
 
     (function() { // DON'T EDIT BELOW THIS LINE
