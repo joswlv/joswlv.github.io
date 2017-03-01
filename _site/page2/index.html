@@ -111,6 +111,511 @@
             
               <li>
                 <h2>
+                  <a class="post-link" href="/2017/01/05/javastring/">Java String에 대해..</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2017-01-05
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#Java" title="Category: Java" rel="category">Java</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="java-string">Java String</h1>
+
+<p>우선 Java의 <code class="highlighter-rouge">String</code> 객체는 immutable(불변의) 클래스이다. 그래서 한번 생성되면 수정이 불가능 하다.</p>
+
+<p>다음은 <code class="highlighter-rouge">String</code>객체의 특성을 나열 한다.</p>
+
+<h3 id="or--string-">1. “” or 객체 String 만들기</h3>
+
+<p>String을 만들때는 두가지 방식이 존재한다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">String</span> <span class="n">a</span> <span class="o">=</span> <span class="s">"abc"</span><span class="o">;</span>
+<span class="n">String</span> <span class="n">b</span> <span class="o">=</span> <span class="k">new</span> <span class="n">String</span><span class="o">(</span><span class="s">"abc"</span><span class="o">);</span>
+</code></pre>
+</div>
+
+<p>우선 차이를 설명하는 예를 보자</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">String</span> <span class="n">a</span> <span class="o">=</span> <span class="s">"abc"</span><span class="o">;</span>
+<span class="n">String</span> <span class="n">b</span> <span class="o">=</span> <span class="s">"abc"</span><span class="o">;</span>
+<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">a</span> <span class="o">==</span> <span class="n">b</span><span class="o">);</span> <span class="c1">//True</span>
+<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">a</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">b</span><span class="o">));</span> <span class="c1">//True</span>
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">a</code>와 <code class="highlighter-rouge">b</code>는 Method Area에서 같은 메모리를 참조 한다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">String</span> <span class="n">c</span> <span class="o">=</span> <span class="k">new</span> <span class="n">String</span><span class="o">(</span><span class="s">"abc"</span><span class="o">);</span>
+<span class="n">String</span> <span class="n">d</span> <span class="o">=</span> <span class="k">new</span> <span class="n">String</span><span class="o">(</span><span class="s">"abc"</span><span class="o">);</span>
+<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">c</span> <span class="o">==</span> <span class="n">d</span><span class="o">);</span> <span class="c1">//False</span>
+<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">c</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">d</span><span class="o">));</span> <span class="c1">//True</span>
+</code></pre>
+</div>
+<p><code class="highlighter-rouge">c</code>와 <code class="highlighter-rouge">d</code>는 다른 heap영역에서 다른 object이다. 다른 object는 다른 메모리 참조한다.</p>
+
+<p>String을 만들때 객체를 새로 만드는 것보다 <code class="highlighter-rouge">""</code>으로 String을 만드는 것이 불필요한 객체를 안만들어서 더 유용하다고 한다.</p>
+
+<h3 id="string-passed-by-value">2. String은 passed by value</h3>
+
+<p>다음 예를 보자</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+	<span class="n">String</span> <span class="n">a</span> <span class="o">=</span> <span class="k">new</span> <span class="n">String</span><span class="o">(</span><span class="s">"abc"</span><span class="o">);</span>
+	<span class="n">changeText</span><span class="o">(</span><span class="n">a</span><span class="o">);</span>
+	<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">a</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">changeText</span><span class="o">(</span><span class="n">String</span> <span class="n">a</span><span class="o">)</span> <span class="o">{</span>
+	<span class="n">a</span> <span class="o">=</span> <span class="s">"cd"</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>이 예제에서 print되는 것은 “abc”이다.</p>
+
+<p>이러한 이유는 Java는 항상 <code class="highlighter-rouge">pass by value</code>를 하기 때문이다. 즉 <code class="highlighter-rouge">changeText()</code>메소드를 지나면서 <code class="highlighter-rouge">a</code>에 저장되었던 “abc”는 무시되고 “cd”가 새롭게 heap생성이된다. 처음에 생성되었던 a는 여전히 “abc”를 참조하고 있다. 이는 앞서 설명한 Java에서는 String이 immutable한 클래스이기 때문이다. 즉 참조에 의한 값전달(passed by reference)는 지원하지 않는다.</p>
+
+<p>immutable하지 않는 String을 만들고 싶으면 <code class="highlighter-rouge">StringBuilder</code>를 사용하면 된다.</p>
+
+<p>다음 예는 <code class="highlighter-rouge">changeText()</code>메소드의 기능을 살리는 방식이다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+	<span class="n">StringBuilder</span> <span class="n">x</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuilder</span><span class="o">(</span><span class="s">"ab"</span><span class="o">);</span>
+	<span class="n">changeText</span><span class="o">(</span><span class="n">x</span><span class="o">);</span>
+	<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">x</span><span class="o">);</span>
+<span class="o">}</span>
+ 
+<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">changeText</span><span class="o">(</span><span class="n">StringBuilder</span> <span class="n">x</span><span class="o">)</span> <span class="o">{</span>
+	<span class="n">x</span><span class="o">.</span><span class="na">delete</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">2</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="s">"cd"</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+<p>여기서 StringBuilder는 값이 변할 수 있다. 그리고 새로운 객체를 생성하는 것이 아니라 새로운 값을 할당한다.</p>
+
+<p>요약하면 Java는 값(변수?)의한 전달만 가능하다!! 참조를 통한 전달은 지원하지 않는다.</p>
+
+<p>C++로 <code class="highlighter-rouge">passed by reference</code>의 예를 보면 다음과 같다.</p>
+
+<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">change</span><span class="p">(</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="s">"cd"</span><span class="p">;</span>
+<span class="p">}</span>
+ 
+<span class="kt">int</span> <span class="n">main</span><span class="p">(){</span>
+    <span class="n">string</span> <span class="n">x</span> <span class="o">=</span> <span class="s">"ab"</span><span class="p">;</span>
+    <span class="n">change</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+<p>최종적인 x는 “cd”가 출력된다. heap에 생성된 x의 메모리주소를 참조하여 값을 변경하였다.</p>
+
+<h3 id="reference">Reference</h3>
+
+<ul>
+  <li><a href="http://www.programcreek.com/">programcreek</a></li>
+  <li><a href="http://javadude.com/articles/passbyvalue.htm">JavaDude.com</a></li>
+  <li><a href="http://fowler.egloos.com/1243657">어제보다 나은 오늘</a></li>
+</ul>
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2017/01/05/javastring/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
+                  <a class="post-link" href="/2016/12/18/curl/">curl</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-12-18
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#Etc" title="Category: Etc" rel="category">Etc</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="curl----http-getpost-rest-api">curl 설치 및 사용법 (HTTP GET/POST REST API)</h1>
+
+<h3 id="section">개요</h3>
+
+<p><code class="highlighter-rouge">curl</code>은 command line용 data transfer tool이다. download/upload 모두 가능하며 <code class="highlighter-rouge">HTTP/HTTPS/FTP/LDAP/SCP/TELNET/SMTP/POP3</code> 등 주요한 프로토콜을 지원하며 Linux/Unix 계열 및 Windows 등 주요한 OS 에서 구동되므로
+여러 플랫폼과 OS에서 유용하게 사용할 수 있다. 또 libcurl 이라는 C 기반의 library 가 제공되므로 C/C++ 프로그램 개발시 위의 protocol 과 연계가 필요하다면 libcurl 을 사용하여 손쉽게 연계할 수 있다. 또 libcurl은 PHP, ruby, PERL 및 여러 언어에 바인딩되어 있으므로 사용하는 언어나 개발환경에 맞게 libcurl 을 사용할 수 있다.</p>
+
+<h3 id="section-1">설치</h3>
+
+<p>Linux나 Mac OS X 에는 기본 탑재되어 있다. 
+<code class="highlighter-rouge">sudo brew install curl</code>로 설치하면 된다.</p>
+
+<h3 id="section-2">사용법</h3>
+
+<p><code class="highlighter-rouge">curl [options...] &lt;url&gt;</code>형식으로 사용하면 된다.</p>
+
+<p>option 처리는 GNU getopt를 사용하므로 하이픈(-)하나를 붙이는 short형식의 옵션과 하이픈두개(–)두개로 시작되는 long 형식의 options이 있다.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>short</th>
+      <th>long</th>
+      <th>설명</th>
+      <th>비고</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>-v</td>
+      <td>–verbose </td>
+      <td>동작하면서 자세한 옵션을 출력한다.</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>-s</td>
+      <td>–silent</td>
+      <td>정숙 모드. 진행 내역이나 메시지등을 출력하지 않는다. -o 옵션으로 remote data 도 /dev/null 로 보내면 결과물도 출력되지 않는다</td>
+      <td>HTTP response code 만 가져오거나 할 경우 유리</td>
+    </tr>
+    <tr>
+      <td>-o</td>
+      <td>–output FILE</td>
+      <td>curl 은 remote 에서 받아온 데이타를 기본적으로는 콘솔에 출력한다. -o 옵션 뒤에 FILE 을 적어주면 해당 FILE 로 저장한다. (download 시 유용)</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>-O</td>
+      <td>–remote-name</td>
+      <td>file 저장시 remote 의 file 이름으로 저장한다. -o 옵션보다 편리하다.</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>-l</td>
+      <td>–head</td>
+      <td>HTTP header 만 보여주고 content 는 표시하지 않는다</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>-L</td>
+      <td>–location</td>
+      <td>서버에서 <a href="http://en.wikipedia.org/wiki/HTTP_301">HTTP 301 </a>이나 <a href="http://en.wikipedia.org/wiki/HTTP_302">HTTP 302</a> 응답이 왔을 경우 redirection URL 로 따라간다.<br />–max-redirs 뒤에 숫자로 redirection 을 몇 번 따라갈지 지정할 수 있다. 기본 값은 50이다</td>
+      <td>curl -v daum.net 을 실행하면 결과값으로 다음과 같이 HTTP 302 가 리턴된다.<br />&lt; HTTP/1.1 302 Object Moved<br /> Location: <a href="http://www.daum.net/">http://www.daum.net/</a><br />-L 옵션을 추가하면 <a href="http://www.daum.net/">www.daum.net</a> 으로 재접속하여 결과를 받아오게 된다.&lt;/span&gt;</td>
+    </tr>
+    <tr>
+      <td>-k</td>
+      <td>–insecure</td>
+      <td>https 사이트를 SSL certificate 검증없이 연결한다.</td>
+      <td>wget 의 –no-check-certificate 과 비슷한 역할 수행</td>
+    </tr>
+    <tr>
+      <td>-J</td>
+      <td>–remote-header-name</td>
+      <td>어떤 웹서비스는 파일 다운로드시 <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec19.html">Content-Disposition Header</a> 를 파싱해야 정확한 파일이름을 알 수 있을 경우가 있다. -J 옵션을 주면 헤더에 있는 파일 이름으로 저장한다.</td>
+      <td>curl 7.20 이상부터 추가된 옵션</td>
+    </tr>
+    <tr>
+      <td>-D</td>
+      <td>–dump-header &lt;file&gt;</td>
+      <td>&lt;file&gt; 에 HTTP header 를 기록한다.</td>
+      <td> </td>
+    </tr>
+    <tr>
+      <td>-d</td>
+      <td>–data</td>
+      <td>HTTP Post data</td>
+      <td>FORM 을 POST 하는 HTTP나 JSON 으로 데이타를 주고받는 REST 기반의 웹서비스 디버깅시 유용한 옵션이다</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="section-3">사용예</h2>
+
+<h3 id="httphttps-download">HTTP/HTTPS Download</h3>
+
+<ul>
+  <li>다운로드 받은 파일을 콘솔로 출력</li>
+</ul>
+
+<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl http://www.gnu.org/software/bash/manual/html_node/index.html
+</code></pre>
+</div>
+
+<ul>
+  <li>지정한 이름으로 저장</li>
+</ul>
+
+<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl -o index.html http://www.gnu.org/software/bash/manual/html_node/index.html
+</code></pre>
+</div>
+
+<ul>
+  <li>서버의 filename으로 저장</li>
+</ul>
+
+<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl -O  http://www.gnu.org/software/bash/manual/html_node/index.html
+</code></pre>
+</div>
+
+<ul>
+  <li>여러 url에서 동시에 다운로드</li>
+</ul>
+
+<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl -O  http://www.gnu.org/software/bash/manual/html_node/index.html -O http://www.gnu.org/savannah-checkouts/gnu/libiconv/documentation/libiconv-1.13/iconv.1.html
+</code></pre>
+</div>
+
+<h3 id="section-4">이어받기</h3>
+
+<p><code class="highlighter-rouge">-C / --continue-at &lt;offset&gt;</code> 
+옵션을 주면 이어받기 가능 (offset에 - 를 주면 전송이후 부분부터 이어받음)</p>
+
+<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl -C - -O  http://www.gnu.org/software/bash/manual/html_node/index.html
+</code></pre>
+</div>
+
+<h3 id="section-5">특정일 이전/이후 변경되었으면 받기</h3>
+
+<p><code class="highlighter-rouge">-z / --time-cond &lt;time&gt;</code></p>
+
+<p>HTTP 헤더에 If-Modified-Since: 헤더를 추가하여 특정일 이후에 변경되었으면 다운로드 수행
+아래 예제는 2011년 12월 21일 <strong>이후에</strong> 변경되었으면 다운로드 수행</p>
+
+<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl -z 21-Dec-11 http://www.example.com/yy.html
+</code></pre>
+</div>
+<p>날자앞에 - 를 추가하면 If-Unmodified-Since: 헤더를 추가하여 특정일 이전에 변경되었으면 다운로드 수행
+아래 예제는 2011년 12월 21일 <strong>이전에</strong> 변경되었으면 다운로드함 (날자에 - 추가)</p>
+
+<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl -z -21-Dec-11 http://www.example.com/yy.html
+</code></pre>
+</div>
+
+<h3 id="http-response-code-">http response code만 출력</h3>
+
+<p>HTTP Header 나 contents 는 빼고 <a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes">HTTP Response code</a> 만 출력한다. 서버의 정상 작동 여부 점검때 유용하다.</p>
+
+<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl -s -o /dev/null -w "%{http_code}\n" http://www.example.com/yy.html
+</code></pre>
+</div>
+
+<h3 id="http">HTTP인증</h3>
+
+<p>id/pwd 가 필요한 사이트의 경우 -u(– user) 옵션 뒤에 userid:password 를 지정하여 인증할 수 있다</p>
+
+<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl -v -u userid:password http://www.example.com/user.html
+</code></pre>
+</div>
+
+<h3 id="http-header-">결과값에 HTTP Header 포함</h3>
+
+<p>-i 옵션을 사용하면 서버의 응답에 서버가 보낸 HTTP 헤더를 추가하여 출력한다. 디버깅에 유용한다.</p>
+
+<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl -i https://api.github.com -u valid_username:valid_password
+</code></pre>
+</div>
+
+<h3 id="httphttps-post">HTTP/HTTPS POST</h3>
+
+<p>-X POST 옵션을 추가하거나 -d( –data) 옵션을 지정하면 기본값으로 POST 로 설정됨</p>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;form</span> <span class="na">method=</span><span class="s">"POST"</span> <span class="na">action=</span><span class="s">"post.php"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">text</span> <span class="na">name=</span><span class="s">"first_name"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">text</span> <span class="na">name=</span><span class="s">"last_name"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">submit</span> <span class="na">name=</span><span class="s">press</span> <span class="na">value=</span><span class="s">" OK "</span><span class="nt">&gt;</span>
+ <span class="nt">&lt;/form&gt;</span>
+</code></pre>
+</div>
+
+<p>POST 데이타는 “param1=value1&amp;param2=value2” 형식으로 전달</p>
+
+<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl -d "first_name=Bruce&amp;last_name=Wayne&amp;press=%20OK%20" http://posttestserver.com/post.php
+</code></pre>
+</div>
+
+<p>데이타에 공백이나 기타 특수 문자가 있을 경우 URL encoding 을 해야 한다.
+공백일 경우 일일이 + 로 변환해서 전송해야 하지만 최신 버전의 curl(7.18.0 이후) 은 FORM 파라미터를 URL Encoding 해주는 –data-urlencode 옵션을 사용하면 별도로 인코딩을 해주지 않아도 된다.</p>
+
+<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl --data-urlencode "first_name=Bruce" --data-urlencode "last_name=Wayne" --data-urlencode "press= OK " http://posttestserver.com/post.php
+</code></pre>
+</div>
+
+<blockquote>
+  <p>Hidden field 전송시 일반 필드처럼 name=value 형식으로 전송하면 된다.</p>
+</blockquote>
+
+<h3 id="http-post-file">HTTP POST File</h3>
+
+<p>file POST할 경우 file name 앞에 @ 를 붙여줌</p>
+
+<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl -d @myPostfile http://posttestserver.com/post.php
+</code></pre>
+</div>
+
+<h3 id="http-post-binary-file">HTTP POST Binary File</h3>
+
+<p>curl 은 POST 시 데이타를 text 로 취급하므로 binary 데이타는 깨질 수 있다. 제대로 전송하려면 –data-binary 옵션을 추가해야 한다.</p>
+
+<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl --data-binary @myBinary.jpg http://posttestserver.com/post.php
+</code></pre>
+</div>
+
+<h3 id="http-file-upload-form">HTTP File Upload Form</h3>
+
+<p>다음과 같은 파일 업로드 FORM이 있을 때</p>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;form</span> <span class="na">method=</span><span class="s">"POST"</span> <span class="na">enctype=</span><span class="s">'multipart/form-data'</span> <span class="na">action=</span><span class="s">"upload.php"</span><span class="nt">&gt;</span>
+ <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">file</span> <span class="na">name=</span><span class="s">upload</span><span class="nt">&gt;</span>
+ <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">submit</span> <span class="na">name=</span><span class="s">press</span> <span class="na">value=</span><span class="s">"OK"</span><span class="nt">&gt;</span>
+<span class="nt">&lt;/form&gt;</span>
+</code></pre>
+</div>
+
+<p>localfilename은 upload 할 파일명, submit은 press=OK</p>
+
+<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl --form upload=@localfilename --form press=OK http://localhost/upload.php
+</code></pre>
+</div>
+
+<h3 id="http-header--1">HTTP Header 설정</h3>
+
+<p>특정한 HTTP Header를 설정해서 보내야 할 경우(Ex: json data등) -H (–header) 옵션으로 헤더를 설정할 수 있다.</p>
+
+<h4 id="content-type-header-">Content-Type Header 설정</h4>
+
+<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl -d @myJson.js -H "Content-Type: application/json" http://localhost:8080/jsonEcho
+</code></pre>
+</div>
+
+<h4 id="user-agent-">User-Agent 설정</h4>
+
+<p>특정 브라우저인(Browser) 것처럼 동작하기 위해서는 -A ( –user-agent) 옵션을 사용할 수 있다.</p>
+
+<h3 id="chrome-240-user-agent">Chrome 24.0으로 User-Agent설정</h3>
+
+<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl -d @myJson.js -H "Content-Type: application/json" --user-agent "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.14 (KHTML, like Gecko) Chrome/24.0.1292.0 Safari/537.14" http://localhost:8080/jsonEcho
+</code></pre>
+</div>
+
+<h3 id="ie10-user-agnet">IE10으로 User-Agnet설정</h3>
+
+<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl -d @myJson.js -H "Content-Type: application/json" --user-agent "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; WOW64; Trident/6.0)" http://localhost:8080/jsonEcho
+</code></pre>
+</div>
+
+<h3 id="firefodx-290-user-agent-">Firefodx 29.0으로 User-Agent 설정</h3>
+
+<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl -d @myJson.js -H "Content-Type: application/json" --user-agent "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:29.0) Gecko/20120101 Firefox/29.0" http://localhost:8080/jsonEcho
+</code></pre>
+</div>
+
+<h3 id="referer">Referer설정</h3>
+
+<p>Referer 를 체크하는 사이트일 경우 -e ( –referer) 옵션으로 Referer URL 을 설정할 수 있다.</p>
+
+<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl --referer http://www.example.come/from  http://www.example.com/to
+</code></pre>
+</div>
+
+<p>아니면 -H 옵션으로 referer 헤더를 지정해도 된다.</p>
+
+<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl -H "Referer: http://www.example.come/from"  http://www.example.com/to
+</code></pre>
+</div>
+
+<h3 id="ssltls">SSL/TLS옵션</h3>
+
+<h3 id="tls-version-">TLS Version 지정</h3>
+
+<p>SSL의 후속 버전인 TLS의 버전을 지정할 수 있다. 지정하지 않을 경우 서버와 negotiation하여 결정한다.</p>
+
+<ul>
+  <li>-1, –tlsv1     Use =&gt; TLSv1 (SSL)</li>
+  <li>–tlsv1.0       Use TLSv1.0 (SSL)</li>
+  <li>–tlsv1.1       Use TLSv1.1 (SSL)</li>
+  <li>–tlsv1.2       Use TLSv1.2 (SSL)</li>
+</ul>
+
+<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl --tlsv1.2 https://www.example.come
+</code></pre>
+</div>
+
+<h3 id="ssl-version-">SSL Version 지정</h3>
+
+<p>다음 옵션으로 사용할 SSL 의 버전을 지정할 수 있다. 지정하지 않을 경우 서버와 negotiation하여 결정한다. SSL 은 오래 됐으니 SSL 보다는 TLS 를 사용하는게 좋다.</p>
+
+<ul>
+  <li>-2, –sslv2         Use SSLv2 (SSL)</li>
+  <li>-3, –sslv3         Use SSLv3 (SSL)</li>
+</ul>
+
+<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl --sslv3 https://www.example.come
+</code></pre>
+</div>
+
+<h3 id="reference">Reference</h3>
+
+<ul>
+  <li><a href="https://www.lesstif.com/pages/viewpage.action?pageId=14745703#curl설치및사용법-HTTPGET/POST,RESTAPI연계등-curl로AtlassianJIRARESTAPI연계하기">lesstif</a></li>
+</ul>
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/12/18/curl/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
                   <a class="post-link" href="/2016/12/18/groupconcat/">GROUP_CONCAT</a>
                 </h2>
                 <div class="label">
@@ -666,341 +1171,6 @@ sudo service uwsgi restart
                 <hr>
               </li>
             
-              <li>
-                <h2>
-                  <a class="post-link" href="/2016/11/18/Shortcircuitevaluation/">Short-circuit evaluation</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-11-18
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#Java" title="Category: Java" rel="category">Java</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                </div>
-                <div class="excerpt">
-                    <h1 id="short-circuit-evaluation">Short-circuit evaluation이란</h1>
-
-<blockquote>
-  <p><code class="highlighter-rouge">and</code>, <code class="highlighter-rouge">or</code>논리 연산에서 인자 하나만 보고 결과를 확실히 알 수 있을 때, 뒤에 나오는 인자를 확인하지 않고 바로 답을 내는 방법이다. <code class="highlighter-rouge">&amp;&amp;</code> 연산일 때, 하나라도 false이면 무조건 답이 false이고 <code class="highlighter-rouge">||</code> 연산일 땐, 하나라도 true이면 무조건 답이 true이다.</p>
-</blockquote>
-
-<p>지원하는 언어는 <a href="https://en.wikipedia.org/wiki/Short-circuit_evaluation#Support_in_common_programming_languages">여기</a></p>
-
-<p>예를 보면 다음과 같다.</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>조건식 1 &amp;&amp; 조건식 2
-조건식 1 이 false 이면, 조건식 2 를 건너뜀
-</code></pre>
-</div>
-
-<h4 id="section">설명</h4>
-
-<p><code class="highlighter-rouge">&amp;&amp;</code>연산자에서는 두 조건식이 모두 true가 되어야 전체 결과가 true가 되는데, <code class="highlighter-rouge">조건식1</code>이 <code class="highlighter-rouge">false</code>가되면 <code class="highlighter-rouge">조건식2</code>을 보지 않아도 전체가 <code class="highlighter-rouge">false</code>가 되므로 <code class="highlighter-rouge">조건식2</code>를 체크하지 않는다.</p>
-
-<h1 id="section-1">적용한 예</h1>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="k">if</span> <span class="o">(</span><span class="n">check1</span> <span class="o">==</span> <span class="err">''</span> <span class="o">&amp;&amp;</span> <span class="n">check2</span> <span class="o">==</span> <span class="kc">null</span><span class="o">){</span>
-	<span class="n">blabla</span>
-<span class="o">}</span>
-</code></pre>
-</div>
-
-<p>위 경우에서 <code class="highlighter-rouge">''</code>을 먼저 체크하는 것보다 <code class="highlighter-rouge">null</code>인 경우를 먼저 체크하는 것이 안전하다고 한다.</p>
-
-<p>수정하면 아래와 같다.</p>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="k">if</span> <span class="o">(</span><span class="n">check2</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">check1</span> <span class="o">==</span> <span class="err">''</span><span class="o">){</span>
-	<span class="n">blabla</span>
-<span class="o">}</span>
-</code></pre>
-</div>
-
-<p><br /></p>
-
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2016/11/18/Shortcircuitevaluation/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
-              <li>
-                <h2>
-                  <a class="post-link" href="/2016/11/10/JQuery_findnode/">jquery 선택자</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-11-10
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#js" title="Category: js" rel="category">js</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                </div>
-                <div class="excerpt">
-                    <h1 id="jquery-">JQuery 노드찾기</h1>
-
-<ol>
-  <li>노드 찾기</li>
-</ol>
-
-<ul>
-  <li>
-    <p>태그 이름으로 노드 찾기 :  $(“태그이름”),   $(“선택자”)</p>
-  </li>
-  <li>
-    <p>클래스 이름으로 노드 찾기 : $(“.클래스이름”)</p>
-  </li>
-  <li>
-    <p>ID로 노드 찾기 : $(“선택자”)</p>
-  </li>
-  <li>
-    <p>속성으로 노드 찾기 : $(“[속성이름=값]”)</p>
-  </li>
-  <li>
-    <p>찾은 요소 개수 구하기 :  .size()    ,     .length</p>
-  </li>
-  <li>
-    <p>찾은 요소 n번째 접근하기 : .eq(index)    ,    .each(function(index){});</p>
-  </li>
-  <li>
-    <p>찾은 요소에서 특정요소만을 걸러내기 : .filter(“선택자”)</p>
-  </li>
-  <li>
-    <p>찾은 요소에서 특정 자식요소만 찾기 :  .find(“선택자”)</p>
-  </li>
-</ul>
-
-<ol>
-  <li>자식 노드 찾기</li>
-</ol>
-
-<ul>
-  <li>
-    <p>전체 자식 노드 찾기</p>
-
- 	- 텍스트 노드 포함 전체 자식 노드 찾기 :  $(“선택자”).contents()
-
- 	- 텍스트 노드 제외한 전체 자식 노드 찾기 : $(“선택자”).children(“선택자”)
-  </li>
-  <li>
-    <p>n번째 자식 노드 접근</p>
-
- 	- $(“선택자”).children().eq(N)
-
- 	- $(“선택자”).children(“:eq(N)”)
-  </li>
-  <li>
-    <p>첫번째 자식 노드 접근</p>
-
- 	- $(“선택자”).children().first()
-
- 	- $(“선택자”).children(“:first”)
-
-    <div class="highlighter-rouge"><pre class="highlight"><code>	- $("선택자").children().eq(0)
-</code></pre>
-    </div>
-
- 	- $(“선택자”).children(“:eq(0)”)
-  </li>
-  <li>
-    <p>마지막 자식 노드 접근</p>
-
- 	- $(“선택자”).children().last()
-
- 	- $(“선택자”).children(“:last”)
-  </li>
-</ul>
-
-<ol>
-  <li>부모 노드 찾기</li>
-</ol>
-
-<ul>
-  <li>
-    <p>바로 위의 부모 : $(“선택자”).parent()</p>
-  </li>
-  <li>
-    <p>모든 부모 찾기</p>
-
- 	- $(“선택자”).parents()  모든 부모
-  </li>
-  <li>
-    <p>모든 부모 중 선택자에 해당하는 부모 찾기</p>
-
- 	- $(“선택자”).parents(“선택자”)
-  </li>
-</ul>
-
-<ol>
-  <li>형제 노드 찾기</li>
-</ol>
-
-<ul>
-  <li>
-    <p>이전 형제 노드 찾기</p>
-
- 	- $(“선택자”).prev()
-
- 	- $(“선택자”).prevAll(“선택자”);
-  </li>
-  <li>
-    <p>다음 형제 노드 찾기</p>
-
- 	- $(“선택자”).next()
-
- 	- $(“선택자”).nextAll(“선택자”);
-  </li>
-</ul>
-
-<ol>
-  <li>노드 생성,추가,이동,삭제</li>
-</ol>
-
-<ul>
-  <li>
-    <p>생성</p>
-
- 	- $(“노드”)
-
- 	- $(“선택자”).html(“<노드>...")
-</노드>
- 	- $(“노드”).clone()
-  </li>
-  <li>
-    <p>추가</p>
-
-    <ul>
-      <li>
-        <p>$기준노드.append($추가노드)</p>
-      </li>
-      <li>
-        <p>$추가노드.appendTo($기준노드)</p>
-      </li>
-      <li>
-        <p>$기준노드.prepend($추가노드)</p>
-      </li>
-      <li>
-        <p>$추가노드.prependTo($기준노드)</p>
-
-        <ul>
-          <li>$추가노드.insertBefore($기준노드)</li>
-        </ul>
-      </li>
-      <li>
-        <p>$기준노드.before($추가노드)</p>
-      </li>
-      <li>
-        <p>$추가노드.insertAfter($기준노드)</p>
-      </li>
-      <li>
-        <p>$기준노드.after($추가노드)</p>
-      </li>
-    </ul>
-  </li>
-  <li>
-    <p>삭제</p>
-
-    <p>– $(“선택자”).remove()</p>
-  </li>
-  <li>
-    <p>이동</p>
-
-    <ul>
-      <li>
-        <p>$기준노드.append($이동노드)</p>
-      </li>
-      <li>
-        <p>$이동노드.appendTo($기준노드)</p>
-      </li>
-      <li>
-        <p>$이동노드.insertBefore($기준노드)</p>
-      </li>
-      <li>
-        <p>$기준노드.before($이동노드)</p>
-
-        <ul>
-          <li>$이동노드.insertAfter($기준노드)</li>
-        </ul>
-      </li>
-      <li>
-        <p>$기준노드.after($이동노드)</p>
-      </li>
-    </ul>
-  </li>
-</ul>
-
-<ol>
-  <li>텍스트 노드 다루기</li>
-</ol>
-
-<ul>
-  <li>
-    <p>텍스트 노드 생성 : $(“텍스트”)</p>
-  </li>
-  <li>
-    <p>텍스트 노드 추가 : $기준노드.append(“텍스트”)</p>
-  </li>
-  <li>
-    <p>텍스트 노드 변경 : $기준노드.text(“새로운 텍스트”)</p>
-  </li>
-</ul>
-
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2016/11/10/JQuery_findnode/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
         </ul>
 
 
@@ -1079,7 +1249,7 @@ sudo service uwsgi restart
                             <span class="name">
                                 Java
                             </span>
-                            <span class="badge">4</span>
+                            <span class="badge">5</span>
                         </a>
                     </li>
                     
@@ -1133,7 +1303,7 @@ sudo service uwsgi restart
                             <span class="name">
                                 ElasticSearch
                             </span>
-                            <span class="badge">1</span>
+                            <span class="badge">2</span>
                         </a>
                     </li>
                     
@@ -1155,7 +1325,11 @@ sudo service uwsgi restart
                 </div>
                 <ul class="content-ul" recent>
                     
+                        <li><a href="/2017/03/01/stringbuildervsstringbuffer/">StringBuilder vs StringBuffer</a></li>
+                    
                         <li><a href="/2017/02/26/basicrdd/">기본 RDD연산들(트랜스포메이션, 액션)</a></li>
+                    
+                        <li><a href="/2017/02/19/logstash/">Logstash 기초</a></li>
                     
                         <li><a href="/2017/02/18/elasticsearchbasic/">ElasticSearch 기초</a></li>
                     
@@ -1170,10 +1344,6 @@ sudo service uwsgi restart
                         <li><a href="/2016/12/18/groupconcat/">GROUP_CONCAT</a></li>
                     
                         <li><a href="/2016/12/17/truncateanddelete/">TRUNCATE와 DELETE</a></li>
-                    
-                        <li><a href="/2016/11/27/flasnginxsetting/">Flask + Nginx 설정</a></li>
-                    
-                        <li><a href="/2016/11/20/realtimeweb/">Real-time web tec List</a></li>
                     
                 </ul>
             </div>

@@ -111,6 +111,191 @@
             
               <li>
                 <h2>
+                  <a class="post-link" href="/2017/03/01/stringbuildervsstringbuffer/">StringBuilder vs StringBuffer</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2017-03-01
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#Java" title="Category: Java" rel="category">Java</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="stringbuilder-vs-stringbuffer">StringBuilder vs StringBuffer</h1>
+
+<h3 id="section">단일 쓰레드환경에서 속도 비교</h3>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="cm">/**
+ * Buffers : 9
+ * Builder : 4
+ * strings:21756
+ *
+ * 단일 쓰레드 환경에서는 StringBuilder가 가장빠르다.
+ */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">StringSpeedTest</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+
+
+        <span class="kt">long</span> <span class="n">t0</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
+
+        <span class="n">t0</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
+        <span class="n">StringBuffer</span> <span class="n">buf</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuffer</span><span class="o">();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">100000</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
+            <span class="n">buf</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">"some string"</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Buffers : "</span><span class="o">+(</span><span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">()</span> <span class="o">-</span> <span class="n">t0</span><span class="o">));</span>
+
+        <span class="n">t0</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
+        <span class="n">StringBuilder</span> <span class="n">building</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuilder</span><span class="o">();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">100000</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
+            <span class="n">building</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">"some string"</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Builder : "</span><span class="o">+(</span><span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">()</span> <span class="o">-</span> <span class="n">t0</span><span class="o">));</span>
+
+        <span class="n">String</span> <span class="n">withString</span> <span class="o">=</span><span class="s">""</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">100000</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
+            <span class="n">withString</span><span class="o">+=</span><span class="s">"some string"</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"strings:"</span> <span class="o">+</span> <span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">()</span> <span class="o">-</span> <span class="n">t0</span><span class="o">));</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>StringBuilder가 가장 좋은 성능을 보여줬다.</p>
+
+<h3 id="section-1">멀티쓰레드환경에서 비교</h3>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="cm">/**
+ * Created by Jo_seungwan on 2017. 3. 1..
+ * StringBuilder는 java.lang.ArrayIndexOutOfBoundsException을 출력한다.
+ */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">StringMultiThreadTest</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="n">ThreadPoolExecutor</span> <span class="n">executorService</span> <span class="o">=</span> <span class="o">(</span><span class="n">ThreadPoolExecutor</span><span class="o">)</span> <span class="n">Executors</span><span class="o">.</span><span class="na">newFixedThreadPool</span><span class="o">(</span><span class="mi">10</span><span class="o">);</span>
+        <span class="c1">//With Buffer</span>
+        <span class="n">StringBuffer</span> <span class="n">buffer</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuffer</span><span class="o">();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
+            <span class="n">executorService</span><span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="k">new</span> <span class="n">AppendableRunnable</span><span class="o">(</span><span class="n">buffer</span><span class="o">));</span>
+        <span class="o">}</span>
+        <span class="n">shutdownAndAwaitTermination</span><span class="o">(</span><span class="n">executorService</span><span class="o">);</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">" Thread Buffer : "</span><span class="o">+</span> <span class="n">AppendableRunnable</span><span class="o">.</span><span class="na">time</span><span class="o">);</span>
+
+        <span class="c1">//With Builder</span>
+        <span class="n">AppendableRunnable</span><span class="o">.</span><span class="na">time</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="n">executorService</span> <span class="o">=</span> <span class="o">(</span><span class="n">ThreadPoolExecutor</span><span class="o">)</span> <span class="n">Executors</span><span class="o">.</span><span class="na">newFixedThreadPool</span><span class="o">(</span><span class="mi">10</span><span class="o">);</span>
+        <span class="n">StringBuilder</span> <span class="n">builder</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuilder</span><span class="o">();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
+            <span class="n">executorService</span><span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="k">new</span> <span class="n">AppendableRunnable</span><span class="o">(</span><span class="n">builder</span><span class="o">));</span>
+        <span class="o">}</span>
+        <span class="n">shutdownAndAwaitTermination</span><span class="o">(</span><span class="n">executorService</span><span class="o">);</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">" Thread Builder: "</span><span class="o">+</span> <span class="n">AppendableRunnable</span><span class="o">.</span><span class="na">time</span><span class="o">);</span>
+
+    <span class="o">}</span>
+
+    <span class="kd">static</span> <span class="kt">void</span> <span class="nf">shutdownAndAwaitTermination</span><span class="o">(</span><span class="n">ExecutorService</span> <span class="n">pool</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">pool</span><span class="o">.</span><span class="na">shutdown</span><span class="o">();</span> <span class="c1">// code reduced from Official Javadoc for Executors</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="n">pool</span><span class="o">.</span><span class="na">awaitTermination</span><span class="o">(</span><span class="mi">60</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">pool</span><span class="o">.</span><span class="na">shutdownNow</span><span class="o">();</span>
+                <span class="k">if</span> <span class="o">(!</span><span class="n">pool</span><span class="o">.</span><span class="na">awaitTermination</span><span class="o">(</span><span class="mi">60</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">))</span>
+                    <span class="n">System</span><span class="o">.</span><span class="na">err</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Pool did not terminate"</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">AppendableRunnable</span><span class="o">&lt;</span><span class="n">T</span> <span class="kd">extends</span> <span class="n">Appendable</span><span class="o">&gt;</span> <span class="kd">implements</span> <span class="n">Runnable</span> <span class="o">{</span>
+
+    <span class="kd">static</span> <span class="kt">long</span> <span class="n">time</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="n">T</span> <span class="n">appendable</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="nf">AppendableRunnable</span><span class="o">(</span><span class="n">T</span> <span class="n">appendable</span><span class="o">){</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">appendable</span> <span class="o">=</span> <span class="n">appendable</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">(){</span>
+        <span class="kt">long</span> <span class="n">t0</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="mi">10000</span> <span class="o">;</span> <span class="n">j</span><span class="o">++){</span>
+            <span class="k">try</span> <span class="o">{</span>
+                <span class="n">appendable</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">"some string"</span><span class="o">);</span>
+            <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{}</span>
+        <span class="o">}</span>
+        <span class="n">time</span><span class="o">+=(</span><span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">()</span> <span class="o">-</span> <span class="n">t0</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>멀티 쓰레드환경에서 10000개를 append하는 작업에서 <code class="highlighter-rouge">StringBuffer</code>속도는 느렸다.</p>
+
+<p>그 이유는 JIT / hotspot / compiler / 무언가가 잠금을 검사 할 필요가 없다는 것을 탐지 할 때 최적화를 수행하기 때문이다.</p>
+
+<p>이에 반해 <code class="highlighter-rouge">StringBuilder</code>는 java.lang.ArrayIndexOutOfBoundsException을 출력한다.</p>
+
+<h3 id="section-2">정리</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>구분</th>
+      <th>StringBuffer</th>
+      <th>StringBuilder</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>synchronized</td>
+      <td>Yes</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td>Thread-safe</td>
+      <td>Yes</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td>performance</td>
+      <td>Slow</td>
+      <td>Better than StringBuffer</td>
+    </tr>
+  </tbody>
+</table>
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2017/03/01/stringbuildervsstringbuffer/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
                   <a class="post-link" href="/2017/02/26/basicrdd/">기본 RDD연산들(트랜스포메이션, 액션)</a>
                 </h2>
                 <div class="label">
@@ -320,6 +505,207 @@
                 </div>
                 <div class="read-all">
                     <a  href="/2017/02/26/basicrdd/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
+                  <a class="post-link" href="/2017/02/19/logstash/">Logstash 기초</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2017-02-19
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#ElasticSearch" title="Category: ElasticSearch" rel="category">ElasticSearch</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="logstash-">Logstash 기초</h1>
+
+<h3 id="section">설치</h3>
+
+<p>최신 버전은 <a href="https://www.elastic.co/kr/downloads/logstash">Download Logstash</a>에서 다운 받으면 된다.</p>
+
+<p>하지만 낮은 버전을 이용할 경우 다음 과 같이 하면 된다. 
+우선 해당 버전 logstash repo정보를 찾는다.</p>
+
+<p>작업을 위해 2.3버전이 필요했다.<a href="https://www.elastic.co/guide/en/logstash/2.3/installing-logstash.html">링크</a></p>
+
+<p>링크에서 설명한 것을 보면 다운로드를 위한 pulic signing key를 다음과 같이 발급받는다.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>rpm --import https://packages.elastic.co/GPG-KEY-elasticsearch
+</code></pre>
+</div>
+
+<p>그리고 <code class="highlighter-rouge">/etc/yum.repos.d/</code> 디렉토리에 logstash.repo파일을 다음과 같이 만들고 저장한다.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[logstash-2.3]
+name=Logstash repository for 2.3.x packages
+baseurl=https://packages.elastic.co/logstash/2.3/centos
+gpgcheck=1
+gpgkey=https://packages.elastic.co/GPG-KEY-elasticsearch
+enabled=1
+</code></pre>
+</div>
+
+<p>그리고 <code class="highlighter-rouge">yum install logstash</code>를 하면 logstash 2.3버전이 설치가 된다.</p>
+
+<p>설치는 <code class="highlighter-rouge">/opt/logstash</code>디렉토리에 설치된다.</p>
+
+<h3 id="section-1">개념</h3>
+
+<p><code class="highlighter-rouge">logstash</code>는 파이프라인같은 개념이다. <a href="https://www.elastic.co/guide/en/logstash/current/input-plugins.html">다양한 곳</a>에서 Input을 받아 사용자가 가공하여 <a href="https://www.elastic.co/guide/en/logstash/current/output-plugins.html">다양한 곳</a>으로 출력 및 저장 할 수 있다.</p>
+
+<p>데이터가 소스에서 저장소로 이동할 때 <code class="highlighter-rouge">logstash</code>필터에서 미리 정의한 이벤트 및 구조를 정의 할 수 있다. 사용할 수 있는 <a href="https://www.elastic.co/guide/en/logstash/current/filter-plugins.html">라이브러리</a>는 다양하다.</p>
+
+<p>즉</p>
+
+<ul>
+  <li>input : 데이터를 받는다.</li>
+  <li>filter : 데이터를 가공한다.</li>
+  <li>output : 데이터를 출력한다.</li>
+</ul>
+
+<p>이렇게 정리가 된다.</p>
+
+<h3 id="section-2">사용하기</h3>
+
+<p><code class="highlighter-rouge">logstash</code>를 사용하기 위해서 데이터 소스를 가공을 정의한 <code class="highlighter-rouge">conf</code>파일이 필요하다.</p>
+
+<p>모양은 다음과 같다.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>input {
+        .
+        .
+        .
+}
+
+filter {
+        .
+        .
+        .
+}
+
+output {
+        .
+        .
+        .
+}
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">conf</code>파일을 만들면 <code class="highlighter-rouge">logstash</code>가 설치된 폴더안에 있는 <code class="highlighter-rouge">bin</code>폴더에 있는 <code class="highlighter-rouge">logstash</code>를 사용하면 된다.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>./logstash -f test.conf
+</code></pre>
+</div>
+
+<h3 id="section-3">예제</h3>
+
+<p><a href="finace.yahoo.com">finace.yahoo.com</a>에서 apple 주식 정보를 csv파일로 다운 받아 elasticsearch에 저장해보자</p>
+
+<p>데이터는 Date, Open, High, Low, Close 등이 있다.</p>
+
+<p><code class="highlighter-rouge">conf</code>파일을 작성하면 다음과 같다.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>input {
+  file {
+    path =&gt; "/root/applestock.csv"
+    start_position =&gt; "beginning"
+    sincedb_path =&gt; "/dev/null"
+  }
+}
+filter {
+  csv {
+      separator =&gt; ","
+      columns =&gt; ["Date","Open","High","Low","Close","Volume","Adj Close"]
+  }
+  mutate {convert =&gt; ["Open", "float"]}
+  mutate {convert =&gt; ["High", "float"]}
+  mutate {convert =&gt; ["Low", "float"]}
+  mutate {convert =&gt; ["Close", "float"]}
+}
+output {
+    elasticsearch {
+        hosts =&gt; "localhost"
+        index =&gt; "applestock"
+    }
+    stdout {}
+}
+</code></pre>
+</div>
+
+<ul>
+  <li>input에서 file을 받고, 처음부터 읽겠다고 선언했다. 그리고 sincdb_path는 position을 저장하는 db의 위치인데, 사용을 안하겠다고 선언했다.</li>
+  <li>filter에서 csv파일을 <code class="highlighter-rouge">,</code>로 구분하고 Open, High, Low, Close를 float라고 mapping을 했다.</li>
+  <li>결과 같음 elasticsearch <code class="highlighter-rouge">applestock</code> index에 저장했다. 그리고 저장되는 과정을 출력했다.</li>
+</ul>
+
+<p>다음과 같이 stdout이 되는 것을 확인 할 수 있다.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>...
+2017-02-20T03:08:23.445Z ip-172-31-3-227 1981-08-24,18.999999,18.999999,18.875,18.875,5768000,0.279022
+2017-02-20T03:08:23.445Z ip-172-31-3-227 1981-08-21,20.375001,20.375001,20.125,20.125,10477600,0.2975
+2017-02-20T03:08:23.445Z ip-172-31-3-227 1981-08-20,21.624999,21.75,21.624999,21.624999,4278400,0.319674
+2017-02-20T03:08:23.445Z ip-172-31-3-227 1981-08-19,21.624999,21.624999,21.375,21.375,5168800,0.315978
+2017-02-20T03:08:23.445Z ip-172-31-3-227 1981-08-18,21.875,21.875,21.624999,21.624999,4250400,0.319674
+2017-02-20T03:08:23.446Z ip-172-31-3-227 1981-08-17,22.375,22.375,22.125001,22.125001,4726400,0.327065
+2017-02-20T03:08:23.446Z ip-172-31-3-227 1981-08-14,23.125,23.125,22.875,22.875,6048000,0.338152
+2017-02-20T03:08:23.446Z ip-172-31-3-227 1981-08-13,23.374999,23.374999,23.25,23.25,6871200,0.343695
+2017-02-20T03:08:23.446Z ip-172-31-3-227 1981-08-12,24.125,24.125,24.00,24.00,6568800,0.354782
+2017-02-20T03:08:23.446Z ip-172-31-3-227 1981-08-11,24.750001,24.750001,24.50,24.50,17864000,0.362174
+2017-02-20T03:08:23.446Z ip-172-31-3-227 1981-08-07,25.25,25.375,25.25,25.25,2301600,0.373261
+2017-02-20T03:08:23.446Z ip-172-31-3-227 1981-08-06,25.375,25.375,25.25,25.25,2632000,0.373261
+2017-02-20T03:08:23.446Z ip-172-31-3-227 1981-08-05,25.875,25.999999,25.875,25.875,4373600,0.3825
+...
+</code></pre>
+</div>
+
+<p><img src="http://joswlv.github.io/images/logstash-elasticsearch.png" alt="" /></p>
+
+<p>ElasticSearch에 Index가 생성된 것을 확인 할 수 있다.</p>
+
+<p><img src="http://joswlv.github.io/images/logstash-kibana.png" alt="" /></p>
+
+<p>Kibana를 이용하여 apple주식데이터를 시각화를 하였다.</p>
+
+<p>사용된 Document는 9125개임을 확인 할 수 있다.</p>
+
+<h3 id="reference">Reference</h3>
+
+<ul>
+  <li><a href="http://asuraiv.blogspot.kr/2015/07/elasticsearch-logstash.html">Hong’s Store House</a></li>
+  <li><a href="https://www.elastic.co/kr/products/logstash">elastic-logstash</a></li>
+</ul>
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2017/02/19/logstash/"><i class="fa fa-newspaper-o"></i>Read All</a>
                 </div>
                 <hr>
               </li>
@@ -1273,511 +1659,6 @@ curl http://localhost:9200
                 <hr>
               </li>
             
-              <li>
-                <h2>
-                  <a class="post-link" href="/2017/01/05/javastring/">Java String에 대해..</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2017-01-05
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#Java" title="Category: Java" rel="category">Java</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                </div>
-                <div class="excerpt">
-                    <h1 id="java-string">Java String</h1>
-
-<p>우선 Java의 <code class="highlighter-rouge">String</code> 객체는 immutable(불변의) 클래스이다. 그래서 한번 생성되면 수정이 불가능 하다.</p>
-
-<p>다음은 <code class="highlighter-rouge">String</code>객체의 특성을 나열 한다.</p>
-
-<h3 id="or--string-">1. “” or 객체 String 만들기</h3>
-
-<p>String을 만들때는 두가지 방식이 존재한다.</p>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">String</span> <span class="n">a</span> <span class="o">=</span> <span class="s">"abc"</span><span class="o">;</span>
-<span class="n">String</span> <span class="n">b</span> <span class="o">=</span> <span class="k">new</span> <span class="n">String</span><span class="o">(</span><span class="s">"abc"</span><span class="o">);</span>
-</code></pre>
-</div>
-
-<p>우선 차이를 설명하는 예를 보자</p>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">String</span> <span class="n">a</span> <span class="o">=</span> <span class="s">"abc"</span><span class="o">;</span>
-<span class="n">String</span> <span class="n">b</span> <span class="o">=</span> <span class="s">"abc"</span><span class="o">;</span>
-<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">a</span> <span class="o">==</span> <span class="n">b</span><span class="o">);</span> <span class="c1">//True</span>
-<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">a</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">b</span><span class="o">));</span> <span class="c1">//True</span>
-</code></pre>
-</div>
-
-<p><code class="highlighter-rouge">a</code>와 <code class="highlighter-rouge">b</code>는 Method Area에서 같은 메모리를 참조 한다.</p>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">String</span> <span class="n">c</span> <span class="o">=</span> <span class="k">new</span> <span class="n">String</span><span class="o">(</span><span class="s">"abc"</span><span class="o">);</span>
-<span class="n">String</span> <span class="n">d</span> <span class="o">=</span> <span class="k">new</span> <span class="n">String</span><span class="o">(</span><span class="s">"abc"</span><span class="o">);</span>
-<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">c</span> <span class="o">==</span> <span class="n">d</span><span class="o">);</span> <span class="c1">//False</span>
-<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">c</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">d</span><span class="o">));</span> <span class="c1">//True</span>
-</code></pre>
-</div>
-<p><code class="highlighter-rouge">c</code>와 <code class="highlighter-rouge">d</code>는 다른 heap영역에서 다른 object이다. 다른 object는 다른 메모리 참조한다.</p>
-
-<p>String을 만들때 객체를 새로 만드는 것보다 <code class="highlighter-rouge">""</code>으로 String을 만드는 것이 불필요한 객체를 안만들어서 더 유용하다고 한다.</p>
-
-<h3 id="string-passed-by-value">2. String은 passed by value</h3>
-
-<p>다음 예를 보자</p>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-	<span class="n">String</span> <span class="n">a</span> <span class="o">=</span> <span class="k">new</span> <span class="n">String</span><span class="o">(</span><span class="s">"abc"</span><span class="o">);</span>
-	<span class="n">changeText</span><span class="o">(</span><span class="n">a</span><span class="o">);</span>
-	<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">a</span><span class="o">);</span>
-<span class="o">}</span>
-
-<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">changeText</span><span class="o">(</span><span class="n">String</span> <span class="n">a</span><span class="o">)</span> <span class="o">{</span>
-	<span class="n">a</span> <span class="o">=</span> <span class="s">"cd"</span><span class="o">;</span>
-<span class="o">}</span>
-</code></pre>
-</div>
-
-<p>이 예제에서 print되는 것은 “abc”이다.</p>
-
-<p>이러한 이유는 Java는 항상 <code class="highlighter-rouge">pass by value</code>를 하기 때문이다. 즉 <code class="highlighter-rouge">changeText()</code>메소드를 지나면서 <code class="highlighter-rouge">a</code>에 저장되었던 “abc”는 무시되고 “cd”가 새롭게 heap생성이된다. 처음에 생성되었던 a는 여전히 “abc”를 참조하고 있다. 이는 앞서 설명한 Java에서는 String이 immutable한 클래스이기 때문이다. 즉 참조에 의한 값전달(passed by reference)는 지원하지 않는다.</p>
-
-<p>immutable하지 않는 String을 만들고 싶으면 <code class="highlighter-rouge">StringBuilder</code>를 사용하면 된다.</p>
-
-<p>다음 예는 <code class="highlighter-rouge">changeText()</code>메소드의 기능을 살리는 방식이다.</p>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-	<span class="n">StringBuilder</span> <span class="n">x</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuilder</span><span class="o">(</span><span class="s">"ab"</span><span class="o">);</span>
-	<span class="n">changeText</span><span class="o">(</span><span class="n">x</span><span class="o">);</span>
-	<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">x</span><span class="o">);</span>
-<span class="o">}</span>
- 
-<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">changeText</span><span class="o">(</span><span class="n">StringBuilder</span> <span class="n">x</span><span class="o">)</span> <span class="o">{</span>
-	<span class="n">x</span><span class="o">.</span><span class="na">delete</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">2</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="s">"cd"</span><span class="o">);</span>
-<span class="o">}</span>
-</code></pre>
-</div>
-<p>여기서 StringBuilder는 값이 변할 수 있다. 그리고 새로운 객체를 생성하는 것이 아니라 새로운 값을 할당한다.</p>
-
-<p>요약하면 Java는 값(변수?)의한 전달만 가능하다!! 참조를 통한 전달은 지원하지 않는다.</p>
-
-<p>C++로 <code class="highlighter-rouge">passed by reference</code>의 예를 보면 다음과 같다.</p>
-
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">change</span><span class="p">(</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="s">"cd"</span><span class="p">;</span>
-<span class="p">}</span>
- 
-<span class="kt">int</span> <span class="n">main</span><span class="p">(){</span>
-    <span class="n">string</span> <span class="n">x</span> <span class="o">=</span> <span class="s">"ab"</span><span class="p">;</span>
-    <span class="n">change</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
-    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre>
-</div>
-<p>최종적인 x는 “cd”가 출력된다. heap에 생성된 x의 메모리주소를 참조하여 값을 변경하였다.</p>
-
-<h3 id="reference">Reference</h3>
-
-<ul>
-  <li><a href="http://www.programcreek.com/">programcreek</a></li>
-  <li><a href="http://javadude.com/articles/passbyvalue.htm">JavaDude.com</a></li>
-  <li><a href="http://fowler.egloos.com/1243657">어제보다 나은 오늘</a></li>
-</ul>
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2017/01/05/javastring/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
-              <li>
-                <h2>
-                  <a class="post-link" href="/2016/12/18/curl/">curl</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-12-18
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#Etc" title="Category: Etc" rel="category">Etc</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                </div>
-                <div class="excerpt">
-                    <h1 id="curl----http-getpost-rest-api">curl 설치 및 사용법 (HTTP GET/POST REST API)</h1>
-
-<h3 id="section">개요</h3>
-
-<p><code class="highlighter-rouge">curl</code>은 command line용 data transfer tool이다. download/upload 모두 가능하며 <code class="highlighter-rouge">HTTP/HTTPS/FTP/LDAP/SCP/TELNET/SMTP/POP3</code> 등 주요한 프로토콜을 지원하며 Linux/Unix 계열 및 Windows 등 주요한 OS 에서 구동되므로
-여러 플랫폼과 OS에서 유용하게 사용할 수 있다. 또 libcurl 이라는 C 기반의 library 가 제공되므로 C/C++ 프로그램 개발시 위의 protocol 과 연계가 필요하다면 libcurl 을 사용하여 손쉽게 연계할 수 있다. 또 libcurl은 PHP, ruby, PERL 및 여러 언어에 바인딩되어 있으므로 사용하는 언어나 개발환경에 맞게 libcurl 을 사용할 수 있다.</p>
-
-<h3 id="section-1">설치</h3>
-
-<p>Linux나 Mac OS X 에는 기본 탑재되어 있다. 
-<code class="highlighter-rouge">sudo brew install curl</code>로 설치하면 된다.</p>
-
-<h3 id="section-2">사용법</h3>
-
-<p><code class="highlighter-rouge">curl [options...] &lt;url&gt;</code>형식으로 사용하면 된다.</p>
-
-<p>option 처리는 GNU getopt를 사용하므로 하이픈(-)하나를 붙이는 short형식의 옵션과 하이픈두개(–)두개로 시작되는 long 형식의 options이 있다.</p>
-
-<table>
-  <thead>
-    <tr>
-      <th>short</th>
-      <th>long</th>
-      <th>설명</th>
-      <th>비고</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>-v</td>
-      <td>–verbose </td>
-      <td>동작하면서 자세한 옵션을 출력한다.</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>-s</td>
-      <td>–silent</td>
-      <td>정숙 모드. 진행 내역이나 메시지등을 출력하지 않는다. -o 옵션으로 remote data 도 /dev/null 로 보내면 결과물도 출력되지 않는다</td>
-      <td>HTTP response code 만 가져오거나 할 경우 유리</td>
-    </tr>
-    <tr>
-      <td>-o</td>
-      <td>–output FILE</td>
-      <td>curl 은 remote 에서 받아온 데이타를 기본적으로는 콘솔에 출력한다. -o 옵션 뒤에 FILE 을 적어주면 해당 FILE 로 저장한다. (download 시 유용)</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>-O</td>
-      <td>–remote-name</td>
-      <td>file 저장시 remote 의 file 이름으로 저장한다. -o 옵션보다 편리하다.</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>-l</td>
-      <td>–head</td>
-      <td>HTTP header 만 보여주고 content 는 표시하지 않는다</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>-L</td>
-      <td>–location</td>
-      <td>서버에서 <a href="http://en.wikipedia.org/wiki/HTTP_301">HTTP 301 </a>이나 <a href="http://en.wikipedia.org/wiki/HTTP_302">HTTP 302</a> 응답이 왔을 경우 redirection URL 로 따라간다.<br />–max-redirs 뒤에 숫자로 redirection 을 몇 번 따라갈지 지정할 수 있다. 기본 값은 50이다</td>
-      <td>curl -v daum.net 을 실행하면 결과값으로 다음과 같이 HTTP 302 가 리턴된다.<br />&lt; HTTP/1.1 302 Object Moved<br /> Location: <a href="http://www.daum.net/">http://www.daum.net/</a><br />-L 옵션을 추가하면 <a href="http://www.daum.net/">www.daum.net</a> 으로 재접속하여 결과를 받아오게 된다.&lt;/span&gt;</td>
-    </tr>
-    <tr>
-      <td>-k</td>
-      <td>–insecure</td>
-      <td>https 사이트를 SSL certificate 검증없이 연결한다.</td>
-      <td>wget 의 –no-check-certificate 과 비슷한 역할 수행</td>
-    </tr>
-    <tr>
-      <td>-J</td>
-      <td>–remote-header-name</td>
-      <td>어떤 웹서비스는 파일 다운로드시 <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec19.html">Content-Disposition Header</a> 를 파싱해야 정확한 파일이름을 알 수 있을 경우가 있다. -J 옵션을 주면 헤더에 있는 파일 이름으로 저장한다.</td>
-      <td>curl 7.20 이상부터 추가된 옵션</td>
-    </tr>
-    <tr>
-      <td>-D</td>
-      <td>–dump-header &lt;file&gt;</td>
-      <td>&lt;file&gt; 에 HTTP header 를 기록한다.</td>
-      <td> </td>
-    </tr>
-    <tr>
-      <td>-d</td>
-      <td>–data</td>
-      <td>HTTP Post data</td>
-      <td>FORM 을 POST 하는 HTTP나 JSON 으로 데이타를 주고받는 REST 기반의 웹서비스 디버깅시 유용한 옵션이다</td>
-    </tr>
-  </tbody>
-</table>
-
-<h2 id="section-3">사용예</h2>
-
-<h3 id="httphttps-download">HTTP/HTTPS Download</h3>
-
-<ul>
-  <li>다운로드 받은 파일을 콘솔로 출력</li>
-</ul>
-
-<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl http://www.gnu.org/software/bash/manual/html_node/index.html
-</code></pre>
-</div>
-
-<ul>
-  <li>지정한 이름으로 저장</li>
-</ul>
-
-<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl -o index.html http://www.gnu.org/software/bash/manual/html_node/index.html
-</code></pre>
-</div>
-
-<ul>
-  <li>서버의 filename으로 저장</li>
-</ul>
-
-<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl -O  http://www.gnu.org/software/bash/manual/html_node/index.html
-</code></pre>
-</div>
-
-<ul>
-  <li>여러 url에서 동시에 다운로드</li>
-</ul>
-
-<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl -O  http://www.gnu.org/software/bash/manual/html_node/index.html -O http://www.gnu.org/savannah-checkouts/gnu/libiconv/documentation/libiconv-1.13/iconv.1.html
-</code></pre>
-</div>
-
-<h3 id="section-4">이어받기</h3>
-
-<p><code class="highlighter-rouge">-C / --continue-at &lt;offset&gt;</code> 
-옵션을 주면 이어받기 가능 (offset에 - 를 주면 전송이후 부분부터 이어받음)</p>
-
-<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl -C - -O  http://www.gnu.org/software/bash/manual/html_node/index.html
-</code></pre>
-</div>
-
-<h3 id="section-5">특정일 이전/이후 변경되었으면 받기</h3>
-
-<p><code class="highlighter-rouge">-z / --time-cond &lt;time&gt;</code></p>
-
-<p>HTTP 헤더에 If-Modified-Since: 헤더를 추가하여 특정일 이후에 변경되었으면 다운로드 수행
-아래 예제는 2011년 12월 21일 <strong>이후에</strong> 변경되었으면 다운로드 수행</p>
-
-<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl -z 21-Dec-11 http://www.example.com/yy.html
-</code></pre>
-</div>
-<p>날자앞에 - 를 추가하면 If-Unmodified-Since: 헤더를 추가하여 특정일 이전에 변경되었으면 다운로드 수행
-아래 예제는 2011년 12월 21일 <strong>이전에</strong> 변경되었으면 다운로드함 (날자에 - 추가)</p>
-
-<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl -z -21-Dec-11 http://www.example.com/yy.html
-</code></pre>
-</div>
-
-<h3 id="http-response-code-">http response code만 출력</h3>
-
-<p>HTTP Header 나 contents 는 빼고 <a href="https://en.wikipedia.org/wiki/List_of_HTTP_status_codes">HTTP Response code</a> 만 출력한다. 서버의 정상 작동 여부 점검때 유용하다.</p>
-
-<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl -s -o /dev/null -w "%{http_code}\n" http://www.example.com/yy.html
-</code></pre>
-</div>
-
-<h3 id="http">HTTP인증</h3>
-
-<p>id/pwd 가 필요한 사이트의 경우 -u(– user) 옵션 뒤에 userid:password 를 지정하여 인증할 수 있다</p>
-
-<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl -v -u userid:password http://www.example.com/user.html
-</code></pre>
-</div>
-
-<h3 id="http-header-">결과값에 HTTP Header 포함</h3>
-
-<p>-i 옵션을 사용하면 서버의 응답에 서버가 보낸 HTTP 헤더를 추가하여 출력한다. 디버깅에 유용한다.</p>
-
-<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl -i https://api.github.com -u valid_username:valid_password
-</code></pre>
-</div>
-
-<h3 id="httphttps-post">HTTP/HTTPS POST</h3>
-
-<p>-X POST 옵션을 추가하거나 -d( –data) 옵션을 지정하면 기본값으로 POST 로 설정됨</p>
-
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;form</span> <span class="na">method=</span><span class="s">"POST"</span> <span class="na">action=</span><span class="s">"post.php"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">text</span> <span class="na">name=</span><span class="s">"first_name"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">text</span> <span class="na">name=</span><span class="s">"last_name"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">submit</span> <span class="na">name=</span><span class="s">press</span> <span class="na">value=</span><span class="s">" OK "</span><span class="nt">&gt;</span>
- <span class="nt">&lt;/form&gt;</span>
-</code></pre>
-</div>
-
-<p>POST 데이타는 “param1=value1&amp;param2=value2” 형식으로 전달</p>
-
-<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl -d "first_name=Bruce&amp;last_name=Wayne&amp;press=%20OK%20" http://posttestserver.com/post.php
-</code></pre>
-</div>
-
-<p>데이타에 공백이나 기타 특수 문자가 있을 경우 URL encoding 을 해야 한다.
-공백일 경우 일일이 + 로 변환해서 전송해야 하지만 최신 버전의 curl(7.18.0 이후) 은 FORM 파라미터를 URL Encoding 해주는 –data-urlencode 옵션을 사용하면 별도로 인코딩을 해주지 않아도 된다.</p>
-
-<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl --data-urlencode "first_name=Bruce" --data-urlencode "last_name=Wayne" --data-urlencode "press= OK " http://posttestserver.com/post.php
-</code></pre>
-</div>
-
-<blockquote>
-  <p>Hidden field 전송시 일반 필드처럼 name=value 형식으로 전송하면 된다.</p>
-</blockquote>
-
-<h3 id="http-post-file">HTTP POST File</h3>
-
-<p>file POST할 경우 file name 앞에 @ 를 붙여줌</p>
-
-<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl -d @myPostfile http://posttestserver.com/post.php
-</code></pre>
-</div>
-
-<h3 id="http-post-binary-file">HTTP POST Binary File</h3>
-
-<p>curl 은 POST 시 데이타를 text 로 취급하므로 binary 데이타는 깨질 수 있다. 제대로 전송하려면 –data-binary 옵션을 추가해야 한다.</p>
-
-<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl --data-binary @myBinary.jpg http://posttestserver.com/post.php
-</code></pre>
-</div>
-
-<h3 id="http-file-upload-form">HTTP File Upload Form</h3>
-
-<p>다음과 같은 파일 업로드 FORM이 있을 때</p>
-
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;form</span> <span class="na">method=</span><span class="s">"POST"</span> <span class="na">enctype=</span><span class="s">'multipart/form-data'</span> <span class="na">action=</span><span class="s">"upload.php"</span><span class="nt">&gt;</span>
- <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">file</span> <span class="na">name=</span><span class="s">upload</span><span class="nt">&gt;</span>
- <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">submit</span> <span class="na">name=</span><span class="s">press</span> <span class="na">value=</span><span class="s">"OK"</span><span class="nt">&gt;</span>
-<span class="nt">&lt;/form&gt;</span>
-</code></pre>
-</div>
-
-<p>localfilename은 upload 할 파일명, submit은 press=OK</p>
-
-<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl --form upload=@localfilename --form press=OK http://localhost/upload.php
-</code></pre>
-</div>
-
-<h3 id="http-header--1">HTTP Header 설정</h3>
-
-<p>특정한 HTTP Header를 설정해서 보내야 할 경우(Ex: json data등) -H (–header) 옵션으로 헤더를 설정할 수 있다.</p>
-
-<h4 id="content-type-header-">Content-Type Header 설정</h4>
-
-<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl -d @myJson.js -H "Content-Type: application/json" http://localhost:8080/jsonEcho
-</code></pre>
-</div>
-
-<h4 id="user-agent-">User-Agent 설정</h4>
-
-<p>특정 브라우저인(Browser) 것처럼 동작하기 위해서는 -A ( –user-agent) 옵션을 사용할 수 있다.</p>
-
-<h3 id="chrome-240-user-agent">Chrome 24.0으로 User-Agent설정</h3>
-
-<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl -d @myJson.js -H "Content-Type: application/json" --user-agent "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.14 (KHTML, like Gecko) Chrome/24.0.1292.0 Safari/537.14" http://localhost:8080/jsonEcho
-</code></pre>
-</div>
-
-<h3 id="ie10-user-agnet">IE10으로 User-Agnet설정</h3>
-
-<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl -d @myJson.js -H "Content-Type: application/json" --user-agent "Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; WOW64; Trident/6.0)" http://localhost:8080/jsonEcho
-</code></pre>
-</div>
-
-<h3 id="firefodx-290-user-agent-">Firefodx 29.0으로 User-Agent 설정</h3>
-
-<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl -d @myJson.js -H "Content-Type: application/json" --user-agent "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:29.0) Gecko/20120101 Firefox/29.0" http://localhost:8080/jsonEcho
-</code></pre>
-</div>
-
-<h3 id="referer">Referer설정</h3>
-
-<p>Referer 를 체크하는 사이트일 경우 -e ( –referer) 옵션으로 Referer URL 을 설정할 수 있다.</p>
-
-<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl --referer http://www.example.come/from  http://www.example.com/to
-</code></pre>
-</div>
-
-<p>아니면 -H 옵션으로 referer 헤더를 지정해도 된다.</p>
-
-<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl -H "Referer: http://www.example.come/from"  http://www.example.com/to
-</code></pre>
-</div>
-
-<h3 id="ssltls">SSL/TLS옵션</h3>
-
-<h3 id="tls-version-">TLS Version 지정</h3>
-
-<p>SSL의 후속 버전인 TLS의 버전을 지정할 수 있다. 지정하지 않을 경우 서버와 negotiation하여 결정한다.</p>
-
-<ul>
-  <li>-1, –tlsv1     Use =&gt; TLSv1 (SSL)</li>
-  <li>–tlsv1.0       Use TLSv1.0 (SSL)</li>
-  <li>–tlsv1.1       Use TLSv1.1 (SSL)</li>
-  <li>–tlsv1.2       Use TLSv1.2 (SSL)</li>
-</ul>
-
-<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl --tlsv1.2 https://www.example.come
-</code></pre>
-</div>
-
-<h3 id="ssl-version-">SSL Version 지정</h3>
-
-<p>다음 옵션으로 사용할 SSL 의 버전을 지정할 수 있다. 지정하지 않을 경우 서버와 negotiation하여 결정한다. SSL 은 오래 됐으니 SSL 보다는 TLS 를 사용하는게 좋다.</p>
-
-<ul>
-  <li>-2, –sslv2         Use SSLv2 (SSL)</li>
-  <li>-3, –sslv3         Use SSLv3 (SSL)</li>
-</ul>
-
-<div class="language-console highlighter-rouge"><pre class="highlight"><code>curl --sslv3 https://www.example.come
-</code></pre>
-</div>
-
-<h3 id="reference">Reference</h3>
-
-<ul>
-  <li><a href="https://www.lesstif.com/pages/viewpage.action?pageId=14745703#curl설치및사용법-HTTPGET/POST,RESTAPI연계등-curl로AtlassianJIRARESTAPI연계하기">lesstif</a></li>
-</ul>
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2016/12/18/curl/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
         </ul>
 
 
@@ -1856,7 +1737,7 @@ curl http://localhost:9200
                             <span class="name">
                                 Java
                             </span>
-                            <span class="badge">4</span>
+                            <span class="badge">5</span>
                         </a>
                     </li>
                     
@@ -1910,7 +1791,7 @@ curl http://localhost:9200
                             <span class="name">
                                 ElasticSearch
                             </span>
-                            <span class="badge">1</span>
+                            <span class="badge">2</span>
                         </a>
                     </li>
                     
@@ -1932,7 +1813,11 @@ curl http://localhost:9200
                 </div>
                 <ul class="content-ul" recent>
                     
+                        <li><a href="/2017/03/01/stringbuildervsstringbuffer/">StringBuilder vs StringBuffer</a></li>
+                    
                         <li><a href="/2017/02/26/basicrdd/">기본 RDD연산들(트랜스포메이션, 액션)</a></li>
+                    
+                        <li><a href="/2017/02/19/logstash/">Logstash 기초</a></li>
                     
                         <li><a href="/2017/02/18/elasticsearchbasic/">ElasticSearch 기초</a></li>
                     
@@ -1947,10 +1832,6 @@ curl http://localhost:9200
                         <li><a href="/2016/12/18/groupconcat/">GROUP_CONCAT</a></li>
                     
                         <li><a href="/2016/12/17/truncateanddelete/">TRUNCATE와 DELETE</a></li>
-                    
-                        <li><a href="/2016/11/27/flasnginxsetting/">Flask + Nginx 설정</a></li>
-                    
-                        <li><a href="/2016/11/20/realtimeweb/">Real-time web tec List</a></li>
                     
                 </ul>
             </div>

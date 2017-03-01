@@ -111,6 +111,329 @@
             
               <li>
                 <h2>
+                  <a class="post-link" href="/2016/09/16/frontcontroller_dietc/">프런트 컨트롤러 패턴과 의존성주입</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-09-16
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#web" title="Category: web" rel="category">web</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="section">1. 프런트 컨트롤러 패턴</h1>
+
+<p>MVC구조에서 좀 더 유지보수가 쉬운 구조로 개선 한 것으로 두개의 컨트롤러를 사용하여 웹 브라우저 요청을 처리한다. 프론트 컨트롤러는 VO 객체의 준비, 뷰 컴포넌트의 위임, 오류 처리 등과 같은 공동 작업을 담당하고, 페이지 컨트롤러는 이름 그대로 요청한 페이지만을 위한 작업을 수행한다.</p>
+
+<p><img src="http://joswlv.github.io/images/frontcontroller.png" alt="" /></p>
+
+<ol>
+  <li>웹 브라우저는 회원 목록 페이지를 요청한다.</li>
+  <li>프런트 컨트롤러 <code class="highlighter-rouge">DispatcherServlet</code>은 회원 목록 요청 처리를 담당하는 페이지 컨트롤러를 호출한다. 이때 데이터를 주고받을 바구니 역할을 할 Map 객체를 넘긴다.</li>
+  <li>페이지 컨트롤러 <code class="highlighter-rouge">MemverListController</code>는 Dao에게 회원 목록 데이터를 요청한다.</li>
+  <li>MemberDao는 데이터베이스로 부터 회원 목록 데이터를 가져와서, Member객체에 담아 반환한다.</li>
+  <li>페이지 컨트롤러는 Dao가 반환한 회원 목록 데이터를 Map 객체에 저장한다. 그리고 프런트 컨트롤러에게 뷰 URL을 반환한다.</li>
+  <li>프런트 컨트롤러는 Map객체에 저장된 페이지 컨트롤러의 작업 결과물을 JSP가 사용할 수 있도록 ServletRequest로 옮긴다.</li>
+</ol>
+
+<p>프런트 컨트롤러가 페이지 컨트롤러에게 작업을 위임할때 <code class="highlighter-rouge">execute()</code>메서드를 호출한다. 이렇게 호출하기 위해서 페이지 컨트롤러 클래스를 대표하는 Interface를 만들고 <code class="highlighter-rouge">execute()</code>메서드를 상속받게 만든다. 그러면 일관성있는 사용을 보장할 수 있다.</p>
+
+<p>페이지 컨트롤러를 서블릿이 아닌 자바파일로 만들었기 때문에, Dao에서 리턴받은 결과값을 Map을 사용하여 데이터 저장하여, 프런트 컨트롤러로 전달한다. 프런트 컨트롤러에서는 jsp에서 이 데이터들을 사용하기 위해 서블릿 보관소에 저장한다. 이런 과정을 프런트 컨트롤러 패턴이라고 한다. <br /></p>
+
+<h1 id="didependency-injection---">2. DI(Dependency Injection)을 이용한 의존성 과리</h1>
+
+<p>의존 객체를 사용하는 쪽과 의존 객체(또는 보관소) 사이의 결합도가 높아져서 의존 객체나 보관소에 변경이 발생하면 바로 영향을 받는다. 그리고 의존 객체를 다른 객체로 대체하기 가 어렵다. 이런 문제를 해결하기 위해 의존 객체를 외부에서 주입받는 방식이 등장하였다.</p>
+
+<p>이의존객체를 전문으로 관리하는 <code class="highlighter-rouge">빈컨테이너(Java Beans Container)</code>를 사용한다. 빈컨테이너는 객체가 실행되기 전에 그 객체가 필요로 하는 의존 객체를 주입해주는 역할을 수행한다. 이런방식으로 의존 객체를 관리하는 것을 <code class="highlighter-rouge">의존성주입(DI:Dependency Injection)</code> 좀 더 일반적으로 <code class="highlighter-rouge">역제어(IoC:Inversion of Control)</code>라고 한다. 즉 역제어 방식의 한 예가 의존성 주입이다.</p>
+
+<p>하지만 이 방법으로는 <code class="highlighter-rouge">DispatcherServlet</code>의 경우 페이지 컨트롤러가 추가 될 때마다 조건문을 변경해야하고, <code class="highlighter-rouge">ContextLoaderListener</code>도 Dao나 페이지 컨트롤러가 추가될 때마다 변경해야하는 문제가 있다.
+<br /></p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="c1">// 의존 객체 주입을 위해 인스턴스 변수와 셋터 메서드 추가</span>
+<span class="c1">//- 또한 의존 객체를 꺼내는 기존 코드 변경</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">MemberListController</span> <span class="kd">implements</span> <span class="n">Controller</span> <span class="o">{</span>
+  <span class="n">MemberDao</span> <span class="n">memberDao</span><span class="o">;</span>
+  
+  <span class="kd">public</span> <span class="n">MemberListController</span> <span class="nf">setMemberDao</span><span class="o">(</span><span class="n">MemberDao</span> <span class="n">memberDao</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">memberDao</span> <span class="o">=</span> <span class="n">memberDao</span><span class="o">;</span>
+    <span class="k">return</span> <span class="k">this</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="n">String</span> <span class="nf">execute</span><span class="o">(</span><span class="n">Map</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">model</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+    <span class="n">model</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"members"</span><span class="o">,</span> <span class="n">memberDao</span><span class="o">.</span><span class="na">selectList</span><span class="o">());</span>
+    <span class="k">return</span> <span class="s">"/member/MemberList.jsp"</span><span class="o">;</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="c1">// ServletContext에 보관된 페이지 컨트롤러를 사용</span>
+<span class="nd">@SuppressWarnings</span><span class="o">(</span><span class="s">"serial"</span><span class="o">)</span>
+<span class="nd">@WebServlet</span><span class="o">(</span><span class="s">"*.do"</span><span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">DispatcherServlet</span> <span class="kd">extends</span> <span class="n">HttpServlet</span> <span class="o">{</span>
+  <span class="nd">@Override</span>
+  <span class="kd">protected</span> <span class="kt">void</span> <span class="nf">service</span><span class="o">(</span>
+      <span class="n">HttpServletRequest</span> <span class="n">request</span><span class="o">,</span> <span class="n">HttpServletResponse</span> <span class="n">response</span><span class="o">)</span>
+      <span class="kd">throws</span> <span class="n">ServletException</span><span class="o">,</span> <span class="n">IOException</span> <span class="o">{</span>
+    <span class="n">response</span><span class="o">.</span><span class="na">setContentType</span><span class="o">(</span><span class="s">"text/html; charset=UTF-8"</span><span class="o">);</span>
+    <span class="n">String</span> <span class="n">servletPath</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getServletPath</span><span class="o">();</span>
+    <span class="k">try</span> <span class="o">{</span>
+      <span class="n">ServletContext</span> <span class="n">sc</span> <span class="o">=</span> <span class="k">this</span><span class="o">.</span><span class="na">getServletContext</span><span class="o">();</span>
+      
+      <span class="c1">// 페이지 컨트롤러에게 전달할 Map 객체를 준비한다. </span>
+      <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">Object</span><span class="o">&gt;</span> <span class="n">model</span> <span class="o">=</span> <span class="k">new</span> <span class="n">HashMap</span><span class="o">&lt;</span><span class="n">String</span><span class="o">,</span><span class="n">Object</span><span class="o">&gt;();</span>
+      <span class="n">model</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"session"</span><span class="o">,</span> <span class="n">request</span><span class="o">.</span><span class="na">getSession</span><span class="o">());</span>
+      
+      <span class="n">Controller</span> <span class="n">pageController</span> <span class="o">=</span> <span class="o">(</span><span class="n">Controller</span><span class="o">)</span> <span class="n">sc</span><span class="o">.</span><span class="na">getAttribute</span><span class="o">(</span><span class="n">servletPath</span><span class="o">);</span>
+      
+      <span class="k">if</span> <span class="o">(</span><span class="s">"/member/add.do"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">servletPath</span><span class="o">))</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"email"</span><span class="o">)</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+          <span class="n">model</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"member"</span><span class="o">,</span> <span class="k">new</span> <span class="n">Member</span><span class="o">()</span>
+            <span class="o">.</span><span class="na">setEmail</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"email"</span><span class="o">))</span>
+            <span class="o">.</span><span class="na">setPassword</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"password"</span><span class="o">))</span>
+            <span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"name"</span><span class="o">)));</span>
+        <span class="o">}</span>
+      <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="s">"/member/update.do"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">servletPath</span><span class="o">))</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"email"</span><span class="o">)</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+          <span class="n">model</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"member"</span><span class="o">,</span> <span class="k">new</span> <span class="n">Member</span><span class="o">()</span>
+            <span class="o">.</span><span class="na">setNo</span><span class="o">(</span><span class="n">Integer</span><span class="o">.</span><span class="na">parseInt</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"no"</span><span class="o">)))</span>
+            <span class="o">.</span><span class="na">setEmail</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"email"</span><span class="o">))</span>
+            <span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"name"</span><span class="o">)));</span>
+        <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+          <span class="n">model</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"no"</span><span class="o">,</span> <span class="k">new</span> <span class="n">Integer</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"no"</span><span class="o">)));</span>
+        <span class="o">}</span>
+      <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="s">"/member/delete.do"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">servletPath</span><span class="o">))</span> <span class="o">{</span>
+        <span class="n">model</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"no"</span><span class="o">,</span> <span class="k">new</span> <span class="n">Integer</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"no"</span><span class="o">)));</span>
+      <span class="o">}</span> <span class="k">else</span> <span class="k">if</span> <span class="o">(</span><span class="s">"/auth/login.do"</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">servletPath</span><span class="o">))</span> <span class="o">{</span>
+        <span class="k">if</span> <span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"email"</span><span class="o">)</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="o">{</span>
+          <span class="n">model</span><span class="o">.</span><span class="na">put</span><span class="o">(</span><span class="s">"loginInfo"</span><span class="o">,</span> <span class="k">new</span> <span class="n">Member</span><span class="o">()</span>
+            <span class="o">.</span><span class="na">setEmail</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"email"</span><span class="o">))</span>
+            <span class="o">.</span><span class="na">setPassword</span><span class="o">(</span><span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"password"</span><span class="o">)));</span>
+        <span class="o">}</span>
+      <span class="o">}</span>
+      
+      <span class="c1">// 페이지 컨트롤러를 실행한다.</span>
+      <span class="n">String</span> <span class="n">viewUrl</span> <span class="o">=</span> <span class="n">pageController</span><span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="n">model</span><span class="o">);</span>
+      
+      <span class="c1">// Map 객체에 저장된 값을 ServletRequest에 복사한다.</span>
+      <span class="k">for</span> <span class="o">(</span><span class="n">String</span> <span class="n">key</span> <span class="o">:</span> <span class="n">model</span><span class="o">.</span><span class="na">keySet</span><span class="o">())</span> <span class="o">{</span>
+        <span class="n">request</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="n">key</span><span class="o">,</span> <span class="n">model</span><span class="o">.</span><span class="na">get</span><span class="o">(</span><span class="n">key</span><span class="o">));</span>
+      <span class="o">}</span>
+      
+      <span class="k">if</span> <span class="o">(</span><span class="n">viewUrl</span><span class="o">.</span><span class="na">startsWith</span><span class="o">(</span><span class="s">"redirect:"</span><span class="o">))</span> <span class="o">{</span>
+        <span class="n">response</span><span class="o">.</span><span class="na">sendRedirect</span><span class="o">(</span><span class="n">viewUrl</span><span class="o">.</span><span class="na">substring</span><span class="o">(</span><span class="mi">9</span><span class="o">));</span>
+        <span class="k">return</span><span class="o">;</span>
+      <span class="o">}</span> <span class="k">else</span> <span class="o">{</span>
+        <span class="n">RequestDispatcher</span> <span class="n">rd</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getRequestDispatcher</span><span class="o">(</span><span class="n">viewUrl</span><span class="o">);</span>
+        <span class="n">rd</span><span class="o">.</span><span class="na">include</span><span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">);</span>
+      <span class="o">}</span>
+      
+    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+      <span class="n">request</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="s">"error"</span><span class="o">,</span> <span class="n">e</span><span class="o">);</span>
+      <span class="n">RequestDispatcher</span> <span class="n">rd</span> <span class="o">=</span> <span class="n">request</span><span class="o">.</span><span class="na">getRequestDispatcher</span><span class="o">(</span><span class="s">"/Error.jsp"</span><span class="o">);</span>
+      <span class="n">rd</span><span class="o">.</span><span class="na">forward</span><span class="o">(</span><span class="n">request</span><span class="o">,</span> <span class="n">response</span><span class="o">);</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@WebListener</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">ContextLoaderListener</span> <span class="kd">implements</span> <span class="n">ServletContextListener</span> <span class="o">{</span>
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">contextInitialized</span><span class="o">(</span><span class="n">ServletContextEvent</span> <span class="n">event</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">try</span> <span class="o">{</span>
+      <span class="n">ServletContext</span> <span class="n">sc</span> <span class="o">=</span> <span class="n">event</span><span class="o">.</span><span class="na">getServletContext</span><span class="o">();</span>
+      
+      <span class="n">InitialContext</span> <span class="n">initialContext</span> <span class="o">=</span> <span class="k">new</span> <span class="n">InitialContext</span><span class="o">();</span>
+      <span class="n">DataSource</span> <span class="n">ds</span> <span class="o">=</span> <span class="o">(</span><span class="n">DataSource</span><span class="o">)</span><span class="n">initialContext</span><span class="o">.</span><span class="na">lookup</span><span class="o">(</span>
+          <span class="s">"java:comp/env/jdbc/studydb"</span><span class="o">);</span>
+      
+      <span class="n">MemberDao</span> <span class="n">memberDao</span> <span class="o">=</span> <span class="k">new</span> <span class="n">MemberDao</span><span class="o">();</span>
+      <span class="n">memberDao</span><span class="o">.</span><span class="na">setDataSource</span><span class="o">(</span><span class="n">ds</span><span class="o">);</span>
+      
+      <span class="n">sc</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="s">"/auth/login.do"</span><span class="o">,</span> 
+          <span class="k">new</span> <span class="nf">LogInController</span><span class="o">().</span><span class="na">setMemberDao</span><span class="o">(</span><span class="n">memberDao</span><span class="o">));</span>
+      <span class="n">sc</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="s">"/auth/logout.do"</span><span class="o">,</span> <span class="k">new</span> <span class="n">LogOutController</span><span class="o">());</span>
+      <span class="n">sc</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="s">"/member/list.do"</span><span class="o">,</span> 
+          <span class="k">new</span> <span class="nf">MemberListController</span><span class="o">().</span><span class="na">setMemberDao</span><span class="o">(</span><span class="n">memberDao</span><span class="o">));</span>
+      <span class="n">sc</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="s">"/member/add.do"</span><span class="o">,</span> 
+          <span class="k">new</span> <span class="nf">MemberAddController</span><span class="o">().</span><span class="na">setMemberDao</span><span class="o">(</span><span class="n">memberDao</span><span class="o">));</span>
+      <span class="n">sc</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="s">"/member/update.do"</span><span class="o">,</span> 
+          <span class="k">new</span> <span class="nf">MemberUpdateController</span><span class="o">().</span><span class="na">setMemberDao</span><span class="o">(</span><span class="n">memberDao</span><span class="o">));</span>
+      <span class="n">sc</span><span class="o">.</span><span class="na">setAttribute</span><span class="o">(</span><span class="s">"/member/delete.do"</span><span class="o">,</span> 
+          <span class="k">new</span> <span class="nf">MemberDeleteController</span><span class="o">().</span><span class="na">setMemberDao</span><span class="o">(</span><span class="n">memberDao</span><span class="o">));</span>
+      
+    <span class="o">}</span> <span class="k">catch</span><span class="o">(</span><span class="n">Throwable</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+      <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+
+  <span class="nd">@Override</span>
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">contextDestroyed</span><span class="o">(</span><span class="n">ServletContextEvent</span> <span class="n">event</span><span class="o">)</span> <span class="o">{}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+<p><br /></p>
+
+<h3 id="reference">Reference</h3>
+<ul>
+  <li><a href="http://www.yes24.com/24/Goods/13159413?Acode=101">열혈강의 자바 웹 개발 워크북</a></li>
+</ul>
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/09/16/frontcontroller_dietc/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
+                  <a class="post-link" href="/2016/09/15/dbconnection/">DB커넥션 관련 정리</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-09-15
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#web" title="Category: web" rel="category">web</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="daodata-access-object">1. DAO(Data Access Object)</h1>
+
+<p>DAO는 데이터 처리를 전문으로 하는 객체이다. 데이터베이스나 파일, 메모리 등을 이용하여 애플리케이션 데이터를 생성, 조회, 변경, 삭제하는 역할을 수행한다. DAO는 보통 하나의 DB테이블이나 DB뷰에 대응하고, 여러개의 테이블을 조인(join)한 데이터도 다룬다.</p>
+
+<p><img src="http://joswlv.github.io/images/dao.png" alt="" /></p>
+
+<ol>
+  <li>웹브라우저에서 회원 목록을 요청한다.</li>
+  <li>MemeberListServlet은 회원 목록 데이터를 얻기 위해 MemberDao의 메서드를 호출한다.</li>
+  <li>MemeberDao는 데이터베이스로부터 회원 정보를 가져온다.</li>
+  <li>MemberDao는 겨로가 레코드의 개수만큼 Member객체를 만들어 서블릿에게 반환한다.</li>
+  <li>MemberListServlet은 MemberDao로 부터 받은 회원 목록을 MemberList.jsp에 전달한다.</li>
+  <li>MemberList.jsp는 회원 목록 데이터를 가지고 화면을 생성한다. 그리고 제어권을 MemberListServlet에게 넘긴다.</li>
+  <li>MemberListServlet에게 넘긴다.</li>
+</ol>
+
+<p><strong>예&gt;</strong></p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">MemberDao</span> <span class="o">{</span>
+  <span class="n">Connection</span> <span class="n">connection</span><span class="o">;</span>
+
+  <span class="kd">public</span> <span class="kt">void</span> <span class="nf">setConnection</span><span class="o">(</span><span class="n">Connection</span> <span class="n">connection</span><span class="o">)</span> <span class="o">{</span>
+    <span class="k">this</span><span class="o">.</span><span class="na">connection</span> <span class="o">=</span> <span class="n">connection</span><span class="o">;</span>
+  <span class="o">}</span>
+
+  <span class="kd">public</span> <span class="n">List</span><span class="o">&lt;</span><span class="n">Member</span><span class="o">&gt;</span> <span class="nf">selectList</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+    <span class="n">Statement</span> <span class="n">stmt</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+    <span class="n">ResultSet</span> <span class="n">rs</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+
+    <span class="k">try</span> <span class="o">{</span>
+      <span class="n">stmt</span> <span class="o">=</span> <span class="n">connection</span><span class="o">.</span><span class="na">createStatement</span><span class="o">();</span>
+      <span class="n">rs</span> <span class="o">=</span> <span class="n">stmt</span><span class="o">.</span><span class="na">executeQuery</span><span class="o">(</span>
+          <span class="s">"SELECT MNO,MNAME,EMAIL,CRE_DATE"</span> <span class="o">+</span> 
+              <span class="s">" FROM MEMBERS"</span> <span class="o">+</span>
+          <span class="s">" ORDER BY MNO ASC"</span><span class="o">);</span>
+
+      <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Member</span><span class="o">&gt;</span> <span class="n">members</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ArrayList</span><span class="o">&lt;</span><span class="n">Member</span><span class="o">&gt;();</span>
+
+      <span class="k">while</span><span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="na">next</span><span class="o">())</span> <span class="o">{</span>
+        <span class="n">members</span><span class="o">.</span><span class="na">add</span><span class="o">(</span><span class="k">new</span> <span class="n">Member</span><span class="o">()</span>
+        <span class="o">.</span><span class="na">setNo</span><span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="na">getInt</span><span class="o">(</span><span class="s">"MNO"</span><span class="o">))</span>
+        <span class="o">.</span><span class="na">setName</span><span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">"MNAME"</span><span class="o">))</span>
+        <span class="o">.</span><span class="na">setEmail</span><span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="na">getString</span><span class="o">(</span><span class="s">"EMAIL"</span><span class="o">))</span>
+        <span class="o">.</span><span class="na">setCreatedDate</span><span class="o">(</span><span class="n">rs</span><span class="o">.</span><span class="na">getDate</span><span class="o">(</span><span class="s">"CRE_DATE"</span><span class="o">))</span>	<span class="o">);</span>
+      <span class="o">}</span>
+
+      <span class="k">return</span> <span class="n">members</span><span class="o">;</span>
+
+    <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
+      <span class="k">throw</span> <span class="n">e</span><span class="o">;</span>
+
+    <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+      <span class="k">try</span> <span class="o">{</span><span class="k">if</span> <span class="o">(</span><span class="n">rs</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="n">rs</span><span class="o">.</span><span class="na">close</span><span class="o">();}</span> <span class="k">catch</span><span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{}</span>
+      <span class="k">try</span> <span class="o">{</span><span class="k">if</span> <span class="o">(</span><span class="n">stmt</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span> <span class="n">stmt</span><span class="o">.</span><span class="na">close</span><span class="o">();}</span> <span class="k">catch</span><span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{}</span>
+    <span class="o">}</span>
+  <span class="o">}</span>
+<span class="o">}</span> 
+</code></pre>
+</div>
+
+<p>위의 예에서 두가지를 배울 수 있다.</p>
+
+<ul>
+  <li>
+    <p>첫번째는 <code class="highlighter-rouge">프로그래밍의 유연성</code>이다. <code class="highlighter-rouge">selectList()</code>에서 리턴 타입이 List인터페이스인 것이다. 하지만 실제 리턴값은 ArrayList객체이다. 이런것을 프로그래밍의 유연성이라고 한다.</p>
+  </li>
+  <li>
+    <p>두번째는 <code class="highlighter-rouge">의존성주입(DI, Dependency Injection)</code> 다른말로 <code class="highlighter-rouge">역제어(IoC, Inversion of Control)</code>이다. connection 인스턴스 변수와 셋터 메서드는 MemberDao에서 ServletContext에 접근할 수 없기 때문에, ServletContext에 보관된 DB Connectoin 객체를 꺼낼 수 없어 필요하다. 외부로 부터 Connection객체를 connection 인스턴스변수와 셋터 메서드에 주입한다. 이런 것을 의존성 주입 또는 역제어라고 한다.<br /></p>
+  </li>
+</ul>
+
+<h1 id="servlet---listener">2. Servlet - Listener</h1>
+
+<p>서블릿 컨테이너는 웹 어플리케이션의 상태를 모니터링 할 수 있도록 웹어플리케이션의 시작에서 종료까지 주요한 사건에 대한 알람기능을 제공한다. 이를 사용하기 위해 규칙에 따라 객체를 만들어 DD파일에 등록하면 된다.</p>
+
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/09/15/dbconnection/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
                   <a class="post-link" href="/2016/09/13/jsp_tag/">JSP 각종 태그들</a>
                 </h2>
                 <div class="label">
@@ -844,438 +1167,6 @@ for(Member member : members) {
                 <hr>
               </li>
             
-              <li>
-                <h2>
-                  <a class="post-link" href="/2016/09/10/servlet_and_JDBC/">HttpServlet와 JDBC, Refresh,Filter</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-09-10
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#web" title="Category: web" rel="category">web</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                </div>
-                <div class="excerpt">
-                    <h1 id="jdbc">1. JDBC종류</h1>
-<p>DBMS 밴더는 자신들의 DBMS에 접속할 수 있는 API를 만들어 배포한다. 즉 DMBS를 사용하기 위해서는 밴더가 제공하는 API에 맞게 개발해야한다. 문제는 밴더들 별로, API가 달라 개발비용 및 유지보수에 많은 비용이 들어간다.</p>
-
-<p>그래서 마이크로소프트에서 밴더에 종속 받지 않고 DBMS에 접근 가능한 ODBC를 만들어 배포했다. 대부분의 DBMS API는 ODBC에 포함되어 있다. 이 라이브어리를 <code class="highlighter-rouge">ODBC 드라이버</code>라고 명칭한다.</p>
-
-<h2 id="jdbc-type-1">1) JDBC Type 1</h2>
-
-<p><img src="http://joswlv.github.io/images/jdbctype1.png" alt="" /></p>
-
-<p>주요특징은 다음과 같다.</p>
-
-<ul>
-  <li>ODBC 드라이버를 사용하여 DBMS에 접속</li>
-  <li>JRE에 포함되어 있다</li>
-  <li>속도가 유형중에서 가장 느리다.</li>
-  <li>Excel이나 Access파일에 접속할 때 유용하다.</li>
-</ul>
-
-<h2 id="jdbc-type-2">2) JDBC Type 2</h2>
-
-<p><img src="http://joswlv.github.io/images/jdbctype2.png" alt="" /></p>
-
-<p>주요특징은 다음과 같다.</p>
-
-<ul>
-  <li>DBMS밴더 API 사용</li>
-  <li>별도 JDBC 드라이버를 내려받아야함</li>
-  <li>DBMS 클라이언트의 설치 필요</li>
-</ul>
-
-<h2 id="jdbc-type-3">3) JDBC Type 3</h2>
-
-<p><img src="http://joswlv.github.io/images/jdbctype3.png" alt="" /></p>
-
-<p>주요특징은 다음과 같다.</p>
-
-<ul>
-  <li>미들웨어 서버를 경유하여 DBMS에 접속</li>
-  <li>미들웨어에서 제공하는 JDBC 드라이버 사용</li>
-  <li>ODBC나 밴더 API처럼 C나 C++로 만든 API를 호출하지 않기 때문에 Pure Java라 한다.</li>
-</ul>
-
-<h2 id="jdbc-type-4">4) JDBC Type 4</h2>
-
-<p><img src="http://joswlv.github.io/images/jdbctype4.png" alt="" /></p>
-
-<p>주요특징은 다음과 같다.</p>
-
-<ul>
-  <li>DBMS 프로토콜을 사용하여 직접 통신(ODBC드라이버가 필요없다.)</li>
-  <li>별도로 JDBC 드라이버 내려받아야한다.</li>
-  <li>Pure Java</li>
-  <li>주로 사용되는 드라이버이다.</li>
-</ul>
-
-<h1 id="jdbc-">2. JDBC와 서블릿</h1>
-
-<h2 id="javasql">1) java.sql</h2>
-
-<h3 id="section">1-1) 드라이버등록</h3>
-<p>JDBC프로그래밍의 첫번째 작업은 <code class="highlighter-rouge">DriverManager</code>를 이용하여 java.sql.Driver 인터페이스 구현체를 등록하는 것이다. 방법은 두가지가 있다.</p>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">DriverManager</span><span class="o">.</span><span class="na">registerDriver</span><span class="o">(</span><span class="k">new</span> <span class="n">com</span><span class="o">.</span><span class="na">mysql</span><span class="o">.</span><span class="na">jdbc</span><span class="o">.</span><span class="na">Driver</span><span class="o">());</span> <span class="c1">//DriverManager를 직접이용</span>
-
-<span class="n">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">getInitParameter</span><span class="o">(</span><span class="s">"QName"</span><span class="o">));</span> <span class="c1">//클래스로딩 </span>
-
-<span class="c1">//QName을 서블릿 초기화 매개변수의 값으 가져와서 작성하는 방법도 있다.</span>
-
-<span class="k">this</span><span class="o">.</span><span class="na">getInitParameter</span><span class="o">(</span><span class="cm">/*매개변수 이름 */</span><span class="o">);</span>
-</code></pre>
-</div>
-
-<h3 id="section-1">1-2) 데이터베이스 연결</h3>
-
-<p>다음과 같이 <code class="highlighter-rouge">DriverManager</code>의 <code class="highlighter-rouge">getConnection()</code>을 호출하여 MySQL 서버에 연결할 수 있다.</p>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">conn</span> <span class="o">=</span> <span class="n">DriverManager</span><span class="o">.</span><span class="na">getConnection</span><span class="o">(</span>
-					<span class="s">"jdbc:mysql://localhost/studydb"</span><span class="o">,</span> <span class="c1">//JDBC URL</span>
-					<span class="s">"study"</span><span class="o">,</span>	<span class="c1">// DBMS 사용자 아이디</span>
-					<span class="s">"study"</span><span class="o">);</span>	<span class="c1">// DBMS 사용자 암호</span>
-</code></pre>
-</div>
-
-<h3 id="sql---">1-3) SQL 실행 및 준비</h3>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">stmt</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="na">createStatement</span><span class="o">();</span> <span class="c1">//java.sql.Statement 인터페이스</span>
-
-<span class="n">stmt</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="na">prepareStatement</span><span class="o">(</span>       <span class="c1">//java.sql.PrepareStatement 인터페이스</span>
-					<span class="s">"INSERT INTO MEMBERS(EMAIL,PWD,MNAME,CRE_DATE,MOD_DATE)"</span>
-					<span class="o">+</span> <span class="s">" VALUES (?,?,?,NOW(),NOW())"</span><span class="o">);</span>
-			<span class="n">stmt</span><span class="o">.</span><span class="na">setString</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"email"</span><span class="o">));</span>
-			<span class="n">stmt</span><span class="o">.</span><span class="na">setString</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"password"</span><span class="o">));</span>
-			<span class="n">stmt</span><span class="o">.</span><span class="na">setString</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"name"</span><span class="o">));</span>
-
-</code></pre>
-</div>
-
-<h4 id="javasqlstatement--">java.sql.Statement 인터페이스의 구현체</h4>
-
-<table>
-  <thead>
-    <tr>
-      <th>메서드</th>
-      <th>설명</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>executeQuery()</td>
-      <td>결과가 만들어지는 SQL문을 실행할때 사용, 보통 SELECT문을 실행</td>
-    </tr>
-    <tr>
-      <td>executeUpdate()</td>
-      <td>DML과 DDL관련 SQL문을 실행할때 사용</td>
-    </tr>
-    <tr>
-      <td>execute()</td>
-      <td>SELECT, DML, DDL 명령문 모두에 사용가능</td>
-    </tr>
-    <tr>
-      <td>executeBatch()</td>
-      <td>addBatch()로 등록한 여러개의 SQL문을 한꺼번에 실행할때 사용</td>
-    </tr>
-  </tbody>
-</table>
-
-<p><code class="highlighter-rouge">PreparedStatement</code>는 반복적인 질의를 하거나, 입력 매개변수가 많은 경우에 유용하다. 특히 이미지와 같은 바이너리 데이터를 저장하거나 변경할 경우는 <code class="highlighter-rouge">PreparedStatement</code>만 가능하다.</p>
-
-<p>위의 예제에서 SQL문에서 <code class="highlighter-rouge">?</code>문자로 표시된 것을 입력 매개변수라고 한다. 입력 항목의 값은 SQL문을 실행하기 전에 <code class="highlighter-rouge">setXXX()</code>메서드를 호출하여 설정해야한다.</p>
-
-<table>
-  <thead>
-    <tr>
-      <th>비교항목</th>
-      <th>Statement</th>
-      <th>PreparedStatement</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>실행속도</td>
-      <td>질의 할때마다 SQL문을 컴파일한다.</td>
-      <td>SQL문을 미리 준비하여 컴파일 해둔다. 입력 매개변수 값만 추가하여 서버에 전송한다. 특히 여러번 반복하여 질의하는 경우, 실행속도가 바름</td>
-    </tr>
-    <tr>
-      <td>바이너리데이터전송</td>
-      <td>불가능</td>
-      <td>가능</td>
-    </tr>
-    <tr>
-      <td>프로그래밍 편의성</td>
-      <td>SQL문 안에 입력 매개변수 값이 포함되어 있어서 SQL문이 복잡하고 매개변수가 여러개인 경우 코드 관리가 힘들다.</td>
-      <td>SQL문과 입력 매개변수가 분리되어 있어 코드작성이 편리하다.</td>
-    </tr>
-  </tbody>
-</table>
-
-<h4 id="javasqlresultset--">java.sql.ResultSet 인터페이스의 구현체</h4>
-
-<table>
-  <thead>
-    <tr>
-      <th>메서드</th>
-      <th>설명</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>first()</td>
-      <td>서버에서 첫번째 레코드를 가져온다.</td>
-    </tr>
-    <tr>
-      <td>last()</td>
-      <td>서버에서 마지막번째 레코드를 가져온다.</td>
-    </tr>
-    <tr>
-      <td>previous()</td>
-      <td>서버에서 이전 레코드를 가져온다.</td>
-    </tr>
-    <tr>
-      <td>next()</td>
-      <td>서버에서 다음 레코드를 가져온다.</td>
-    </tr>
-    <tr>
-      <td>getXXX()</td>
-      <td>레코드에서 특정 컬럼의 값을 꺼낸다. XXX는 칼럼의 타입이다.</td>
-    </tr>
-    <tr>
-      <td>updateXXX()</td>
-      <td>레코드에서 특정 칼럼의 값을 변경한다.</td>
-    </tr>
-    <tr>
-      <td>deleteRow()</td>
-      <td>현재 레코드를 지운다.</td>
-    </tr>
-  </tbody>
-</table>
-
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2016/09/10/servlet_and_JDBC/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
-              <li>
-                <h2>
-                  <a class="post-link" href="/2016/09/10/Servlet_programming/">Servlet_programming</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-09-10
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#web" title="Category: web" rel="category">web</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                </div>
-                <div class="excerpt">
-                    <h1 id="cgi-">1.CGI프로그램과 서블릿</h1>
-
-<h2 id="cgi">1)CGI란?</h2>
-<p><img src="http://joswlv.github.io/images/cgi.png" alt="" /></p>
-
-<p>위의 그림은 웹어플리케이션의 실행과정이다. 웹브라우저가 웹서버에게 요청을하고, 서버는 클라이언트가 요청한 프로그램을 찾아서 실행한다. 그리고 해당 프로그램은 작업을 수행한 후 그 결과를 웹서버에게 돌려준다. 그러면 웹서버는 그 결과를 HTTP 형식에 맞추어 웹브라우저에게 보낸다.</p>
-
-<p>이대 웹서버와 프로그램 사이에 데이터를 주고받는 규칙을 <code class="highlighter-rouge">CGI(Common Gateway Interface)</code>라고 한다. 그래서 CGI규칙에 따라서 웹서버와 데이터를 주고 받도록 작성된 프로그램을 <code class="highlighter-rouge">CGI프로그램</code>이라한다.</p>
-
-<p>CGI프로그램은 C나 C++, java와 같은 컴파일 언어와 스크립언어로 작성할 수 있다.</p>
-
-<h2 id="section">2)서블릿</h2>
-
-<p>자바로 만든 CGI프로그램을 <code class="highlighter-rouge">서블릿(Servlet)</code>이라고 한다. 자바 서블릿이 다른 CGI 프로그램과 다른 점은, 웹 서버와 직접 데이터를 주고 받지 않으며, 전문 프로그램에 의해 관리된다는 점이다.</p>
-
-<h3 id="section-1">2-1)서블릿 컨테이너</h3>
-
-<p><img src="http://joswlv.github.io/images/servlet.png" alt="" /></p>
-
-<p>서블릿의 생성과 실행, 소멸 등 생명주기를 관리하는 프로그램을 <code class="highlighter-rouge">서블릿 컨테이너(Servlet Container)</code>라고 한다. 서블릿 컨테이너가 서블릿을 대신하여 CGI규칙에 따라 웹서버와 데이터를 주고 받는다. 더 이상 CGI규칙에 대해 알 필요가 없지만, 서블릿 컨테이너와 서블릿 사이의 규칙을 알아야한다.</p>
-
-<h1 id="javaxservletservlet-">2. javax.servlet.Servlet 인터페이스</h1>
-
-<h2 id="section-2">1)서블릿 인터페이스</h2>
-<p>서블릿 클래스는 반드시 javax.servlet.Servlet 인터페이스를 구현해야한다. 서블릿 컨테이너가 서블릿에 대해 호출할 메서드를 정의한 것이 Servlet인터페이스 이다.</p>
-
-<blockquote>
-  <p>서블릿 생명주기와 관련된 메소드</p>
-
-  <ul>
-    <li>init()</li>
-    <li>service()</li>
-    <li>destroy()</li>
-  </ul>
-</blockquote>
-
-<ul>
-  <li>getServletInfo()</li>
-  <li>getServletConfig()</li>
-</ul>
-
-<p>여기서 <code class="highlighter-rouge">service()</code>는 클라이언트가 요청할 때 마다 호출되는 메서드이다. 즉 실질적으로 서비스 작업을 수행하는 메서드 이다. 이 메서드에 서블릿이 해야 할 일을 작성하면된다.</p>
-
-<p><code class="highlighter-rouge">web.xml</code>파일을 <code class="highlighter-rouge">배치기술서(Deployment Descriptor)</code> 또는 <code class="highlighter-rouge">DD파일</code>이라고 한다. 여기에 웹어플리케이션의 배치 정보를 담고 있다. DD파일에 등록되지 않은 서블릿은 서블릿 컨테이너가 찾을 수 없다. URL과 서블릿도 매핑한다.</p>
-
-<blockquote>
-  <p>*참고 페키지명+클래스명 = Fully qualified name = QName 이라한다.</p>
-</blockquote>
-
-<h2 id="section-3">2) 서블릿 구동 절차</h2>
-
-<ol>
-  <li>클라이언트의 요청이 들어오면 서블릿 컨테이너는 서블릿을 찾는다.</li>
-  <li>서블릿 클래스를 로딩하고 인스턴스를 준비한 후 생성자를 호출한다. 그리고 서블릿 초기화 메서드인 init()를 호출합니다.</li>
-  <li>클라이언트 요청을 처리하는 service() 메서드를 호출한다.</li>
-  <li>service() 메서드에서 만든 결과를 HTTP 프로토콜에 맞추어 클라이언트에 응답하는 것으로 요청처리를 완료합니다.</li>
-  <li>서블릿 컨테이너를 종료하거나, 웹애플리케이션을 종료를 한다면,</li>
-  <li>서블릿 컨테이너는 종료되기 전에 서블릿이 마무리 작업을 수행할 수 있도록 생성된 모든 서블릿에 대해 destroy()메서드를 호출한다.</li>
-</ol>
-
-<h2 id="welcom-files">3) Welcom Files</h2>
-
-<p><code class="highlighter-rouge">웰컴 파일(Welcome Files)</code>이란, 디렉토리의 기본 웹페이지를 의미한다. 웰컴파일의 이름은 <code class="highlighter-rouge">web.xml</code>의 <code class="highlighter-rouge">&lt;welcome-file-list&gt;</code> 태그를 사용하여 설정할 수 있다. 이 태그의 하위 태그로 <code class="highlighter-rouge">&lt;welcome-file&gt;</code>이 있는데, 여기에 파일이름을 적으면 된다. 여러 개의 웰컴파일을 등록하게 되면, 디렉토리에서 웰컴 파일을 찾을 때 위에서부터 아래로 순차적으로 조회한다.</p>
-
-<h1 id="genericservlet">3. GenericServlet</h1>
-
-<p><code class="highlighter-rouge">GenericServlet</code>은 추상 클래스로 서블릿 클래스가 필요로 하는 <code class="highlighter-rouge">init()</code>, <code class="highlighter-rouge">destroy()</code>, <code class="highlighter-rouge">getServletConfig()</code>, <code class="highlighter-rouge">getServletInfo()</code>를 미리 구현하여 상속한다. 즉 <code class="highlighter-rouge">service()</code>메소드만 구현하면 된다.</p>
-
-<h2 id="servletrequest--">1) ServletRequest의 주요 메소드</h2>
-
-<table>
-  <thead>
-    <tr>
-      <th>메소드</th>
-      <th>설명</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>getRemoteAddr()</td>
-      <td>서비스를 요청한 클라이언트의 Ip주소를 반환</td>
-    </tr>
-    <tr>
-      <td>getScheme()</td>
-      <td>클라이언트가 요청한 URI형식 Scheme을 반환 즉 url에서 ‘:’문자전에 오는 값을 반환</td>
-    </tr>
-    <tr>
-      <td>getProtocol()</td>
-      <td>요청한 프로토콜의 이름과 버전을 반환</td>
-    </tr>
-    <tr>
-      <td>getParameterNames()</td>
-      <td>요청정보에서 매개변수 이름만 추출하여 반환</td>
-    </tr>
-    <tr>
-      <td>getParameterValues()</td>
-      <td>요청정보에서 매개변수 값만 추출하여 반환</td>
-    </tr>
-    <tr>
-      <td>getParameterMap()</td>
-      <td>요청 정보에서 매개변수들을 Map객체에 담아서 반환</td>
-    </tr>
-    <tr>
-      <td>setCharacteerEncoding()</td>
-      <td>POST요청의 매개변수에 대한 문자 집합을 설정 (기본은 <code class="highlighter-rouge">ISO-8859-1</code>)</td>
-    </tr>
-  </tbody>
-</table>
-
-<h2 id="servletresponse-">2) servletResponse 메소드</h2>
-<ul>
-  <li>setContentType() : 출력할 데이터의 인코딩 형식과 문자 집합을 설정</li>
-  <li>setCharacterEncoding() : 출력할 데이터의 문자 집합을 설정</li>
-</ul>
-
-<p>ex) `res.setContentType(“text/plain;chartest=UTF-8”);</p>
-
-<blockquote>
-  <p><code class="highlighter-rouge">setContentType()</code>의 인자 형식이 올바르지 않으면 웹브라우저는 서버에서 받은 결과를 화면에 출력하는 대신 파일저장 대화창을 띄운다.</p>
-</blockquote>
-
-<h1 id="webservlet------">4. @WebServlet 애노테이션을 이용한 서블릿 배치 정보 설정</h1>
-
-<p><code class="highlighter-rouge">Servlet 3.0</code> 사양부터는 애노테이션으로 서블릿 배치 정보를 설정할 수 있다. <code class="highlighter-rouge">web.xml</code>대신 애노테이션을 이용해 배치 정보를 작성해보자</p>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@WebServlet</span><span class="o">(</span>
-  <span class="n">urlPatterns</span><span class="o">={</span><span class="s">"/member/update"</span><span class="o">},</span>
-  <span class="n">initParams</span><span class="o">={</span>
-	  <span class="nd">@WebInitParam</span><span class="o">(</span><span class="n">name</span><span class="o">=</span><span class="s">"driver"</span><span class="o">,</span><span class="n">value</span><span class="o">=</span><span class="s">"com.mysql.jdbc.Driver"</span><span class="o">),</span>
-	  <span class="nd">@WebInitParam</span><span class="o">(</span><span class="n">name</span><span class="o">=</span><span class="s">"url"</span><span class="o">,</span><span class="n">value</span><span class="o">=</span><span class="s">"jdbc:mysql://localhost/studydb"</span><span class="o">),</span>
-	  <span class="nd">@WebInitParam</span><span class="o">(</span><span class="n">name</span><span class="o">=</span><span class="s">"username"</span><span class="o">,</span><span class="n">value</span><span class="o">=</span><span class="s">"study"</span><span class="o">),</span>
-	  <span class="nd">@WebInitParam</span><span class="o">(</span><span class="n">name</span><span class="o">=</span><span class="s">"password"</span><span class="o">,</span><span class="n">value</span><span class="o">=</span><span class="s">"study"</span><span class="o">)</span>
-  <span class="o">}</span>
-<span class="o">)</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CalculatorServlet</span> <span class="kd">extends</span> <span class="n">GenericServlet</span> <span class="o">{</span>
-	<span class="nd">@Override</span>
-	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">service</span><span class="o">(</span><span class="n">ServletRequest</span> <span class="n">req</span><span class="o">,</span> <span class="n">ServletResponse</span> <span class="n">res</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">ServletException</span><span class="o">,</span> 
-		<span class="o">....</span>
-	<span class="o">}</span>
-</code></pre>
-</div>
-
-<h3 id="reference">Reference</h3>
-<ul>
-  <li><a href="http://www.yes24.com/24/Goods/13159413?Acode=101">열혈강의 자바 웹 개발 워크북</a></li>
-</ul>
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2016/09/10/Servlet_programming/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
         </ul>
 
 
@@ -1354,7 +1245,7 @@ for(Member member : members) {
                             <span class="name">
                                 Java
                             </span>
-                            <span class="badge">4</span>
+                            <span class="badge">5</span>
                         </a>
                     </li>
                     
@@ -1408,7 +1299,7 @@ for(Member member : members) {
                             <span class="name">
                                 ElasticSearch
                             </span>
-                            <span class="badge">1</span>
+                            <span class="badge">2</span>
                         </a>
                     </li>
                     
@@ -1430,7 +1321,11 @@ for(Member member : members) {
                 </div>
                 <ul class="content-ul" recent>
                     
+                        <li><a href="/2017/03/01/stringbuildervsstringbuffer/">StringBuilder vs StringBuffer</a></li>
+                    
                         <li><a href="/2017/02/26/basicrdd/">기본 RDD연산들(트랜스포메이션, 액션)</a></li>
+                    
+                        <li><a href="/2017/02/19/logstash/">Logstash 기초</a></li>
                     
                         <li><a href="/2017/02/18/elasticsearchbasic/">ElasticSearch 기초</a></li>
                     
@@ -1445,10 +1340,6 @@ for(Member member : members) {
                         <li><a href="/2016/12/18/groupconcat/">GROUP_CONCAT</a></li>
                     
                         <li><a href="/2016/12/17/truncateanddelete/">TRUNCATE와 DELETE</a></li>
-                    
-                        <li><a href="/2016/11/27/flasnginxsetting/">Flask + Nginx 설정</a></li>
-                    
-                        <li><a href="/2016/11/20/realtimeweb/">Real-time web tec List</a></li>
                     
                 </ul>
             </div>

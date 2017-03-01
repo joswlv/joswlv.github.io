@@ -111,6 +111,341 @@
             
               <li>
                 <h2>
+                  <a class="post-link" href="/2016/11/18/Shortcircuitevaluation/">Short-circuit evaluation</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-11-18
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#Java" title="Category: Java" rel="category">Java</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="short-circuit-evaluation">Short-circuit evaluation이란</h1>
+
+<blockquote>
+  <p><code class="highlighter-rouge">and</code>, <code class="highlighter-rouge">or</code>논리 연산에서 인자 하나만 보고 결과를 확실히 알 수 있을 때, 뒤에 나오는 인자를 확인하지 않고 바로 답을 내는 방법이다. <code class="highlighter-rouge">&amp;&amp;</code> 연산일 때, 하나라도 false이면 무조건 답이 false이고 <code class="highlighter-rouge">||</code> 연산일 땐, 하나라도 true이면 무조건 답이 true이다.</p>
+</blockquote>
+
+<p>지원하는 언어는 <a href="https://en.wikipedia.org/wiki/Short-circuit_evaluation#Support_in_common_programming_languages">여기</a></p>
+
+<p>예를 보면 다음과 같다.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>조건식 1 &amp;&amp; 조건식 2
+조건식 1 이 false 이면, 조건식 2 를 건너뜀
+</code></pre>
+</div>
+
+<h4 id="section">설명</h4>
+
+<p><code class="highlighter-rouge">&amp;&amp;</code>연산자에서는 두 조건식이 모두 true가 되어야 전체 결과가 true가 되는데, <code class="highlighter-rouge">조건식1</code>이 <code class="highlighter-rouge">false</code>가되면 <code class="highlighter-rouge">조건식2</code>을 보지 않아도 전체가 <code class="highlighter-rouge">false</code>가 되므로 <code class="highlighter-rouge">조건식2</code>를 체크하지 않는다.</p>
+
+<h1 id="section-1">적용한 예</h1>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="k">if</span> <span class="o">(</span><span class="n">check1</span> <span class="o">==</span> <span class="err">''</span> <span class="o">&amp;&amp;</span> <span class="n">check2</span> <span class="o">==</span> <span class="kc">null</span><span class="o">){</span>
+	<span class="n">blabla</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>위 경우에서 <code class="highlighter-rouge">''</code>을 먼저 체크하는 것보다 <code class="highlighter-rouge">null</code>인 경우를 먼저 체크하는 것이 안전하다고 한다.</p>
+
+<p>수정하면 아래와 같다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="k">if</span> <span class="o">(</span><span class="n">check2</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">check1</span> <span class="o">==</span> <span class="err">''</span><span class="o">){</span>
+	<span class="n">blabla</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p><br /></p>
+
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/11/18/Shortcircuitevaluation/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
+                  <a class="post-link" href="/2016/11/10/JQuery_findnode/">jquery 선택자</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-11-10
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#js" title="Category: js" rel="category">js</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="jquery-">JQuery 노드찾기</h1>
+
+<ol>
+  <li>노드 찾기</li>
+</ol>
+
+<ul>
+  <li>
+    <p>태그 이름으로 노드 찾기 :  $(“태그이름”),   $(“선택자”)</p>
+  </li>
+  <li>
+    <p>클래스 이름으로 노드 찾기 : $(“.클래스이름”)</p>
+  </li>
+  <li>
+    <p>ID로 노드 찾기 : $(“선택자”)</p>
+  </li>
+  <li>
+    <p>속성으로 노드 찾기 : $(“[속성이름=값]”)</p>
+  </li>
+  <li>
+    <p>찾은 요소 개수 구하기 :  .size()    ,     .length</p>
+  </li>
+  <li>
+    <p>찾은 요소 n번째 접근하기 : .eq(index)    ,    .each(function(index){});</p>
+  </li>
+  <li>
+    <p>찾은 요소에서 특정요소만을 걸러내기 : .filter(“선택자”)</p>
+  </li>
+  <li>
+    <p>찾은 요소에서 특정 자식요소만 찾기 :  .find(“선택자”)</p>
+  </li>
+</ul>
+
+<ol>
+  <li>자식 노드 찾기</li>
+</ol>
+
+<ul>
+  <li>
+    <p>전체 자식 노드 찾기</p>
+
+ 	- 텍스트 노드 포함 전체 자식 노드 찾기 :  $(“선택자”).contents()
+
+ 	- 텍스트 노드 제외한 전체 자식 노드 찾기 : $(“선택자”).children(“선택자”)
+  </li>
+  <li>
+    <p>n번째 자식 노드 접근</p>
+
+ 	- $(“선택자”).children().eq(N)
+
+ 	- $(“선택자”).children(“:eq(N)”)
+  </li>
+  <li>
+    <p>첫번째 자식 노드 접근</p>
+
+ 	- $(“선택자”).children().first()
+
+ 	- $(“선택자”).children(“:first”)
+
+    <div class="highlighter-rouge"><pre class="highlight"><code>	- $("선택자").children().eq(0)
+</code></pre>
+    </div>
+
+ 	- $(“선택자”).children(“:eq(0)”)
+  </li>
+  <li>
+    <p>마지막 자식 노드 접근</p>
+
+ 	- $(“선택자”).children().last()
+
+ 	- $(“선택자”).children(“:last”)
+  </li>
+</ul>
+
+<ol>
+  <li>부모 노드 찾기</li>
+</ol>
+
+<ul>
+  <li>
+    <p>바로 위의 부모 : $(“선택자”).parent()</p>
+  </li>
+  <li>
+    <p>모든 부모 찾기</p>
+
+ 	- $(“선택자”).parents()  모든 부모
+  </li>
+  <li>
+    <p>모든 부모 중 선택자에 해당하는 부모 찾기</p>
+
+ 	- $(“선택자”).parents(“선택자”)
+  </li>
+</ul>
+
+<ol>
+  <li>형제 노드 찾기</li>
+</ol>
+
+<ul>
+  <li>
+    <p>이전 형제 노드 찾기</p>
+
+ 	- $(“선택자”).prev()
+
+ 	- $(“선택자”).prevAll(“선택자”);
+  </li>
+  <li>
+    <p>다음 형제 노드 찾기</p>
+
+ 	- $(“선택자”).next()
+
+ 	- $(“선택자”).nextAll(“선택자”);
+  </li>
+</ul>
+
+<ol>
+  <li>노드 생성,추가,이동,삭제</li>
+</ol>
+
+<ul>
+  <li>
+    <p>생성</p>
+
+ 	- $(“노드”)
+
+ 	- $(“선택자”).html(“<노드>...")
+</노드>
+ 	- $(“노드”).clone()
+  </li>
+  <li>
+    <p>추가</p>
+
+    <ul>
+      <li>
+        <p>$기준노드.append($추가노드)</p>
+      </li>
+      <li>
+        <p>$추가노드.appendTo($기준노드)</p>
+      </li>
+      <li>
+        <p>$기준노드.prepend($추가노드)</p>
+      </li>
+      <li>
+        <p>$추가노드.prependTo($기준노드)</p>
+
+        <ul>
+          <li>$추가노드.insertBefore($기준노드)</li>
+        </ul>
+      </li>
+      <li>
+        <p>$기준노드.before($추가노드)</p>
+      </li>
+      <li>
+        <p>$추가노드.insertAfter($기준노드)</p>
+      </li>
+      <li>
+        <p>$기준노드.after($추가노드)</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>삭제</p>
+
+    <p>– $(“선택자”).remove()</p>
+  </li>
+  <li>
+    <p>이동</p>
+
+    <ul>
+      <li>
+        <p>$기준노드.append($이동노드)</p>
+      </li>
+      <li>
+        <p>$이동노드.appendTo($기준노드)</p>
+      </li>
+      <li>
+        <p>$이동노드.insertBefore($기준노드)</p>
+      </li>
+      <li>
+        <p>$기준노드.before($이동노드)</p>
+
+        <ul>
+          <li>$이동노드.insertAfter($기준노드)</li>
+        </ul>
+      </li>
+      <li>
+        <p>$기준노드.after($이동노드)</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<ol>
+  <li>텍스트 노드 다루기</li>
+</ol>
+
+<ul>
+  <li>
+    <p>텍스트 노드 생성 : $(“텍스트”)</p>
+  </li>
+  <li>
+    <p>텍스트 노드 추가 : $기준노드.append(“텍스트”)</p>
+  </li>
+  <li>
+    <p>텍스트 노드 변경 : $기준노드.text(“새로운 텍스트”)</p>
+  </li>
+</ul>
+
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/11/10/JQuery_findnode/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
                   <a class="post-link" href="/2016/11/07/jqueryselector/">jquery :last 선택자</a>
                 </h2>
                 <div class="label">
@@ -498,169 +833,6 @@
                 <hr>
               </li>
             
-              <li>
-                <h2>
-                  <a class="post-link" href="/2016/11/02/imagepixelget/">이미지 픽셀다루기</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-11-02
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#js" title="Category: js" rel="category">js</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                </div>
-                <div class="excerpt">
-                    <h1 id="section">이미지 픽셀값 뽑기</h1>
-
-<p>이미지를 로드 -&gt; Canvas에 그리기 -&gt; imgdata뽑기 -&gt; 가지고 놀기!!</p>
-
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">canvas</span><span class="p">;</span>
-<span class="kd">var</span> <span class="nx">ctx</span><span class="p">;</span>
-<span class="kd">var</span> <span class="nx">imgsrc</span><span class="p">;</span>
-<span class="kd">function</span> <span class="nx">loadFile</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">output</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'output'</span><span class="p">);</span>
-    <span class="nx">output</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">URL</span><span class="p">.</span><span class="nx">createObjectURL</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">files</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
-    <span class="nx">imgsrc</span><span class="o">=</span><span class="nx">output</span><span class="p">.</span><span class="nx">src</span><span class="p">;</span>
-    <span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="c1">// drawing active image</span>
-        <span class="kd">var</span> <span class="nx">image</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Image</span><span class="p">();</span>
-        <span class="c1">// creating canvas object</span>
-        <span class="nx">image</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-            <span class="nx">ctx</span><span class="p">.</span><span class="nx">drawImage</span><span class="p">(</span><span class="nx">image</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">image</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> <span class="nx">image</span><span class="p">.</span><span class="nx">height</span><span class="p">);</span> <span class="c1">// draw the image on the canvas</span>
-        <span class="p">};</span>
-        <span class="nx">image</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">imgsrc</span><span class="p">;</span>
-        <span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'panel'</span><span class="p">);</span>
-        <span class="nx">ctx</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s1">'2d'</span><span class="p">);</span>
-        <span class="nx">$</span><span class="p">(</span><span class="s1">'#panel'</span><span class="p">).</span><span class="nx">mousemove</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// mouse move handler</span>
-            <span class="kd">var</span> <span class="nx">canvasOffset</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">canvas</span><span class="p">).</span><span class="nx">offset</span><span class="p">();</span>
-            <span class="kd">var</span> <span class="nx">canvasX</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">pageX</span> <span class="o">-</span> <span class="nx">canvasOffset</span><span class="p">.</span><span class="nx">left</span><span class="p">);</span>
-            <span class="kd">var</span> <span class="nx">canvasY</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">pageY</span> <span class="o">-</span> <span class="nx">canvasOffset</span><span class="p">.</span><span class="nx">top</span><span class="p">);</span>
-            <span class="kd">var</span> <span class="nx">imageData</span> <span class="o">=</span> <span class="nx">ctx</span><span class="p">.</span><span class="nx">getImageData</span><span class="p">(</span><span class="nx">canvasX</span><span class="p">,</span> <span class="nx">canvasY</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
-            <span class="kd">var</span> <span class="nx">pixel</span> <span class="o">=</span> <span class="nx">imageData</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
-            <span class="kd">var</span> <span class="nx">pixelColor</span> <span class="o">=</span> <span class="s2">"rgba("</span> <span class="o">+</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">", "</span> <span class="o">+</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s2">", "</span> <span class="o">+</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s2">", "</span> <span class="o">+</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="s2">")"</span><span class="p">;</span>
-            <span class="nx">$</span><span class="p">(</span><span class="s1">'#preview'</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="s1">'backgroundColor'</span><span class="p">,</span> <span class="nx">pixelColor</span><span class="p">);</span>
-        <span class="p">});</span>
-        <span class="nx">$</span><span class="p">(</span><span class="s1">'#panel'</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// mouse click handler</span>
-            <span class="kd">var</span> <span class="nx">canvasOffset</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">canvas</span><span class="p">).</span><span class="nx">offset</span><span class="p">();</span>
-            <span class="kd">var</span> <span class="nx">canvasX</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">pageX</span> <span class="o">-</span> <span class="nx">canvasOffset</span><span class="p">.</span><span class="nx">left</span><span class="p">);</span>
-            <span class="kd">var</span> <span class="nx">canvasY</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">pageY</span> <span class="o">-</span> <span class="nx">canvasOffset</span><span class="p">.</span><span class="nx">top</span><span class="p">);</span>
-            <span class="kd">var</span> <span class="nx">imageData</span> <span class="o">=</span> <span class="nx">ctx</span><span class="p">.</span><span class="nx">getImageData</span><span class="p">(</span><span class="nx">canvasX</span><span class="p">,</span> <span class="nx">canvasY</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
-            <span class="kd">var</span> <span class="nx">pixel</span> <span class="o">=</span> <span class="nx">imageData</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
-            <span class="nx">$</span><span class="p">(</span><span class="s1">'#rVal'</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">pixel</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
-            <span class="nx">$</span><span class="p">(</span><span class="s1">'#gVal'</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">pixel</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
-            <span class="nx">$</span><span class="p">(</span><span class="s1">'#bVal'</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">pixel</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
-            <span class="nx">$</span><span class="p">(</span><span class="s1">'#rgbVal'</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">pixel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">','</span> <span class="o">+</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s1">','</span> <span class="o">+</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
-            <span class="nx">$</span><span class="p">(</span><span class="s1">'#rgbaVal'</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">pixel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">','</span> <span class="o">+</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s1">','</span> <span class="o">+</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s1">','</span> <span class="o">+</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">3</span><span class="p">]);</span>
-            <span class="kd">var</span> <span class="nx">dColor</span> <span class="o">=</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="mi">256</span> <span class="o">*</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">65536</span> <span class="o">*</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
-            <span class="nx">$</span><span class="p">(</span><span class="s1">'#hexVal'</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="s1">'#'</span> <span class="o">+</span> <span class="nx">dColor</span><span class="p">.</span><span class="nx">toString</span><span class="p">(</span><span class="mi">16</span><span class="p">));</span>
-        <span class="p">});</span>
-    <span class="p">});</span>
-<span class="p">}</span>
-</code></pre>
-</div>
-
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2016/11/02/imagepixelget/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
-              <li>
-                <h2>
-                  <a class="post-link" href="/2016/10/29/directorylisting/">Apache Directory listing 제거</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-10-29
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#Etc" title="Category: Etc" rel="category">Etc</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                </div>
-                <div class="excerpt">
-                    <p>Apache설치한경로에서  httpd.conf를 수정한다.</p>
-
-<blockquote>
-  <p>/etc/httpd/conf/httpd.conf	(RPM 설치)</p>
-
-  <p>/usr/local/apach/conf/httpd.conf	(tar 설치)</p>
-</blockquote>
-
-<p><strong>Options Indexes FollowSymLinks Includes</strong></p>
-
-<p>또는</p>
-
-<p><strong>Options All Indexes FollowSymLinks MultiViews</strong></p>
-
-<p>위 두문구중에서 하나는 있을 것이다.</p>
-
-<p>거기서 <code class="highlighter-rouge">Indexes</code>구문을 제거하고 아래와 같이 수정하고 저장한다.</p>
-
-<p><strong>Options FollowSymLinks Includes</strong></p>
-
-<p>또는</p>
-
-<p><strong>Options All FollowSymLinks MultiViews</strong></p>
-
-<p>그리고 apache를 재시작하면 끝~!!</p>
-
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2016/10/29/directorylisting/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
         </ul>
 
 
@@ -739,7 +911,7 @@
                             <span class="name">
                                 Java
                             </span>
-                            <span class="badge">4</span>
+                            <span class="badge">5</span>
                         </a>
                     </li>
                     
@@ -793,7 +965,7 @@
                             <span class="name">
                                 ElasticSearch
                             </span>
-                            <span class="badge">1</span>
+                            <span class="badge">2</span>
                         </a>
                     </li>
                     
@@ -815,7 +987,11 @@
                 </div>
                 <ul class="content-ul" recent>
                     
+                        <li><a href="/2017/03/01/stringbuildervsstringbuffer/">StringBuilder vs StringBuffer</a></li>
+                    
                         <li><a href="/2017/02/26/basicrdd/">기본 RDD연산들(트랜스포메이션, 액션)</a></li>
+                    
+                        <li><a href="/2017/02/19/logstash/">Logstash 기초</a></li>
                     
                         <li><a href="/2017/02/18/elasticsearchbasic/">ElasticSearch 기초</a></li>
                     
@@ -830,10 +1006,6 @@
                         <li><a href="/2016/12/18/groupconcat/">GROUP_CONCAT</a></li>
                     
                         <li><a href="/2016/12/17/truncateanddelete/">TRUNCATE와 DELETE</a></li>
-                    
-                        <li><a href="/2016/11/27/flasnginxsetting/">Flask + Nginx 설정</a></li>
-                    
-                        <li><a href="/2016/11/20/realtimeweb/">Real-time web tec List</a></li>
                     
                 </ul>
             </div>
