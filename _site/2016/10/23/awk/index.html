@@ -382,6 +382,25 @@ awk <span class="s1">'BEGIN {FS="\t"; OFS ="-"} {print $1 ,  $2} END {print "총
   </tbody>
 </table>
 
+<h4 id="section-2">자주 사용하는 예</h4>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="o">[</span>irteam@exexex ~]<span class="nv">$ </span>cat t_06.txt
+863328267  2589984801  /log/applog/2017/03/06
+1356084140  4068252420  /log/logsss/2017/03/06
+6829747498  20489242494  /log/dmp_log/2017/03/06
+18849  56547  /log/logs/2017/03/06
+2867572830  8602718490  /log/join/2017/03/06
+1224  3672  /log/dsapplog/2017/03/06
+</code></pre>
+</div>
+
+<p>이런 내용에서 첫번째 column 의 합을 구하고 싶을 때</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>awk '{sum += $1} END {print "sum = ",sum}'
+</code></pre>
+</div>
+<p>이렇게 적으면 된다.</p>
+
 <p><br /></p>
 
 <h3 id="reference">Reference</h3>
