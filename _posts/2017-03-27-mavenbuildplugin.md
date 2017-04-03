@@ -1,6 +1,6 @@
 ---
 layout: post
-title: Maven Build Plugin
+title: Maven Build Plugin & 옵션
 date: 2017-03-27 09:04
 categories: Etc
 ---
@@ -108,53 +108,52 @@ dependency에 있는 라이브러리 jar파일을 사용자가 지정한 디렉�
 	</executions>
 </plugin>
 ```
+# alpha, beta, real에 따라 resources dir구분하기
 
-### 5. alpha, beta, real에 따라 resources dir구분하기
+```xml
+<profiles>
+	<profile>
+		<id>dev</id>
+		<properties>
+			<env>dev</env>
+		</properties>
+	</profile>
 
-```
-	<profiles>
-		<profile>
-			<id>dev</id>
-			<properties>
-				<env>dev</env>
-			</properties>
-		</profile>
+	<profile>
+		<id>alpha</id>
+		<properties>
+			<env>alpha</env>
+		</properties>
+	</profile>
 
-		<profile>
-			<id>alpha</id>
-			<properties>
-				<env>alpha</env>
-			</properties>
-		</profile>
+	<profile>
+		<id>beta</id>
+		<properties>
+			<env>beta</env>
+		</properties>
+	</profile>
 
-		<profile>
-			<id>beta</id>
-			<properties>
-				<env>beta</env>
-			</properties>
-		</profile>
+	<profile>
+		<id>real</id>
+		<properties>
+			<env>real</env>
+			<value>real</value>
+		</properties>
+	</profile>
+</profiles>
 
-		<profile>
-			<id>real</id>
-			<properties>
-				<env>real</env>
-				<value>real</value>
-			</properties>
-		</profile>
-	</profiles>
-
-	<build>
-		<finalName>DMP-DATA-API</finalName>
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-			</resource>
-			<resource>
-				<directory>src/main/resources-${env}</directory>
-			</resource>
-		</resources>
-		...
-	</build>
+<build>
+	<finalName>DMP-DATA-API</finalName>
+	<resources>
+		<resource>
+			<directory>src/main/resources</directory>
+		</resource>
+		<resource>
+			<directory>src/main/resources-${env}</directory>
+		</resource>
+	</resources>
+	...
+</build>
 ```
 
 profile에 변수를 등록하고 `<resource>`에 `directory`path만 적어 주면 된다. 
