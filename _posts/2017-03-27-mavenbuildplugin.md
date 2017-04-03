@@ -108,3 +108,70 @@ dependency에 있는 라이브러리 jar파일을 사용자가 지정한 디렉�
 	</executions>
 </plugin>
 ```
+
+### 5. alpha, beta, real에 따라 resources dir구분하기
+
+```
+	<profiles>
+		<profile>
+			<id>dev</id>
+			<properties>
+				<env>dev</env>
+			</properties>
+		</profile>
+
+		<profile>
+			<id>alpha</id>
+			<properties>
+				<env>alpha</env>
+			</properties>
+		</profile>
+
+		<profile>
+			<id>beta</id>
+			<properties>
+				<env>beta</env>
+			</properties>
+		</profile>
+
+		<profile>
+			<id>real</id>
+			<properties>
+				<env>real</env>
+				<value>real</value>
+			</properties>
+		</profile>
+	</profiles>
+
+	<build>
+		<finalName>DMP-DATA-API</finalName>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+			</resource>
+			<resource>
+				<directory>src/main/resources-${env}</directory>
+			</resource>
+		</resources>
+		...
+	</build>
+```
+
+profile에 변수를 등록하고 `<resource>`에 `directory`path만 적어 주면 된다. 
+
+resource diretory가 하나로 합쳐지면서 같은 파일명은 `resources-${env}`의 파일 명으로 overwrite 된다. 
+그 이유는 순차적을 실행되면서 overwrite 되기 때문이다.
+
+아래와 같이 resources폴더를 구성하고 `mvn clean package -P real`을 하면 순차적으로 copy되는 것을 확인 할 수 있다.
+
+<br>
+
+![]({{ site.url }}/images/maven_directory.png)
+
+```
+[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ dmp-data-api ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 6 resources		//resources
+[INFO] Copying 3 resources		//resources-${env}
+```
+
