@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="Jo Blog">
+    <meta property="og:description" content="Jo Seungwan Blog!~~!">
+    <meta property="og:image" content="https://raw.githubusercontent.com/joswlv/joswlv.github.io/master/bg.jpg">
+    <meta property="og:url" content="https://joswlv.github.io">
+
+    <title>Maven Build Plugin &amp; 옵션</title>
+    <meta name="description" content="Maven Build Plugin1. 디렉토리에 Resource 디렉토리 추가 방법Maven 빌드를 할때, src 이외에 디록토리를 추가가 필요 할때가 있다.방법은 다음과 같다.&lt;build&gt;&lt;resources&gt;	&lt;resource&gt;		&lt;direc...">
+
+    <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="stylesheet" href="/css/fontawesome/css/font-awesome.min.css ">
+    <link rel="stylesheet" href="/css/main.css ">
+    <link rel="canonical" href="http://joswlv.github.io/2017/03/27/mavenbuildplugin/">
+    <link rel="alternate" type="application/rss+xml" title="Joswlv" href="http://joswlv.github.io/feed.xml ">
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-83868242-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</head>
+
+
+  <body>
+
+    <header id="top">
+    <div class="wrapper">
+        <a href="/" class="brand">Joswlv</a>
+        <small></small>
+        <button id="headerMenu" class="menu"><i class="fa fa-bars"></i></button>
+        <nav id="headerNav">
+            <ul>
+                <li>
+                    
+                    <a href="/">
+                    
+                        <i class="fa fa-home"></i>Home
+                    </a>
+                </li>
+
+                
+                    
+                    <li>
+                        
+                        <a href="/archive/">
+                        
+                            <i class="fa fa-archive"></i>Archives
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/category/">
+                        
+                            <i class="fa fa-th-list"></i>Categories
+                        </a>
+                    </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        </nav>
+    </div>
+</header>
+
+
+        <div class="page clearfix" post>
+    <div class="left">
+        <h1>Maven Build Plugin & 옵션</h1>
+        <div class="label">
+
+            <div class="label-card">
+                <i class="fa fa-calendar"></i>2017-03-27
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+            
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#Etc" title="Category: Etc" rel="category">Etc</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+            </div>
+
+        </div>
+        <hr>
+        <article itemscope itemtype="http://schema.org/BlogPosting">
+        <h1 id="maven-build-plugin">Maven Build Plugin</h1>
+
+<h2 id="resource---">1. 디렉토리에 Resource 디렉토리 추가 방법</h2>
+
+<p>Maven 빌드를 할때, <code class="highlighter-rouge">src</code> 이외에 디록토리를 추가가 필요 할때가 있다.</p>
+
+<p>방법은 다음과 같다.</p>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;build&gt;</span>
+<span class="nt">&lt;resources&gt;</span>
+	<span class="nt">&lt;resource&gt;</span>
+		<span class="nt">&lt;directory&gt;</span>bin<span class="nt">&lt;/directory&gt;</span>
+		<span class="nt">&lt;targetPath&gt;</span>${basedir}/target/bin<span class="nt">&lt;/targetPath&gt;</span>
+	<span class="nt">&lt;/resource&gt;</span>
+	<span class="nt">&lt;resource&gt;</span>
+		<span class="nt">&lt;directory&gt;</span>conf<span class="nt">&lt;/directory&gt;</span>
+		<span class="nt">&lt;targetPath&gt;</span>${basedir}/target/conf<span class="nt">&lt;/targetPath&gt;</span>
+	<span class="nt">&lt;/resource&gt;</span>
+<span class="nt">&lt;/resources&gt;</span>
+
+...
+
+<span class="nt">&lt;/build&gt;</span>
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">bin</code>, <code class="highlighter-rouge">conf</code> 디렉토리를 빌드 할때 함께 추가한다고 명시하면된다.</p>
+
+<h2 id="jar----">2. 빌드한 jar를 저장 위치를 변경하는 법</h2>
+
+<p><code class="highlighter-rouge">src</code>디렉토리의 java파일을 컴파일해 만들어진 jar파일은 기본 /target아래에 만들어진다.</p>
+
+<p>이 위치를 변경하고 싶으면 다음과 같다.</p>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;build&gt;</span>
+	<span class="nt">&lt;plugins&gt;</span>
+		<span class="nt">&lt;plugin&gt;</span>
+			<span class="nt">&lt;groupId&gt;</span>org.apache.maven.plugins<span class="nt">&lt;/groupId&gt;</span>
+			<span class="nt">&lt;artifactId&gt;</span>maven-jar-plugin<span class="nt">&lt;/artifactId&gt;</span>
+			<span class="nt">&lt;configuration&gt;</span>
+				<span class="nt">&lt;outputDirectory&gt;</span>${basedir}/target/lib<span class="nt">&lt;/outputDirectory&gt;</span>
+			<span class="nt">&lt;/configuration&gt;</span>
+		<span class="nt">&lt;/plugin&gt;</span>
+	<span class="nt">&lt;/plugins&gt;</span>
+
+...
+
+<span class="nt">&lt;/build&gt;</span>
+</code></pre>
+</div>
+
+<h2 id="dependency--jar-">3. dependency를 포함한 jar 만들기</h2>
+
+<p>이 방법은 여러가지가 있다. 그 중 assembly plugin을 사용하면 다음과 같다.</p>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;plugin&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>maven-assembly-plugin<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;configuration&gt;</span>
+        <span class="nt">&lt;descriptorRefs&gt;</span>
+            <span class="nt">&lt;descriptorRef&gt;</span>jar-with-dependencies<span class="nt">&lt;/descriptorRef&gt;</span>
+        <span class="nt">&lt;/descriptorRefs&gt;</span>
+    <span class="nt">&lt;/configuration&gt;</span>
+    <span class="nt">&lt;executions&gt;</span>
+        <span class="nt">&lt;execution&gt;</span>
+            <span class="nt">&lt;id&gt;</span>make-assembly<span class="nt">&lt;/id&gt;</span>
+            <span class="nt">&lt;phase&gt;</span>package<span class="nt">&lt;/phase&gt;</span>
+            <span class="nt">&lt;goals&gt;</span>
+                <span class="nt">&lt;goal&gt;</span>single<span class="nt">&lt;/goal&gt;</span>
+            <span class="nt">&lt;/goals&gt;</span>
+        <span class="nt">&lt;/execution&gt;</span>
+    <span class="nt">&lt;/executions&gt;</span>
+<span class="nt">&lt;/plugin&gt;</span>
+</code></pre>
+</div>
+
+<h2 id="dependency-jar----">4. dependency jar를 모아 저장해 빌드하는 법</h2>
+
+<p>dependency에 있는 라이브러리 jar파일을 사용자가 지정한 디렉토리에 저장하는 방법은 다음과 같다.</p>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;plugin&gt;</span>
+	<span class="nt">&lt;groupId&gt;</span>org.apache.maven.plugins<span class="nt">&lt;/groupId&gt;</span>
+	<span class="nt">&lt;artifactId&gt;</span>maven-dependency-plugin<span class="nt">&lt;/artifactId&gt;</span>
+	<span class="nt">&lt;executions&gt;</span>
+		<span class="nt">&lt;execution&gt;</span>
+			<span class="nt">&lt;id&gt;</span>copy-dependencies<span class="nt">&lt;/id&gt;</span>
+			<span class="nt">&lt;phase&gt;</span>package<span class="nt">&lt;/phase&gt;</span>
+			<span class="nt">&lt;goals&gt;</span>
+				<span class="nt">&lt;goal&gt;</span>copy-dependencies<span class="nt">&lt;/goal&gt;</span>
+			<span class="nt">&lt;/goals&gt;</span>
+			<span class="nt">&lt;configuration&gt;</span>
+				<span class="nt">&lt;outputDirectory&gt;</span>${basedir}/target/lib<span class="nt">&lt;/outputDirectory&gt;</span>
+				<span class="nt">&lt;overWriteReleases&gt;</span>false<span class="nt">&lt;/overWriteReleases&gt;</span>
+				<span class="nt">&lt;overWriteSnapshots&gt;</span>false<span class="nt">&lt;/overWriteSnapshots&gt;</span>
+				<span class="nt">&lt;overWriteIfNewer&gt;</span>true<span class="nt">&lt;/overWriteIfNewer&gt;</span>
+			<span class="nt">&lt;/configuration&gt;</span>
+		<span class="nt">&lt;/execution&gt;</span>
+	<span class="nt">&lt;/executions&gt;</span>
+<span class="nt">&lt;/plugin&gt;</span>
+</code></pre>
+</div>
+<h1 id="alpha-beta-real--resources-dir">alpha, beta, real에 따라 resources dir구분하기</h1>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;properties&gt;</span>
+	<span class="nt">&lt;maven.resources.overwrite&gt;</span>true<span class="nt">&lt;/maven.resources.overwrite&gt;</span>
+<span class="nt">&lt;/properties&gt;</span>
+<span class="nt">&lt;profiles&gt;</span>
+	<span class="nt">&lt;profile&gt;</span>
+		<span class="nt">&lt;id&gt;</span>dev<span class="nt">&lt;/id&gt;</span>
+		<span class="nt">&lt;properties&gt;</span>
+			<span class="nt">&lt;env&gt;</span>dev<span class="nt">&lt;/env&gt;</span>
+		<span class="nt">&lt;/properties&gt;</span>
+	<span class="nt">&lt;/profile&gt;</span>
+
+	<span class="nt">&lt;profile&gt;</span>
+		<span class="nt">&lt;id&gt;</span>alpha<span class="nt">&lt;/id&gt;</span>
+		<span class="nt">&lt;properties&gt;</span>
+			<span class="nt">&lt;env&gt;</span>alpha<span class="nt">&lt;/env&gt;</span>
+		<span class="nt">&lt;/properties&gt;</span>
+	<span class="nt">&lt;/profile&gt;</span>
+
+	<span class="nt">&lt;profile&gt;</span>
+		<span class="nt">&lt;id&gt;</span>beta<span class="nt">&lt;/id&gt;</span>
+		<span class="nt">&lt;properties&gt;</span>
+			<span class="nt">&lt;env&gt;</span>beta<span class="nt">&lt;/env&gt;</span>
+		<span class="nt">&lt;/properties&gt;</span>
+	<span class="nt">&lt;/profile&gt;</span>
+
+	<span class="nt">&lt;profile&gt;</span>
+		<span class="nt">&lt;id&gt;</span>real<span class="nt">&lt;/id&gt;</span>
+		<span class="nt">&lt;properties&gt;</span>
+			<span class="nt">&lt;env&gt;</span>real<span class="nt">&lt;/env&gt;</span>
+			<span class="nt">&lt;value&gt;</span>real<span class="nt">&lt;/value&gt;</span>
+		<span class="nt">&lt;/properties&gt;</span>
+	<span class="nt">&lt;/profile&gt;</span>
+<span class="nt">&lt;/profiles&gt;</span>
+
+<span class="nt">&lt;build&gt;</span>
+	<span class="nt">&lt;finalName&gt;</span>DMP-DATA-API<span class="nt">&lt;/finalName&gt;</span>
+	<span class="nt">&lt;resources&gt;</span>
+		<span class="nt">&lt;resource&gt;</span>
+			<span class="nt">&lt;directory&gt;</span>src/main/resources<span class="nt">&lt;/directory&gt;</span>
+		<span class="nt">&lt;/resource&gt;</span>
+		<span class="nt">&lt;resource&gt;</span>
+			<span class="nt">&lt;directory&gt;</span>src/main/resources-${env}<span class="nt">&lt;/directory&gt;</span>
+		<span class="nt">&lt;/resource&gt;</span>
+	<span class="nt">&lt;/resources&gt;</span>
+	...
+<span class="nt">&lt;/build&gt;</span>
+</code></pre>
+</div>
+
+<p>profile에 변수를 등록하고 <code class="highlighter-rouge">&lt;resource&gt;</code>에 <code class="highlighter-rouge">directory</code>path만 적어 주면 된다.</p>
+
+<p>resource diretory가 하나로 합쳐지면서 같은 파일명은 <code class="highlighter-rouge">resources-${env}</code>의 파일 명으로 overwrite 된다. 
+그 이유는 순차적을 실행되면서 overwrite 되기 때문이다.
+(<code class="highlighter-rouge">&lt;maven.resources.overwrite&gt;true&lt;/maven.resources.overwrite&gt;</code> 이 조건을 추가 해서..)</p>
+
+<p>아래와 같이 resources폴더를 구성하고 <code class="highlighter-rouge">mvn clean package -P real</code>을 하면 순차적으로 copy되는 것을 확인 할 수 있다.</p>
+
+<p><br /></p>
+
+<p><img src="http://joswlv.github.io/images/maven_directory.png" alt="" /></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ dmp-data-api ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 6 resources		//resources
+[INFO] Copying 3 resources		//resources-${env}
+</code></pre>
+</div>
+
+
+        </article>
+        <hr>
+
+        
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+        
+
+        <div class="post-recent">
+    <div class="pre">
+        
+        <p><strong>prev</strong> <a href="/2017/03/26/properties/">properties 설정 및 사용</a></p>
+        
+    </div>
+    <div class="nex">
+
+        
+        <p><strong>next</strong> <a href="/2017/04/02/runtojarbackground/">jar 백그라운드로 실행하기</a></p>
+        
+    </div>
+</div>
+
+
+        <h2 id="comments">Comments</h2>
+        
+
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+     * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+
+    var disqus_config = function() {
+        this.page.url = 'http://joswlv.github.io/2017/03/27/mavenbuildplugin/'; // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://joswlv.github.io/2017/03/27/mavenbuildplugin/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document,
+            s = d.createElement('script');
+
+        s.src = '//joswlv.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+
+    </div>
+    <button class="anchor"><i class="fa fa-anchor"></i></button>
+    <div class="right">
+        <div class="wrap">
+
+            <!-- Content -->
+            <div class="side content">
+                <div>
+                    Content
+                </div>
+                <ul id="content-side" class="content-ul">
+                    <li><a href="#similar_posts">Similar Posts</a></li>
+                    <li><a href="#comments">Comments</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+/**
+ * target _blank
+ */
+(function() {
+    var aTags = document.querySelectorAll('article a:not([id])')
+    for (var i = 0; i < aTags.length; i++) {
+        aTags[i].setAttribute('target', '_blank')
+    }
+}());
+</script>
+<script src="/js/pageContent.js " charset="utf-8"></script>
+
+
+    <footer class="site-footer">
+
+
+    <div class="wrapper">
+
+        <p class="description">
+            
+        </p>
+        <p class="contact">
+            Contact me at: 
+            <a href="https://github.com/joswlv" title="GitHub"><i class="fa fa-github" aria-hidden="true"></i></a>  
+            <a href="mailto:wh7923@gmail.com" title="email"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>     
+            <a href="https://www.facebook.com/wsj7923" title="Facebook"><i class="fa fa-facebook-official" aria-hidden="true"></i></a>    
+        </p>
+        <p>
+        </p>
+        <p class="power">
+            <span>
+                Site powered by <a href="https://jekyllrb.com/">Jekyll</a> & <a href="https://pages.github.com/">Github Pages</a>.
+            </span>
+        </p>
+    </div>
+</footer>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <div class="back-to-top">
+    <a href="#top" class="scroll">
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    </a>
+</div>
+
+    <script src=" /js/main.js " charset="utf-8"></script>
+    <script src=" /js/scroll.min.js " charset="utf-8"></script>
+  </body>
+
+</html>

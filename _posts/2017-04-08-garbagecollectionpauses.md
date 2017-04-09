@@ -1,6 +1,6 @@
 ---
 layout: post
-title: [Cassandra] Garbage collection pauses
+title: Garbage collection pauses
 date: 2017-04-08 09:04
 categories: Cassandra
 ---

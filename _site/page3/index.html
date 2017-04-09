@@ -96,6 +96,8 @@
                 
                     
                 
+                    
+                
             </ul>
         </nav>
     </div>
@@ -108,6 +110,563 @@
         <small></small> -->
         <hr>
         <ul>
+            
+              <li>
+                <h2>
+                  <a class="post-link" href="/2016/12/18/groupconcat/">GROUP_CONCAT</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-12-18
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#MYSQL" title="Category: MYSQL" rel="category">MYSQL</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="mysql-groupconcat-">[MySQL] GROUP_CONCAT에 대해</h1>
+
+<p><code class="highlighter-rouge">GROUP_CONCAT</code>은 서로 다른 결과를 한줄로 합쳐서 보여줘야 할 경우 사용하는 MySQL 명령어이다.</p>
+
+<p>이는 전체 결과를 서버로 들고와서 for문을 돌려 문자열을 붙여도 되지만 SELECT쿼리를 사용하여 합쳐져 있는 문자열을 받는게 더 편하다.</p>
+
+<div class="language-sql highlighter-rouge"><pre class="highlight"><code><span class="k">select</span> <span class="o">*</span> <span class="k">from</span> <span class="n">test</span><span class="p">;</span>
+</code></pre>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>key</th>
+      <th>value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>가구</td>
+      <td>편한가구</td>
+    </tr>
+    <tr>
+      <td>가구</td>
+      <td>싼 가구</td>
+    </tr>
+    <tr>
+      <td>가구</td>
+      <td>신혼집 가구</td>
+    </tr>
+    <tr>
+      <td>가구</td>
+      <td>신혼부부 가구</td>
+    </tr>
+    <tr>
+      <td>가구</td>
+      <td>신혼부부 가구</td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>이런 결과를 <code class="highlighter-rouge">GROUP_CONCAT</code>을 사용하면 다음과 같다.</li>
+</ul>
+
+<div class="language-sql highlighter-rouge"><pre class="highlight"><code><span class="k">SELECT</span> <span class="k">key</span><span class="p">,</span> <span class="n">GROUP_CONCAT</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">test</span> <span class="k">GROUP</span> <span class="k">BY</span> <span class="k">key</span><span class="p">;</span>
+</code></pre>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>key</th>
+      <th>value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>가구</td>
+      <td>편한가구,싼 가구,신혼집 가구,신혼부부 가구, 신혼부부 가구</td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li><code class="highlighter-rouge">GROUP_CONCAT</code>의 기본적으로 문자열 사이에 쉼표(,)가 붙게 된다. 구분자를 변경하고 싶을 때에는 <code class="highlighter-rouge">SEPARATOR '구분자'</code>를 함께 사용하면 된다.</li>
+</ul>
+
+<div class="language-sql highlighter-rouge"><pre class="highlight"><code><span class="k">SELECT</span> <span class="n">kye</span><span class="p">,</span> <span class="n">GROUP_CONCAT</span><span class="p">(</span><span class="n">value</span> <span class="n">SEPARATOR</span> <span class="s1">'/'</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">test</span> <span class="k">GROUP</span> <span class="k">BY</span> <span class="k">key</span><span class="p">;</span>
+</code></pre>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>key</th>
+      <th>value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>가구</td>
+      <td>편한가구/싼 가구/신혼집 가구/신혼부부 가구/ 신혼부부 가구</td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>합쳐지는 문자열에 중복되는 문자열을 제거 할때는 <code class="highlighter-rouge">DISTINCT</code>를 사용한다.</li>
+</ul>
+
+<div class="language-sql highlighter-rouge"><pre class="highlight"><code><span class="k">SELECT</span> <span class="k">key</span><span class="p">,</span> <span class="n">GROUP_CONCAT</span><span class="p">(</span><span class="k">DISTINCT</span> <span class="n">value</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">test</span> <span class="k">GROUP</span> <span class="k">BY</span> <span class="k">key</span><span class="p">;</span>
+</code></pre>
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>key</th>
+      <th>value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>가구</td>
+      <td>편한가구,싼 가구,신혼집 가구,신혼부부 가구</td>
+    </tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>문자열을 정렬하여 나타내고 싶으면 <code class="highlighter-rouge">order by</code>를 사용한다.</li>
+</ul>
+
+<div class="language-sql highlighter-rouge"><pre class="highlight"><code><span class="k">SELECT</span> <span class="k">key</span><span class="p">,</span> <span class="n">GROUP_CONCAT</span><span class="p">(</span><span class="k">DISTINCT</span> <span class="n">value</span> <span class="k">ORDER</span> <span class="k">BY</span> <span class="n">valeu</span><span class="p">)</span> <span class="k">FROM</span> <span class="n">test</span> <span class="k">GROUP</span> <span class="k">BY</span> <span class="k">key</span><span class="p">;</span>
+</code></pre>
+</div>
+
+<h3 id="section">정리</h3>
+
+<p>MySQL에서 group by 로 문자열을 합칠땐 group_concat 을 이용한다.</p>
+
+<ol>
+  <li>기본형 : group_concat(필드명)</li>
+  <li>구분자 변경 : group_concat(필드명 separator ‘구분자’)</li>
+  <li>중복제거 : group_concat(distinct 필드명)</li>
+  <li>문자열 정렬 : group_concat(필드명 order by 필드명)</li>
+</ol>
+
+<h3 id="section-1">참고</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Description</th>
+      <th> </th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td> </td>
+      <td>AVG()</td>
+      <td>Return the average value of the argument</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>BIT_AND()</td>
+      <td>Return bitwise AND</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>BIT_OR()</td>
+      <td>Return bitwise OR</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>BIT_XOR()</td>
+      <td>Return bitwise XOR</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>COUNT()</td>
+      <td>Return a count of the number of rows returned</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>COUNT(DISTINCT)</td>
+      <td>Return the count of a number of different values</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>GROUP_CONCAT()</td>
+      <td>Return a concatenated string</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>MAX()</td>
+      <td>Return the maximum value</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>MIN()</td>
+      <td>Return the minimum value</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>STD()</td>
+      <td>Return the population standard deviation</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>STDDEV()</td>
+      <td>Return the population standard deviation</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>STDDEV_POP()</td>
+      <td>Return the population standard deviation</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>STDDEV_SAMP()</td>
+      <td>Return the sample standard deviation</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>SUM()</td>
+      <td>Return the sum</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>VAR_POP()</td>
+      <td>Return the population standard variance</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>VAR_SAMP()</td>
+      <td>Return the sample variance</td>
+    </tr>
+    <tr>
+      <td> </td>
+      <td>VARIANCE()</td>
+      <td>Return the population standard variance</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>표 : <a href="http://dev.mysql.com/doc/refman/5.7/en/group-by-functions.html#function_avg">MySQL_Doc</a></p>
+
+<h4 id="tip">[tip]</h4>
+
+<ul>
+  <li>오라클의 경우 mysql의 group_concat을 아래와 같이 대체하여 사용이 가능하다.</li>
+  <li>오라클 10G : WM_CONCAT()</li>
+  <li>오라클 11G : LISTAGG()</li>
+</ul>
+
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/12/18/groupconcat/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
+                  <a class="post-link" href="/2016/12/17/truncateanddelete/">TRUNCATE와 DELETE</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-12-17
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#MYSQL" title="Category: MYSQL" rel="category">MYSQL</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="truncate--delete">TRUNCATE 와 DELETE</h1>
+
+<h3 id="truncate">TRUNCATE</h3>
+
+<p>테이블의 데이터를 삭제하는 DDL명령어 이다.</p>
+
+<p>데이터를 삭제 방식은 talbe의 명세만 남기고 <strong>DROP 후 CREATE</strong>한다. 즉 데이터가 존재하던 공간마저 제거하기 위한 명령어이다.</p>
+
+<p>이런 방식으로 테이블의 데이터를 삭제하기 때문에 수행 속도는 DELETE보다 빠르지만, 데이터 복구가 불가능하다는 제한사항이 존재한다.</p>
+
+<p>또 auto_increment까지 초기화 시켜준다.(5.0.13버전부터) 즉 table의 옵션을 초기상태로 돌려준다.</p>
+
+<p>삭제하다가 외부키와의 의존관계 때문에 삭제할 수 없다는 메시지가 나오면 다음과 같이하면 된다.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>SET foreign_key_checks = 0; 
+truncate TABLE_NAME;
+SET foreign_key_checks = 1;
+</code></pre>
+</div>
+
+<p>0은 해제 1은 다시 설정을 의미한다.</p>
+
+<h3 id="delete">DELETE</h3>
+
+<p>테이블의 데이터를 삭제하기 위한 명령어이다. <code class="highlighter-rouge">WHERE</code>절을 통해 조건을 부여 할 수 있다.</p>
+
+<p>데이터 삭제 방식은 한줄씩 순차적으로 삭제한다.</p>
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/12/17/truncateanddelete/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
+                  <a class="post-link" href="/2016/11/27/flasnginxsetting/">Flask + Nginx 설정</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-11-27
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#python" title="Category: python" rel="category">python</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="flask--nginx--">Flask + Nginx 설치 방법</h1>
+
+<h2 id="section">환경</h2>
+<p>데비안 계열 중 우분투 서버<br />
+여기서 접근하는 모든 디렉토리는 권한이 있어야함.</p>
+
+<h2 id="section-1">설치</h2>
+<div class="highlighter-rouge"><pre class="highlight"><code>apt-get install nginx # Nginx
+apt-get install uwsgi # uWSGI
+apt-get install uwsgi-plugin-python # python과 uWSGI를 연결하는 플러그인
+</code></pre>
+</div>
+
+<h2 id="nginx-">Nginx 세팅</h2>
+<p>디폴트 파일로 설정하는 방법
+<code class="highlighter-rouge">vi /etc/nginx/sites-available/default</code></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>server {
+       listen       80; # 연결할 포트
+       server_name  0.0.0.0;
+       location / { try_files $uri @app; }
+       location @app {
+           include uwsgi_params;
+           uwsgi_pass unix:socket파일이 위치할 경로;
+           # ex) /home/server/uwsgi.sock
+       }
+}
+</code></pre>
+</div>
+
+<h2 id="uwsgi-">uWSGI 세팅</h2>
+<p><code class="highlighter-rouge">vi /etc/uwsgi/apps-available/uwsgi.ini</code></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>[uwsgi]
+chdir = 프로젝트 경로
+uid = 실행할계정
+gid = 실행할계정
+chmod-socket = 666
+socket = socket파일이 위치할 경로
+module = 모듈이름(실행할 파일 이름)
+callable = 연결될 Flask 모듈이름
+virtualenv = python 가상 환경 경로(virtualenv)
+</code></pre>
+</div>
+
+<p>참고로 프로젝트 경로는 root를 포함하지 않는 것이 좋다 (권한 문제 때문에)</p>
+
+<p>허용하는 파일로 등록하기위해 apps-enabled 디렉토리에 link함
+<code class="highlighter-rouge">ln -s /etc/uwsgi/apps-available/uwsgi.ini /etc/uwsgi/apps-enabled/</code></p>
+
+<h2 id="section-2">실행 방법</h2>
+<p>세팅 후 재시작을 한다.</p>
+<div class="highlighter-rouge"><pre class="highlight"><code>sudo service nginx restart
+sudo service uwsgi restart
+</code></pre>
+</div>
+
+<p>설정한 uwsgi에 맞춰서 실행
+<code class="highlighter-rouge">uwsgi /etc/uwsgi/apps-available/uwsgi.ini &amp;</code></p>
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/11/27/flasnginxsetting/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
+                  <a class="post-link" href="/2016/11/20/realtimeweb/">Real-time web tec List</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-11-20
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#Etc" title="Category: Etc" rel="category">Etc</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="real-time-web-tec-list">Real-time web Tec List</h1>
+
+<p>You can find a comprehensive and updated list of real-time solutions that can be considered alternatives to pusher in this Real-Time Web Technologies Guide.</p>
+
+<h3 id="hosted">Hosted</h3>
+
+<ul>
+  <li>Ably: https://www.ably.io   <strong>(완전 편리함!!)</strong></li>
+  <li>Fanout: http://fanout.io/</li>
+  <li>Firebase https://www.firebase.com</li>
+  <li>Gamooga: http://www.gamooga.com/</li>
+  <li>Google App Engine with Channels API: http://code.google.com/appengine…</li>
+  <li>Google Drive Real Time: https://developers.google.com/dr…</li>
+  <li>Hydna: https://www.hydna.com/</li>
+  <li>ScaleDrone https://www.scaledrone.com</li>
+  <li>Baasil https://baasil.io</li>
+  <li>PubNub: http://pubnub.com</li>
+  <li>Reappt: Data-Efficient Realtime Messaging</li>
+  <li>Simperium: Simperium</li>
+  <li>Tambur: https://www.tambur.io/</li>
+  <li>WebSync on-demand: http://www.frozenmountain.com/we…</li>
+  <li>Xtremepush: Xtremepush - Mobile Marketing Automation Software</li>
+</ul>
+
+<h3 id="self-hosted">Self Hosted</h3>
+
+<ul>
+  <li>http://github.com/Atmosphere : http://async-io.org/</li>
+  <li>http://faye.jcoglan.com/</li>
+  <li>http://firehose.io/</li>
+  <li>Jetty: http://blogs.webtide.com/gregw/e…</li>
+  <li>Kaazing: http://kaazing.com/</li>
+  <li>Lightstreamer: http://lightstreamer.com</li>
+  <li>Diffusion - http://www.pushtechnology.com</li>
+  <li>http://pusheo.com</li>
+  <li>http://code.google.com/p/pywebso…</li>
+  <li>Ruby EventMachine WebSocket server: https://github.com/igrigorik/em-…</li>
+  <li>SignalR (.NET) https://github.com/SignalR/SignalR</li>
+  <li>Slanger. Open source reimplementation of Pusher. Compatible with Pusher libraries: https://github.com/stevegraham/s…</li>
+  <li>http://socky.org/</li>
+  <li>http://socket.io/</li>
+  <li>http://sockjs.org/</li>
+  <li>http://socketcluster.io/</li>
+  <li>Thunderpush: https://github.com/thunderpush/t…</li>
+  <li>https://www.meteor.com/</li>
+</ul>
+
+<p>Pushpin</p>
+<ul>
+  <li>MigratoryData: http://migratorydata.com</li>
+</ul>
+
+<h3 id="reference">Reference</h3>
+
+<ul>
+  <li><a href="https://www.quora.com/What-are-alternatives-to-pusher-com">Quora</a></li>
+</ul>
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/11/20/realtimeweb/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
             
               <li>
                 <h2>
@@ -444,395 +1003,6 @@
                 <hr>
               </li>
             
-              <li>
-                <h2>
-                  <a class="post-link" href="/2016/11/07/jqueryselector/">jquery :last 선택자</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-11-07
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#js" title="Category: js" rel="category">js</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                </div>
-                <div class="excerpt">
-                    <div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;table</span> <span class="na">id =</span><span class="err"> </span><span class="s">"table1"</span><span class="nt">&gt;</span> ---<span class="nt">&lt;/table&gt;</span>
-<span class="nt">&lt;table</span> <span class="na">id =</span><span class="err"> </span><span class="s">"table2"</span><span class="nt">&gt;</span> ---<span class="nt">&lt;/table&gt;</span>
-<span class="nt">&lt;table</span> <span class="na">id =</span><span class="err"> </span><span class="s">"table3"</span><span class="nt">&gt;</span> ---<span class="nt">&lt;/table&gt;</span>
-<span class="nt">&lt;table</span> <span class="na">id =</span><span class="err"> </span><span class="s">"table4"</span><span class="nt">&gt;</span> 
-	<span class="nt">&lt;tr&gt;</span>---<span class="nt">&lt;/tr&gt;</span>
-	<span class="nt">&lt;tr&gt;</span>
-		<span class="nt">&lt;td&gt;</span>asd<span class="nt">&lt;td&gt;</span>
-		<span class="nt">&lt;td&gt;&lt;input</span> <span class="na">class=</span><span class="s">"inputs"</span><span class="nt">&gt;&lt;/td&gt;</span>
-	<span class="nt">&lt;/tr&gt;</span>
-<span class="nt">&lt;/table&gt;</span>
-</code></pre>
-</div>
-
-<p>위와 같은 환경이 있고 <code class="highlighter-rouge">#table4</code>는 파일을 추가 할때마다 <code class="highlighter-rouge">tr</code>이 추가되는 상황이라고 하자!</p>
-
-<p>(추가 될때는 모든 속성이 같다.)</p>
-
-<h4 id="inputs-">이때 가장 마지막에 생성된 <code class="highlighter-rouge">#inputs</code>에 접근할려면…</h4>
-
-<p><code class="highlighter-rouge">$('#table4 tr:last .inputs').val();</code></p>
-
-<p>이런 식으로 <code class="highlighter-rouge">:last</code>선택자를 사용하면 된다.</p>
-
-<h3 id="reference">Reference</h3>
-
-<ul>
-  <li><a href="http://api.jquery.com/last-selector/">jqueryDoc</a></li>
-</ul>
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2016/11/07/jqueryselector/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
-              <li>
-                <h2>
-                  <a class="post-link" href="/2016/11/04/regexp/">정규표현식</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-11-04
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#js" title="Category: js" rel="category">js</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                </div>
-                <div class="excerpt">
-                    <h1 id="section">들어가기 전에</h1>
-
-<p>정규식은 문자열에서 문자 조합에 일치 시키기 위해 사용되는 패턴이다.</p>
-
-<p>자바스크립트에서, 정규식은 객체이다.</p>
-
-<p>이 패턴들은 <code class="highlighter-rouge">RegExp</code>의 <code class="highlighter-rouge">exec</code>메소드와 <code class="highlighter-rouge">test</code>  메소드 그리고 <code class="highlighter-rouge">String</code>의 <code class="highlighter-rouge">match</code>메소드, <code class="highlighter-rouge">replace</code>메소드, <code class="highlighter-rouge">search</code>메소드, <code class="highlighter-rouge">split</code>메소드와 함께 쓰인다.</p>
-
-<h1 id="section-1">정규식 만들기</h1>
-
-<p>정규식은 두가지 방법으로 만들 수 있다.</p>
-
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">re</span> <span class="o">=</span> <span class="sr">/abc+d/</span><span class="p">;</span>
-</code></pre>
-</div>
-
-<p>정규식 리터럴은 스크립트가 로드될때 정규식의 컴파일이 작동한다. 정규식이 계속 사용될 때는 위와 같은 형식으로 사용하는 것이 좋다.</p>
-
-<p>또다른 방법은 <code class="highlighter-rouge">RegExp</code>객체의 생성자 함수를 호출하는 것이다.</p>
-
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">re</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="s2">"abc+d"</span><span class="p">);</span>
-</code></pre>
-</div>
-
-<p>생성자 함수를 사용하면 정규식의 런타임 컴파일을 제공한다.</p>
-
-<h1 id="section-2">정규식 패턴 작성하기</h1>
-
-<h2 id="section-3">단순한 패턴 사용하기</h2>
-
-<p>단순한 패턴은 찾고자하는 문자들로 구성된다. 예를 들어 /abc/라는 패턴은 문자열에서 정확히 ‘abc’라는 문자들이 모두 함께 순서대로 나타나야지 일치한다.</p>
-
-<h2 id="section-4">특수 문자를 사용하기</h2>
-
-<p>단순 패턴보다 더 복잡한 경우 특수문자를 사용하여 패턴을 만든다.</p>
-
-<h2 id="section-5">정규식 사용하기</h2>
-
-<p><strong>JavaScript에서 정규식에서 쓰이는 메소드</strong></p>
-
-<table>
-  <thead>
-    <tr>
-      <th>Method</th>
-      <th>Description</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>exec</td>
-      <td>일치하는 문자열을 찾는 RegExp메소드이다. 정보를 가지고 있는 배열을 반환한다.</td>
-    </tr>
-    <tr>
-      <td>test</td>
-      <td>일치하는 문자열을 검사하는 RegExp 메소드이다. true나 false를 반환한다.</td>
-    </tr>
-    <tr>
-      <td>match</td>
-      <td>일치하는 문자열을 찾는 String메소드이다. 정보를 가지고 있는 배열을 반환하거나 일치하지 않는 부분을 null로 반환한다.</td>
-    </tr>
-    <tr>
-      <td>search</td>
-      <td>일치하는 문자열을 검사하는 String메소드이다. 일치하는 인덱스를 반환하거나 검색에 실패할 시 -1을 반환한다.</td>
-    </tr>
-    <tr>
-      <td>replace</td>
-      <td>일치하는 문자열을 찾는 String메소드이다. 일치하는 문자열을 replacement로 대체한다.</td>
-    </tr>
-  </tbody>
-</table>
-
-<h3 id="reference">Reference</h3>
-
-<ul>
-  <li><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Guide/%EC%A0%95%EA%B7%9C%EC%8B%9D">MDN</a></li>
-</ul>
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2016/11/04/regexp/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
-              <li>
-                <h2>
-                  <a class="post-link" href="/2016/11/03/CORS/">CORS</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-11-03
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#web" title="Category: web" rel="category">web</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                </div>
-                <div class="excerpt">
-                    <h1 id="http---cors">HTTP 접근 제어 (CORS)</h1>
-
-<h2 id="cross-origin-resource-sharingcors">Cross Origin Resource Sharing(CORS)</h2>
-
-<p>HTTP요청은 기본적으로 Cross-Site-HTTP Requests가 가능하다.</p>
-
-<p>다시말하면, <code class="highlighter-rouge">&lt;img&gt;</code>, <code class="highlighter-rouge">&lt;link&gt;</code>, <code class="highlighter-rouge">&lt;script&gt;</code>태그로 다른 도메인의 리소스를 가져오는 것이 가능하다.</p>
-
-<p>그런데!</p>
-
-<p>스크립트에서 생성된 Cross-Site HTTP Requests는 <a href="https://developer.mozilla.org/ko/docs/Web/Security/Same-origin_policy">Same Origin Policy</a>를 적용 받기 때문에 Cross-Site HTTP Requests가 불가능하다.</p>
-
-<p>ajax가 많이 사용되면서 스크립트에서 생성되는 <code class="highlighter-rouge">XMLHttpRequest</code>에 대해서도 Cross-Site HTTP Requests가 가능해야 한다는 요구가 많이 나왔고 W3C에서 CORS라는 이름의 권고안이 나왔다.</p>
-
-<h2 id="cors--">CORS 요청의 종류</h2>
-
-<ul>
-  <li>Simple</li>
-  <li>Preflight</li>
-  <li>Credential</li>
-  <li>Non-Credential</li>
-</ul>
-
-<p>브라우저가 요청 내용을 분석하여 4가지 방식 중 해당하는 방식으로 서버에 요청을 날린다.</p>
-
-<h2 id="section">실무에서..</h2>
-
-<p>얼마전 이미지의 다른 도메인에서 불러와서 켄버스에 그려 이미지의 픽셀값을 가져오는 일이 있었다.</p>
-
-<p><img src="http://joswlv.github.io/images/cors_erro.png" alt="" /></p>
-
-<p>이런 에러가 발생하였다.</p>
-
-<p>처음에는 이미지 CORS 속성을 <code class="highlighter-rouge">anonymous</code>로 지정을 했다.</p>
-
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nx">img</span><span class="p">.</span><span class="nx">crossOrigin</span> <span class="o">=</span> <span class="s2">"anonymous"</span><span class="p">;</span>
-</code></pre>
-</div>
-
-<p>그래도 계속되었다.</p>
-
-<p>이미지가 저장되어 있는 서버에서 이미지를 보내줄 때 헤더에 crossOrigin내용을 첨부해서 보내주면 되지만, 현실적으로 불가능해 클라이언트 측에서 처리하기로 했고 아래와 같이 이미지를 DOM스토리지에 저장하고 DOM스토리지에서 이미지를 불러오는 방식으로 문제를 해결 했다.</p>
-
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;IfModule</span> <span class="na">mod_setenvif</span><span class="err">.</span><span class="na">c</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;IfModule</span> <span class="na">mod_headers</span><span class="err">.</span><span class="na">c</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;FilesMatch</span> <span class="err">"\.(</span><span class="na">cur</span><span class="err">|</span><span class="na">gif</span><span class="err">|</span><span class="na">ico</span><span class="err">|</span><span class="na">jpe</span><span class="err">?</span><span class="na">g</span><span class="err">|</span><span class="na">png</span><span class="err">|</span><span class="na">svgz</span><span class="err">?|</span><span class="na">webp</span><span class="err">)$"</span><span class="nt">&gt;</span>
-            SetEnvIf Origin ":" IS_CORS
-            Header set Access-Control-Allow-Origin "*" env=IS_CORS
-        <span class="nt">&lt;/FilesMatch&gt;</span>
-    <span class="nt">&lt;/IfModule&gt;</span>
-<span class="nt">&lt;/IfModule&gt;</span>
-</code></pre>
-</div>
-
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">img</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Image</span><span class="p">,</span>
-    <span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">"canvas"</span><span class="p">),</span>
-    <span class="nx">ctx</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s2">"2d"</span><span class="p">),</span>
-    <span class="nx">src</span> <span class="o">=</span> <span class="s2">"http://example.com/image"</span><span class="p">;</span> <span class="c1">// insert image url here</span>
-
-<span class="nx">img</span><span class="p">.</span><span class="nx">crossOrigin</span> <span class="o">=</span> <span class="s2">"Anonymous"</span><span class="p">;</span>
-
-<span class="nx">img</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-    <span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">img</span><span class="p">.</span><span class="nx">width</span><span class="p">;</span>
-    <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span> <span class="o">=</span> <span class="nx">img</span><span class="p">.</span><span class="nx">height</span><span class="p">;</span>
-    <span class="nx">ctx</span><span class="p">.</span><span class="nx">drawImage</span><span class="p">(</span> <span class="nx">img</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>
-    <span class="nx">localStorage</span><span class="p">.</span><span class="nx">setItem</span><span class="p">(</span> <span class="s2">"savedImageData"</span><span class="p">,</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">toDataURL</span><span class="p">(</span><span class="s2">"image/png"</span><span class="p">)</span> <span class="p">);</span>
-<span class="p">}</span>
-<span class="nx">img</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">src</span><span class="p">;</span>
-<span class="c1">// make sure the load event fires for cached images too</span>
-<span class="k">if</span> <span class="p">(</span> <span class="nx">img</span><span class="p">.</span><span class="nx">complete</span> <span class="o">||</span> <span class="nx">img</span><span class="p">.</span><span class="nx">complete</span> <span class="o">===</span> <span class="kc">undefined</span> <span class="p">)</span> <span class="p">{</span>
-    <span class="nx">img</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="s2">"data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="</span><span class="p">;</span>
-    <span class="nx">img</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">src</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre>
-</div>
-
-<p><strong>Browser compatibility</strong></p>
-
-<table>
-  <thead>
-    <tr>
-      <th>Chrom</th>
-      <th>Firefox</th>
-      <th>IE</th>
-      <th>Opera</th>
-      <th>Safari</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>13</td>
-      <td>8</td>
-      <td>No support</td>
-      <td>No support</td>
-      <td>?</td>
-    </tr>
-  </tbody>
-</table>
-
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2016/11/03/CORS/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
-              <li>
-                <h2>
-                  <a class="post-link" href="/2016/11/02/gitaddpgitcommitv/">git add -p와 git commit -v</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-11-02
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#Etc" title="Category: Etc" rel="category">Etc</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                </div>
-                <div class="excerpt">
-                    <h1 id="section">참고 링크</h1>
-
-<p><a href="https://blog.outsider.ne.kr/1247">Outsider’s Dev Story</a></p>
-
-<h1 id="section-1">간단한 설명</h1>
-
-<p><code class="highlighter-rouge">git add -p</code> 를 하면 수정된 부분을 하나의 hock으로 보여주면서 추가할 것인지 말것인지를 물어본다.</p>
-
-<p><code class="highlighter-rouge">git commit -v</code> 을 사용하면 커밋메시지를 입력할 때 화면 아래에 diff가 한번 더 나온다.</p>
-
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2016/11/02/gitaddpgitcommitv/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
         </ul>
 
 
@@ -843,10 +1013,10 @@
             <a href="/index.html" class="previous"><i class="fa fa-angle-double-left"></i></a>
             <a href="/page2" class="previous"><i class="fa fa-angle-left"></i></a>
           
-          <span class="page_number ">3/9</span>
+          <span class="page_number ">3/10</span>
           
             <a href="/page4" class="next"><i class="fa fa-angle-right"></i></a>
-            <a href="/page9" class="next"><i class="fa fa-angle-double-right"></i></a>
+            <a href="/page10" class="next"><i class="fa fa-angle-double-right"></i></a>
           
         </div>
     </div>
@@ -911,7 +1081,7 @@
                             <span class="name">
                                 Java
                             </span>
-                            <span class="badge">5</span>
+                            <span class="badge">6</span>
                         </a>
                     </li>
                     
@@ -920,7 +1090,7 @@
                             <span class="name">
                                 Etc
                             </span>
-                            <span class="badge">5</span>
+                            <span class="badge">7</span>
                         </a>
                     </li>
                     
@@ -978,6 +1148,15 @@
                         </a>
                     </li>
                     
+                    <li>
+                        <a href="/category/#Cassandra" class="categories-list-item" cate="Cassandra">
+                            <span class="name">
+                                Cassandra
+                            </span>
+                            <span class="badge">1</span>
+                        </a>
+                    </li>
+                    
                 </ul>
             </div>
             <div class="side">
@@ -986,6 +1165,14 @@
                     Recent Posts
                 </div>
                 <ul class="content-ul" recent>
+                    
+                        <li><a href="/2017/04/08/garbagecollectionpauses/">Garbage collection pauses</a></li>
+                    
+                        <li><a href="/2017/04/02/runtojarbackground/">jar 백그라운드로 실행하기</a></li>
+                    
+                        <li><a href="/2017/03/27/mavenbuildplugin/">Maven Build Plugin & 옵션</a></li>
+                    
+                        <li><a href="/2017/03/26/properties/">properties 설정 및 사용</a></li>
                     
                         <li><a href="/2017/03/01/stringbuildervsstringbuffer/">StringBuilder vs StringBuffer</a></li>
                     
@@ -998,14 +1185,6 @@
                         <li><a href="/2017/02/13/rdmsvsnosql/">RDBMS vs NOSQL</a></li>
                     
                         <li><a href="/2017/01/09/mysqlprocedureinsert/">Stored Procedure으로 Insert</a></li>
-                    
-                        <li><a href="/2017/01/05/javastring/">Java String에 대해..</a></li>
-                    
-                        <li><a href="/2016/12/18/curl/">curl</a></li>
-                    
-                        <li><a href="/2016/12/18/groupconcat/">GROUP_CONCAT</a></li>
-                    
-                        <li><a href="/2016/12/17/truncateanddelete/">TRUNCATE와 DELETE</a></li>
                     
                 </ul>
             </div>

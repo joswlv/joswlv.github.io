@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="Jo Blog">
+    <meta property="og:description" content="Jo Seungwan Blog!~~!">
+    <meta property="og:image" content="https://raw.githubusercontent.com/joswlv/joswlv.github.io/master/bg.jpg">
+    <meta property="og:url" content="https://joswlv.github.io">
+
+    <title>properties 설정 및 사용</title>
+    <meta name="description" content="Properties 사용하기properties는 Hashtable를 상속받아 Key value로 구성 되어 있다.key와 value를 =으로 구분한다.다음은 properties 파일의 예이다.spark.network.timeout=800spark.driver.memory=1Gspa...">
+
+    <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="stylesheet" href="/css/fontawesome/css/font-awesome.min.css ">
+    <link rel="stylesheet" href="/css/main.css ">
+    <link rel="canonical" href="http://joswlv.github.io/2017/03/26/properties/">
+    <link rel="alternate" type="application/rss+xml" title="Joswlv" href="http://joswlv.github.io/feed.xml ">
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-83868242-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</head>
+
+
+  <body>
+
+    <header id="top">
+    <div class="wrapper">
+        <a href="/" class="brand">Joswlv</a>
+        <small></small>
+        <button id="headerMenu" class="menu"><i class="fa fa-bars"></i></button>
+        <nav id="headerNav">
+            <ul>
+                <li>
+                    
+                    <a href="/">
+                    
+                        <i class="fa fa-home"></i>Home
+                    </a>
+                </li>
+
+                
+                    
+                    <li>
+                        
+                        <a href="/archive/">
+                        
+                            <i class="fa fa-archive"></i>Archives
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/category/">
+                        
+                            <i class="fa fa-th-list"></i>Categories
+                        </a>
+                    </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        </nav>
+    </div>
+</header>
+
+
+        <div class="page clearfix" post>
+    <div class="left">
+        <h1>properties 설정 및 사용</h1>
+        <div class="label">
+
+            <div class="label-card">
+                <i class="fa fa-calendar"></i>2017-03-26
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+            
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#Java" title="Category: Java" rel="category">Java</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+            </div>
+
+        </div>
+        <hr>
+        <article itemscope itemtype="http://schema.org/BlogPosting">
+        <h1 id="properties-">Properties 사용하기</h1>
+
+<p><code class="highlighter-rouge">properties</code>는 <code class="highlighter-rouge">Hashtable</code>를 상속받아 Key value로 구성 되어 있다.</p>
+
+<p>key와 value를 <code class="highlighter-rouge">=</code>으로 구분한다.</p>
+
+<p>다음은 properties 파일의 예이다.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>spark.network.timeout=800
+spark.driver.memory=1G
+spark.executor.memory=1G
+spark.rdd.compress=true
+spark.storage.memoryFraction=1
+spark.core.connection.ack.wait.timeout=600
+spark.akka.frameSize=50
+spark.streaming.backpressure.enabled=true
+spark.serializer=org.apache.spark.serializer.KryoSerializer
+</code></pre>
+</div>
+
+<p>이런식으로 <code class="highlighter-rouge">=</code>를 사용하여, 구분 짓는다.</p>
+
+<p>다음은 properties파일을 읽는 모듈이다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="n">Properties</span> <span class="nf">getProperties</span><span class="o">(</span><span class="n">String</span> <span class="n">configFilePath</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">Properties</span> <span class="n">prop</span> <span class="o">=</span> <span class="k">new</span> <span class="n">Properties</span><span class="o">();</span>
+        <span class="n">InputStream</span> <span class="n">in</span> <span class="o">=</span> <span class="kc">null</span><span class="o">;</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">prop</span><span class="o">.</span><span class="na">load</span><span class="o">(</span><span class="k">new</span> <span class="n">FileInputStream</span><span class="o">(</span><span class="n">configFilePath</span><span class="o">));</span>
+        <span class="o">}</span><span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">){</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Error &gt;&gt;&gt;&gt;&gt; can't read the configFilePath =&gt; "</span> <span class="o">+</span> <span class="n">configFilePath</span><span class="o">);</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">exit</span><span class="o">(-</span><span class="mi">1</span><span class="o">);</span>
+        <span class="o">}</span><span class="k">finally</span> <span class="o">{</span>
+            <span class="k">try</span> <span class="o">{</span>
+                <span class="k">if</span> <span class="o">(</span><span class="n">in</span> <span class="o">!=</span> <span class="kc">null</span><span class="o">)</span>
+                    <span class="n">in</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+            <span class="o">}</span><span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{}</span>
+            <span class="k">finally</span> <span class="o">{</span>
+                <span class="k">return</span> <span class="n">prop</span><span class="o">;</span>
+            <span class="o">}</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+</code></pre>
+</div>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="k">for</span> <span class="o">(</span><span class="n">Map</span><span class="o">.</span><span class="na">Entry</span><span class="o">&lt;</span><span class="n">Object</span><span class="o">,</span> <span class="n">Object</span><span class="o">&gt;</span> <span class="n">ele</span> <span class="o">:</span> <span class="n">DefaultSetting</span><span class="o">.</span><span class="na">getProperties</span><span class="o">(</span><span class="s">"resources/sites.txt"</span><span class="o">).</span><span class="na">entrySet</span><span class="o">())</span> <span class="o">{</span>
+            <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">((</span><span class="n">String</span><span class="o">)</span> <span class="n">ele</span><span class="o">.</span><span class="na">getKey</span><span class="o">()</span> <span class="o">+</span><span class="s">" ==&gt; "</span><span class="o">+</span> <span class="o">(</span><span class="n">String</span><span class="o">)</span> <span class="n">ele</span><span class="o">.</span><span class="na">getValue</span><span class="o">());</span>
+        <span class="o">}</span>
+</code></pre>
+</div>
+
+<p>이런식으로 HashMap에 넣어서 사용하면 편리하다.</p>
+
+
+        </article>
+        <hr>
+
+        
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+        
+
+        <div class="post-recent">
+    <div class="pre">
+        
+        <p><strong>prev</strong> <a href="/2017/03/01/stringbuildervsstringbuffer/">StringBuilder vs StringBuffer</a></p>
+        
+    </div>
+    <div class="nex">
+
+        
+        <p><strong>next</strong> <a href="/2017/03/27/mavenbuildplugin/">Maven Build Plugin & 옵션</a></p>
+        
+    </div>
+</div>
+
+
+        <h2 id="comments">Comments</h2>
+        
+
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+     * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+
+    var disqus_config = function() {
+        this.page.url = 'http://joswlv.github.io/2017/03/26/properties/'; // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://joswlv.github.io/2017/03/26/properties/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document,
+            s = d.createElement('script');
+
+        s.src = '//joswlv.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+
+    </div>
+    <button class="anchor"><i class="fa fa-anchor"></i></button>
+    <div class="right">
+        <div class="wrap">
+
+            <!-- Content -->
+            <div class="side content">
+                <div>
+                    Content
+                </div>
+                <ul id="content-side" class="content-ul">
+                    <li><a href="#similar_posts">Similar Posts</a></li>
+                    <li><a href="#comments">Comments</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+/**
+ * target _blank
+ */
+(function() {
+    var aTags = document.querySelectorAll('article a:not([id])')
+    for (var i = 0; i < aTags.length; i++) {
+        aTags[i].setAttribute('target', '_blank')
+    }
+}());
+</script>
+<script src="/js/pageContent.js " charset="utf-8"></script>
+
+
+    <footer class="site-footer">
+
+
+    <div class="wrapper">
+
+        <p class="description">
+            
+        </p>
+        <p class="contact">
+            Contact me at: 
+            <a href="https://github.com/joswlv" title="GitHub"><i class="fa fa-github" aria-hidden="true"></i></a>  
+            <a href="mailto:wh7923@gmail.com" title="email"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>     
+            <a href="https://www.facebook.com/wsj7923" title="Facebook"><i class="fa fa-facebook-official" aria-hidden="true"></i></a>    
+        </p>
+        <p>
+        </p>
+        <p class="power">
+            <span>
+                Site powered by <a href="https://jekyllrb.com/">Jekyll</a> & <a href="https://pages.github.com/">Github Pages</a>.
+            </span>
+        </p>
+    </div>
+</footer>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <div class="back-to-top">
+    <a href="#top" class="scroll">
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    </a>
+</div>
+
+    <script src=" /js/main.js " charset="utf-8"></script>
+    <script src=" /js/scroll.min.js " charset="utf-8"></script>
+  </body>
+
+</html>
