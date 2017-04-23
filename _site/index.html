@@ -113,6 +113,251 @@
             
               <li>
                 <h2>
+                  <a class="post-link" href="/2017/04/20/resourcecleanup/">Resource CleanUp</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2017-04-20
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#Java" title="Category: Java" rel="category">Java</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="section">리소스 클린업</h1>
+
+<p>java에서는 GC가 있어 리소스를 관리해준다. 하지만 외부 리소르를 클린업을 하지 않아 오작동을 발생하는 실수를 많이 하게 된다.</p>
+
+<p>단계별로 외부리소를 클린업을 하는 법을 정리하고, 최종적으로 람다표현식을 사용한 리소스클린업을 정리한다.</p>
+
+<h2 id="section-1">흔히하는 실수</h2>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">FileWriterEx</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">FileWriter</span> <span class="n">writer</span><span class="o">;</span>
+    
+    <span class="kd">public</span> <span class="nf">FileWriterEx</span><span class="o">(</span><span class="kd">final</span> <span class="n">String</span> <span class="n">fileName</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+        <span class="n">writer</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FileWriter</span><span class="o">(</span><span class="n">fileName</span><span class="o">);</span>
+    <span class="o">}</span>
+    
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">writeStuff</span><span class="o">(</span><span class="kd">final</span> <span class="n">String</span> <span class="n">message</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+        <span class="n">writer</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">message</span><span class="o">);</span>
+    <span class="o">}</span>
+    
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">finalize</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+        <span class="n">writer</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+        <span class="kd">final</span> <span class="n">FileWriterEx</span> <span class="n">writerEx</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FileWriterEx</span><span class="o">(</span><span class="s">"joswlvTest.txt"</span><span class="o">);</span>
+        <span class="n">writerEx</span><span class="o">.</span><span class="na">writeStuff</span><span class="o">(</span><span class="s">"TEST-TEST"</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+<p>이런 경우 <code class="highlighter-rouge">joswlvTest.txt</code>파일은 생성되지만 내용은 비어 잇다. <code class="highlighter-rouge">finalize()</code>가 실행되지 않았고, JVM은 충분한 메모리가 있기 때문에 <code class="highlighter-rouge">finalize()</code>를 할 필요가 없다고 생각한다. 그래서 파일은 종료되지 않고 작성한 내용은 메모리에서 파일로 flush가 되지 않았다.</p>
+
+<h2 id="section-2">수정 1</h2>
+
+<p><code class="highlighter-rouge">흔히하는 실수</code> 문제를 수정하기 위해 명시적으로 <code class="highlighter-rouge">close()</code> 호출을 추가하고 <code class="highlighter-rouge">finalize()</code>메소드를 제거한다.</p>
+
+<p>인스턴스 사용이 끝나면, 해당 인스턴스를 클린업할 것을 명시적으로 요청할 수 있게 한것이다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">FileWriterEx</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">FileWriter</span> <span class="n">writer</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">FileWriterEx</span><span class="o">(</span><span class="kd">final</span> <span class="n">String</span> <span class="n">fileName</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+        <span class="n">writer</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FileWriter</span><span class="o">(</span><span class="n">fileName</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">writeStuff</span><span class="o">(</span><span class="kd">final</span> <span class="n">String</span> <span class="n">message</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+        <span class="n">writer</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">message</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">close</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+        <span class="n">writer</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+    <span class="o">}</span>
+    
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+        <span class="kd">final</span> <span class="n">FileWriterEx</span> <span class="n">writerEx</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FileWriterEx</span><span class="o">(</span><span class="s">"joswlvTest.txt"</span><span class="o">);</span>
+        <span class="n">writerEx</span><span class="o">.</span><span class="na">writeStuff</span><span class="o">(</span><span class="s">"TEST-TEST"</span><span class="o">);</span>
+        <span class="n">writerEx</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">close()</code>를 명시적으로 호출하는 것은 인스턴스가 사용한 외부 리소스를 클린업한다. 그러나 코드에서 예외처리가 일어나면 <code class="highlighter-rouge">close()</code> 메소드가 호출하지 못할 수도 있다.</p>
+
+<h2 id="section-3">수정 2</h2>
+
+<p><code class="highlighter-rouge">close()</code>메소드 호출을 보자하는 수정을 해보자</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">FileWriterEx</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">FileWriter</span> <span class="n">writer</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">FileWriterEx</span><span class="o">(</span><span class="kd">final</span> <span class="n">String</span> <span class="n">fileName</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+        <span class="n">writer</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FileWriter</span><span class="o">(</span><span class="n">fileName</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">writeStuff</span><span class="o">(</span><span class="kd">final</span> <span class="n">String</span> <span class="n">message</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+        <span class="n">writer</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">message</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">close</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+        <span class="n">writer</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+        <span class="kd">final</span> <span class="n">FileWriterEx</span> <span class="n">writerEx</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FileWriterEx</span><span class="o">(</span><span class="s">"joswlvTest.txt"</span><span class="o">);</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">writerEx</span><span class="o">.</span><span class="na">writeStuff</span><span class="o">(</span><span class="s">"TEST-TEST"</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+            <span class="n">writerEx</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>이렇게 하면 코드에서 예외가 발생하더라도 리소스에 대한 클린업이 보장된다.</p>
+
+<h2 id="section-4">수정 3</h2>
+
+<p>java SE7에서 부터 제공하는 <code class="highlighter-rouge">ARM (Automatic Resource Management)</code> 기능을 사용해 장황한 코드를 감소 시켜 보자!</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">FileWriterEx</span> <span class="kd">implements</span> <span class="n">AutoCloseable</span><span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">FileWriter</span> <span class="n">writer</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">FileWriterEx</span><span class="o">(</span><span class="kd">final</span> <span class="n">String</span> <span class="n">fileName</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+        <span class="n">writer</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FileWriter</span><span class="o">(</span><span class="n">fileName</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">writeStuff</span><span class="o">(</span><span class="kd">final</span> <span class="n">String</span> <span class="n">message</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+        <span class="n">writer</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">message</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">close</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+	    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Close호출됨!"</span><span class="o">);</span>
+        <span class="n">writer</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+        <span class="k">try</span> <span class="o">(</span><span class="n">FileWriterEx</span> <span class="n">writer</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FileWriterEx</span><span class="o">(</span><span class="s">"joswlv.txt"</span><span class="o">))</span> <span class="o">{</span>
+            <span class="n">writer</span><span class="o">.</span><span class="na">writeStuff</span><span class="o">(</span><span class="s">"TEST-TEST"</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>클래스의 인스턴스를 <code class="highlighter-rouge">try-with-resources</code> 형태로 생성하고 그블록 안에서 writeStuff()를 호출한다. try 블록을 빠져나오면, 자동적으로 try 블록에 의해 관리되는 인스턴스/리소스에서 <code class="highlighter-rouge">close()</code> 메소드가 호출된다.</p>
+
+<p>이러한 작업을 위해 컴파일러는 <code class="highlighter-rouge">AutoCloseable</code> 인터페이스의 구현에 대한 관리 리소스 클래스가 필요하고, 이 인터페이스는 <code class="highlighter-rouge">close()</code>라는 메소드 하나만 가진다.</p>
+
+<p>ARM을 사용한 코드는 간결하지만 프로그래머가 원하는 시간에 클린업을 할려면 추가적인 작업이 필요하다.</p>
+
+<h2 id="section-5">수정 4</h2>
+
+<p>클래스가 일정 시간 내에 클린업이 되야하는 heavy한 리소스를 사용한다면 다음과 같이 하면 된다.</p>
+
+<p>우선, 생성자와 <code class="highlighter-rouge">close()</code>를 <code class="highlighter-rouge">private</code>로 선언해 프로그래머가 직접 FileWriteEAM의 인스턴스를 생성할 수 없게 한다. 그래서 factory 메소드가 필요하다. 인스턴스를 생성하고 파라미터로 해당 인스턴스를 전달하는 일번적인 factory 메소드와 달리, 작성할 코드는 인스턴스를 사용자에게 전달하고 작업이 끝날 때까지 기다린다.(람다표현식을 이용하면 가능함)</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code>
+<span class="cm">/*
+FileWriterEAM.java
+*/</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">FileWriterEAM</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">FileWriter</span> <span class="n">writer</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="nf">FileWriterEAM</span><span class="o">(</span><span class="kd">final</span> <span class="n">String</span> <span class="n">fileName</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+        <span class="n">writer</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FileWriter</span><span class="o">(</span><span class="n">fileName</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">writeStuff</span><span class="o">(</span><span class="kd">final</span> <span class="n">String</span> <span class="n">message</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+        <span class="n">writer</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">message</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">close</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Close 호출됨"</span><span class="o">);</span>
+        <span class="n">writer</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">use</span><span class="o">(</span><span class="kd">final</span> <span class="n">String</span> <span class="n">fileName</span><span class="o">,</span> 
+    	<span class="kd">final</span> <span class="n">UseInstance</span><span class="o">&lt;</span><span class="n">FileWriterEAM</span><span class="o">,</span> <span class="n">IOException</span><span class="o">&gt;</span> <span class="n">block</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> 
+    <span class="o">{</span>
+        <span class="kd">final</span> <span class="n">FileWriterEAM</span> <span class="n">writerEAM</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FileWriterEAM</span><span class="o">(</span><span class="n">fileName</span><span class="o">);</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">block</span><span class="o">.</span><span class="na">accept</span><span class="o">(</span><span class="n">writerEAM</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+            <span class="n">writerEAM</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+        <span class="o">}</span>
+        
+        <span class="cm">/* ARM으로 작성해도 된다. (AutoCloseable implements를 받아야한다.)
+        try (FileWriterEAM writerEAM = new FileWriterEAM(fileName)) {
+            block.accept(writerEAM);
+        }
+        */</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">FileWriterEAM</span><span class="o">.</span><span class="na">use</span><span class="o">(</span><span class="s">"eam.txt"</span><span class="o">,</span> <span class="n">writerEAM</span> <span class="o">-&gt;</span> <span class="n">writerEAM</span><span class="o">.</span><span class="na">writeStuff</span><span class="o">(</span><span class="s">"GOOD!!"</span><span class="o">));</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="cm">/*
+UseInstance.java
+*/</span>
+<span class="nd">@FunctionalInterface</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">UseInstance</span><span class="o">&lt;</span><span class="n">T</span><span class="o">,</span> <span class="n">X</span> <span class="kd">extends</span> <span class="n">Throwable</span><span class="o">&gt;</span> <span class="o">{</span>
+    <span class="kt">void</span> <span class="nf">accept</span><span class="o">(</span><span class="n">T</span> <span class="n">instance</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">X</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">use()</code> 메소드에서 두개의 파라미터 fileName, UseInstacne 인터페이스에 대한 레퍼런스를 인수로 받는다. 이 메소드에서 FileWriteEAM을 객체화하고 try와 finally 블록을 생성한다. 그리고 나서 인터페이스가 생성되자마자 <code class="highlighter-rouge">accept()</code> 메소드에 FileWriteEAM의 인스턴스를 파라미터로 넘긴다. 호출이 리턴되면, finally 블록에 잇는 인스턴스의 <code class="highlighter-rouge">close()</code>메소드를 호출한다.</p>
+
+<p><code class="highlighter-rouge">@FunctionalInterface</code> Annotation를 붙여 UseInstance는 함수형 인터페이스로 만들어 자바 컴파일러가 자동으로 람다 표현식이나 메소드 레퍼런스를 합성할 수 있도록 한다.</p>
+
+<p>클레스의 사용자들은 인스턴스를 직접 생성하지 못한다. 이런 특징은 인스턴스가 만료되는 시점 이후로 리소스의 클린업일어나는 코드 생성을 막는 효과를 가져온다.</p>
+
+<h3 id="reference">Reference</h3>
+
+<ul>
+  <li>자바 8 람다의힘</li>
+</ul>
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2017/04/20/resourcecleanup/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
                   <a class="post-link" href="/2017/04/08/garbagecollectionpauses/">Garbage collection pauses</a>
                 </h2>
                 <div class="label">
@@ -856,221 +1101,6 @@ spark.serializer=org.apache.spark.serializer.KryoSerializer
                 <hr>
               </li>
             
-              <li>
-                <h2>
-                  <a class="post-link" href="/2017/02/26/basicrdd/">기본 RDD연산들(트랜스포메이션, 액션)</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2017-02-26
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#Spark" title="Category: Spark" rel="category">Spark</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                </div>
-                <div class="excerpt">
-                    <h1 id="rdd-">기본 RDD 트랜스포메이션</h1>
-
-<h3 id="rdd--rdd-"><strong>{1,2,3,3}을 가지고 있는 RDD에 대한 RDD 트랜스포메이션</strong></h3>
-
-<table>
-  <thead>
-    <tr>
-      <th>함수 이름</th>
-      <th>용도</th>
-      <th>예</th>
-      <th>결과</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>map()</td>
-      <td>RDD의 각 요소에 함수를 적용하고 결과 RDD를 되돌려준다.</td>
-      <td>rdd.map(x -&gt; x+1)</td>
-      <td>{2,3,4,4}</td>
-    </tr>
-    <tr>
-      <td>flatMap()</td>
-      <td>RDD의 각 요소에 함수를 적용하고 반환된 반복자의 내용들로 이루어진 RDD를 되될려준다. 종종 단어 분해를 위해 쓰인다.</td>
-      <td>rdd.flatMap(x -&gt; x.to(3))</td>
-      <td>{1,2,3,2,3,3}</td>
-    </tr>
-    <tr>
-      <td>filter()</td>
-      <td>filter()로 전달된 함수의 조건을 통과한 값으로만 이루어진 RDD를 되돌려 준다.</td>
-      <td>rdd.filter(x -&gt; x != 1)</td>
-      <td>{2,3,3}</td>
-    </tr>
-    <tr>
-      <td>distinct()</td>
-      <td>중복제거</td>
-      <td>rdd.distinct()</td>
-      <td>{1,2,3}</td>
-    </tr>
-    <tr>
-      <td>sample(withReplacement, fraction, [seed])</td>
-      <td>복원 추출(withReplacement-true)이나 비복원 추출로 RDD에서 표본을 뽑아낸다.</td>
-      <td>rdd.sample(false, 0.5)</td>
-      <td>생략</td>
-    </tr>
-  </tbody>
-</table>
-
-<h3 id="rdd--"><strong>{1,2,3}과 {3,4,5}를 가진 두 RDD에 대한 트랜스포메이션</strong></h3>
-
-<table>
-  <thead>
-    <tr>
-      <th>함수 이름</th>
-      <th>용도</th>
-      <th>예</th>
-      <th>결과</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>union()</td>
-      <td>두 RDD에 잇는 데이터들을 합한 RDD를 생성한다.</td>
-      <td>rdd.union(other)</td>
-      <td>{1,2,3,3,4,5}</td>
-    </tr>
-    <tr>
-      <td>intersection()</td>
-      <td>양쪽 RDD에 모두 있는 데이터들만을 가진 RDD를 반환한다.</td>
-      <td>rdd.intersection(other)</td>
-      <td>{3}</td>
-    </tr>
-    <tr>
-      <td>subtract()</td>
-      <td>한 RDD가 가진 데이터를 다른 쪽에서 삭제한다</td>
-      <td>rdd.subtract(other)</td>
-      <td>{1,2}</td>
-    </tr>
-    <tr>
-      <td>cartesian()</td>
-      <td>두 RDD의 카테시안 곱</td>
-      <td>rdd.cartesian(other)</td>
-      <td>{{1,3},{1,4},{1,5} … ,{3,5}}</td>
-    </tr>
-  </tbody>
-</table>
-
-<p><br /></p>
-
-<h1 id="rdd--1">기본 RDD 액션</h1>
-
-<h3 id="rdd---"><strong>{1,2,3,3}을 갖고 있는 RDD에 대한 기본 액션</strong></h3>
-
-<table>
-  <thead>
-    <tr>
-      <th>함수 이름</th>
-      <th>용도</th>
-      <th>예</th>
-      <th>결과</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>collect()</td>
-      <td>RDD의 모든 데이터요소 리턴</td>
-      <td>rdd.collect()</td>
-      <td>{1,2,3,3}</td>
-    </tr>
-    <tr>
-      <td>count()</td>
-      <td>RDD의 요소 개수 리턴</td>
-      <td>rdd.count()</td>
-      <td>4</td>
-    </tr>
-    <tr>
-      <td>countByValue()</td>
-      <td>RDD에 있는 각 값의 개수 리턴</td>
-      <td>rdd.countByValue()</td>
-      <td>{{1,1},{2,1},{3,2}}</td>
-    </tr>
-    <tr>
-      <td>take(num)</td>
-      <td>RDD의 값들 중 num개 리턴</td>
-      <td>rdd.take(2)</td>
-      <td>{1,2}</td>
-    </tr>
-    <tr>
-      <td>top(num)</td>
-      <td>RDD의 값들 중 상위 num개 리턴</td>
-      <td>rdd.top(2)</td>
-      <td>{3,3}</td>
-    </tr>
-    <tr>
-      <td>takeOrdered(num(ordering)</td>
-      <td>제공된 ordering 기준으로 num개 값 리턴</td>
-      <td>rdd.takeOrdered(2)(myOrdering)</td>
-      <td>{3,3}</td>
-    </tr>
-    <tr>
-      <td>takeSample(withReplacement, num, [seed])</td>
-      <td>무작위 값을 리턴</td>
-      <td>rdd.takeSample(false,1)</td>
-      <td>생략</td>
-    </tr>
-    <tr>
-      <td>reduce(func)</td>
-      <td>RDD의 값들을 병렬로 병합 연산한다.</td>
-      <td>rdd.reduce((x,y) -&gt; x+y)</td>
-      <td>9</td>
-    </tr>
-    <tr>
-      <td>fold(zero)(func)</td>
-      <td>reduce()와 동일하나 제로 밸류를 넣어준다.</td>
-      <td>rdd.fold(0)(x,y) -&gt; x+y</td>
-      <td>9</td>
-    </tr>
-    <tr>
-      <td>aggregate(zeroValue)(seqOP, combOp)</td>
-      <td>reduce()와 유사하나 다른 타입을 리턴한다.</td>
-      <td>rdd.aggregate((0,0))((x,y) -&gt; (x._1 + y, x._2 +1), (x,y) -&gt; (x._1 + y._1, x._2 + y._2))</td>
-      <td>{9,4}</td>
-    </tr>
-    <tr>
-      <td>foreach(func)</td>
-      <td>RDD의 각값에 func을 적용한다.</td>
-      <td>rdd.foreach(func)</td>
-      <td>없음</td>
-    </tr>
-  </tbody>
-</table>
-
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2017/02/26/basicrdd/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
         </ul>
 
 
@@ -1149,7 +1179,7 @@ spark.serializer=org.apache.spark.serializer.KryoSerializer
                             <span class="name">
                                 Java
                             </span>
-                            <span class="badge">6</span>
+                            <span class="badge">7</span>
                         </a>
                     </li>
                     
@@ -1234,6 +1264,8 @@ spark.serializer=org.apache.spark.serializer.KryoSerializer
                 </div>
                 <ul class="content-ul" recent>
                     
+                        <li><a href="/2017/04/20/resourcecleanup/">Resource CleanUp</a></li>
+                    
                         <li><a href="/2017/04/08/garbagecollectionpauses/">Garbage collection pauses</a></li>
                     
                         <li><a href="/2017/04/02/runtojarbackground/">jar 백그라운드로 실행하기</a></li>
@@ -1251,8 +1283,6 @@ spark.serializer=org.apache.spark.serializer.KryoSerializer
                         <li><a href="/2017/02/18/elasticsearchbasic/">ElasticSearch 기초</a></li>
                     
                         <li><a href="/2017/02/13/rdmsvsnosql/">RDBMS vs NOSQL</a></li>
-                    
-                        <li><a href="/2017/01/09/mysqlprocedureinsert/">Stored Procedure으로 Insert</a></li>
                     
                 </ul>
             </div>
