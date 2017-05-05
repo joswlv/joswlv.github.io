@@ -113,6 +113,147 @@
             
               <li>
                 <h2>
+                  <a class="post-link" href="/2017/01/05/javastring/">Java String에 대해..</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2017-01-05
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#Java" title="Category: Java" rel="category">Java</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="java-string">Java String</h1>
+
+<p>우선 Java의 <code class="highlighter-rouge">String</code> 객체는 immutable(불변의) 클래스이다. 그래서 한번 생성되면 수정이 불가능 하다.</p>
+
+<p>다음은 <code class="highlighter-rouge">String</code>객체의 특성을 나열 한다.</p>
+
+<h3 id="or--string-">1. “” or 객체 String 만들기</h3>
+
+<p>String을 만들때는 두가지 방식이 존재한다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">String</span> <span class="n">a</span> <span class="o">=</span> <span class="s">"abc"</span><span class="o">;</span>
+<span class="n">String</span> <span class="n">b</span> <span class="o">=</span> <span class="k">new</span> <span class="n">String</span><span class="o">(</span><span class="s">"abc"</span><span class="o">);</span>
+</code></pre>
+</div>
+
+<p>우선 차이를 설명하는 예를 보자</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">String</span> <span class="n">a</span> <span class="o">=</span> <span class="s">"abc"</span><span class="o">;</span>
+<span class="n">String</span> <span class="n">b</span> <span class="o">=</span> <span class="s">"abc"</span><span class="o">;</span>
+<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">a</span> <span class="o">==</span> <span class="n">b</span><span class="o">);</span> <span class="c1">//True</span>
+<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">a</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">b</span><span class="o">));</span> <span class="c1">//True</span>
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">a</code>와 <code class="highlighter-rouge">b</code>는 Method Area에서 같은 메모리를 참조 한다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">String</span> <span class="n">c</span> <span class="o">=</span> <span class="k">new</span> <span class="n">String</span><span class="o">(</span><span class="s">"abc"</span><span class="o">);</span>
+<span class="n">String</span> <span class="n">d</span> <span class="o">=</span> <span class="k">new</span> <span class="n">String</span><span class="o">(</span><span class="s">"abc"</span><span class="o">);</span>
+<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">c</span> <span class="o">==</span> <span class="n">d</span><span class="o">);</span> <span class="c1">//False</span>
+<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">c</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">d</span><span class="o">));</span> <span class="c1">//True</span>
+</code></pre>
+</div>
+<p><code class="highlighter-rouge">c</code>와 <code class="highlighter-rouge">d</code>는 다른 heap영역에서 다른 object이다. 다른 object는 다른 메모리 참조한다.</p>
+
+<p>String을 만들때 객체를 새로 만드는 것보다 <code class="highlighter-rouge">""</code>으로 String을 만드는 것이 불필요한 객체를 안만들어서 더 유용하다고 한다.</p>
+
+<h3 id="string-passed-by-value">2. String은 passed by value</h3>
+
+<p>다음 예를 보자</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+	<span class="n">String</span> <span class="n">a</span> <span class="o">=</span> <span class="k">new</span> <span class="n">String</span><span class="o">(</span><span class="s">"abc"</span><span class="o">);</span>
+	<span class="n">changeText</span><span class="o">(</span><span class="n">a</span><span class="o">);</span>
+	<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">a</span><span class="o">);</span>
+<span class="o">}</span>
+
+<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">changeText</span><span class="o">(</span><span class="n">String</span> <span class="n">a</span><span class="o">)</span> <span class="o">{</span>
+	<span class="n">a</span> <span class="o">=</span> <span class="s">"cd"</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>이 예제에서 print되는 것은 “abc”이다.</p>
+
+<p>이러한 이유는 Java는 항상 <code class="highlighter-rouge">pass by value</code>를 하기 때문이다. 즉 <code class="highlighter-rouge">changeText()</code>메소드를 지나면서 <code class="highlighter-rouge">a</code>에 저장되었던 “abc”는 무시되고 “cd”가 새롭게 heap생성이된다. 처음에 생성되었던 a는 여전히 “abc”를 참조하고 있다. 이는 앞서 설명한 Java에서는 String이 immutable한 클래스이기 때문이다. 즉 참조에 의한 값전달(passed by reference)는 지원하지 않는다.</p>
+
+<p>immutable하지 않는 String을 만들고 싶으면 <code class="highlighter-rouge">StringBuilder</code>를 사용하면 된다.</p>
+
+<p>다음 예는 <code class="highlighter-rouge">changeText()</code>메소드의 기능을 살리는 방식이다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+	<span class="n">StringBuilder</span> <span class="n">x</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuilder</span><span class="o">(</span><span class="s">"ab"</span><span class="o">);</span>
+	<span class="n">changeText</span><span class="o">(</span><span class="n">x</span><span class="o">);</span>
+	<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">x</span><span class="o">);</span>
+<span class="o">}</span>
+ 
+<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">changeText</span><span class="o">(</span><span class="n">StringBuilder</span> <span class="n">x</span><span class="o">)</span> <span class="o">{</span>
+	<span class="n">x</span><span class="o">.</span><span class="na">delete</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">2</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="s">"cd"</span><span class="o">);</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+<p>여기서 StringBuilder는 값이 변할 수 있다. 그리고 새로운 객체를 생성하는 것이 아니라 새로운 값을 할당한다.</p>
+
+<p>요약하면 Java는 값(변수?)의한 전달만 가능하다!! 참조를 통한 전달은 지원하지 않는다.</p>
+
+<p>C++로 <code class="highlighter-rouge">passed by reference</code>의 예를 보면 다음과 같다.</p>
+
+<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">change</span><span class="p">(</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>
+    <span class="n">x</span> <span class="o">=</span> <span class="s">"cd"</span><span class="p">;</span>
+<span class="p">}</span>
+ 
+<span class="kt">int</span> <span class="n">main</span><span class="p">(){</span>
+    <span class="n">string</span> <span class="n">x</span> <span class="o">=</span> <span class="s">"ab"</span><span class="p">;</span>
+    <span class="n">change</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
+    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+<p>최종적인 x는 “cd”가 출력된다. heap에 생성된 x의 메모리주소를 참조하여 값을 변경하였다.</p>
+
+<h3 id="reference">Reference</h3>
+
+<ul>
+  <li><a href="http://www.programcreek.com/">programcreek</a></li>
+  <li><a href="http://javadude.com/articles/passbyvalue.htm">JavaDude.com</a></li>
+  <li><a href="http://fowler.egloos.com/1243657">어제보다 나은 오늘</a></li>
+</ul>
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2017/01/05/javastring/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
                   <a class="post-link" href="/2016/12/18/curl/">curl</a>
                 </h2>
                 <div class="label">
@@ -1032,89 +1173,6 @@ sudo service uwsgi restart
                 <hr>
               </li>
             
-              <li>
-                <h2>
-                  <a class="post-link" href="/2016/11/18/Shortcircuitevaluation/">Short-circuit evaluation</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-11-18
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#Java" title="Category: Java" rel="category">Java</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                </div>
-                <div class="excerpt">
-                    <h1 id="short-circuit-evaluation">Short-circuit evaluation이란</h1>
-
-<blockquote>
-  <p><code class="highlighter-rouge">and</code>, <code class="highlighter-rouge">or</code>논리 연산에서 인자 하나만 보고 결과를 확실히 알 수 있을 때, 뒤에 나오는 인자를 확인하지 않고 바로 답을 내는 방법이다. <code class="highlighter-rouge">&amp;&amp;</code> 연산일 때, 하나라도 false이면 무조건 답이 false이고 <code class="highlighter-rouge">||</code> 연산일 땐, 하나라도 true이면 무조건 답이 true이다.</p>
-</blockquote>
-
-<p>지원하는 언어는 <a href="https://en.wikipedia.org/wiki/Short-circuit_evaluation#Support_in_common_programming_languages">여기</a></p>
-
-<p>예를 보면 다음과 같다.</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>조건식 1 &amp;&amp; 조건식 2
-조건식 1 이 false 이면, 조건식 2 를 건너뜀
-</code></pre>
-</div>
-
-<h4 id="section">설명</h4>
-
-<p><code class="highlighter-rouge">&amp;&amp;</code>연산자에서는 두 조건식이 모두 true가 되어야 전체 결과가 true가 되는데, <code class="highlighter-rouge">조건식1</code>이 <code class="highlighter-rouge">false</code>가되면 <code class="highlighter-rouge">조건식2</code>을 보지 않아도 전체가 <code class="highlighter-rouge">false</code>가 되므로 <code class="highlighter-rouge">조건식2</code>를 체크하지 않는다.</p>
-
-<h1 id="section-1">적용한 예</h1>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="k">if</span> <span class="o">(</span><span class="n">check1</span> <span class="o">==</span> <span class="err">''</span> <span class="o">&amp;&amp;</span> <span class="n">check2</span> <span class="o">==</span> <span class="kc">null</span><span class="o">){</span>
-	<span class="n">blabla</span>
-<span class="o">}</span>
-</code></pre>
-</div>
-
-<p>위 경우에서 <code class="highlighter-rouge">''</code>을 먼저 체크하는 것보다 <code class="highlighter-rouge">null</code>인 경우를 먼저 체크하는 것이 안전하다고 한다.</p>
-
-<p>수정하면 아래와 같다.</p>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="k">if</span> <span class="o">(</span><span class="n">check2</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">check1</span> <span class="o">==</span> <span class="err">''</span><span class="o">){</span>
-	<span class="n">blabla</span>
-<span class="o">}</span>
-</code></pre>
-</div>
-
-<p><br /></p>
-
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2016/11/18/Shortcircuitevaluation/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
         </ul>
 
 
@@ -1193,7 +1251,7 @@ sudo service uwsgi restart
                             <span class="name">
                                 Java
                             </span>
-                            <span class="badge">7</span>
+                            <span class="badge">8</span>
                         </a>
                     </li>
                     
@@ -1278,6 +1336,8 @@ sudo service uwsgi restart
                 </div>
                 <ul class="content-ul" recent>
                     
+                        <li><a href="/2017/05/04/logback/">LogBack</a></li>
+                    
                         <li><a href="/2017/04/20/resourcecleanup/">Resource CleanUp</a></li>
                     
                         <li><a href="/2017/04/08/garbagecollectionpauses/">Garbage collection pauses</a></li>
@@ -1295,8 +1355,6 @@ sudo service uwsgi restart
                         <li><a href="/2017/02/19/logstash/">Logstash 기초</a></li>
                     
                         <li><a href="/2017/02/18/elasticsearchbasic/">ElasticSearch 기초</a></li>
-                    
-                        <li><a href="/2017/02/13/rdmsvsnosql/">RDBMS vs NOSQL</a></li>
                     
                 </ul>
             </div>

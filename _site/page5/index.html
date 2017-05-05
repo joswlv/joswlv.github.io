@@ -113,6 +113,99 @@
             
               <li>
                 <h2>
+                  <a class="post-link" href="/2016/11/02/imagepixelget/">이미지 픽셀다루기</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-11-02
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#js" title="Category: js" rel="category">js</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="section">이미지 픽셀값 뽑기</h1>
+
+<p>이미지를 로드 -&gt; Canvas에 그리기 -&gt; imgdata뽑기 -&gt; 가지고 놀기!!</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">canvas</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">ctx</span><span class="p">;</span>
+<span class="kd">var</span> <span class="nx">imgsrc</span><span class="p">;</span>
+<span class="kd">function</span> <span class="nx">loadFile</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">output</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'output'</span><span class="p">);</span>
+    <span class="nx">output</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">URL</span><span class="p">.</span><span class="nx">createObjectURL</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">files</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+    <span class="nx">imgsrc</span><span class="o">=</span><span class="nx">output</span><span class="p">.</span><span class="nx">src</span><span class="p">;</span>
+    <span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="c1">// drawing active image</span>
+        <span class="kd">var</span> <span class="nx">image</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Image</span><span class="p">();</span>
+        <span class="c1">// creating canvas object</span>
+        <span class="nx">image</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+            <span class="nx">ctx</span><span class="p">.</span><span class="nx">drawImage</span><span class="p">(</span><span class="nx">image</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">image</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> <span class="nx">image</span><span class="p">.</span><span class="nx">height</span><span class="p">);</span> <span class="c1">// draw the image on the canvas</span>
+        <span class="p">};</span>
+        <span class="nx">image</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">imgsrc</span><span class="p">;</span>
+        <span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'panel'</span><span class="p">);</span>
+        <span class="nx">ctx</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s1">'2d'</span><span class="p">);</span>
+        <span class="nx">$</span><span class="p">(</span><span class="s1">'#panel'</span><span class="p">).</span><span class="nx">mousemove</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// mouse move handler</span>
+            <span class="kd">var</span> <span class="nx">canvasOffset</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">canvas</span><span class="p">).</span><span class="nx">offset</span><span class="p">();</span>
+            <span class="kd">var</span> <span class="nx">canvasX</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">pageX</span> <span class="o">-</span> <span class="nx">canvasOffset</span><span class="p">.</span><span class="nx">left</span><span class="p">);</span>
+            <span class="kd">var</span> <span class="nx">canvasY</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">pageY</span> <span class="o">-</span> <span class="nx">canvasOffset</span><span class="p">.</span><span class="nx">top</span><span class="p">);</span>
+            <span class="kd">var</span> <span class="nx">imageData</span> <span class="o">=</span> <span class="nx">ctx</span><span class="p">.</span><span class="nx">getImageData</span><span class="p">(</span><span class="nx">canvasX</span><span class="p">,</span> <span class="nx">canvasY</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="kd">var</span> <span class="nx">pixel</span> <span class="o">=</span> <span class="nx">imageData</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
+            <span class="kd">var</span> <span class="nx">pixelColor</span> <span class="o">=</span> <span class="s2">"rgba("</span> <span class="o">+</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">", "</span> <span class="o">+</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s2">", "</span> <span class="o">+</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s2">", "</span> <span class="o">+</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="s2">")"</span><span class="p">;</span>
+            <span class="nx">$</span><span class="p">(</span><span class="s1">'#preview'</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="s1">'backgroundColor'</span><span class="p">,</span> <span class="nx">pixelColor</span><span class="p">);</span>
+        <span class="p">});</span>
+        <span class="nx">$</span><span class="p">(</span><span class="s1">'#panel'</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// mouse click handler</span>
+            <span class="kd">var</span> <span class="nx">canvasOffset</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">canvas</span><span class="p">).</span><span class="nx">offset</span><span class="p">();</span>
+            <span class="kd">var</span> <span class="nx">canvasX</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">pageX</span> <span class="o">-</span> <span class="nx">canvasOffset</span><span class="p">.</span><span class="nx">left</span><span class="p">);</span>
+            <span class="kd">var</span> <span class="nx">canvasY</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">pageY</span> <span class="o">-</span> <span class="nx">canvasOffset</span><span class="p">.</span><span class="nx">top</span><span class="p">);</span>
+            <span class="kd">var</span> <span class="nx">imageData</span> <span class="o">=</span> <span class="nx">ctx</span><span class="p">.</span><span class="nx">getImageData</span><span class="p">(</span><span class="nx">canvasX</span><span class="p">,</span> <span class="nx">canvasY</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
+            <span class="kd">var</span> <span class="nx">pixel</span> <span class="o">=</span> <span class="nx">imageData</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
+            <span class="nx">$</span><span class="p">(</span><span class="s1">'#rVal'</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">pixel</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
+            <span class="nx">$</span><span class="p">(</span><span class="s1">'#gVal'</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">pixel</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
+            <span class="nx">$</span><span class="p">(</span><span class="s1">'#bVal'</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">pixel</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+            <span class="nx">$</span><span class="p">(</span><span class="s1">'#rgbVal'</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">pixel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">','</span> <span class="o">+</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s1">','</span> <span class="o">+</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
+            <span class="nx">$</span><span class="p">(</span><span class="s1">'#rgbaVal'</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">pixel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">','</span> <span class="o">+</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s1">','</span> <span class="o">+</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s1">','</span> <span class="o">+</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">3</span><span class="p">]);</span>
+            <span class="kd">var</span> <span class="nx">dColor</span> <span class="o">=</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="mi">256</span> <span class="o">*</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">65536</span> <span class="o">*</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
+            <span class="nx">$</span><span class="p">(</span><span class="s1">'#hexVal'</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="s1">'#'</span> <span class="o">+</span> <span class="nx">dColor</span><span class="p">.</span><span class="nx">toString</span><span class="p">(</span><span class="mi">16</span><span class="p">));</span>
+        <span class="p">});</span>
+    <span class="p">});</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/11/02/imagepixelget/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
                   <a class="post-link" href="/2016/10/29/directorylisting/">Apache Directory listing 제거</a>
                 </h2>
                 <div class="label">
@@ -1016,342 +1109,6 @@ awk <span class="s1">'BEGIN {FS="\t"; OFS ="-"} {print $1 ,  $2} END {print "총
                 <hr>
               </li>
             
-              <li>
-                <h2>
-                  <a class="post-link" href="/2016/10/13/LogBack/">LogBack in SpringBoot</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-10-13
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#Spring" title="Category: Spring" rel="category">Spring</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                </div>
-                <div class="excerpt">
-                    <h1 id="logback-">LogBack 이란</h1>
-
-<p>logback은 SLF4J의 native 구현체이다. slf4j로 어플리케이션 로그를 남긴다면 logback을 선택하는 것이 좋다고 한다. slf4j의 도움으로 연관 라이브어리들이 다른 loggin framework를 쓰더라도 logback으로 통합할 수 있다.</p>
-
-<p>logbac은 <code class="highlighter-rouge">logback-core</code>, <code class="highlighter-rouge">logback-classic</code>, <code class="highlighter-rouge">logback-access</code>의 3개의 모듈이 있다.</p>
-
-<h1 id="logbackxml">logback.xml설정</h1>
-
-<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
-<span class="nt">&lt;configuration&gt;</span>
-    <span class="nt">&lt;appender</span> <span class="na">name=</span><span class="s">"STDOUT"</span> <span class="na">class=</span><span class="s">"ch.qos.logback.core.ConsoleAppender"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;layout</span> <span class="na">class=</span><span class="s">"ch.qos.logback.classic.PatternLayout"</span><span class="nt">&gt;</span>
-            <span class="nt">&lt;Pattern&gt;</span>%d{HH:mm} %-5level %logger{36} - %msg%n<span class="nt">&lt;/Pattern&gt;</span>
-        <span class="nt">&lt;/layout&gt;</span>
-    <span class="nt">&lt;/appender&gt;</span>
- 
-    <span class="nt">&lt;logger</span> <span class="na">name=</span><span class="s">"example.logback.level.grandparents"</span> <span class="na">level=</span><span class="s">"TRACE"</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;logger</span> <span class="na">name=</span><span class="s">"example.logback.level.grandparents.parents.children"</span> <span class="na">level=</span><span class="s">"INFO"</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;root</span> <span class="na">level=</span><span class="s">"DEBUG"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;appender-ref</span> <span class="na">ref=</span><span class="s">"STDOUT"</span> <span class="nt">/&gt;</span>
-    <span class="nt">&lt;/root&gt;</span>
-<span class="nt">&lt;/configuration&gt;</span>
-</code></pre>
-</div>
-
-<p>여기서 root는 root logger를 말한다. logger name=”“과 같은 뜻이라고 생각하면 된다.</p>
-
-<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;logger</span> <span class="na">name=</span><span class="s">"example.logback.level.grandparents"</span> <span class="na">level=</span><span class="s">"TRACE"</span><span class="nt">/&gt;</span>
-</code></pre>
-</div>
-<p><code class="highlighter-rouge">example.logback.level.grandparents</code> 이하 모든  Logger들의 level은 TRACE라는 설정이다.</p>
-
-<p>log level은 다음과 같다.</p>
-
-<ul>
-  <li>trace</li>
-  <li>debug</li>
-  <li>info</li>
-  <li>warn</li>
-  <li>error</li>
-</ul>
-
-<h1 id="appender">Appender</h1>
-
-<p>Event마다 Log를 기록하는 기능은 Appender가 처리한다. 그래서 Logger는 어떤 Appender에 해당이 되어 처리 되는지가 중요하다. Appender를 설정해도 log출력에 해당되지 않으면 작동하지 않는다.</p>
-
-<p>Appender는 출력될 형식을 직접 가지고 있이 않고, 해당 기능은 Layout과 Encoder에 위임한다.</p>
-
-<h1 id="consoleappender">ConsoleAppender</h1>
-
-<p>ConsoleAppender는 OutputStreamAppender를 상속한다. encoder, pattern으로 PatternLayoutEncoder가 생성해서 Appender에 주입된다.</p>
-
-<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;appender</span> <span class="na">name=</span><span class="s">"STDOUT"</span> <span class="na">class=</span><span class="s">"ch.qos.logback.core.ConsoleAppender"</span><span class="nt">&gt;</span>
-  <span class="c">&lt;!-- encoders are assigned the type
-       ch.qos.logback.classic.encoder.PatternLayoutEncoder by default --&gt;</span>
-  <span class="nt">&lt;encoder&gt;</span>
-    <span class="nt">&lt;pattern&gt;</span>%-4relative [%thread] %-5level %logger{35} - %msg %n<span class="nt">&lt;/pattern&gt;</span>
-  <span class="nt">&lt;/encoder&gt;</span>
-<span class="nt">&lt;/appender&gt;</span>
-</code></pre>
-</div>
-
-<p>PatternLayoutEncoder는 pattern으로 받은 값을 이용해서 PatternLayout을 생성하고 PatternLayoutEncoder는 log messag를 byte[]로 변환하는 기능도 포함한다. 이렇게 되면 Appender는 Layout기능과 Encoder기능을 모두 가지게 된다. 
-이것을 이용해 OutputStreamAppender는 byte[]를 OutputStream에 write하게 된다.</p>
-
-<p>참고 - <a href="http://logback.qos.ch/manual/layouts.html#ClassicPatternLayout">http://logback.qos.ch/manual/layouts.html#ClassicPatternLayout</a></p>
-
-<h1 id="fileappender">FileAppender</h1>
-
-<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="c">&lt;!-- Insert the current time formatted as "yyyyMMdd'T'HHmmss" under
-     the key "bySecond" into the logger context. This value will be
-     available to all subsequent configuration elements. --&gt;</span>
-<span class="nt">&lt;timestamp</span> <span class="na">key=</span><span class="s">"bySecond"</span> <span class="na">datePattern=</span><span class="s">"yyyyMMdd'T'HHmmss"</span><span class="nt">/&gt;</span>
-<span class="nt">&lt;appender</span> <span class="na">name=</span><span class="s">"FILE"</span> <span class="na">class=</span><span class="s">"ch.qos.logback.core.FileAppender"</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;file&gt;</span>log-${bySecond}.txt<span class="nt">&lt;/file&gt;</span>
-  <span class="nt">&lt;append&gt;</span>true<span class="nt">&lt;/append&gt;</span>
-  <span class="c">&lt;!-- encoders are assigned the type
-       ch.qos.logback.classic.encoder.PatternLayoutEncoder by default --&gt;</span>
-  <span class="nt">&lt;encoder&gt;</span>
-    <span class="nt">&lt;pattern&gt;</span>%-4relative [%thread] %-5level %logger{35} - %msg%n<span class="nt">&lt;/pattern&gt;</span>
-  <span class="nt">&lt;/encoder&gt;</span>
-<span class="nt">&lt;/appender&gt;</span>
-</code></pre>
-</div>
-
-<p>로그가 저장될 file을 선언하고, ConsoleAppender처럼 encoder, pattern을 선언하게 되면, log event를 지정된 file에 저장할 수 있다. 이때 파일 포맷중 날짜 형식은 java.text.SimpleDateFormat을 따른다.</p>
-
-<p><code class="highlighter-rouge">&lt;file&gt;</code>태그에 파일명만 작성하면 톰켓으로 구동할 경우 톰켓 <code class="highlighter-rouge">bin</code>폴더에 로그파일이 생성된다.</p>
-
-<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;appender</span> <span class="na">name=</span><span class="s">"FILE"</span> <span class="na">class=</span><span class="s">"ch.qos.logback.core.FileAppender"</span><span class="nt">&gt;</span>
-...
-  <span class="nt">&lt;prudent&gt;</span>true<span class="nt">&lt;/prudent&gt;</span>
-...
-<span class="nt">&lt;/appender&gt;</span>
-</code></pre>
-</div>
-
-<p><code class="highlighter-rouge">&lt;prudent&gt;</code>태그는 file에 저장될때 lock을 생성해서 처리한다. 서로 다른 java vm이 같은 파일을 가릴킬때 사용한다. 성능이 저하되는 단점이 있다.</p>
-
-<h1 id="rollingfileappender">RollingFileAppender</h1>
-
-<p>log가 많아지면 file하나당 최대 용량 제한도 있고, 로그를 파악하기도 어렵다. 이때 대부분 날짜를 기준으로 file을 남긴다. 따로 crontab으로 매일 file을 rename해서 처리할 수도 있지만, logback은 RollingFileAppender로 처리할 수 있다.</p>
-
-<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;appender</span> <span class="na">name=</span><span class="s">"ROLLING"</span> <span class="na">class=</span><span class="s">"ch.qos.logback.core.rolling.RollingFileAppender"</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;file&gt;</span>mylog.txt<span class="nt">&lt;/file&gt;</span>
-  <span class="nt">&lt;rollingPolicy</span> <span class="na">class=</span><span class="s">"ch.qos.logback.core.rolling.TimeBasedRollingPolicy"</span><span class="nt">&gt;</span>
-    <span class="c">&lt;!-- rollover daily --&gt;</span>
-    <span class="nt">&lt;fileNamePattern&gt;</span>mylog-%d{yyyy-MM-dd}.%i.txt<span class="nt">&lt;/fileNamePattern&gt;</span>
-    <span class="nt">&lt;timeBasedFileNamingAndTriggeringPolicy</span>
-          <span class="na">class=</span><span class="s">"ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP"</span><span class="nt">&gt;</span>
-      <span class="c">&lt;!-- or whenever the file size reaches 100MB --&gt;</span>
-      <span class="nt">&lt;maxFileSize&gt;</span>100MB<span class="nt">&lt;/maxFileSize&gt;</span>
-    <span class="nt">&lt;/timeBasedFileNamingAndTriggeringPolicy&gt;</span>
-  <span class="nt">&lt;/rollingPolicy&gt;</span>
-  <span class="nt">&lt;encoder&gt;</span>
-    <span class="nt">&lt;pattern&gt;</span>%msg%n<span class="nt">&lt;/pattern&gt;</span>
-  <span class="nt">&lt;/encoder&gt;</span>
-<span class="nt">&lt;/appender&gt;</span>
-</code></pre>
-</div>
-
-<p>rollingPolicy로 rolling정책을 등록할 수 있다. fileNamePattern으로 file pattern을 선언하고, <code class="highlighter-rouge">&lt;timeBasedFileNameingAndTriggeringPolicy&gt;</code>로 파일마다 트리거를 걸어 파일 최대 용량을 설정하면 새로운 index이름으로 파일을 생성한다.</p>
-
-<p>filesize는 끝문자열에 kb,mb,gb를 인식하고 대소문자 구분은 없다. whitespace는 모두 무시한다.</p>
-
-<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;fileNamePattern&gt;</span>mylog-%d{yyyy-MM-dd}.%i.txt.zip<span class="nt">&lt;/fileNamePattern&gt;</span>
-</code></pre>
-</div>
-<p>확장자에 <code class="highlighter-rouge">.zip</code>을 선언하면 새로운 file이 생성될때 이전 파일은 .zip으로 압축을 할 수 있다.</p>
-
-<h1 id="configuration">Configuration</h1>
-
-<h3 id="logback-debug">logback debug모드</h3>
-
-<p>아래 설정으로 logback이 구동될때 logback상태를 확인 할 수 있다.</p>
-
-<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;configuration</span> <span class="na">debug=</span><span class="s">"true"</span><span class="nt">&gt;</span>
-...
-<span class="nt">&lt;/configuration&gt;</span>
-</code></pre>
-</div>
-
-<h3 id="additivity">additivity</h3>
-
-<p>additivity의 default값은 true이다. logger name이하 모두 적용이 되는데 additivity를 false로 설정하면 해당 name에만 looger가 적용된다.</p>
-
-<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;logger</span> <span class="na">name=</span><span class="s">"XXX"</span> <span class="na">level=</span><span class="s">"DEBUG"</span> <span class="na">additivity=</span><span class="s">"false"</span><span class="nt">/&gt;</span>
-</code></pre>
-</div>
-
-<h3 id="root">root</h3>
-
-<p>loggr들은 name으로 등록이 된다. 기본적으로 java package구조와 동일하게 적용한다. tree구조이기때문에 최상단 root을 적용하면 모든 tree이하에 적용 할 수 있다. 이 설정으로 logger를 대신한다.</p>
-
-<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;root</span> <span class="na">level=</span><span class="s">"DEBUG"</span><span class="nt">&gt;</span>
-    <span class="nt">&lt;appender-ref</span> <span class="na">ref=</span><span class="s">"STDOUT"</span> <span class="nt">/&gt;</span>
-<span class="nt">&lt;/root&gt;</span>
-</code></pre>
-</div>
-
-<p>모든 대상에 STDOUT Appender를 적용하고 level이 DEBUG이하인 것만 처리로 설정된다.</p>
-
-<h1 id="json-log-">Json으로 log남겨 보기!</h1>
-
-<p>간단한 쇼핑몰 log를 json으로 남겨본다.</p>
-
-<p>우선 <code class="highlighter-rouge">logback.xml</code>대신에 <code class="highlighter-rouge">logback-sping.xml</code>파일을 만든다.</p>
-
-<p>내용은 아래와 같다.</p>
-
-<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="cp">&lt;?xml version="1.0" encoding="UTF-8"?&gt;</span>
-<span class="nt">&lt;configuration&gt;</span>
-    <span class="nt">&lt;include</span> <span class="na">resource=</span><span class="s">"org/springframework/boot/logging/logback/base.xml"</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;appender</span> <span class="na">name=</span><span class="s">"FILE-AUDIT"</span>
-        <span class="na">class=</span><span class="s">"ch.qos.logback.core.rolling.RollingFileAppender"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;file&gt;</span>/tmp/test.log<span class="nt">&lt;/file&gt;</span>
-        <span class="nt">&lt;encoder</span> <span class="na">class=</span><span class="s">"ch.qos.logback.classic.encoder.PatternLayoutEncoder"</span><span class="nt">&gt;</span>
-            <span class="nt">&lt;Pattern&gt;</span>
-                %msg%n
-            <span class="nt">&lt;/Pattern&gt;</span>
-        <span class="nt">&lt;/encoder&gt;</span>
-
-        <span class="nt">&lt;rollingPolicy</span> <span class="na">class=</span><span class="s">"ch.qos.logback.core.rolling.TimeBasedRollingPolicy"</span><span class="nt">&gt;</span>
-            <span class="c">&lt;!-- rollover daily --&gt;</span>
-            <span class="nt">&lt;fileNamePattern&gt;</span>${DEV_HOME}/archived/debug.%d{yyyy-MM-dd}.%i.log
-            <span class="nt">&lt;/fileNamePattern&gt;</span>
-            <span class="nt">&lt;timeBasedFileNamingAndTriggeringPolicy</span>
-                    <span class="na">class=</span><span class="s">"ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP"</span><span class="nt">&gt;</span>
-                <span class="nt">&lt;maxFileSize&gt;</span>10MB<span class="nt">&lt;/maxFileSize&gt;</span>
-            <span class="nt">&lt;/timeBasedFileNamingAndTriggeringPolicy&gt;</span>
-        <span class="nt">&lt;/rollingPolicy&gt;</span>
-    <span class="nt">&lt;/appender&gt;</span>
-    <span class="nt">&lt;logger</span> <span class="na">name=</span><span class="s">"com.newace.model"</span> <span class="na">level=</span><span class="s">"TRACE"</span> <span class="na">additivity=</span><span class="s">"false"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;appender-ref</span> <span class="na">ref=</span><span class="s">"FILE-AUDIT"</span><span class="nt">/&gt;</span>
-    <span class="nt">&lt;/logger&gt;</span>
-
-<span class="nt">&lt;/configuration&gt;</span>
-</code></pre>
-</div>
-
-<p>logger를 com.newace.model아래에 TRACE level아래의 모든 로그로 설정하였다.</p>
-
-<p>log모델은 다음과 같다.</p>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">LogSumModel</span> <span class="kd">extends</span> <span class="n">BaseModel</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Logger</span> <span class="n">LOGGER</span> <span class="o">=</span> <span class="n">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="n">LogSumModel</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
-
-    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">LogSumModel</span> <span class="n">LOG_LOGIN</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LogSumModel</span><span class="o">(</span><span class="s">"login"</span><span class="o">);</span>
-    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">LogSumModel</span> <span class="n">LOG_ADD_CART</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LogSumModel</span><span class="o">(</span><span class="s">"cart"</span><span class="o">);</span>
-    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">LogSumModel</span> <span class="n">LOG_CATEGORY</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LogSumModel</span><span class="o">(</span><span class="s">"category"</span><span class="o">);</span>
-    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">LogSumModel</span> <span class="n">LOG_PRODUCT_BUY</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LogSumModel</span><span class="o">(</span><span class="s">"buy"</span><span class="o">);</span>
-    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">LogSumModel</span> <span class="n">LOG_PRODUCT_DETAIL</span> <span class="o">=</span> <span class="k">new</span> <span class="n">LogSumModel</span><span class="o">(</span><span class="s">"detail"</span><span class="o">);</span>
-
-
-    <span class="kd">private</span> <span class="n">String</span> <span class="n">action</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="kt">long</span> <span class="n">regDate</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="kt">int</span> <span class="n">userId</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="kt">int</span> <span class="n">categoryNum</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="kt">int</span> <span class="n">productNum</span><span class="o">;</span>
-    <span class="kd">private</span> <span class="kt">boolean</span> <span class="n">isCart</span><span class="o">;</span>
-
-    <span class="kd">private</span> <span class="nf">LogSumModel</span><span class="o">()</span> <span class="o">{</span>
-    <span class="o">}</span>
-
-    <span class="kd">private</span> <span class="nf">LogSumModel</span><span class="o">(</span><span class="n">String</span> <span class="n">action</span><span class="o">)</span> <span class="o">{</span>
-        <span class="k">this</span><span class="o">();</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">action</span> <span class="o">=</span> <span class="n">action</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">writeLoginLog</span><span class="o">(</span><span class="nd">@NotNull</span> <span class="n">UserModel</span> <span class="n">userModel</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="na">trace</span><span class="o">(</span><span class="n">LOG_LOGIN</span><span class="o">.</span><span class="na">setRegDate</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">())</span>
-                <span class="o">.</span><span class="na">setUserId</span><span class="o">(</span><span class="n">userModel</span><span class="o">.</span><span class="na">getUserId</span><span class="o">())</span>
-                <span class="o">.</span><span class="na">toString</span><span class="o">());</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">writeAddCartLog</span><span class="o">(</span><span class="nd">@NotNull</span> <span class="n">UserModel</span> <span class="n">userModel</span><span class="o">,</span> <span class="nd">@NotNull</span> <span class="n">ProductModel</span> <span class="n">productModel</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="na">trace</span><span class="o">(</span><span class="n">LOG_ADD_CART</span><span class="o">.</span><span class="na">setRegDate</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">())</span>
-                <span class="o">.</span><span class="na">setProductNum</span><span class="o">(</span><span class="n">productModel</span><span class="o">.</span><span class="na">getProductId</span><span class="o">())</span>
-                <span class="o">.</span><span class="na">setUserId</span><span class="o">(</span><span class="n">userModel</span><span class="o">.</span><span class="na">getUserId</span><span class="o">())</span>
-                <span class="o">.</span><span class="na">toString</span><span class="o">());</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">writeProductBuyLog</span><span class="o">(</span><span class="nd">@NotNull</span> <span class="n">UserModel</span> <span class="n">userModel</span><span class="o">,</span> <span class="nd">@NotNull</span> <span class="n">ProductModel</span> <span class="n">productModel</span><span class="o">,</span> <span class="kt">boolean</span> <span class="n">isCart</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="na">trace</span><span class="o">(</span><span class="n">LOG_PRODUCT_BUY</span><span class="o">.</span><span class="na">setRegDate</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">())</span>
-                <span class="o">.</span><span class="na">setProductNum</span><span class="o">(</span><span class="n">productModel</span><span class="o">.</span><span class="na">getProductId</span><span class="o">())</span>
-                <span class="o">.</span><span class="na">setUserId</span><span class="o">(</span><span class="n">userModel</span><span class="o">.</span><span class="na">getUserId</span><span class="o">())</span>
-                <span class="o">.</span><span class="na">setCart</span><span class="o">(</span><span class="n">isCart</span><span class="o">)</span>
-                <span class="o">.</span><span class="na">toString</span><span class="o">());</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">writeProductDetailLog</span><span class="o">(</span><span class="nd">@NotNull</span> <span class="n">UserModel</span> <span class="n">userModel</span><span class="o">,</span> <span class="nd">@NotNull</span> <span class="n">ProductModel</span> <span class="n">productModel</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="na">trace</span><span class="o">(</span><span class="n">LOG_PRODUCT_DETAIL</span><span class="o">.</span><span class="na">setRegDate</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">())</span>
-                <span class="o">.</span><span class="na">setProductNum</span><span class="o">(</span><span class="n">productModel</span><span class="o">.</span><span class="na">getProductId</span><span class="o">())</span>
-                <span class="o">.</span><span class="na">setUserId</span><span class="o">(</span><span class="n">userModel</span><span class="o">.</span><span class="na">getUserId</span><span class="o">())</span>
-                <span class="o">.</span><span class="na">toString</span><span class="o">());</span>
-    <span class="o">}</span>
-
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">writeCategoryLog</span><span class="o">(</span><span class="nd">@NotNull</span> <span class="n">UserModel</span> <span class="n">userModel</span><span class="o">,</span> <span class="nd">@NotNull</span> <span class="n">CategoryModel</span> <span class="n">productModel</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">LOGGER</span><span class="o">.</span><span class="na">trace</span><span class="o">(</span><span class="n">LOG_CATEGORY</span><span class="o">.</span><span class="na">setRegDate</span><span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">())</span>
-                <span class="o">.</span><span class="na">setUserId</span><span class="o">(</span><span class="n">userModel</span><span class="o">.</span><span class="na">getUserId</span><span class="o">())</span>
-                <span class="o">.</span><span class="na">setCategoryNum</span><span class="o">(</span><span class="n">productModel</span><span class="o">.</span><span class="na">getCategoryId</span><span class="o">())</span>
-                <span class="o">.</span><span class="na">toString</span><span class="o">());</span>
-    <span class="o">}</span>
-
-<span class="o">....</span> <span class="n">SeterGeter</span><span class="err">메소드</span>
-
-<span class="o">}</span>
-</code></pre>
-</div>
-
-<p>BaseModel에서는 object를 json으로 변환하는 함수를 상속해준다.</p>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">BaseModel</span> <span class="o">{</span>
-    <span class="kd">private</span> <span class="kd">static</span> <span class="n">ObjectMapper</span> <span class="n">mapper</span> <span class="o">=</span> <span class="k">new</span> <span class="n">ObjectMapper</span><span class="o">();</span>
-
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="n">String</span> <span class="nf">toString</span><span class="o">()</span> <span class="o">{</span>
-        <span class="k">try</span> <span class="o">{</span>
-            <span class="k">return</span> <span class="n">mapper</span><span class="o">.</span><span class="na">writeValueAsString</span><span class="o">(</span><span class="k">this</span><span class="o">);</span>
-        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">JsonProcessingException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{</span>
-            <span class="n">e</span><span class="o">.</span><span class="na">printStackTrace</span><span class="o">();</span>
-        <span class="o">}</span>
-        <span class="k">return</span> <span class="kc">null</span><span class="o">;</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre>
-</div>
-
-<p>로그 모델객체를 생성해 로그를 찍고 싶은 곳에서 사용하면 된다. 결과는 아래그림과 같다.</p>
-
-<p><img src="http://joswlv.github.io/images/logback.png" alt="" /></p>
-
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2016/10/13/LogBack/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
         </ul>
 
 
@@ -1430,7 +1187,7 @@ awk <span class="s1">'BEGIN {FS="\t"; OFS ="-"} {print $1 ,  $2} END {print "총
                             <span class="name">
                                 Java
                             </span>
-                            <span class="badge">7</span>
+                            <span class="badge">8</span>
                         </a>
                     </li>
                     
@@ -1515,6 +1272,8 @@ awk <span class="s1">'BEGIN {FS="\t"; OFS ="-"} {print $1 ,  $2} END {print "총
                 </div>
                 <ul class="content-ul" recent>
                     
+                        <li><a href="/2017/05/04/logback/">LogBack</a></li>
+                    
                         <li><a href="/2017/04/20/resourcecleanup/">Resource CleanUp</a></li>
                     
                         <li><a href="/2017/04/08/garbagecollectionpauses/">Garbage collection pauses</a></li>
@@ -1532,8 +1291,6 @@ awk <span class="s1">'BEGIN {FS="\t"; OFS ="-"} {print $1 ,  $2} END {print "총
                         <li><a href="/2017/02/19/logstash/">Logstash 기초</a></li>
                     
                         <li><a href="/2017/02/18/elasticsearchbasic/">ElasticSearch 기초</a></li>
-                    
-                        <li><a href="/2017/02/13/rdmsvsnosql/">RDBMS vs NOSQL</a></li>
                     
                 </ul>
             </div>

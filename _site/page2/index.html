@@ -113,6 +113,191 @@
             
               <li>
                 <h2>
+                  <a class="post-link" href="/2017/03/01/stringbuildervsstringbuffer/">StringBuilder vs StringBuffer</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2017-03-01
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#Java" title="Category: Java" rel="category">Java</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="stringbuilder-vs-stringbuffer">StringBuilder vs StringBuffer</h1>
+
+<h3 id="section">단일 쓰레드환경에서 속도 비교</h3>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="cm">/**
+ * Buffers : 9
+ * Builder : 4
+ * strings:21756
+ *
+ * 단일 쓰레드 환경에서는 StringBuilder가 가장빠르다.
+ */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">StringSpeedTest</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+
+
+        <span class="kt">long</span> <span class="n">t0</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
+
+        <span class="n">t0</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
+        <span class="n">StringBuffer</span> <span class="n">buf</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuffer</span><span class="o">();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">100000</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
+            <span class="n">buf</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">"some string"</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Buffers : "</span><span class="o">+(</span><span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">()</span> <span class="o">-</span> <span class="n">t0</span><span class="o">));</span>
+
+        <span class="n">t0</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
+        <span class="n">StringBuilder</span> <span class="n">building</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuilder</span><span class="o">();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">100000</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
+            <span class="n">building</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">"some string"</span><span class="o">);</span>
+        <span class="o">}</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Builder : "</span><span class="o">+(</span><span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">()</span> <span class="o">-</span> <span class="n">t0</span><span class="o">));</span>
+
+        <span class="n">String</span> <span class="n">withString</span> <span class="o">=</span><span class="s">""</span><span class="o">;</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">100000</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
+            <span class="n">withString</span><span class="o">+=</span><span class="s">"some string"</span><span class="o">;</span>
+        <span class="o">}</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"strings:"</span> <span class="o">+</span> <span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">()</span> <span class="o">-</span> <span class="n">t0</span><span class="o">));</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>StringBuilder가 가장 좋은 성능을 보여줬다.</p>
+
+<h3 id="section-1">멀티쓰레드환경에서 비교</h3>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="cm">/**
+ * Created by Jo_seungwan on 2017. 3. 1..
+ * StringBuilder는 java.lang.ArrayIndexOutOfBoundsException을 출력한다.
+ */</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">StringMultiThreadTest</span> <span class="o">{</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+
+        <span class="n">ThreadPoolExecutor</span> <span class="n">executorService</span> <span class="o">=</span> <span class="o">(</span><span class="n">ThreadPoolExecutor</span><span class="o">)</span> <span class="n">Executors</span><span class="o">.</span><span class="na">newFixedThreadPool</span><span class="o">(</span><span class="mi">10</span><span class="o">);</span>
+        <span class="c1">//With Buffer</span>
+        <span class="n">StringBuffer</span> <span class="n">buffer</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuffer</span><span class="o">();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
+            <span class="n">executorService</span><span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="k">new</span> <span class="n">AppendableRunnable</span><span class="o">(</span><span class="n">buffer</span><span class="o">));</span>
+        <span class="o">}</span>
+        <span class="n">shutdownAndAwaitTermination</span><span class="o">(</span><span class="n">executorService</span><span class="o">);</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">" Thread Buffer : "</span><span class="o">+</span> <span class="n">AppendableRunnable</span><span class="o">.</span><span class="na">time</span><span class="o">);</span>
+
+        <span class="c1">//With Builder</span>
+        <span class="n">AppendableRunnable</span><span class="o">.</span><span class="na">time</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+        <span class="n">executorService</span> <span class="o">=</span> <span class="o">(</span><span class="n">ThreadPoolExecutor</span><span class="o">)</span> <span class="n">Executors</span><span class="o">.</span><span class="na">newFixedThreadPool</span><span class="o">(</span><span class="mi">10</span><span class="o">);</span>
+        <span class="n">StringBuilder</span> <span class="n">builder</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuilder</span><span class="o">();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
+            <span class="n">executorService</span><span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="k">new</span> <span class="n">AppendableRunnable</span><span class="o">(</span><span class="n">builder</span><span class="o">));</span>
+        <span class="o">}</span>
+        <span class="n">shutdownAndAwaitTermination</span><span class="o">(</span><span class="n">executorService</span><span class="o">);</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">" Thread Builder: "</span><span class="o">+</span> <span class="n">AppendableRunnable</span><span class="o">.</span><span class="na">time</span><span class="o">);</span>
+
+    <span class="o">}</span>
+
+    <span class="kd">static</span> <span class="kt">void</span> <span class="nf">shutdownAndAwaitTermination</span><span class="o">(</span><span class="n">ExecutorService</span> <span class="n">pool</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">pool</span><span class="o">.</span><span class="na">shutdown</span><span class="o">();</span> <span class="c1">// code reduced from Official Javadoc for Executors</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="k">if</span> <span class="o">(!</span><span class="n">pool</span><span class="o">.</span><span class="na">awaitTermination</span><span class="o">(</span><span class="mi">60</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">))</span> <span class="o">{</span>
+                <span class="n">pool</span><span class="o">.</span><span class="na">shutdownNow</span><span class="o">();</span>
+                <span class="k">if</span> <span class="o">(!</span><span class="n">pool</span><span class="o">.</span><span class="na">awaitTermination</span><span class="o">(</span><span class="mi">60</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">))</span>
+                    <span class="n">System</span><span class="o">.</span><span class="na">err</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Pool did not terminate"</span><span class="o">);</span>
+            <span class="o">}</span>
+        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="kd">class</span> <span class="nc">AppendableRunnable</span><span class="o">&lt;</span><span class="n">T</span> <span class="kd">extends</span> <span class="n">Appendable</span><span class="o">&gt;</span> <span class="kd">implements</span> <span class="n">Runnable</span> <span class="o">{</span>
+
+    <span class="kd">static</span> <span class="kt">long</span> <span class="n">time</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
+    <span class="n">T</span> <span class="n">appendable</span><span class="o">;</span>
+    <span class="kd">public</span> <span class="nf">AppendableRunnable</span><span class="o">(</span><span class="n">T</span> <span class="n">appendable</span><span class="o">){</span>
+        <span class="k">this</span><span class="o">.</span><span class="na">appendable</span> <span class="o">=</span> <span class="n">appendable</span><span class="o">;</span>
+    <span class="o">}</span>
+
+    <span class="nd">@Override</span>
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">(){</span>
+        <span class="kt">long</span> <span class="n">t0</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
+        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="mi">10000</span> <span class="o">;</span> <span class="n">j</span><span class="o">++){</span>
+            <span class="k">try</span> <span class="o">{</span>
+                <span class="n">appendable</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">"some string"</span><span class="o">);</span>
+            <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{}</span>
+        <span class="o">}</span>
+        <span class="n">time</span><span class="o">+=(</span><span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">()</span> <span class="o">-</span> <span class="n">t0</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>멀티 쓰레드환경에서 10000개를 append하는 작업에서 <code class="highlighter-rouge">StringBuffer</code>속도는 느렸다.</p>
+
+<p>그 이유는 JIT / hotspot / compiler / 무언가가 잠금을 검사 할 필요가 없다는 것을 탐지 할 때 최적화를 수행하기 때문이다.</p>
+
+<p>이에 반해 <code class="highlighter-rouge">StringBuilder</code>는 java.lang.ArrayIndexOutOfBoundsException을 출력한다.</p>
+
+<h3 id="section-2">정리</h3>
+
+<table>
+  <thead>
+    <tr>
+      <th>구분</th>
+      <th>StringBuffer</th>
+      <th>StringBuilder</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>synchronized</td>
+      <td>Yes</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td>Thread-safe</td>
+      <td>Yes</td>
+      <td>No</td>
+    </tr>
+    <tr>
+      <td>performance</td>
+      <td>Slow</td>
+      <td>Better than StringBuffer</td>
+    </tr>
+  </tbody>
+</table>
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2017/03/01/stringbuildervsstringbuffer/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
                   <a class="post-link" href="/2017/02/26/basicrdd/">기본 RDD연산들(트랜스포메이션, 액션)</a>
                 </h2>
                 <div class="label">
@@ -1476,147 +1661,6 @@ curl http://localhost:9200
                 <hr>
               </li>
             
-              <li>
-                <h2>
-                  <a class="post-link" href="/2017/01/05/javastring/">Java String에 대해..</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2017-01-05
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#Java" title="Category: Java" rel="category">Java</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                </div>
-                <div class="excerpt">
-                    <h1 id="java-string">Java String</h1>
-
-<p>우선 Java의 <code class="highlighter-rouge">String</code> 객체는 immutable(불변의) 클래스이다. 그래서 한번 생성되면 수정이 불가능 하다.</p>
-
-<p>다음은 <code class="highlighter-rouge">String</code>객체의 특성을 나열 한다.</p>
-
-<h3 id="or--string-">1. “” or 객체 String 만들기</h3>
-
-<p>String을 만들때는 두가지 방식이 존재한다.</p>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">String</span> <span class="n">a</span> <span class="o">=</span> <span class="s">"abc"</span><span class="o">;</span>
-<span class="n">String</span> <span class="n">b</span> <span class="o">=</span> <span class="k">new</span> <span class="n">String</span><span class="o">(</span><span class="s">"abc"</span><span class="o">);</span>
-</code></pre>
-</div>
-
-<p>우선 차이를 설명하는 예를 보자</p>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">String</span> <span class="n">a</span> <span class="o">=</span> <span class="s">"abc"</span><span class="o">;</span>
-<span class="n">String</span> <span class="n">b</span> <span class="o">=</span> <span class="s">"abc"</span><span class="o">;</span>
-<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">a</span> <span class="o">==</span> <span class="n">b</span><span class="o">);</span> <span class="c1">//True</span>
-<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">a</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">b</span><span class="o">));</span> <span class="c1">//True</span>
-</code></pre>
-</div>
-
-<p><code class="highlighter-rouge">a</code>와 <code class="highlighter-rouge">b</code>는 Method Area에서 같은 메모리를 참조 한다.</p>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">String</span> <span class="n">c</span> <span class="o">=</span> <span class="k">new</span> <span class="n">String</span><span class="o">(</span><span class="s">"abc"</span><span class="o">);</span>
-<span class="n">String</span> <span class="n">d</span> <span class="o">=</span> <span class="k">new</span> <span class="n">String</span><span class="o">(</span><span class="s">"abc"</span><span class="o">);</span>
-<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">c</span> <span class="o">==</span> <span class="n">d</span><span class="o">);</span> <span class="c1">//False</span>
-<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">c</span><span class="o">.</span><span class="na">equals</span><span class="o">(</span><span class="n">d</span><span class="o">));</span> <span class="c1">//True</span>
-</code></pre>
-</div>
-<p><code class="highlighter-rouge">c</code>와 <code class="highlighter-rouge">d</code>는 다른 heap영역에서 다른 object이다. 다른 object는 다른 메모리 참조한다.</p>
-
-<p>String을 만들때 객체를 새로 만드는 것보다 <code class="highlighter-rouge">""</code>으로 String을 만드는 것이 불필요한 객체를 안만들어서 더 유용하다고 한다.</p>
-
-<h3 id="string-passed-by-value">2. String은 passed by value</h3>
-
-<p>다음 예를 보자</p>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-	<span class="n">String</span> <span class="n">a</span> <span class="o">=</span> <span class="k">new</span> <span class="n">String</span><span class="o">(</span><span class="s">"abc"</span><span class="o">);</span>
-	<span class="n">changeText</span><span class="o">(</span><span class="n">a</span><span class="o">);</span>
-	<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">a</span><span class="o">);</span>
-<span class="o">}</span>
-
-<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">changeText</span><span class="o">(</span><span class="n">String</span> <span class="n">a</span><span class="o">)</span> <span class="o">{</span>
-	<span class="n">a</span> <span class="o">=</span> <span class="s">"cd"</span><span class="o">;</span>
-<span class="o">}</span>
-</code></pre>
-</div>
-
-<p>이 예제에서 print되는 것은 “abc”이다.</p>
-
-<p>이러한 이유는 Java는 항상 <code class="highlighter-rouge">pass by value</code>를 하기 때문이다. 즉 <code class="highlighter-rouge">changeText()</code>메소드를 지나면서 <code class="highlighter-rouge">a</code>에 저장되었던 “abc”는 무시되고 “cd”가 새롭게 heap생성이된다. 처음에 생성되었던 a는 여전히 “abc”를 참조하고 있다. 이는 앞서 설명한 Java에서는 String이 immutable한 클래스이기 때문이다. 즉 참조에 의한 값전달(passed by reference)는 지원하지 않는다.</p>
-
-<p>immutable하지 않는 String을 만들고 싶으면 <code class="highlighter-rouge">StringBuilder</code>를 사용하면 된다.</p>
-
-<p>다음 예는 <code class="highlighter-rouge">changeText()</code>메소드의 기능을 살리는 방식이다.</p>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-	<span class="n">StringBuilder</span> <span class="n">x</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuilder</span><span class="o">(</span><span class="s">"ab"</span><span class="o">);</span>
-	<span class="n">changeText</span><span class="o">(</span><span class="n">x</span><span class="o">);</span>
-	<span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="n">x</span><span class="o">);</span>
-<span class="o">}</span>
- 
-<span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">changeText</span><span class="o">(</span><span class="n">StringBuilder</span> <span class="n">x</span><span class="o">)</span> <span class="o">{</span>
-	<span class="n">x</span><span class="o">.</span><span class="na">delete</span><span class="o">(</span><span class="mi">0</span><span class="o">,</span> <span class="mi">2</span><span class="o">).</span><span class="na">append</span><span class="o">(</span><span class="s">"cd"</span><span class="o">);</span>
-<span class="o">}</span>
-</code></pre>
-</div>
-<p>여기서 StringBuilder는 값이 변할 수 있다. 그리고 새로운 객체를 생성하는 것이 아니라 새로운 값을 할당한다.</p>
-
-<p>요약하면 Java는 값(변수?)의한 전달만 가능하다!! 참조를 통한 전달은 지원하지 않는다.</p>
-
-<p>C++로 <code class="highlighter-rouge">passed by reference</code>의 예를 보면 다음과 같다.</p>
-
-<div class="language-c++ highlighter-rouge"><pre class="highlight"><code><span class="kt">void</span> <span class="nf">change</span><span class="p">(</span><span class="n">string</span> <span class="o">&amp;</span><span class="n">x</span><span class="p">)</span> <span class="p">{</span>
-    <span class="n">x</span> <span class="o">=</span> <span class="s">"cd"</span><span class="p">;</span>
-<span class="p">}</span>
- 
-<span class="kt">int</span> <span class="n">main</span><span class="p">(){</span>
-    <span class="n">string</span> <span class="n">x</span> <span class="o">=</span> <span class="s">"ab"</span><span class="p">;</span>
-    <span class="n">change</span><span class="p">(</span><span class="n">x</span><span class="p">);</span>
-    <span class="n">cout</span> <span class="o">&lt;&lt;</span> <span class="n">x</span> <span class="o">&lt;&lt;</span> <span class="n">endl</span><span class="p">;</span>
-<span class="p">}</span>
-</code></pre>
-</div>
-<p>최종적인 x는 “cd”가 출력된다. heap에 생성된 x의 메모리주소를 참조하여 값을 변경하였다.</p>
-
-<h3 id="reference">Reference</h3>
-
-<ul>
-  <li><a href="http://www.programcreek.com/">programcreek</a></li>
-  <li><a href="http://javadude.com/articles/passbyvalue.htm">JavaDude.com</a></li>
-  <li><a href="http://fowler.egloos.com/1243657">어제보다 나은 오늘</a></li>
-</ul>
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2017/01/05/javastring/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
         </ul>
 
 
@@ -1695,7 +1739,7 @@ curl http://localhost:9200
                             <span class="name">
                                 Java
                             </span>
-                            <span class="badge">7</span>
+                            <span class="badge">8</span>
                         </a>
                     </li>
                     
@@ -1780,6 +1824,8 @@ curl http://localhost:9200
                 </div>
                 <ul class="content-ul" recent>
                     
+                        <li><a href="/2017/05/04/logback/">LogBack</a></li>
+                    
                         <li><a href="/2017/04/20/resourcecleanup/">Resource CleanUp</a></li>
                     
                         <li><a href="/2017/04/08/garbagecollectionpauses/">Garbage collection pauses</a></li>
@@ -1797,8 +1843,6 @@ curl http://localhost:9200
                         <li><a href="/2017/02/19/logstash/">Logstash 기초</a></li>
                     
                         <li><a href="/2017/02/18/elasticsearchbasic/">ElasticSearch 기초</a></li>
-                    
-                        <li><a href="/2017/02/13/rdmsvsnosql/">RDBMS vs NOSQL</a></li>
                     
                 </ul>
             </div>

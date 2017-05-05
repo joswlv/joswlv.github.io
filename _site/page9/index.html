@@ -113,6 +113,248 @@
             
               <li>
                 <h2>
+                  <a class="post-link" href="/2016/09/10/servlet_and_JDBC/">HttpServlet와 JDBC, Refresh,Filter</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-09-10
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#web" title="Category: web" rel="category">web</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="jdbc">1. JDBC종류</h1>
+<p>DBMS 밴더는 자신들의 DBMS에 접속할 수 있는 API를 만들어 배포한다. 즉 DMBS를 사용하기 위해서는 밴더가 제공하는 API에 맞게 개발해야한다. 문제는 밴더들 별로, API가 달라 개발비용 및 유지보수에 많은 비용이 들어간다.</p>
+
+<p>그래서 마이크로소프트에서 밴더에 종속 받지 않고 DBMS에 접근 가능한 ODBC를 만들어 배포했다. 대부분의 DBMS API는 ODBC에 포함되어 있다. 이 라이브어리를 <code class="highlighter-rouge">ODBC 드라이버</code>라고 명칭한다.</p>
+
+<h2 id="jdbc-type-1">1) JDBC Type 1</h2>
+
+<p><img src="http://joswlv.github.io/images/jdbctype1.png" alt="" /></p>
+
+<p>주요특징은 다음과 같다.</p>
+
+<ul>
+  <li>ODBC 드라이버를 사용하여 DBMS에 접속</li>
+  <li>JRE에 포함되어 있다</li>
+  <li>속도가 유형중에서 가장 느리다.</li>
+  <li>Excel이나 Access파일에 접속할 때 유용하다.</li>
+</ul>
+
+<h2 id="jdbc-type-2">2) JDBC Type 2</h2>
+
+<p><img src="http://joswlv.github.io/images/jdbctype2.png" alt="" /></p>
+
+<p>주요특징은 다음과 같다.</p>
+
+<ul>
+  <li>DBMS밴더 API 사용</li>
+  <li>별도 JDBC 드라이버를 내려받아야함</li>
+  <li>DBMS 클라이언트의 설치 필요</li>
+</ul>
+
+<h2 id="jdbc-type-3">3) JDBC Type 3</h2>
+
+<p><img src="http://joswlv.github.io/images/jdbctype3.png" alt="" /></p>
+
+<p>주요특징은 다음과 같다.</p>
+
+<ul>
+  <li>미들웨어 서버를 경유하여 DBMS에 접속</li>
+  <li>미들웨어에서 제공하는 JDBC 드라이버 사용</li>
+  <li>ODBC나 밴더 API처럼 C나 C++로 만든 API를 호출하지 않기 때문에 Pure Java라 한다.</li>
+</ul>
+
+<h2 id="jdbc-type-4">4) JDBC Type 4</h2>
+
+<p><img src="http://joswlv.github.io/images/jdbctype4.png" alt="" /></p>
+
+<p>주요특징은 다음과 같다.</p>
+
+<ul>
+  <li>DBMS 프로토콜을 사용하여 직접 통신(ODBC드라이버가 필요없다.)</li>
+  <li>별도로 JDBC 드라이버 내려받아야한다.</li>
+  <li>Pure Java</li>
+  <li>주로 사용되는 드라이버이다.</li>
+</ul>
+
+<h1 id="jdbc-">2. JDBC와 서블릿</h1>
+
+<h2 id="javasql">1) java.sql</h2>
+
+<h3 id="section">1-1) 드라이버등록</h3>
+<p>JDBC프로그래밍의 첫번째 작업은 <code class="highlighter-rouge">DriverManager</code>를 이용하여 java.sql.Driver 인터페이스 구현체를 등록하는 것이다. 방법은 두가지가 있다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">DriverManager</span><span class="o">.</span><span class="na">registerDriver</span><span class="o">(</span><span class="k">new</span> <span class="n">com</span><span class="o">.</span><span class="na">mysql</span><span class="o">.</span><span class="na">jdbc</span><span class="o">.</span><span class="na">Driver</span><span class="o">());</span> <span class="c1">//DriverManager를 직접이용</span>
+
+<span class="n">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">getInitParameter</span><span class="o">(</span><span class="s">"QName"</span><span class="o">));</span> <span class="c1">//클래스로딩 </span>
+
+<span class="c1">//QName을 서블릿 초기화 매개변수의 값으 가져와서 작성하는 방법도 있다.</span>
+
+<span class="k">this</span><span class="o">.</span><span class="na">getInitParameter</span><span class="o">(</span><span class="cm">/*매개변수 이름 */</span><span class="o">);</span>
+</code></pre>
+</div>
+
+<h3 id="section-1">1-2) 데이터베이스 연결</h3>
+
+<p>다음과 같이 <code class="highlighter-rouge">DriverManager</code>의 <code class="highlighter-rouge">getConnection()</code>을 호출하여 MySQL 서버에 연결할 수 있다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">conn</span> <span class="o">=</span> <span class="n">DriverManager</span><span class="o">.</span><span class="na">getConnection</span><span class="o">(</span>
+					<span class="s">"jdbc:mysql://localhost/studydb"</span><span class="o">,</span> <span class="c1">//JDBC URL</span>
+					<span class="s">"study"</span><span class="o">,</span>	<span class="c1">// DBMS 사용자 아이디</span>
+					<span class="s">"study"</span><span class="o">);</span>	<span class="c1">// DBMS 사용자 암호</span>
+</code></pre>
+</div>
+
+<h3 id="sql---">1-3) SQL 실행 및 준비</h3>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">stmt</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="na">createStatement</span><span class="o">();</span> <span class="c1">//java.sql.Statement 인터페이스</span>
+
+<span class="n">stmt</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="na">prepareStatement</span><span class="o">(</span>       <span class="c1">//java.sql.PrepareStatement 인터페이스</span>
+					<span class="s">"INSERT INTO MEMBERS(EMAIL,PWD,MNAME,CRE_DATE,MOD_DATE)"</span>
+					<span class="o">+</span> <span class="s">" VALUES (?,?,?,NOW(),NOW())"</span><span class="o">);</span>
+			<span class="n">stmt</span><span class="o">.</span><span class="na">setString</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"email"</span><span class="o">));</span>
+			<span class="n">stmt</span><span class="o">.</span><span class="na">setString</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"password"</span><span class="o">));</span>
+			<span class="n">stmt</span><span class="o">.</span><span class="na">setString</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"name"</span><span class="o">));</span>
+
+</code></pre>
+</div>
+
+<h4 id="javasqlstatement--">java.sql.Statement 인터페이스의 구현체</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>메서드</th>
+      <th>설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>executeQuery()</td>
+      <td>결과가 만들어지는 SQL문을 실행할때 사용, 보통 SELECT문을 실행</td>
+    </tr>
+    <tr>
+      <td>executeUpdate()</td>
+      <td>DML과 DDL관련 SQL문을 실행할때 사용</td>
+    </tr>
+    <tr>
+      <td>execute()</td>
+      <td>SELECT, DML, DDL 명령문 모두에 사용가능</td>
+    </tr>
+    <tr>
+      <td>executeBatch()</td>
+      <td>addBatch()로 등록한 여러개의 SQL문을 한꺼번에 실행할때 사용</td>
+    </tr>
+  </tbody>
+</table>
+
+<p><code class="highlighter-rouge">PreparedStatement</code>는 반복적인 질의를 하거나, 입력 매개변수가 많은 경우에 유용하다. 특히 이미지와 같은 바이너리 데이터를 저장하거나 변경할 경우는 <code class="highlighter-rouge">PreparedStatement</code>만 가능하다.</p>
+
+<p>위의 예제에서 SQL문에서 <code class="highlighter-rouge">?</code>문자로 표시된 것을 입력 매개변수라고 한다. 입력 항목의 값은 SQL문을 실행하기 전에 <code class="highlighter-rouge">setXXX()</code>메서드를 호출하여 설정해야한다.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>비교항목</th>
+      <th>Statement</th>
+      <th>PreparedStatement</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>실행속도</td>
+      <td>질의 할때마다 SQL문을 컴파일한다.</td>
+      <td>SQL문을 미리 준비하여 컴파일 해둔다. 입력 매개변수 값만 추가하여 서버에 전송한다. 특히 여러번 반복하여 질의하는 경우, 실행속도가 바름</td>
+    </tr>
+    <tr>
+      <td>바이너리데이터전송</td>
+      <td>불가능</td>
+      <td>가능</td>
+    </tr>
+    <tr>
+      <td>프로그래밍 편의성</td>
+      <td>SQL문 안에 입력 매개변수 값이 포함되어 있어서 SQL문이 복잡하고 매개변수가 여러개인 경우 코드 관리가 힘들다.</td>
+      <td>SQL문과 입력 매개변수가 분리되어 있어 코드작성이 편리하다.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="javasqlresultset--">java.sql.ResultSet 인터페이스의 구현체</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>메서드</th>
+      <th>설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>first()</td>
+      <td>서버에서 첫번째 레코드를 가져온다.</td>
+    </tr>
+    <tr>
+      <td>last()</td>
+      <td>서버에서 마지막번째 레코드를 가져온다.</td>
+    </tr>
+    <tr>
+      <td>previous()</td>
+      <td>서버에서 이전 레코드를 가져온다.</td>
+    </tr>
+    <tr>
+      <td>next()</td>
+      <td>서버에서 다음 레코드를 가져온다.</td>
+    </tr>
+    <tr>
+      <td>getXXX()</td>
+      <td>레코드에서 특정 컬럼의 값을 꺼낸다. XXX는 칼럼의 타입이다.</td>
+    </tr>
+    <tr>
+      <td>updateXXX()</td>
+      <td>레코드에서 특정 칼럼의 값을 변경한다.</td>
+    </tr>
+    <tr>
+      <td>deleteRow()</td>
+      <td>현재 레코드를 지운다.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/09/10/servlet_and_JDBC/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
                   <a class="post-link" href="/2016/09/10/Servlet_programming/">Servlet_programming</a>
                 </h2>
                 <div class="label">
@@ -758,164 +1000,6 @@
                 <hr>
               </li>
             
-              <li>
-                <h2>
-                  <a class="post-link" href="/2016/07/08/Angularjs_promise_and_q/">AngularJS_Promise객체 와 $q서비스</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-07-08
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#js" title="Category: js" rel="category">js</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                </div>
-                <div class="excerpt">
-                    <h2 id="promise">Promise객체</h2>
-<p>promise 객체는 약속을 표현하는 자바스크립트 객체이다.</p>
-
-<p>AngularJS에서 <code class="highlighter-rouge">$http</code>,<code class="highlighter-rouge">$tiemoute</code>,<code class="highlighter-rouge">$resource</code>,<code class="highlighter-rouge">$route</code>등 여러 서비스에서 promise객체를 반환한다.</p>
-
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">fetchData</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">cb</span><span class="p">){</span>
-  <span class="nx">getDataFromServer</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">){</span>
-    <span class="k">if</span><span class="p">(</span><span class="nx">err</span><span class="p">){</span>
-      <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="kc">null</span><span class="p">);</span>
-    <span class="p">}</span><span class="k">else</span><span class="p">{</span>
-      <span class="nx">transformData</span><span class="p">(</span><span class="nx">result</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">transformedResult</span><span class="p">){</span>
-        <span class="k">if</span><span class="p">(</span><span class="nx">err</span><span class="p">){</span>
-          <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="kc">null</span><span class="p">);</span>
-        <span class="p">}</span><span class="k">else</span><span class="p">{</span>
-          <span class="nx">saveToIndexDB</span><span class="p">(</span><span class="nx">result</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">savedData</span><span class="p">){</span>
-            <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">savedData</span><span class="p">);</span>
-          <span class="p">});</span>
-        <span class="p">}</span>
-      <span class="p">});</span>
-    <span class="p">}</span>
-  <span class="p">});</span>
-<span class="p">}</span>
-</code></pre>
-</div>
-<p>위 코드는 콜백지옥이다. promise객체를 사용하면 다음과 같다.</p>
-
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">fetchData</span><span class="p">(</span><span class="nx">id</span><span class="p">){</span>
-  <span class="k">return</span> <span class="nx">getDataFromServer</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span>
-          <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">transformData</span><span class="p">)</span>
-          <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">saveToIndexDB</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre>
-</div>
-<p>then으로 묶어 주면 된다. 코드가 예뻐졌다. 그리고 <code class="highlighter-rouge">error</code>처리도 쉬워진다.</p>
-
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nx">fetchData</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">result</span><span class="p">){</span>
-
-  <span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">){</span>
-    <span class="c1">// exceptions in transformData, or saveToIndexDB</span>
-    <span class="c1">// will result in this error callback being called.</span>
-  <span class="p">});</span>
-</code></pre>
-</div>
-
-<h2 id="deferred">Deferred객체</h2>
-<p>약속을 정의했으면 누군가는 약속을 지키거나 거절해야 한다. 이러한 일을 하는 것이 <code class="highlighter-rouge">deferred</code>객체이다. <code class="highlighter-rouge">deferred</code>객체는 약속을 만들고 만든 약속의 상태를 변경한다.</p>
-
-<p>AngluarJS는 <code class="highlighter-rouge">$q.deferred()</code>를 이용하여 <code class="highlighter-rouge">deferred</code>객체를 생성할 수 있다. (<code class="highlighter-rouge">deferred</code>객체 생성은 곧 <code class="highlighter-rouge">Promise</code>객체 생성이기도 하다.)</p>
-
-<p><code class="highlighter-rouge">deferred</code>객체는 <code class="highlighter-rouge">resolve</code>,<code class="highlighter-rouge">reject</code>,<code class="highlighter-rouge">notify</code>를 통하여 약속으 지키거나 거절/취소하여 진행 상태를 알려준다.</p>
-
-<p><code class="highlighter-rouge">deferred</code>객체는 주로 별도의 서비스를 만들고 해당 서비스에서 생성하여 해당 객체의 약속을 반환하는 식으로 많이 사용된다.</p>
-
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">'demo-app'</span><span class="p">,</span> <span class="p">[])</span>
-  <span class="p">.</span><span class="nx">factory</span><span class="p">(</span><span class="s1">'userService'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$http</span><span class="p">,</span> <span class="nx">$log</span><span class="p">,</span> <span class="nx">$q</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="p">{</span>
-     <span class="na">getUser</span><span class="p">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">userId</span><span class="p">)</span> <span class="p">{</span>
-       <span class="c1">//deferred 객체를 생성한다.</span>
-       <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">$q</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
-       <span class="nx">$http</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'/api/users/'</span> <span class="o">+</span> <span class="nx">userID</span><span class="p">)</span>
-         <span class="p">.</span><span class="nx">success</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-            <span class="c1">//요청이 성공하면 약속을 지키고 별도 데이터를 전달한다.</span>
-            <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">({</span>
-               <span class="na">name</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span>
-               <span class="na">address</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">address</span><span class="p">});</span>
-         <span class="p">}).</span><span class="nx">error</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">msg</span><span class="p">,</span> <span class="nx">code</span><span class="p">)</span> <span class="p">{</span>
-            <span class="c1">//요청이 실패하면 약속을 취소하고 메시지를 전달한다.</span>
-            <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span><span class="p">(</span><span class="nx">msg</span><span class="p">);</span>
-            <span class="nx">$log</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">msg</span><span class="p">,</span> <span class="nx">code</span><span class="p">);</span>
-         <span class="p">});</span>
-       <span class="c1">//해당 deferred 객체의 약속을 반환한다.</span>
-       <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
-     <span class="p">}</span>
-    <span class="p">}</span>
-	<span class="p">});</span>
-</code></pre>
-</div>
-
-<h2 id="promise-qall">여러 Promise 묶어주기($q.all)</h2>
-<p>$q 서비스는 미래에 지켜지거나 지켜지지 않을 여러 약속을 하나의 약속으로 처리할 수 있는 API도 제공한다.</p>
-
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nx">factory</span><span class="p">(</span><span class="s1">'asyncService'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$http</span><span class="p">,</span> <span class="nx">$q</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">return</span> <span class="p">{</span>
-    <span class="na">loadDataFromTwoReq</span><span class="p">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-      <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">$q</span><span class="p">.</span><span class="nx">defer</span><span class="p">(),</span>
-          <span class="nx">httpPromise1</span> <span class="o">=</span> <span class="nx">$http</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'/api/req1'</span><span class="p">),</span>
-          <span class="nx">httpPromise2</span> <span class="o">=</span> <span class="nx">$http</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'/api/req2'</span><span class="p">);</span>
-
-      <span class="c1">//두 약속을 $q.all 메서드를 이용해 새로운 약속을 만든다.</span>
-      <span class="nx">$q</span><span class="p">.</span><span class="nx">all</span><span class="p">(</span><span class="nx">httpPromise1</span><span class="p">,</span> <span class="nx">httpPromise2</span><span class="p">)</span>
-        <span class="p">.</span><span class="nx">then</span><span class="p">(</span>
-          <span class="kd">function</span><span class="p">(</span><span class="nx">results</span><span class="p">)</span> <span class="p">{</span>
-            <span class="c1">//두 약속이 모두 지켜지면 asyncService서비스가 반한하는 약속을 지키고 두 약속이 전달하는 결과를 묶은 배열로 전달한다.</span>
-            <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">results</span><span class="p">)</span>
-          <span class="p">},</span>
-          <span class="kd">function</span><span class="p">(</span><span class="nx">errors</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span><span class="p">(</span><span class="nx">errors</span><span class="p">);</span>
-          <span class="p">},</span>
-          <span class="kd">function</span><span class="p">(</span><span class="nx">updates</span><span class="p">)</span> <span class="p">{</span>
-          <span class="nx">deferred</span><span class="p">.</span><span class="nx">update</span><span class="p">(</span><span class="nx">updates</span><span class="p">);</span>
-        <span class="p">});</span>
-      <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">};</span>
-<span class="p">});</span>
-</code></pre>
-</div>
-
-<p>위 코드는 일반적인 콜백 방식으로 작성하게 되면 첫 번째 요청의 성공 콜백에서 다른 요청을 하고 그 요청의 성공 콜백에서 두 요청에 대한 성공 처리를 하는 코드를 작성하게 된다.</p>
-
-<p>하지만!! $q 서비스는 $q.all 메서드를 이용해 약속을 바환하는 여러 비동기적인 일이 병렬적으로 행해지고 있다.
-약속을 하나로 묶어 성공/실패 처리를 할 수 있게 해준다.</p>
-
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2016/07/08/Angularjs_promise_and_q/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
         </ul>
 
 
@@ -994,7 +1078,7 @@
                             <span class="name">
                                 Java
                             </span>
-                            <span class="badge">7</span>
+                            <span class="badge">8</span>
                         </a>
                     </li>
                     
@@ -1079,6 +1163,8 @@
                 </div>
                 <ul class="content-ul" recent>
                     
+                        <li><a href="/2017/05/04/logback/">LogBack</a></li>
+                    
                         <li><a href="/2017/04/20/resourcecleanup/">Resource CleanUp</a></li>
                     
                         <li><a href="/2017/04/08/garbagecollectionpauses/">Garbage collection pauses</a></li>
@@ -1096,8 +1182,6 @@
                         <li><a href="/2017/02/19/logstash/">Logstash 기초</a></li>
                     
                         <li><a href="/2017/02/18/elasticsearchbasic/">ElasticSearch 기초</a></li>
-                    
-                        <li><a href="/2017/02/13/rdmsvsnosql/">RDBMS vs NOSQL</a></li>
                     
                 </ul>
             </div>

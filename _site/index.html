@@ -113,6 +113,113 @@
             
               <li>
                 <h2>
+                  <a class="post-link" href="/2017/05/04/logback/">LogBack</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2017-05-04
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#Java" title="Category: Java" rel="category">Java</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="how-to-use-logback">How to use logback</h1>
+
+<h2 id="logback">logback이란</h2>
+
+<p>logback은 SLF4J의 native 구현체 입니다. slf4j로 어플리케이션 로그를 남긴다면 logback을 선택하는게 가장 좋습니다. slf4j의 도움으로 연관 라이브러리들이 다른 logging framework를 쓰더라도 logback으로 통합할 수 있습니다.</p>
+
+<p>logback 은 logback-core, logback-classic, logback-access의 3개의 모듈이 있습니다. core는 classic과 access의 공통라이브러리입니다. maven repository를 쓴다면 classic만 추가하면 관련 라이브러리가 추가 됩니다.</p>
+
+<p>Maven pom.xml</p>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code>    <span class="nt">&lt;dependencies&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>ch.qos.logback<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>logback-classic<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>1.1.2<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+    <span class="nt">&lt;/dependencies&gt;</span>
+</code></pre>
+</div>
+
+<pre><code class="language-libraries">External Libraries
+Maven: ch.qos.logback:logback-classic:1.1.2
+Maven: ch.qos.logback:logback-core:1.1.2
+Maven: org.slf4j:slf4j-api:1.7.6
+</code></pre>
+
+<h2 id="section">전격 실행</h2>
+
+<p>logback을 사용할수 있는 준비가 끝났습니다. 아래 코드를 바로 실행해봅시다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">ch.qos.logback.classic.LoggerContext</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">ch.qos.logback.core.util.StatusPrinter</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.slf4j.Logger</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.slf4j.LoggerFactory</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Tutorial</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Logger</span> <span class="n">logger</span> <span class="o">=</span> <span class="n">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="n">Tutorial</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+        <span class="n">logger</span><span class="o">.</span><span class="na">trace</span><span class="o">(</span><span class="s">"trace"</span><span class="o">);</span>
+        <span class="n">logger</span><span class="o">.</span><span class="na">debug</span><span class="o">(</span><span class="s">"debug"</span><span class="o">);</span>
+        <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"info"</span><span class="o">);</span>
+        <span class="n">logger</span><span class="o">.</span><span class="na">warn</span><span class="o">(</span><span class="s">"warn"</span><span class="o">);</span>
+        <span class="n">logger</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="s">"error"</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<h2 id="logger-loggerfactory">Logger, LoggerFactory</h2>
+<p>Logger와 LoggerFactory는 SLF4J에 있는 interface와 implements입니다. 실제 어플리케이션상에 logger를 정의 할때 logback 관련 코드를 넣지는 않습니다. 다시 말해 logback과 dependency가 없는 코드를 구현하게 되면 차후 다른 logging framework로 교체하는게 가능하게 됩니다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code>		<span class="n">Logger</span> <span class="n">logger</span> <span class="o">=</span> <span class="n">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="n">Tutorial</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</code></pre>
+</div>
+
+<div class="language-console highlighter-rouge"><pre class="highlight"><code>20:57:59.346 [main] DEBUG example.logback.Tutorial - debug
+20:57:59.350 [main] INFO  example.logback.Tutorial - info
+20:57:59.350 [main] WARN  example.logback.Tutorial - warn
+20:57:59.350 [main] ERROR example.logback.Tutorial - error
+</code></pre>
+</div>
+
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2017/05/04/logback/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
                   <a class="post-link" href="/2017/04/20/resourcecleanup/">Resource CleanUp</a>
                 </h2>
                 <div class="label">
@@ -916,191 +1023,6 @@ spark.serializer=org.apache.spark.serializer.KryoSerializer
                 <hr>
               </li>
             
-              <li>
-                <h2>
-                  <a class="post-link" href="/2017/03/01/stringbuildervsstringbuffer/">StringBuilder vs StringBuffer</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2017-03-01
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#Java" title="Category: Java" rel="category">Java</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                </div>
-                <div class="excerpt">
-                    <h1 id="stringbuilder-vs-stringbuffer">StringBuilder vs StringBuffer</h1>
-
-<h3 id="section">단일 쓰레드환경에서 속도 비교</h3>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="cm">/**
- * Buffers : 9
- * Builder : 4
- * strings:21756
- *
- * 단일 쓰레드 환경에서는 StringBuilder가 가장빠르다.
- */</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">StringSpeedTest</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-
-
-        <span class="kt">long</span> <span class="n">t0</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
-
-        <span class="n">t0</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
-        <span class="n">StringBuffer</span> <span class="n">buf</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuffer</span><span class="o">();</span>
-        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">100000</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
-            <span class="n">buf</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">"some string"</span><span class="o">);</span>
-        <span class="o">}</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Buffers : "</span><span class="o">+(</span><span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">()</span> <span class="o">-</span> <span class="n">t0</span><span class="o">));</span>
-
-        <span class="n">t0</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
-        <span class="n">StringBuilder</span> <span class="n">building</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuilder</span><span class="o">();</span>
-        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">100000</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
-            <span class="n">building</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">"some string"</span><span class="o">);</span>
-        <span class="o">}</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Builder : "</span><span class="o">+(</span><span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">()</span> <span class="o">-</span> <span class="n">t0</span><span class="o">));</span>
-
-        <span class="n">String</span> <span class="n">withString</span> <span class="o">=</span><span class="s">""</span><span class="o">;</span>
-        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">100000</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
-            <span class="n">withString</span><span class="o">+=</span><span class="s">"some string"</span><span class="o">;</span>
-        <span class="o">}</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"strings:"</span> <span class="o">+</span> <span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">()</span> <span class="o">-</span> <span class="n">t0</span><span class="o">));</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre>
-</div>
-
-<p>StringBuilder가 가장 좋은 성능을 보여줬다.</p>
-
-<h3 id="section-1">멀티쓰레드환경에서 비교</h3>
-
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="cm">/**
- * Created by Jo_seungwan on 2017. 3. 1..
- * StringBuilder는 java.lang.ArrayIndexOutOfBoundsException을 출력한다.
- */</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">StringMultiThreadTest</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-
-        <span class="n">ThreadPoolExecutor</span> <span class="n">executorService</span> <span class="o">=</span> <span class="o">(</span><span class="n">ThreadPoolExecutor</span><span class="o">)</span> <span class="n">Executors</span><span class="o">.</span><span class="na">newFixedThreadPool</span><span class="o">(</span><span class="mi">10</span><span class="o">);</span>
-        <span class="c1">//With Buffer</span>
-        <span class="n">StringBuffer</span> <span class="n">buffer</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuffer</span><span class="o">();</span>
-        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
-            <span class="n">executorService</span><span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="k">new</span> <span class="n">AppendableRunnable</span><span class="o">(</span><span class="n">buffer</span><span class="o">));</span>
-        <span class="o">}</span>
-        <span class="n">shutdownAndAwaitTermination</span><span class="o">(</span><span class="n">executorService</span><span class="o">);</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">" Thread Buffer : "</span><span class="o">+</span> <span class="n">AppendableRunnable</span><span class="o">.</span><span class="na">time</span><span class="o">);</span>
-
-        <span class="c1">//With Builder</span>
-        <span class="n">AppendableRunnable</span><span class="o">.</span><span class="na">time</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-        <span class="n">executorService</span> <span class="o">=</span> <span class="o">(</span><span class="n">ThreadPoolExecutor</span><span class="o">)</span> <span class="n">Executors</span><span class="o">.</span><span class="na">newFixedThreadPool</span><span class="o">(</span><span class="mi">10</span><span class="o">);</span>
-        <span class="n">StringBuilder</span> <span class="n">builder</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuilder</span><span class="o">();</span>
-        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
-            <span class="n">executorService</span><span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="k">new</span> <span class="n">AppendableRunnable</span><span class="o">(</span><span class="n">builder</span><span class="o">));</span>
-        <span class="o">}</span>
-        <span class="n">shutdownAndAwaitTermination</span><span class="o">(</span><span class="n">executorService</span><span class="o">);</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">" Thread Builder: "</span><span class="o">+</span> <span class="n">AppendableRunnable</span><span class="o">.</span><span class="na">time</span><span class="o">);</span>
-
-    <span class="o">}</span>
-
-    <span class="kd">static</span> <span class="kt">void</span> <span class="nf">shutdownAndAwaitTermination</span><span class="o">(</span><span class="n">ExecutorService</span> <span class="n">pool</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">pool</span><span class="o">.</span><span class="na">shutdown</span><span class="o">();</span> <span class="c1">// code reduced from Official Javadoc for Executors</span>
-        <span class="k">try</span> <span class="o">{</span>
-            <span class="k">if</span> <span class="o">(!</span><span class="n">pool</span><span class="o">.</span><span class="na">awaitTermination</span><span class="o">(</span><span class="mi">60</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">))</span> <span class="o">{</span>
-                <span class="n">pool</span><span class="o">.</span><span class="na">shutdownNow</span><span class="o">();</span>
-                <span class="k">if</span> <span class="o">(!</span><span class="n">pool</span><span class="o">.</span><span class="na">awaitTermination</span><span class="o">(</span><span class="mi">60</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">))</span>
-                    <span class="n">System</span><span class="o">.</span><span class="na">err</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Pool did not terminate"</span><span class="o">);</span>
-            <span class="o">}</span>
-        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{}</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-
-<span class="kd">class</span> <span class="nc">AppendableRunnable</span><span class="o">&lt;</span><span class="n">T</span> <span class="kd">extends</span> <span class="n">Appendable</span><span class="o">&gt;</span> <span class="kd">implements</span> <span class="n">Runnable</span> <span class="o">{</span>
-
-    <span class="kd">static</span> <span class="kt">long</span> <span class="n">time</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-    <span class="n">T</span> <span class="n">appendable</span><span class="o">;</span>
-    <span class="kd">public</span> <span class="nf">AppendableRunnable</span><span class="o">(</span><span class="n">T</span> <span class="n">appendable</span><span class="o">){</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">appendable</span> <span class="o">=</span> <span class="n">appendable</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">(){</span>
-        <span class="kt">long</span> <span class="n">t0</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
-        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="mi">10000</span> <span class="o">;</span> <span class="n">j</span><span class="o">++){</span>
-            <span class="k">try</span> <span class="o">{</span>
-                <span class="n">appendable</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">"some string"</span><span class="o">);</span>
-            <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{}</span>
-        <span class="o">}</span>
-        <span class="n">time</span><span class="o">+=(</span><span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">()</span> <span class="o">-</span> <span class="n">t0</span><span class="o">);</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-</code></pre>
-</div>
-
-<p>멀티 쓰레드환경에서 10000개를 append하는 작업에서 <code class="highlighter-rouge">StringBuffer</code>속도는 느렸다.</p>
-
-<p>그 이유는 JIT / hotspot / compiler / 무언가가 잠금을 검사 할 필요가 없다는 것을 탐지 할 때 최적화를 수행하기 때문이다.</p>
-
-<p>이에 반해 <code class="highlighter-rouge">StringBuilder</code>는 java.lang.ArrayIndexOutOfBoundsException을 출력한다.</p>
-
-<h3 id="section-2">정리</h3>
-
-<table>
-  <thead>
-    <tr>
-      <th>구분</th>
-      <th>StringBuffer</th>
-      <th>StringBuilder</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>synchronized</td>
-      <td>Yes</td>
-      <td>No</td>
-    </tr>
-    <tr>
-      <td>Thread-safe</td>
-      <td>Yes</td>
-      <td>No</td>
-    </tr>
-    <tr>
-      <td>performance</td>
-      <td>Slow</td>
-      <td>Better than StringBuffer</td>
-    </tr>
-  </tbody>
-</table>
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2017/03/01/stringbuildervsstringbuffer/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
         </ul>
 
 
@@ -1179,7 +1101,7 @@ spark.serializer=org.apache.spark.serializer.KryoSerializer
                             <span class="name">
                                 Java
                             </span>
-                            <span class="badge">7</span>
+                            <span class="badge">8</span>
                         </a>
                     </li>
                     
@@ -1264,6 +1186,8 @@ spark.serializer=org.apache.spark.serializer.KryoSerializer
                 </div>
                 <ul class="content-ul" recent>
                     
+                        <li><a href="/2017/05/04/logback/">LogBack</a></li>
+                    
                         <li><a href="/2017/04/20/resourcecleanup/">Resource CleanUp</a></li>
                     
                         <li><a href="/2017/04/08/garbagecollectionpauses/">Garbage collection pauses</a></li>
@@ -1281,8 +1205,6 @@ spark.serializer=org.apache.spark.serializer.KryoSerializer
                         <li><a href="/2017/02/19/logstash/">Logstash 기초</a></li>
                     
                         <li><a href="/2017/02/18/elasticsearchbasic/">ElasticSearch 기초</a></li>
-                    
-                        <li><a href="/2017/02/13/rdmsvsnosql/">RDBMS vs NOSQL</a></li>
                     
                 </ul>
             </div>
