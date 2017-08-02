@@ -45,6 +45,12 @@ default-character-set=utf8
 
 그리고 서버 재시작
 
+### root 페스워드 설정
+
+```
+[root@test ~]# /usr/bin/mysql_secure_installation
+```
+
 
 ### DB생성 및 사용자 추가하기
 
@@ -102,6 +108,15 @@ $> date
 2017. 07. 31. (월) 12:18:08 KST
 ```
 
+### 부팅시 자동시작 등록
+
+```
+[root@test ~]# chkconfig --list mysqld
+mysqld         	0:off	1:off	2:off	3:off	4:off	5:off	6:off
+[root@test ~]# chkconfig mysqld on
+[root@test ~]# chkconfig --list mysqld 
+mysqld         	0:off	1:off	2:on	3:on	4:on	5:on	6:off
+```
 
 ### Refrence
 
