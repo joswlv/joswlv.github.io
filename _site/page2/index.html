@@ -98,6 +98,8 @@
                 
                     
                 
+                    
+                
             </ul>
         </nav>
     </div>
@@ -113,11 +115,11 @@
             
               <li>
                 <h2>
-                  <a class="post-link" href="/2017/03/01/stringbuildervsstringbuffer/">StringBuilder vs StringBuffer</a>
+                  <a class="post-link" href="/2017/05/09/javarxe/">java 유용한 정규표현식</a>
                 </h2>
                 <div class="label">
                     <div class="label-card">
-                        <i class="fa fa-calendar"></i>2017-03-01
+                        <i class="fa fa-calendar"></i>2017-05-09
                     </div>
                     <div class="label-card">
                         
@@ -147,162 +149,402 @@
 
                 </div>
                 <div class="excerpt">
-                    <h1 id="stringbuilder-vs-stringbuffer">StringBuilder vs StringBuffer</h1>
+                    <h1 id="section">1. 특수문자 제거하기</h1>
 
-<h3 id="section">단일 쓰레드환경에서 속도 비교</h3>
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">StringReplace</span><span class="o">(</span><span class="n">String</span> <span class="n">str</span><span class="o">){</span>       
+  <span class="n">String</span> <span class="n">match</span> <span class="o">=</span> <span class="s">"[^\uAC00-\uD7A3xfe0-9a-zA-Z\\s]"</span><span class="o">;</span>
+  <span class="n">str</span> <span class="o">=</span><span class="n">str</span><span class="o">.</span><span class="na">replaceAll</span><span class="o">(</span><span class="n">match</span><span class="o">,</span> <span class="s">" "</span><span class="o">);</span>
+  <span class="k">return</span> <span class="n">str</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre>
+</div>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="cm">/**
- * Buffers : 9
- * Builder : 4
- * strings:21756
- *
- * 단일 쓰레드 환경에서는 StringBuilder가 가장빠르다.
- */</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">StringSpeedTest</span> <span class="o">{</span>
+<h1 id="section-1">2. 이메일 유효성 체크</h1>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="kt">boolean</span> <span class="nf">isEmailPattern</span><span class="o">(</span><span class="n">String</span> <span class="n">email</span><span class="o">){</span>
+	<span class="n">Pattern</span> <span class="n">pattern</span><span class="o">=</span><span class="n">Pattern</span><span class="o">.</span><span class="na">compile</span><span class="o">(</span><span class="s">"\\w+[@]\\w+\\.\\w+"</span><span class="o">);</span>
+	<span class="n">Matcher</span> <span class="n">match</span><span class="o">=</span><span class="n">pattern</span><span class="o">.</span><span class="na">matcher</span><span class="o">(</span><span class="n">email</span><span class="o">);</span>
+	<span class="k">return</span> <span class="n">match</span><span class="o">.</span><span class="na">find</span><span class="o">();</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<h1 id="section-2">3. 연속 스페이스 제거</h1>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">static</span> <span class="n">String</span> <span class="nf">continueSpaceRemove</span><span class="o">(</span><span class="n">String</span> <span class="n">str</span><span class="o">){</span>
+	<span class="n">String</span> <span class="n">match2</span> <span class="o">=</span> <span class="s">"\\s{2,}"</span><span class="o">;</span>
+	<span class="n">str</span> <span class="o">=</span> <span class="n">str</span><span class="o">.</span><span class="na">replaceAll</span><span class="o">(</span><span class="n">match2</span><span class="o">,</span> <span class="s">" "</span><span class="o">);</span>
+	<span class="k">return</span> <span class="n">str</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2017/05/09/javarxe/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
+                  <a class="post-link" href="/2017/05/04/logback/">LogBack</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2017-05-04
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#Java" title="Category: Java" rel="category">Java</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="how-to-use-logback">How to use logback</h1>
+
+<h2 id="logback">logback이란</h2>
+
+<p>logback은 SLF4J의 native 구현체 입니다. slf4j로 어플리케이션 로그를 남긴다면 logback을 선택하는게 가장 좋습니다. slf4j의 도움으로 연관 라이브러리들이 다른 logging framework를 쓰더라도 logback으로 통합할 수 있습니다.</p>
+
+<p>logback 은 logback-core, logback-classic, logback-access의 3개의 모듈이 있습니다. core는 classic과 access의 공통라이브러리입니다. maven repository를 쓴다면 classic만 추가하면 관련 라이브러리가 추가 됩니다.</p>
+
+<p>Maven pom.xml</p>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code>    <span class="nt">&lt;dependencies&gt;</span>
+        <span class="nt">&lt;dependency&gt;</span>
+            <span class="nt">&lt;groupId&gt;</span>ch.qos.logback<span class="nt">&lt;/groupId&gt;</span>
+            <span class="nt">&lt;artifactId&gt;</span>logback-classic<span class="nt">&lt;/artifactId&gt;</span>
+            <span class="nt">&lt;version&gt;</span>1.1.2<span class="nt">&lt;/version&gt;</span>
+        <span class="nt">&lt;/dependency&gt;</span>
+    <span class="nt">&lt;/dependencies&gt;</span>
+</code></pre>
+</div>
+
+<pre><code class="language-libraries">External Libraries
+Maven: ch.qos.logback:logback-classic:1.1.2
+Maven: ch.qos.logback:logback-core:1.1.2
+Maven: org.slf4j:slf4j-api:1.7.6
+</code></pre>
+
+<h2 id="section">전격 실행</h2>
+
+<p>logback을 사용할수 있는 준비가 끝났습니다. 아래 코드를 바로 실행해봅시다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">ch.qos.logback.classic.LoggerContext</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">ch.qos.logback.core.util.StatusPrinter</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.slf4j.Logger</span><span class="o">;</span>
+<span class="kn">import</span> <span class="nn">org.slf4j.LoggerFactory</span><span class="o">;</span>
+
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">Tutorial</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">static</span> <span class="kd">final</span> <span class="n">Logger</span> <span class="n">logger</span> <span class="o">=</span> <span class="n">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="n">Tutorial</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+
     <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
-
-
-        <span class="kt">long</span> <span class="n">t0</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
-
-        <span class="n">t0</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
-        <span class="n">StringBuffer</span> <span class="n">buf</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuffer</span><span class="o">();</span>
-        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">100000</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
-            <span class="n">buf</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">"some string"</span><span class="o">);</span>
-        <span class="o">}</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Buffers : "</span><span class="o">+(</span><span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">()</span> <span class="o">-</span> <span class="n">t0</span><span class="o">));</span>
-
-        <span class="n">t0</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
-        <span class="n">StringBuilder</span> <span class="n">building</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuilder</span><span class="o">();</span>
-        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">100000</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
-            <span class="n">building</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">"some string"</span><span class="o">);</span>
-        <span class="o">}</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Builder : "</span><span class="o">+(</span><span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">()</span> <span class="o">-</span> <span class="n">t0</span><span class="o">));</span>
-
-        <span class="n">String</span> <span class="n">withString</span> <span class="o">=</span><span class="s">""</span><span class="o">;</span>
-        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">100000</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
-            <span class="n">withString</span><span class="o">+=</span><span class="s">"some string"</span><span class="o">;</span>
-        <span class="o">}</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"strings:"</span> <span class="o">+</span> <span class="o">(</span><span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">()</span> <span class="o">-</span> <span class="n">t0</span><span class="o">));</span>
+        <span class="n">logger</span><span class="o">.</span><span class="na">trace</span><span class="o">(</span><span class="s">"trace"</span><span class="o">);</span>
+        <span class="n">logger</span><span class="o">.</span><span class="na">debug</span><span class="o">(</span><span class="s">"debug"</span><span class="o">);</span>
+        <span class="n">logger</span><span class="o">.</span><span class="na">info</span><span class="o">(</span><span class="s">"info"</span><span class="o">);</span>
+        <span class="n">logger</span><span class="o">.</span><span class="na">warn</span><span class="o">(</span><span class="s">"warn"</span><span class="o">);</span>
+        <span class="n">logger</span><span class="o">.</span><span class="na">error</span><span class="o">(</span><span class="s">"error"</span><span class="o">);</span>
     <span class="o">}</span>
 <span class="o">}</span>
 </code></pre>
 </div>
 
-<p>StringBuilder가 가장 좋은 성능을 보여줬다.</p>
+<h2 id="logger-loggerfactory">Logger, LoggerFactory</h2>
+<p>Logger와 LoggerFactory는 SLF4J에 있는 interface와 implements입니다. 실제 어플리케이션상에 logger를 정의 할때 logback 관련 코드를 넣지는 않습니다. 다시 말해 logback과 dependency가 없는 코드를 구현하게 되면 차후 다른 logging framework로 교체하는게 가능하게 됩니다.</p>
 
-<h3 id="section-1">멀티쓰레드환경에서 비교</h3>
+<div class="language-java highlighter-rouge"><pre class="highlight"><code>		<span class="n">Logger</span> <span class="n">logger</span> <span class="o">=</span> <span class="n">LoggerFactory</span><span class="o">.</span><span class="na">getLogger</span><span class="o">(</span><span class="n">Tutorial</span><span class="o">.</span><span class="na">class</span><span class="o">);</span>
+</code></pre>
+</div>
 
-<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="cm">/**
- * Created by Jo_seungwan on 2017. 3. 1..
- * StringBuilder는 java.lang.ArrayIndexOutOfBoundsException을 출력한다.
- */</span>
-<span class="kd">public</span> <span class="kd">class</span> <span class="nc">StringMultiThreadTest</span> <span class="o">{</span>
-    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="o">{</span>
+<div class="language-console highlighter-rouge"><pre class="highlight"><code>20:57:59.346 [main] DEBUG example.logback.Tutorial - debug
+20:57:59.350 [main] INFO  example.logback.Tutorial - info
+20:57:59.350 [main] WARN  example.logback.Tutorial - warn
+20:57:59.350 [main] ERROR example.logback.Tutorial - error
+</code></pre>
+</div>
 
-        <span class="n">ThreadPoolExecutor</span> <span class="n">executorService</span> <span class="o">=</span> <span class="o">(</span><span class="n">ThreadPoolExecutor</span><span class="o">)</span> <span class="n">Executors</span><span class="o">.</span><span class="na">newFixedThreadPool</span><span class="o">(</span><span class="mi">10</span><span class="o">);</span>
-        <span class="c1">//With Buffer</span>
-        <span class="n">StringBuffer</span> <span class="n">buffer</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuffer</span><span class="o">();</span>
-        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
-            <span class="n">executorService</span><span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="k">new</span> <span class="n">AppendableRunnable</span><span class="o">(</span><span class="n">buffer</span><span class="o">));</span>
-        <span class="o">}</span>
-        <span class="n">shutdownAndAwaitTermination</span><span class="o">(</span><span class="n">executorService</span><span class="o">);</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">" Thread Buffer : "</span><span class="o">+</span> <span class="n">AppendableRunnable</span><span class="o">.</span><span class="na">time</span><span class="o">);</span>
 
-        <span class="c1">//With Builder</span>
-        <span class="n">AppendableRunnable</span><span class="o">.</span><span class="na">time</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-        <span class="n">executorService</span> <span class="o">=</span> <span class="o">(</span><span class="n">ThreadPoolExecutor</span><span class="o">)</span> <span class="n">Executors</span><span class="o">.</span><span class="na">newFixedThreadPool</span><span class="o">(</span><span class="mi">10</span><span class="o">);</span>
-        <span class="n">StringBuilder</span> <span class="n">builder</span> <span class="o">=</span> <span class="k">new</span> <span class="n">StringBuilder</span><span class="o">();</span>
-        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">i</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">;</span> <span class="n">i</span> <span class="o">&lt;</span> <span class="mi">10</span><span class="o">;</span> <span class="n">i</span><span class="o">++){</span>
-            <span class="n">executorService</span><span class="o">.</span><span class="na">execute</span><span class="o">(</span><span class="k">new</span> <span class="n">AppendableRunnable</span><span class="o">(</span><span class="n">builder</span><span class="o">));</span>
-        <span class="o">}</span>
-        <span class="n">shutdownAndAwaitTermination</span><span class="o">(</span><span class="n">executorService</span><span class="o">);</span>
-        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">" Thread Builder: "</span><span class="o">+</span> <span class="n">AppendableRunnable</span><span class="o">.</span><span class="na">time</span><span class="o">);</span>
+                </div>
+                <div class="read-all">
+                    <a  href="/2017/05/04/logback/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
+                  <a class="post-link" href="/2017/04/20/resourcecleanup/">Resource CleanUp</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2017-04-20
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
 
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#Java" title="Category: Java" rel="category">Java</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="section">리소스 클린업</h1>
+
+<p>java에서는 GC가 있어 리소스를 관리해준다. 하지만 외부 리소르를 클린업을 하지 않아 오작동을 발생하는 실수를 많이 하게 된다.</p>
+
+<p>단계별로 외부리소를 클린업을 하는 법을 정리하고, 최종적으로 람다표현식을 사용한 리소스클린업을 정리한다.</p>
+
+<h2 id="section-1">흔히하는 실수</h2>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">FileWriterEx</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">FileWriter</span> <span class="n">writer</span><span class="o">;</span>
+    
+    <span class="kd">public</span> <span class="nf">FileWriterEx</span><span class="o">(</span><span class="kd">final</span> <span class="n">String</span> <span class="n">fileName</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+        <span class="n">writer</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FileWriter</span><span class="o">(</span><span class="n">fileName</span><span class="o">);</span>
+    <span class="o">}</span>
+    
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">writeStuff</span><span class="o">(</span><span class="kd">final</span> <span class="n">String</span> <span class="n">message</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+        <span class="n">writer</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">message</span><span class="o">);</span>
+    <span class="o">}</span>
+    
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">finalize</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+        <span class="n">writer</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
     <span class="o">}</span>
 
-    <span class="kd">static</span> <span class="kt">void</span> <span class="nf">shutdownAndAwaitTermination</span><span class="o">(</span><span class="n">ExecutorService</span> <span class="n">pool</span><span class="o">)</span> <span class="o">{</span>
-        <span class="n">pool</span><span class="o">.</span><span class="na">shutdown</span><span class="o">();</span> <span class="c1">// code reduced from Official Javadoc for Executors</span>
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+        <span class="kd">final</span> <span class="n">FileWriterEx</span> <span class="n">writerEx</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FileWriterEx</span><span class="o">(</span><span class="s">"joswlvTest.txt"</span><span class="o">);</span>
+        <span class="n">writerEx</span><span class="o">.</span><span class="na">writeStuff</span><span class="o">(</span><span class="s">"TEST-TEST"</span><span class="o">);</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+<p>이런 경우 <code class="highlighter-rouge">joswlvTest.txt</code>파일은 생성되지만 내용은 비어 잇다. <code class="highlighter-rouge">finalize()</code>가 실행되지 않았고, JVM은 충분한 메모리가 있기 때문에 <code class="highlighter-rouge">finalize()</code>를 할 필요가 없다고 생각한다. 그래서 파일은 종료되지 않고 작성한 내용은 메모리에서 파일로 flush가 되지 않았다.</p>
+
+<h2 id="section-2">수정 1</h2>
+
+<p><code class="highlighter-rouge">흔히하는 실수</code> 문제를 수정하기 위해 명시적으로 <code class="highlighter-rouge">close()</code> 호출을 추가하고 <code class="highlighter-rouge">finalize()</code>메소드를 제거한다.</p>
+
+<p>인스턴스 사용이 끝나면, 해당 인스턴스를 클린업할 것을 명시적으로 요청할 수 있게 한것이다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">FileWriterEx</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">FileWriter</span> <span class="n">writer</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">FileWriterEx</span><span class="o">(</span><span class="kd">final</span> <span class="n">String</span> <span class="n">fileName</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+        <span class="n">writer</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FileWriter</span><span class="o">(</span><span class="n">fileName</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">writeStuff</span><span class="o">(</span><span class="kd">final</span> <span class="n">String</span> <span class="n">message</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+        <span class="n">writer</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">message</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">close</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+        <span class="n">writer</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+    <span class="o">}</span>
+    
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+        <span class="kd">final</span> <span class="n">FileWriterEx</span> <span class="n">writerEx</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FileWriterEx</span><span class="o">(</span><span class="s">"joswlvTest.txt"</span><span class="o">);</span>
+        <span class="n">writerEx</span><span class="o">.</span><span class="na">writeStuff</span><span class="o">(</span><span class="s">"TEST-TEST"</span><span class="o">);</span>
+        <span class="n">writerEx</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">close()</code>를 명시적으로 호출하는 것은 인스턴스가 사용한 외부 리소스를 클린업한다. 그러나 코드에서 예외처리가 일어나면 <code class="highlighter-rouge">close()</code> 메소드가 호출하지 못할 수도 있다.</p>
+
+<h2 id="section-3">수정 2</h2>
+
+<p><code class="highlighter-rouge">close()</code>메소드 호출을 보자하는 수정을 해보자</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">FileWriterEx</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">FileWriter</span> <span class="n">writer</span><span class="o">;</span>
+
+    <span class="kd">public</span> <span class="nf">FileWriterEx</span><span class="o">(</span><span class="kd">final</span> <span class="n">String</span> <span class="n">fileName</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+        <span class="n">writer</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FileWriter</span><span class="o">(</span><span class="n">fileName</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">writeStuff</span><span class="o">(</span><span class="kd">final</span> <span class="n">String</span> <span class="n">message</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+        <span class="n">writer</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">message</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">close</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+        <span class="n">writer</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+        <span class="kd">final</span> <span class="n">FileWriterEx</span> <span class="n">writerEx</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FileWriterEx</span><span class="o">(</span><span class="s">"joswlvTest.txt"</span><span class="o">);</span>
         <span class="k">try</span> <span class="o">{</span>
-            <span class="k">if</span> <span class="o">(!</span><span class="n">pool</span><span class="o">.</span><span class="na">awaitTermination</span><span class="o">(</span><span class="mi">60</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">))</span> <span class="o">{</span>
-                <span class="n">pool</span><span class="o">.</span><span class="na">shutdownNow</span><span class="o">();</span>
-                <span class="k">if</span> <span class="o">(!</span><span class="n">pool</span><span class="o">.</span><span class="na">awaitTermination</span><span class="o">(</span><span class="mi">60</span><span class="o">,</span> <span class="n">TimeUnit</span><span class="o">.</span><span class="na">SECONDS</span><span class="o">))</span>
-                    <span class="n">System</span><span class="o">.</span><span class="na">err</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Pool did not terminate"</span><span class="o">);</span>
-            <span class="o">}</span>
-        <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">Exception</span> <span class="n">e</span><span class="o">)</span> <span class="o">{}</span>
-    <span class="o">}</span>
-<span class="o">}</span>
-
-<span class="kd">class</span> <span class="nc">AppendableRunnable</span><span class="o">&lt;</span><span class="n">T</span> <span class="kd">extends</span> <span class="n">Appendable</span><span class="o">&gt;</span> <span class="kd">implements</span> <span class="n">Runnable</span> <span class="o">{</span>
-
-    <span class="kd">static</span> <span class="kt">long</span> <span class="n">time</span> <span class="o">=</span> <span class="mi">0</span><span class="o">;</span>
-    <span class="n">T</span> <span class="n">appendable</span><span class="o">;</span>
-    <span class="kd">public</span> <span class="nf">AppendableRunnable</span><span class="o">(</span><span class="n">T</span> <span class="n">appendable</span><span class="o">){</span>
-        <span class="k">this</span><span class="o">.</span><span class="na">appendable</span> <span class="o">=</span> <span class="n">appendable</span><span class="o">;</span>
-    <span class="o">}</span>
-
-    <span class="nd">@Override</span>
-    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">run</span><span class="o">(){</span>
-        <span class="kt">long</span> <span class="n">t0</span> <span class="o">=</span> <span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">();</span>
-        <span class="k">for</span> <span class="o">(</span><span class="kt">int</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">;</span> <span class="n">j</span> <span class="o">&lt;</span> <span class="mi">10000</span> <span class="o">;</span> <span class="n">j</span><span class="o">++){</span>
-            <span class="k">try</span> <span class="o">{</span>
-                <span class="n">appendable</span><span class="o">.</span><span class="na">append</span><span class="o">(</span><span class="s">"some string"</span><span class="o">);</span>
-            <span class="o">}</span> <span class="k">catch</span> <span class="o">(</span><span class="n">IOException</span> <span class="n">e</span><span class="o">)</span> <span class="o">{}</span>
+            <span class="n">writerEx</span><span class="o">.</span><span class="na">writeStuff</span><span class="o">(</span><span class="s">"TEST-TEST"</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+            <span class="n">writerEx</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
         <span class="o">}</span>
-        <span class="n">time</span><span class="o">+=(</span><span class="n">System</span><span class="o">.</span><span class="na">currentTimeMillis</span><span class="o">()</span> <span class="o">-</span> <span class="n">t0</span><span class="o">);</span>
     <span class="o">}</span>
 <span class="o">}</span>
 </code></pre>
 </div>
 
-<p>멀티 쓰레드환경에서 10000개를 append하는 작업에서 <code class="highlighter-rouge">StringBuffer</code>속도는 느렸다.</p>
+<p>이렇게 하면 코드에서 예외가 발생하더라도 리소스에 대한 클린업이 보장된다.</p>
 
-<p>그 이유는 JIT / hotspot / compiler / 무언가가 잠금을 검사 할 필요가 없다는 것을 탐지 할 때 최적화를 수행하기 때문이다.</p>
+<h2 id="section-4">수정 3</h2>
 
-<p>이에 반해 <code class="highlighter-rouge">StringBuilder</code>는 java.lang.ArrayIndexOutOfBoundsException을 출력한다.</p>
+<p>java SE7에서 부터 제공하는 <code class="highlighter-rouge">ARM (Automatic Resource Management)</code> 기능을 사용해 장황한 코드를 감소 시켜 보자!</p>
 
-<h3 id="section-2">정리</h3>
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="nc">FileWriterEx</span> <span class="kd">implements</span> <span class="n">AutoCloseable</span><span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">FileWriter</span> <span class="n">writer</span><span class="o">;</span>
 
-<table>
-  <thead>
-    <tr>
-      <th>구분</th>
-      <th>StringBuffer</th>
-      <th>StringBuilder</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>synchronized</td>
-      <td>Yes</td>
-      <td>No</td>
-    </tr>
-    <tr>
-      <td>Thread-safe</td>
-      <td>Yes</td>
-      <td>No</td>
-    </tr>
-    <tr>
-      <td>performance</td>
-      <td>Slow</td>
-      <td>Better than StringBuffer</td>
-    </tr>
-  </tbody>
-</table>
+    <span class="kd">public</span> <span class="nf">FileWriterEx</span><span class="o">(</span><span class="kd">final</span> <span class="n">String</span> <span class="n">fileName</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+        <span class="n">writer</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FileWriter</span><span class="o">(</span><span class="n">fileName</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">writeStuff</span><span class="o">(</span><span class="kd">final</span> <span class="n">String</span> <span class="n">message</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+        <span class="n">writer</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">message</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">close</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+	    <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Close호출됨!"</span><span class="o">);</span>
+        <span class="n">writer</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+        <span class="k">try</span> <span class="o">(</span><span class="n">FileWriterEx</span> <span class="n">writer</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FileWriterEx</span><span class="o">(</span><span class="s">"joswlv.txt"</span><span class="o">))</span> <span class="o">{</span>
+            <span class="n">writer</span><span class="o">.</span><span class="na">writeStuff</span><span class="o">(</span><span class="s">"TEST-TEST"</span><span class="o">);</span>
+        <span class="o">}</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p>클래스의 인스턴스를 <code class="highlighter-rouge">try-with-resources</code> 형태로 생성하고 그블록 안에서 writeStuff()를 호출한다. try 블록을 빠져나오면, 자동적으로 try 블록에 의해 관리되는 인스턴스/리소스에서 <code class="highlighter-rouge">close()</code> 메소드가 호출된다.</p>
+
+<p>이러한 작업을 위해 컴파일러는 <code class="highlighter-rouge">AutoCloseable</code> 인터페이스의 구현에 대한 관리 리소스 클래스가 필요하고, 이 인터페이스는 <code class="highlighter-rouge">close()</code>라는 메소드 하나만 가진다.</p>
+
+<p>ARM을 사용한 코드는 간결하지만 프로그래머가 원하는 시간에 클린업을 할려면 추가적인 작업이 필요하다.</p>
+
+<h2 id="section-5">수정 4</h2>
+
+<p>클래스가 일정 시간 내에 클린업이 되야하는 heavy한 리소스를 사용한다면 다음과 같이 하면 된다.</p>
+
+<p>우선, 생성자와 <code class="highlighter-rouge">close()</code>를 <code class="highlighter-rouge">private</code>로 선언해 프로그래머가 직접 FileWriteEAM의 인스턴스를 생성할 수 없게 한다. 그래서 factory 메소드가 필요하다. 인스턴스를 생성하고 파라미터로 해당 인스턴스를 전달하는 일번적인 factory 메소드와 달리, 작성할 코드는 인스턴스를 사용자에게 전달하고 작업이 끝날 때까지 기다린다.(람다표현식을 이용하면 가능함)</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code>
+<span class="cm">/*
+FileWriterEAM.java
+*/</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">FileWriterEAM</span> <span class="o">{</span>
+    <span class="kd">private</span> <span class="kd">final</span> <span class="n">FileWriter</span> <span class="n">writer</span><span class="o">;</span>
+
+    <span class="kd">private</span> <span class="nf">FileWriterEAM</span><span class="o">(</span><span class="kd">final</span> <span class="n">String</span> <span class="n">fileName</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+        <span class="n">writer</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FileWriter</span><span class="o">(</span><span class="n">fileName</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kt">void</span> <span class="nf">writeStuff</span><span class="o">(</span><span class="kd">final</span> <span class="n">String</span> <span class="n">message</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">IOException</span> <span class="o">{</span>
+        <span class="n">writer</span><span class="o">.</span><span class="na">write</span><span class="o">(</span><span class="n">message</span><span class="o">);</span>
+    <span class="o">}</span>
+
+    <span class="kd">private</span> <span class="kt">void</span> <span class="nf">close</span><span class="o">()</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">System</span><span class="o">.</span><span class="na">out</span><span class="o">.</span><span class="na">println</span><span class="o">(</span><span class="s">"Close 호출됨"</span><span class="o">);</span>
+        <span class="n">writer</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">use</span><span class="o">(</span><span class="kd">final</span> <span class="n">String</span> <span class="n">fileName</span><span class="o">,</span> 
+    	<span class="kd">final</span> <span class="n">UseInstance</span><span class="o">&lt;</span><span class="n">FileWriterEAM</span><span class="o">,</span> <span class="n">IOException</span><span class="o">&gt;</span> <span class="n">block</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> 
+    <span class="o">{</span>
+        <span class="kd">final</span> <span class="n">FileWriterEAM</span> <span class="n">writerEAM</span> <span class="o">=</span> <span class="k">new</span> <span class="n">FileWriterEAM</span><span class="o">(</span><span class="n">fileName</span><span class="o">);</span>
+        <span class="k">try</span> <span class="o">{</span>
+            <span class="n">block</span><span class="o">.</span><span class="na">accept</span><span class="o">(</span><span class="n">writerEAM</span><span class="o">);</span>
+        <span class="o">}</span> <span class="k">finally</span> <span class="o">{</span>
+            <span class="n">writerEAM</span><span class="o">.</span><span class="na">close</span><span class="o">();</span>
+        <span class="o">}</span>
+        
+        <span class="cm">/* ARM으로 작성해도 된다. (AutoCloseable implements를 받아야한다.)
+        try (FileWriterEAM writerEAM = new FileWriterEAM(fileName)) {
+            block.accept(writerEAM);
+        }
+        */</span>
+    <span class="o">}</span>
+
+    <span class="kd">public</span> <span class="kd">static</span> <span class="kt">void</span> <span class="nf">main</span><span class="o">(</span><span class="n">String</span><span class="o">[]</span> <span class="n">args</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">Exception</span> <span class="o">{</span>
+        <span class="n">FileWriterEAM</span><span class="o">.</span><span class="na">use</span><span class="o">(</span><span class="s">"eam.txt"</span><span class="o">,</span> <span class="n">writerEAM</span> <span class="o">-&gt;</span> <span class="n">writerEAM</span><span class="o">.</span><span class="na">writeStuff</span><span class="o">(</span><span class="s">"GOOD!!"</span><span class="o">));</span>
+    <span class="o">}</span>
+<span class="o">}</span>
+
+<span class="cm">/*
+UseInstance.java
+*/</span>
+<span class="nd">@FunctionalInterface</span>
+<span class="kd">public</span> <span class="kd">interface</span> <span class="nc">UseInstance</span><span class="o">&lt;</span><span class="n">T</span><span class="o">,</span> <span class="n">X</span> <span class="kd">extends</span> <span class="n">Throwable</span><span class="o">&gt;</span> <span class="o">{</span>
+    <span class="kt">void</span> <span class="nf">accept</span><span class="o">(</span><span class="n">T</span> <span class="n">instance</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">X</span><span class="o">;</span>
+<span class="o">}</span>
+</code></pre>
+</div>
+
+<p><code class="highlighter-rouge">use()</code> 메소드에서 두개의 파라미터 fileName, UseInstacne 인터페이스에 대한 레퍼런스를 인수로 받는다. 이 메소드에서 FileWriteEAM을 객체화하고 try와 finally 블록을 생성한다. 그리고 나서 인터페이스가 생성되자마자 <code class="highlighter-rouge">accept()</code> 메소드에 FileWriteEAM의 인스턴스를 파라미터로 넘긴다. 호출이 리턴되면, finally 블록에 잇는 인스턴스의 <code class="highlighter-rouge">close()</code>메소드를 호출한다.</p>
+
+<p><code class="highlighter-rouge">@FunctionalInterface</code> Annotation를 붙여 UseInstance는 함수형 인터페이스로 만들어 자바 컴파일러가 자동으로 람다 표현식이나 메소드 레퍼런스를 합성할 수 있도록 한다.</p>
+
+<p>클레스의 사용자들은 인스턴스를 직접 생성하지 못한다. 이런 특징은 인스턴스가 만료되는 시점 이후로 리소스의 클린업일어나는 코드 생성을 막는 효과를 가져온다.</p>
+
+<h3 id="reference">Reference</h3>
+
+<ul>
+  <li>자바 8 람다의힘</li>
+</ul>
 
                 </div>
                 <div class="read-all">
-                    <a  href="/2017/03/01/stringbuildervsstringbuffer/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                    <a  href="/2017/04/20/resourcecleanup/"><i class="fa fa-newspaper-o"></i>Read All</a>
                 </div>
                 <hr>
               </li>
             
               <li>
                 <h2>
-                  <a class="post-link" href="/2017/02/26/basicrdd/">기본 RDD연산들(트랜스포메이션, 액션)</a>
+                  <a class="post-link" href="/2017/04/08/garbagecollectionpauses/">Garbage collection pauses</a>
                 </h2>
                 <div class="label">
                     <div class="label-card">
-                        <i class="fa fa-calendar"></i>2017-02-26
+                        <i class="fa fa-calendar"></i>2017-04-08
                     </div>
                     <div class="label-card">
                         
@@ -320,7 +562,7 @@
   <i class="fa fa-th-list"></i>
   
     
-        <a href="/category/#Spark" title="Category: Spark" rel="category">Spark</a>
+        <a href="/category/#Cassandra" title="Category: Cassandra" rel="category">Cassandra</a>
     
   
 
@@ -332,192 +574,95 @@
 
                 </div>
                 <div class="excerpt">
-                    <h1 id="rdd-">기본 RDD 트랜스포메이션</h1>
+                    <h1 id="section">장애현상</h1>
 
-<h3 id="rdd--rdd-"><strong>{1,2,3,3}을 가지고 있는 RDD에 대한 RDD 트랜스포메이션</strong></h3>
+<p><strong>Using cassandra version : 2.1.8</strong></p>
 
-<table>
-  <thead>
-    <tr>
-      <th>함수 이름</th>
-      <th>용도</th>
-      <th>예</th>
-      <th>결과</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>map()</td>
-      <td>RDD의 각 요소에 함수를 적용하고 결과 RDD를 되돌려준다.</td>
-      <td>rdd.map(x -&gt; x+1)</td>
-      <td>{2,3,4,4}</td>
-    </tr>
-    <tr>
-      <td>flatMap()</td>
-      <td>RDD의 각 요소에 함수를 적용하고 반환된 반복자의 내용들로 이루어진 RDD를 되될려준다. 종종 단어 분해를 위해 쓰인다.</td>
-      <td>rdd.flatMap(x -&gt; x.to(3))</td>
-      <td>{1,2,3,2,3,3}</td>
-    </tr>
-    <tr>
-      <td>filter()</td>
-      <td>filter()로 전달된 함수의 조건을 통과한 값으로만 이루어진 RDD를 되돌려 준다.</td>
-      <td>rdd.filter(x -&gt; x != 1)</td>
-      <td>{2,3,3}</td>
-    </tr>
-    <tr>
-      <td>distinct()</td>
-      <td>중복제거</td>
-      <td>rdd.distinct()</td>
-      <td>{1,2,3}</td>
-    </tr>
-    <tr>
-      <td>sample(withReplacement, fraction, [seed])</td>
-      <td>복원 추출(withReplacement-true)이나 비복원 추출로 RDD에서 표본을 뽑아낸다.</td>
-      <td>rdd.sample(false, 0.5)</td>
-      <td>생략</td>
-    </tr>
-  </tbody>
-</table>
+<div class="highlighter-rouge"><pre class="highlight"><code>WARN  [GossipTasks:1] 2017-03-21 17:11:05,462 FailureDetector.java:249 - Not marking nodes down due to local pause of 9594745097 &gt; 5000000000
+INFO  [GossipTasks:1] 2017-03-21 17:11:05,462 Gossiper.java:968 - InetAddress /10.161.26.248 is now DOWN
+INFO  [Service Thread] 2017-03-21 17:11:05,463 GCInspector.java:252 - ConcurrentMarkSweep GC in 9487ms.  CMS Old Gen: 3039553840 -&gt; 3027311712; Par Eden Space: 833093632 -&gt; 0; Par Survivor Space: 46277016 -&gt; 0
+</code></pre>
+</div>
 
-<h3 id="rdd--"><strong>{1,2,3}과 {3,4,5}를 가진 두 RDD에 대한 트랜스포메이션</strong></h3>
+<p>이런 로그를 찍고 서버가 <code class="highlighter-rouge">down</code> 되었다 살았다를 반복하였다.</p>
 
-<table>
-  <thead>
-    <tr>
-      <th>함수 이름</th>
-      <th>용도</th>
-      <th>예</th>
-      <th>결과</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>union()</td>
-      <td>두 RDD에 잇는 데이터들을 합한 RDD를 생성한다.</td>
-      <td>rdd.union(other)</td>
-      <td>{1,2,3,3,4,5}</td>
-    </tr>
-    <tr>
-      <td>intersection()</td>
-      <td>양쪽 RDD에 모두 있는 데이터들만을 가진 RDD를 반환한다.</td>
-      <td>rdd.intersection(other)</td>
-      <td>{3}</td>
-    </tr>
-    <tr>
-      <td>subtract()</td>
-      <td>한 RDD가 가진 데이터를 다른 쪽에서 삭제한다</td>
-      <td>rdd.subtract(other)</td>
-      <td>{1,2}</td>
-    </tr>
-    <tr>
-      <td>cartesian()</td>
-      <td>두 RDD의 카테시안 곱</td>
-      <td>rdd.cartesian(other)</td>
-      <td>{{1,3},{1,4},{1,5} … ,{3,5}}</td>
-    </tr>
-  </tbody>
-</table>
+<h1 id="section-1">원인</h1>
 
-<p><br /></p>
+<ul>
+  <li><a href="https://docs.datastax.com/en/landing_page/doc/landing_page/troubleshooting/cassandra/gcPauses.html">https://docs.datastax.com/en/landing_page/doc/landing_page/troubleshooting/cassandra/gcPauses.html</a></li>
+</ul>
 
-<h1 id="rdd--1">기본 RDD 액션</h1>
+<p><code class="highlighter-rouge">Garbage collection pause</code>라고 한다. 이 현상이 있으면 해당 노드가 다른 노드에 down 된 것처럼 보일 수 있다고 한다.</p>
 
-<h3 id="rdd---"><strong>{1,2,3,3}을 갖고 있는 RDD에 대한 기본 액션</strong></h3>
+<p>원인은 아래 4가지 정도가 있다고 한다.</p>
 
-<table>
-  <thead>
-    <tr>
-      <th>함수 이름</th>
-      <th>용도</th>
-      <th>예</th>
-      <th>결과</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>collect()</td>
-      <td>RDD의 모든 데이터요소 리턴</td>
-      <td>rdd.collect()</td>
-      <td>{1,2,3,3}</td>
-    </tr>
-    <tr>
-      <td>count()</td>
-      <td>RDD의 요소 개수 리턴</td>
-      <td>rdd.count()</td>
-      <td>4</td>
-    </tr>
-    <tr>
-      <td>countByValue()</td>
-      <td>RDD에 있는 각 값의 개수 리턴</td>
-      <td>rdd.countByValue()</td>
-      <td>{{1,1},{2,1},{3,2}}</td>
-    </tr>
-    <tr>
-      <td>take(num)</td>
-      <td>RDD의 값들 중 num개 리턴</td>
-      <td>rdd.take(2)</td>
-      <td>{1,2}</td>
-    </tr>
-    <tr>
-      <td>top(num)</td>
-      <td>RDD의 값들 중 상위 num개 리턴</td>
-      <td>rdd.top(2)</td>
-      <td>{3,3}</td>
-    </tr>
-    <tr>
-      <td>takeOrdered(num(ordering)</td>
-      <td>제공된 ordering 기준으로 num개 값 리턴</td>
-      <td>rdd.takeOrdered(2)(myOrdering)</td>
-      <td>{3,3}</td>
-    </tr>
-    <tr>
-      <td>takeSample(withReplacement, num, [seed])</td>
-      <td>무작위 값을 리턴</td>
-      <td>rdd.takeSample(false,1)</td>
-      <td>생략</td>
-    </tr>
-    <tr>
-      <td>reduce(func)</td>
-      <td>RDD의 값들을 병렬로 병합 연산한다.</td>
-      <td>rdd.reduce((x,y) -&gt; x+y)</td>
-      <td>9</td>
-    </tr>
-    <tr>
-      <td>fold(zero)(func)</td>
-      <td>reduce()와 동일하나 제로 밸류를 넣어준다.</td>
-      <td>rdd.fold(0)(x,y) -&gt; x+y</td>
-      <td>9</td>
-    </tr>
-    <tr>
-      <td>aggregate(zeroValue)(seqOP, combOp)</td>
-      <td>reduce()와 유사하나 다른 타입을 리턴한다.</td>
-      <td>rdd.aggregate((0,0))((x,y) -&gt; (x._1 + y, x._2 +1), (x,y) -&gt; (x._1 + y._1, x._2 + y._2))</td>
-      <td>{9,4}</td>
-    </tr>
-    <tr>
-      <td>foreach(func)</td>
-      <td>RDD의 각값에 func을 적용한다.</td>
-      <td>rdd.foreach(func)</td>
-      <td>없음</td>
-    </tr>
-  </tbody>
-</table>
+<ul>
+  <li>If the problem is recent, check for any recent applications changes.</li>
+  <li>Excessive tombstone activity: often caused by heavy delete workloads.</li>
+  <li>Large row updates or large batch updates: reduce the size of the individual write below 1 Mb (at the most).</li>
+  <li>Extremely wide rows: manifests as problems in repairs, selects, caching, and elsewhere.</li>
+</ul>
+
+<p>지금 운영 중인 카산드라 특성상 비슷한 TTL이 걸려 있는 데이터들이 많은데, 한달전에 인입된 데이터가 <code class="highlighter-rouge">heavy delete</code>되면서 발생한 문제인것으로 추측한다.</p>
+
+<p><code class="highlighter-rouge">Not marking nodes down due to local pause</code> 로그는 pause 현상이 너무 오래 지속되었을 때 node down이 계속 된 것처럼 보이기 때문에 client에서 심각한 에러가 발생했다고 볼 수 있어서 최대 시간(5초) 보다 크면 node down 표시를 skip 하겠다 라고 알려주는 로그라고한다.</p>
+
+<p><code class="highlighter-rouge">Garbage collection pause</code>현상은 <code class="highlighter-rouge">2.1.6</code>버전 부터 패치되어 최대시간(5초)동안 서버가 down되었다 살았다를 반복한다.</p>
+
+<p><a href="https://issues.apache.org/jira/browse/CASSANDRA-9183">https://issues.apache.org/jira/browse/CASSANDRA-9183</a></p>
+
+<h1 id="section-2">해결방안</h1>
+
+<p>해결 방안은 크게 두가지 방법이 존재한다.</p>
+
+<ol>
+  <li>Java 1.7부터 도입된 G1 방식으로 튜닝</li>
+  <li>Cassandra 메모리 설정을 바꾸는 방법</li>
+</ol>
+
+<p>1번은 현재 사용하고 있는 CMS GC방식이 아닌 Java 1.7부터 도입된 G1 방식으로 튜닝한다.</p>
+
+<p><strong><a href="https://medium.com/@mlowicki/move-cassandra-2-1-to-g1-garbage-collector-b9fb27365509">https://medium.com/@mlowicki/move-cassandra-2-1-to-g1-garbage-collector-b9fb27365509</a></strong></p>
+
+<p>datastax 에서는 2번 방법 위주로 튜닝 가이드를 제공하고 있다.
+<code class="highlighter-rouge">MAX_HEAP_SIZE</code>, <code class="highlighter-rouge">HEAP_NEWSIZE</code>를 조정하는 방법이다.</p>
+
+<p><strong><a href="https://docs.datastax.com/en/cassandra/2.1/cassandra/operations/ops_tune_jvm_c.html">https://docs.datastax.com/en/cassandra/2.1/cassandra/operations/ops_tune_jvm_c.html</a></strong></p>
+
+<p><code class="highlighter-rouge">cassandra-env.sh</code> 설정을 보면 이런 계산식에 의해 default 세팅이 되어 있다.</p>
+
+<ul>
+  <li>
+    <p><code class="highlighter-rouge">MAX_HEAP_SIZE</code> = max(min(1/2 ram, 1024MB), min(1/4 ram, 8GB))</p>
+  </li>
+  <li>
+    <p><code class="highlighter-rouge">HEAP_NEWSIZE</code> = min(max_sensible_per_modern_cpu_core * num_cores, 1/4 * heap size)  <br />
+(max_sensible_per_modern_cpu_core 는 100으로 세팅됨)</p>
+  </li>
+</ul>
+
+<p>카산드라 서버들이 모두 24 CPU core, 16G 메모리를 가지고 있으므로
+<code class="highlighter-rouge">MAX_HEAP_SIZE</code>는 4G, <code class="highlighter-rouge">HEAP_NEWSIZE</code>는 1G 로 세팅되어 있다.</p>
+
+<p>datastax 가이드 추천대로라면
+<code class="highlighter-rouge">MAX_HEAP_SIZE</code>= 8G,  <code class="highlighter-rouge">HEAP_NEWSIZE</code>=2G 정도까지 늘릴 수 있을 것 같다.
+그리고 현재 서버 메모리를 40%정도만 사용하고 있으므로 큰 영향은 없을 것 같다.</p>
 
 
                 </div>
                 <div class="read-all">
-                    <a  href="/2017/02/26/basicrdd/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                    <a  href="/2017/04/08/garbagecollectionpauses/"><i class="fa fa-newspaper-o"></i>Read All</a>
                 </div>
                 <hr>
               </li>
             
               <li>
                 <h2>
-                  <a class="post-link" href="/2017/02/19/logstash/">Logstash 기초</a>
+                  <a class="post-link" href="/2017/04/02/runtojarbackground/">jar 백그라운드로 실행하기</a>
                 </h2>
                 <div class="label">
                     <div class="label-card">
-                        <i class="fa fa-calendar"></i>2017-02-19
+                        <i class="fa fa-calendar"></i>2017-04-02
                     </div>
                     <div class="label-card">
                         
@@ -535,7 +680,7 @@
   <i class="fa fa-th-list"></i>
   
     
-        <a href="/category/#ElasticSearch" title="Category: ElasticSearch" rel="category">ElasticSearch</a>
+        <a href="/category/#Etc" title="Category: Etc" rel="category">Etc</a>
     
   
 
@@ -547,1116 +692,311 @@
 
                 </div>
                 <div class="excerpt">
-                    <h1 id="logstash-">Logstash 기초</h1>
+                    <h1 id="jar--">Jar 백그라운드로 실행하기</h1>
 
-<h3 id="section">설치</h3>
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="nv">JARFile</span><span class="o">=</span><span class="s2">"KafkaOffsetMonitor-assembly-0.2.1.jar"</span>
+<span class="nv">DIR</span><span class="o">=</span><span class="s2">"/home1/irteam/seungwan"</span>
+<span class="k">function </span>start <span class="o">{</span>
+    <span class="k">if </span>pkill -0 -f <span class="nv">$JARFile</span> &gt; /dev/null 2&gt;&amp;1
+    <span class="k">then </span><span class="nb">echo</span> <span class="s2">"Service [</span><span class="nv">$JARFile</span><span class="s2">] is already running. Ignoring startup request/"</span>
+      <span class="nb">exit </span>1
+    <span class="k">fi
+    </span><span class="nb">echo</span> <span class="s2">"Staring [</span><span class="nv">$JARFile</span><span class="s2">] Application!!"</span>
+    nohup java -cp KafkaOffsetMonitor-assembly-0.2.1.jar com.quantifind.kafka.offsetapp.OffsetGetterWeb --zk tcambkaf-91b901.svr.toastmaker.net,tcambkaf-91b902.svr.toastmaker.net --port 8080 --refresh 10.seconds --retain 2.days&gt; <span class="nv">$DIR</span>/log.txt 2&gt;&amp;1 &amp;
 
-<p>최신 버전은 <a href="https://www.elastic.co/kr/downloads/logstash">Download Logstash</a>에서 다운 받으면 된다.</p>
+<span class="o">}</span>
 
-<p>하지만 낮은 버전을 이용할 경우 다음 과 같이 하면 된다. 
-우선 해당 버전 logstash repo정보를 찾는다.</p>
+<span class="k">function </span>stop <span class="o">{</span>
+    <span class="k">if</span> ! pkill -0 -f <span class="nv">$JARFile</span> &gt; /dev/null 2&gt;&amp;1
+    <span class="k">then
+        </span><span class="nb">echo</span> <span class="s2">"Service [</span><span class="nv">$JARFile</span><span class="s2">] is not running. Ignoring shutdown request."</span>
+        <span class="k">return </span>0
+    <span class="k">fi
 
-<p>작업을 위해 2.3버전이 필요했다.<a href="https://www.elastic.co/guide/en/logstash/2.3/installing-logstash.html">링크</a></p>
+    </span><span class="nb">echo</span> <span class="s2">"Stopping [</span><span class="nv">$JARFile</span><span class="s2">]!!"</span>
 
-<p>링크에서 설명한 것을 보면 다운로드를 위한 pulic signing key를 다음과 같이 발급받는다.</p>
+    <span class="c"># First, we will try to trigger a controlled shutdown using</span>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>rpm --import https://packages.elastic.co/GPG-KEY-elasticsearch
-</code></pre>
-</div>
+    <span class="c"># Wait until the server process has shut down</span>
+    <span class="nv">attempts</span><span class="o">=</span>0
+    <span class="k">while </span>pkill -0 -f <span class="nv">$JARFile</span> &gt; /dev/null 2&gt;&amp;1
+    <span class="k">do
+        </span><span class="nv">attempts</span><span class="o">=</span><span class="nv">$[$attempts</span> + 1]
+        <span class="k">if</span> <span class="o">[</span> <span class="nv">$attempts</span> -gt 5 <span class="o">]</span>
+        <span class="k">then</span>
+            <span class="c"># We have waited too long. Kill it.</span>
+            pkill -f <span class="nv">$JARFile</span> &gt; /dev/null 2&gt;&amp;1
+        <span class="k">fi
+        </span>sleep 1s
+    <span class="k">done
+    </span><span class="nb">echo</span> <span class="s2">"Stop [</span><span class="nv">$JARFile</span><span class="s2">] is completed!!"</span>
+<span class="o">}</span>
 
-<p>그리고 <code class="highlighter-rouge">/etc/yum.repos.d/</code> 디렉토리에 logstash.repo파일을 다음과 같이 만들고 저장한다.</p>
+<span class="k">function </span>status <span class="o">{</span>
+    <span class="k">if </span>pkill -0 -f <span class="nv">$JARFile</span> &gt; /dev/null 2&gt;&amp;1
+    <span class="k">then </span><span class="nb">echo</span> <span class="s2">"Service [</span><span class="nv">$JARFile</span><span class="s2">] is running."</span>
+      <span class="nb">exit </span>1
+    <span class="k">fi
+    </span><span class="nb">echo</span> <span class="s2">"Service [</span><span class="nv">$JARFile</span><span class="s2">] is not running"</span>
+<span class="o">}</span>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[logstash-2.3]
-name=Logstash repository for 2.3.x packages
-baseurl=https://packages.elastic.co/logstash/2.3/centos
-gpgcheck=1
-gpgkey=https://packages.elastic.co/GPG-KEY-elasticsearch
-enabled=1
-</code></pre>
-</div>
+<span class="k">case</span> <span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span> <span class="k">in
+  </span>status<span class="p">)</span>
+    status
+    <span class="p">;;</span>
+  stop<span class="p">)</span>
+        stop
+    <span class="p">;;</span>
+  start<span class="p">)</span>
+        start
+    <span class="p">;;</span>
+  restart<span class="p">)</span>
+    stop
+    start
+    <span class="p">;;</span>
+  <span class="k">*</span><span class="p">)</span>
+    <span class="nb">echo</span> <span class="s2">"Usage: </span><span class="nv">$0</span><span class="s2"> {start|stop|restart|status}"</span>
+    <span class="nb">exit </span>1
+<span class="k">esac
 
-<p>그리고 <code class="highlighter-rouge">yum install logstash</code>를 하면 logstash 2.3버전이 설치가 된다.</p>
-
-<p>설치는 <code class="highlighter-rouge">/opt/logstash</code>디렉토리에 설치된다.</p>
-
-<h3 id="section-1">개념</h3>
-
-<p><code class="highlighter-rouge">logstash</code>는 파이프라인같은 개념이다. <a href="https://www.elastic.co/guide/en/logstash/current/input-plugins.html">다양한 곳</a>에서 Input을 받아 사용자가 가공하여 <a href="https://www.elastic.co/guide/en/logstash/current/output-plugins.html">다양한 곳</a>으로 출력 및 저장 할 수 있다.</p>
-
-<p>데이터가 소스에서 저장소로 이동할 때 <code class="highlighter-rouge">logstash</code>필터에서 미리 정의한 이벤트 및 구조를 정의 할 수 있다. 사용할 수 있는 <a href="https://www.elastic.co/guide/en/logstash/current/filter-plugins.html">라이브러리</a>는 다양하다.</p>
-
-<p>즉</p>
-
-<ul>
-  <li>input : 데이터를 받는다.</li>
-  <li>filter : 데이터를 가공한다.</li>
-  <li>output : 데이터를 출력한다.</li>
-</ul>
-
-<p>이렇게 정리가 된다.</p>
-
-<h3 id="section-2">사용하기</h3>
-
-<p><code class="highlighter-rouge">logstash</code>를 사용하기 위해서 데이터 소스를 가공을 정의한 <code class="highlighter-rouge">conf</code>파일이 필요하다.</p>
-
-<p>모양은 다음과 같다.</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>input {
-        .
-        .
-        .
-}
-
-filter {
-        .
-        .
-        .
-}
-
-output {
-        .
-        .
-        .
-}
-</code></pre>
-</div>
-
-<p><code class="highlighter-rouge">conf</code>파일을 만들면 <code class="highlighter-rouge">logstash</code>가 설치된 폴더안에 있는 <code class="highlighter-rouge">bin</code>폴더에 있는 <code class="highlighter-rouge">logstash</code>를 사용하면 된다.</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>./logstash -f test.conf
-</code></pre>
-</div>
-
-<h3 id="section-3">예제</h3>
-
-<p><a href="finace.yahoo.com">finace.yahoo.com</a>에서 apple 주식 정보를 csv파일로 다운 받아 elasticsearch에 저장해보자</p>
-
-<p>데이터는 Date, Open, High, Low, Close 등이 있다.</p>
-
-<p><code class="highlighter-rouge">conf</code>파일을 작성하면 다음과 같다.</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>input {
-  file {
-    path =&gt; "/root/applestock.csv"
-    start_position =&gt; "beginning"
-    sincedb_path =&gt; "/dev/null"
-  }
-}
-filter {
-  csv {
-      separator =&gt; ","
-      columns =&gt; ["Date","Open","High","Low","Close","Volume","Adj Close"]
-  }
-  mutate {convert =&gt; ["Open", "float"]}
-  mutate {convert =&gt; ["High", "float"]}
-  mutate {convert =&gt; ["Low", "float"]}
-  mutate {convert =&gt; ["Close", "float"]}
-}
-output {
-    elasticsearch {
-        hosts =&gt; "localhost"
-        index =&gt; "applestock"
-    }
-    stdout {}
-}
+</span><span class="nb">exit </span>0
 </code></pre>
 </div>
 
 <ul>
-  <li>input에서 file을 받고, 처음부터 읽겠다고 선언했다. 그리고 sincdb_path는 position을 저장하는 db의 위치인데, 사용을 안하겠다고 선언했다.</li>
-  <li>filter에서 csv파일을 <code class="highlighter-rouge">,</code>로 구분하고 Open, High, Low, Close를 float라고 mapping을 했다.</li>
-  <li>결과 같음 elasticsearch <code class="highlighter-rouge">applestock</code> index에 저장했다. 그리고 저장되는 과정을 출력했다.</li>
+  <li><code class="highlighter-rouge">/dev/null</code>은 어디에도 콘솔로그를 출력하지 않겠다는 뜻</li>
+  <li><code class="highlighter-rouge">2&gt;&amp;1</code>은 표준에러는 표준출력에 출력하겠다는 뜻</li>
+  <li><code class="highlighter-rouge">$DIR/log.txt 2&gt;&amp;1</code>은 표준에러를 파일에 적지 않고 콘솔에 출력하겠다는 뜻 이렇게 2&gt;&amp;1 리다이렉션을 시켜 줌으로 인해 stderr &gt; stdout 으로 출력이 되고 log.txt파일에 기록됨</li>
+  <li><code class="highlighter-rouge">nohup</code>명령어는 프로세스 중단(hangup)을 무시하고 명령어를 실행한다는 뜻</li>
+  <li><code class="highlighter-rouge">nohup</code>명령어 끝에 <code class="highlighter-rouge">&amp;</code>를 추가 하면 백그라운드로 실행</li>
+  <li><code class="highlighter-rouge">&gt; /dev/null 2&gt;&amp;1</code>도 있는데, 이는 표준 출력을 무시하고, 표준에러만 화면에 출력하겠다는 뜻</li>
+  <li><code class="highlighter-rouge">&gt;</code>연산자는 redirection을 의미함</li>
 </ul>
 
-<p>다음과 같이 stdout이 되는 것을 확인 할 수 있다.</p>
+<h3 id="reference">Reference</h3>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>...
-2017-02-20T03:08:23.445Z ip-172-31-3-227 1981-08-24,18.999999,18.999999,18.875,18.875,5768000,0.279022
-2017-02-20T03:08:23.445Z ip-172-31-3-227 1981-08-21,20.375001,20.375001,20.125,20.125,10477600,0.2975
-2017-02-20T03:08:23.445Z ip-172-31-3-227 1981-08-20,21.624999,21.75,21.624999,21.624999,4278400,0.319674
-2017-02-20T03:08:23.445Z ip-172-31-3-227 1981-08-19,21.624999,21.624999,21.375,21.375,5168800,0.315978
-2017-02-20T03:08:23.445Z ip-172-31-3-227 1981-08-18,21.875,21.875,21.624999,21.624999,4250400,0.319674
-2017-02-20T03:08:23.446Z ip-172-31-3-227 1981-08-17,22.375,22.375,22.125001,22.125001,4726400,0.327065
-2017-02-20T03:08:23.446Z ip-172-31-3-227 1981-08-14,23.125,23.125,22.875,22.875,6048000,0.338152
-2017-02-20T03:08:23.446Z ip-172-31-3-227 1981-08-13,23.374999,23.374999,23.25,23.25,6871200,0.343695
-2017-02-20T03:08:23.446Z ip-172-31-3-227 1981-08-12,24.125,24.125,24.00,24.00,6568800,0.354782
-2017-02-20T03:08:23.446Z ip-172-31-3-227 1981-08-11,24.750001,24.750001,24.50,24.50,17864000,0.362174
-2017-02-20T03:08:23.446Z ip-172-31-3-227 1981-08-07,25.25,25.375,25.25,25.25,2301600,0.373261
-2017-02-20T03:08:23.446Z ip-172-31-3-227 1981-08-06,25.375,25.375,25.25,25.25,2632000,0.373261
-2017-02-20T03:08:23.446Z ip-172-31-3-227 1981-08-05,25.875,25.999999,25.875,25.875,4373600,0.3825
+<ul>
+  <li><a href="http://reebok.tistory.com/56">http://reebok.tistory.com/56</a></li>
+  <li><a href="https://www.xaprb.com/blog/2006/06/06/what-does-devnull-21-mean/">https://www.xaprb.com/blog/2006/06/06/what-does-devnull-21-mean/</a></li>
+</ul>
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2017/04/02/runtojarbackground/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
+                  <a class="post-link" href="/2017/03/27/mavenbuildplugin/">Maven Build Plugin & 옵션</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2017-03-27
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#Etc" title="Category: Etc" rel="category">Etc</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="maven-build-plugin">Maven Build Plugin</h1>
+
+<h2 id="resource---">1. 디렉토리에 Resource 디렉토리 추가 방법</h2>
+
+<p>Maven 빌드를 할때, <code class="highlighter-rouge">src</code> 이외에 디록토리를 추가가 필요 할때가 있다.</p>
+
+<p>방법은 다음과 같다.</p>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;build&gt;</span>
+<span class="nt">&lt;resources&gt;</span>
+	<span class="nt">&lt;resource&gt;</span>
+		<span class="nt">&lt;directory&gt;</span>bin<span class="nt">&lt;/directory&gt;</span>
+		<span class="nt">&lt;targetPath&gt;</span>${basedir}/target/bin<span class="nt">&lt;/targetPath&gt;</span>
+	<span class="nt">&lt;/resource&gt;</span>
+	<span class="nt">&lt;resource&gt;</span>
+		<span class="nt">&lt;directory&gt;</span>conf<span class="nt">&lt;/directory&gt;</span>
+		<span class="nt">&lt;targetPath&gt;</span>${basedir}/target/conf<span class="nt">&lt;/targetPath&gt;</span>
+	<span class="nt">&lt;/resource&gt;</span>
+<span class="nt">&lt;/resources&gt;</span>
+
 ...
+
+<span class="nt">&lt;/build&gt;</span>
 </code></pre>
 </div>
 
-<p><img src="http://joswlv.github.io/images/logstash-elasticsearch.png" alt="" /></p>
+<p><code class="highlighter-rouge">bin</code>, <code class="highlighter-rouge">conf</code> 디렉토리를 빌드 할때 함께 추가한다고 명시하면된다.</p>
 
-<p>ElasticSearch에 Index가 생성된 것을 확인 할 수 있다.</p>
+<h2 id="jar----">2. 빌드한 jar를 저장 위치를 변경하는 법</h2>
 
-<p><img src="http://joswlv.github.io/images/logstash-kibana.png" alt="" /></p>
+<p><code class="highlighter-rouge">src</code>디렉토리의 java파일을 컴파일해 만들어진 jar파일은 기본 /target아래에 만들어진다.</p>
 
-<p>Kibana를 이용하여 apple주식데이터를 시각화를 하였다.</p>
+<p>이 위치를 변경하고 싶으면 다음과 같다.</p>
 
-<p>사용된 Document는 9125개임을 확인 할 수 있다.</p>
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;build&gt;</span>
+	<span class="nt">&lt;plugins&gt;</span>
+		<span class="nt">&lt;plugin&gt;</span>
+			<span class="nt">&lt;groupId&gt;</span>org.apache.maven.plugins<span class="nt">&lt;/groupId&gt;</span>
+			<span class="nt">&lt;artifactId&gt;</span>maven-jar-plugin<span class="nt">&lt;/artifactId&gt;</span>
+			<span class="nt">&lt;configuration&gt;</span>
+				<span class="nt">&lt;outputDirectory&gt;</span>${basedir}/target/lib<span class="nt">&lt;/outputDirectory&gt;</span>
+			<span class="nt">&lt;/configuration&gt;</span>
+		<span class="nt">&lt;/plugin&gt;</span>
+	<span class="nt">&lt;/plugins&gt;</span>
 
-<h3 id="reference">Reference</h3>
+...
 
-<ul>
-  <li><a href="http://asuraiv.blogspot.kr/2015/07/elasticsearch-logstash.html">Hong’s Store House</a></li>
-  <li><a href="https://www.elastic.co/kr/products/logstash">elastic-logstash</a></li>
-</ul>
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2017/02/19/logstash/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
-              <li>
-                <h2>
-                  <a class="post-link" href="/2017/02/18/elasticsearchbasic/">ElasticSearch 기초</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2017-02-18
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#ElasticSearch" title="Category: ElasticSearch" rel="category">ElasticSearch</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                </div>
-                <div class="excerpt">
-                    <h1 id="elasticsearch-">ElasticSearch 기초</h1>
-
-<h3 id="ubuntu">설치 (ubuntu)</h3>
-
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code>
-<span class="c">#fileName : ElasticSearchInstall.sh</span>
-<span class="c">#!/bin/bash</span>
-
-<span class="c">### USAGE</span>
-<span class="c">###</span>
-<span class="c">### ./ElasticSearch.sh 1.7 will install Elasticsearch 1.7</span>
-<span class="c">### ./ElasticSearch.sh will fail because no version was specified (exit code 1)</span>
-<span class="c">###</span>
-<span class="c">### CLI options Contributed by @janpieper</span>
-<span class="c">### Check http://www.elasticsearch.org/download/ for latest version of ElasticSearch</span>
-
-<span class="c">### ElasticSearch version</span>
-<span class="k">if</span> <span class="o">[</span> -z <span class="s2">"</span><span class="nv">$1</span><span class="s2">"</span> <span class="o">]</span>; <span class="k">then
-  </span><span class="nb">echo</span> <span class="s2">""</span>
-  <span class="nb">echo</span> <span class="s2">"  Please specify the Elasticsearch version you want to install!"</span>
-  <span class="nb">echo</span> <span class="s2">""</span>
-  <span class="nb">echo</span> <span class="s2">"    </span><span class="nv">$ $0</span><span class="s2"> 1.7"</span>
-  <span class="nb">echo</span> <span class="s2">""</span>
-  <span class="nb">exit </span>1
-<span class="k">fi
- 
-</span><span class="nv">ELASTICSEARCH_VERSION</span><span class="o">=</span><span class="nv">$1</span>
- 
-<span class="k">if</span> <span class="o">[[</span> ! <span class="s2">"</span><span class="k">${</span><span class="nv">ELASTICSEARCH_VERSION</span><span class="k">}</span><span class="s2">"</span> <span class="o">=</span>~ ^[0-9]+<span class="se">\.</span><span class="o">[</span>0-9]+ <span class="o">]]</span>; <span class="k">then
-  </span><span class="nb">echo</span> <span class="s2">""</span>
-  <span class="nb">echo</span> <span class="s2">"  The specified Elasticsearch version isn't valid!"</span>
-  <span class="nb">echo</span> <span class="s2">""</span>
-  <span class="nb">echo</span> <span class="s2">"    </span><span class="nv">$ $0</span><span class="s2"> 1.7"</span>
-  <span class="nb">echo</span> <span class="s2">""</span>
-  <span class="nb">exit </span>2
-<span class="k">fi</span>
- 
-<span class="c">### Install Java 8</span>
-<span class="nb">cd</span> ~
-sudo apt-get install python-software-properties -y
-sleep 1
-sudo add-apt-repository ppa:webupd8team/java -y
-sleep 1
-sudo apt-get update
-sleep 1
-sudo apt-get install oracle-java8-installer -y
-
-<span class="c">### Download and install the Public Signing Key</span>
-wget -qO - https://packages.elastic.co/GPG-KEY-elasticsearch | sudo apt-key add -
-
-<span class="c">### Setup Repository</span>
-<span class="nb">echo</span> <span class="s2">"deb http://packages.elastic.co/elasticsearch/</span><span class="k">${</span><span class="nv">ELASTICSEARCH_VERSION</span><span class="k">}</span><span class="s2">/debian stable main"</span> | sudo tee -a /etc/apt/sources.list.d/elk.list
-
-<span class="c">### Install Elasticsearch</span>
-sudo apt-get update <span class="o">&amp;&amp;</span> sudo apt-get install elasticsearch -y
-
-<span class="c">### Start ElasticSearch </span>
-sudo service elasticsearch start
-
-<span class="c">### Lets wait a little while ElasticSearch starts</span>
-sleep 5
-
-<span class="c">### Make sure service is running</span>
-curl http://localhost:9200
-
-<span class="c">### Should return something like this:</span>
-<span class="c"># {</span>
-<span class="c">#  "status" : 200,</span>
-<span class="c">#  "name" : "Storm",</span>
-<span class="c">#  "version" : {</span>
-<span class="c">#    "number" : "1.3.1",</span>
-<span class="c">#    "build_hash" : "2de6dc5268c32fb49b205233c138d93aaf772015",</span>
-<span class="c">#    "build_timestamp" : "2014-07-28T14:45:15Z",</span>
-<span class="c">#    "build_snapshot" : false,</span>
-<span class="c">#    "lucene_version" : "4.9"</span>
-<span class="c">#  },</span>
-<span class="c">#  "tagline" : "You Know, for Search"</span>
-<span class="c"># }</span>
+<span class="nt">&lt;/build&gt;</span>
 </code></pre>
 </div>
 
-<p>위 스크립트를 <code class="highlighter-rouge">./ElasticSearchInstall.sh [버전]</code>으로 실행 실행하면 된다.</p>
+<h2 id="dependency--jar-">3. dependency를 포함한 jar 만들기</h2>
 
-<h3 id="section">기본 개념</h3>
+<p>이 방법은 여러가지가 있다. 그 중 assembly plugin을 사용하면 다음과 같다.</p>
 
-<table>
-  <thead>
-    <tr>
-      <th>Elastic Search</th>
-      <th>Relational DB</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Index</td>
-      <td>Databases</td>
-    </tr>
-    <tr>
-      <td>Type</td>
-      <td>Table</td>
-    </tr>
-    <tr>
-      <td>Document</td>
-      <td>Row</td>
-    </tr>
-    <tr>
-      <td>Field</td>
-      <td>Column</td>
-    </tr>
-    <tr>
-      <td>Mapping</td>
-      <td>Schema</td>
-    </tr>
-  </tbody>
-</table>
-
-<p>RESTfull 방식으로 사용된다.</p>
-
-<table>
-  <thead>
-    <tr>
-      <th>Elastic Search</th>
-      <th>Relational DB</th>
-      <th>CRUD</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>GET</td>
-      <td>Select</td>
-      <td>Read</td>
-    </tr>
-    <tr>
-      <td>PUT</td>
-      <td>Update</td>
-      <td>Update</td>
-    </tr>
-    <tr>
-      <td>Post</td>
-      <td>Insert</td>
-      <td>Create</td>
-    </tr>
-    <tr>
-      <td>DELETE</td>
-      <td>Delete</td>
-      <td>Delete</td>
-    </tr>
-  </tbody>
-</table>
-
-<p><br />
-<strong>1) Index 조회</strong></p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>curl -XGET '[elasticsearch 주소]/[Index name]
-
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;plugin&gt;</span>
+    <span class="nt">&lt;artifactId&gt;</span>maven-assembly-plugin<span class="nt">&lt;/artifactId&gt;</span>
+    <span class="nt">&lt;configuration&gt;</span>
+        <span class="nt">&lt;descriptorRefs&gt;</span>
+            <span class="nt">&lt;descriptorRef&gt;</span>jar-with-dependencies<span class="nt">&lt;/descriptorRef&gt;</span>
+        <span class="nt">&lt;/descriptorRefs&gt;</span>
+    <span class="nt">&lt;/configuration&gt;</span>
+    <span class="nt">&lt;executions&gt;</span>
+        <span class="nt">&lt;execution&gt;</span>
+            <span class="nt">&lt;id&gt;</span>make-assembly<span class="nt">&lt;/id&gt;</span>
+            <span class="nt">&lt;phase&gt;</span>package<span class="nt">&lt;/phase&gt;</span>
+            <span class="nt">&lt;goals&gt;</span>
+                <span class="nt">&lt;goal&gt;</span>single<span class="nt">&lt;/goal&gt;</span>
+            <span class="nt">&lt;/goals&gt;</span>
+        <span class="nt">&lt;/execution&gt;</span>
+    <span class="nt">&lt;/executions&gt;</span>
+<span class="nt">&lt;/plugin&gt;</span>
 </code></pre>
 </div>
 
-<p><strong>결과</strong></p>
+<h2 id="dependency-jar----">4. dependency jar를 모아 저장해 빌드하는 법</h2>
 
-<div class="highlighter-rouge"><pre class="highlight"><code>[root@bigdataStudy]# curl -XGET localhost:9200/basketball?pretty
-{
-  "basketball" : {
-    "aliases" : { },
-    "mappings" : {
-      "record" : {
-        "properties" : {
-          "assists" : {
-            "type" : "long"
-          },
-          "blocks" : {
-            "type" : "long"
-          },
-          "name" : {
-            "type" : "string"
-          },
-          "points" : {
-            "type" : "long"
-          },
-          "rebounds" : {
-            "type" : "long"
-          },
-          "submit_date" : {
-            "type" : "date",
-            "format" : "yyyy-MM-dd"
-          },
-          "team" : {
-            "type" : "string"
-          }
-        }
-      }
-    },
-    "settings" : {
-      "index" : {
-        "creation_date" : "1487474066966",
-        "uuid" : "uFna9rNjR5S3vRKEZtEHvg",
-        "number_of_replicas" : "1",
-        "number_of_shards" : "5",
-        "version" : {
-          "created" : "2030399"
-        }
-      }
-    },
-    "warmers" : { }
-  }
-}
+<p>dependency에 있는 라이브러리 jar파일을 사용자가 지정한 디렉토리에 저장하는 방법은 다음과 같다.</p>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;plugin&gt;</span>
+	<span class="nt">&lt;groupId&gt;</span>org.apache.maven.plugins<span class="nt">&lt;/groupId&gt;</span>
+	<span class="nt">&lt;artifactId&gt;</span>maven-dependency-plugin<span class="nt">&lt;/artifactId&gt;</span>
+	<span class="nt">&lt;executions&gt;</span>
+		<span class="nt">&lt;execution&gt;</span>
+			<span class="nt">&lt;id&gt;</span>copy-dependencies<span class="nt">&lt;/id&gt;</span>
+			<span class="nt">&lt;phase&gt;</span>package<span class="nt">&lt;/phase&gt;</span>
+			<span class="nt">&lt;goals&gt;</span>
+				<span class="nt">&lt;goal&gt;</span>copy-dependencies<span class="nt">&lt;/goal&gt;</span>
+			<span class="nt">&lt;/goals&gt;</span>
+			<span class="nt">&lt;configuration&gt;</span>
+				<span class="nt">&lt;outputDirectory&gt;</span>${basedir}/target/lib<span class="nt">&lt;/outputDirectory&gt;</span>
+				<span class="nt">&lt;overWriteReleases&gt;</span>false<span class="nt">&lt;/overWriteReleases&gt;</span>
+				<span class="nt">&lt;overWriteSnapshots&gt;</span>false<span class="nt">&lt;/overWriteSnapshots&gt;</span>
+				<span class="nt">&lt;overWriteIfNewer&gt;</span>true<span class="nt">&lt;/overWriteIfNewer&gt;</span>
+			<span class="nt">&lt;/configuration&gt;</span>
+		<span class="nt">&lt;/execution&gt;</span>
+	<span class="nt">&lt;/executions&gt;</span>
+<span class="nt">&lt;/plugin&gt;</span>
+</code></pre>
+</div>
+<h1 id="alpha-beta-real--resources-dir">alpha, beta, real에 따라 resources dir구분하기</h1>
+
+<div class="language-xml highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;properties&gt;</span>
+	<span class="nt">&lt;maven.resources.overwrite&gt;</span>true<span class="nt">&lt;/maven.resources.overwrite&gt;</span>
+<span class="nt">&lt;/properties&gt;</span>
+<span class="nt">&lt;profiles&gt;</span>
+	<span class="nt">&lt;profile&gt;</span>
+		<span class="nt">&lt;id&gt;</span>dev<span class="nt">&lt;/id&gt;</span>
+		<span class="nt">&lt;properties&gt;</span>
+			<span class="nt">&lt;env&gt;</span>dev<span class="nt">&lt;/env&gt;</span>
+		<span class="nt">&lt;/properties&gt;</span>
+	<span class="nt">&lt;/profile&gt;</span>
+
+	<span class="nt">&lt;profile&gt;</span>
+		<span class="nt">&lt;id&gt;</span>alpha<span class="nt">&lt;/id&gt;</span>
+		<span class="nt">&lt;properties&gt;</span>
+			<span class="nt">&lt;env&gt;</span>alpha<span class="nt">&lt;/env&gt;</span>
+		<span class="nt">&lt;/properties&gt;</span>
+	<span class="nt">&lt;/profile&gt;</span>
+
+	<span class="nt">&lt;profile&gt;</span>
+		<span class="nt">&lt;id&gt;</span>beta<span class="nt">&lt;/id&gt;</span>
+		<span class="nt">&lt;properties&gt;</span>
+			<span class="nt">&lt;env&gt;</span>beta<span class="nt">&lt;/env&gt;</span>
+		<span class="nt">&lt;/properties&gt;</span>
+	<span class="nt">&lt;/profile&gt;</span>
+
+	<span class="nt">&lt;profile&gt;</span>
+		<span class="nt">&lt;id&gt;</span>real<span class="nt">&lt;/id&gt;</span>
+		<span class="nt">&lt;properties&gt;</span>
+			<span class="nt">&lt;env&gt;</span>real<span class="nt">&lt;/env&gt;</span>
+			<span class="nt">&lt;value&gt;</span>real<span class="nt">&lt;/value&gt;</span>
+		<span class="nt">&lt;/properties&gt;</span>
+	<span class="nt">&lt;/profile&gt;</span>
+<span class="nt">&lt;/profiles&gt;</span>
+
+<span class="nt">&lt;build&gt;</span>
+	<span class="nt">&lt;finalName&gt;</span>DMP-DATA-API<span class="nt">&lt;/finalName&gt;</span>
+	<span class="nt">&lt;resources&gt;</span>
+		<span class="nt">&lt;resource&gt;</span>
+			<span class="nt">&lt;directory&gt;</span>src/main/resources<span class="nt">&lt;/directory&gt;</span>
+		<span class="nt">&lt;/resource&gt;</span>
+		<span class="nt">&lt;resource&gt;</span>
+			<span class="nt">&lt;directory&gt;</span>src/main/resources-${env}<span class="nt">&lt;/directory&gt;</span>
+		<span class="nt">&lt;/resource&gt;</span>
+	<span class="nt">&lt;/resources&gt;</span>
+	...
+<span class="nt">&lt;/build&gt;</span>
 </code></pre>
 </div>
 
-<p><code class="highlighter-rouge">basketball</code> Index정보를 볼 수 있다. <code class="highlighter-rouge">record</code>라는 Type의 정보도 함께 나오는 것을 확인 할 수 있다.</p>
+<p>profile에 변수를 등록하고 <code class="highlighter-rouge">&lt;resource&gt;</code>에 <code class="highlighter-rouge">directory</code>path만 적어 주면 된다.</p>
 
-<p><strong>2) <code class="highlighter-rouge">_update</code></strong></p>
+<p>resource diretory가 하나로 합쳐지면서 같은 파일명은 <code class="highlighter-rouge">resources-${env}</code>의 파일 명으로 overwrite 된다. 
+그 이유는 순차적을 실행되면서 overwrite 되기 때문이다.
+(<code class="highlighter-rouge">&lt;maven.resources.overwrite&gt;true&lt;/maven.resources.overwrite&gt;</code> 이 조건을 추가 해서..)</p>
 
-<p><code class="highlighter-rouge">_update</code>옵션은 Type의 Field를 추가할 때 사용한다.</p>
-
-<p>다음과 같은 Document가 있다</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>[root@bigdataStudy]# curl -XGET localhost:9200/classes/class/1/?pretty
-{
-  "_index" : "classes",
-  "_type" : "class",
-  "_id" : "1",
-  "_version" : 1,
-  "found" : true,
-  "_source" : {
-    "title" : "Bigdata",
-    "professor" : "Jo"
-  }
-}
-</code></pre>
-</div>
-
-<p>다음과 같이 <code class="highlighter-rouge">point</code> Field를 추가하였다.</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>[root@bigdataStudy]# curl -XPOST localhost:9200/classes/class/1/_update?pretty -d '
-&gt; {"doc":{"point":1}}'
-{
-  "_index" : "classes",
-  "_type" : "class",
-  "_id" : "1",
-  "_version" : 2,
-  "_shards" : {
-    "total" : 2,
-    "successful" : 1,
-    "failed" : 0
-  }
-}
-</code></pre>
-</div>
-
-<p>결과를 확인하면 다음과 같다.</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>[root@ip-172-31-12-34 ch04]# curl -XGET localhost:9200/classes/class/1/?pretty
-{
-  "_index" : "classes",
-  "_type" : "class",
-  "_id" : "1",
-  "_version" : 2,
-  "found" : true,
-  "_source" : {
-    "title" : "Bigdata",
-    "professor" : "Jo",
-    "point" : 1
-  }
-}
-</code></pre>
-</div>
-<p>추가 된 것을 확인 할 수 있다.</p>
+<p>아래와 같이 resources폴더를 구성하고 <code class="highlighter-rouge">mvn clean package -P real</code>을 하면 순차적으로 copy되는 것을 확인 할 수 있다.</p>
 
 <p><br /></p>
 
-<p><strong>3) <code class="highlighter-rouge">_bulk</code></strong></p>
+<p><img src="http://joswlv.github.io/images/maven_directory.png" alt="" /></p>
 
-<p>여러개의 Document를 입력할 때 사용한다.</p>
-
-<p>다음은 파일에서 값을 가져오는 방법이다.</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>culr -XPOST [elasticsearch 주소]/_bulk --data-binary @[파일명]
+<div class="highlighter-rouge"><pre class="highlight"><code>[INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ dmp-data-api ---
+[INFO] Using 'UTF-8' encoding to copy filtered resources.
+[INFO] Copying 6 resources		//resources
+[INFO] Copying 3 resources		//resources-${env}
 </code></pre>
 </div>
-<p><br />
-<strong>4) Mapping</strong></p>
-
-<p>Index를 생성하면 mapping 정보가 빠져 있다.</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code> [root@bigdataStudy]# curl -XGET localhost:9200/classes/?pretty
-{
-  "classes" : {
-    "aliases" : { },
-    "mappings" : { },
-    "settings" : {
-      "index" : {
-        "creation_date" : "1487477362931",
-        "uuid" : "Z3HY5liZToOyUiEgRL9J4g",
-        "number_of_replicas" : "1",
-        "number_of_shards" : "5",
-        "version" : {
-          "created" : "2030399"
-        }
-      }
-    },
-    "warmers" : { }
-  }
-}
-</code></pre>
-</div>
-
-<p>class라는 <code class="highlighter-rouge">Type</code>의 mapping 값을 다음과 같이 입력하겠다.</p>
-
-<div class="language-json highlighter-rouge"><pre class="highlight"><code><span class="err">classesRating_mapping.json</span><span class="w">
-</span><span class="p">{</span><span class="w">
-	</span><span class="nt">"class"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-		</span><span class="nt">"properties"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-			</span><span class="nt">"title"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-				</span><span class="nt">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w">
-			</span><span class="p">},</span><span class="w">
-			</span><span class="nt">"professor"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-				</span><span class="nt">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w">
-			</span><span class="p">},</span><span class="w">
-			</span><span class="nt">"major"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-				</span><span class="nt">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w">
-			</span><span class="p">},</span><span class="w">
-			</span><span class="nt">"semester"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-				</span><span class="nt">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"string"</span><span class="w">
-			</span><span class="p">},</span><span class="w">
-			</span><span class="nt">"student_count"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-				</span><span class="nt">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"integer"</span><span class="w">
-			</span><span class="p">},</span><span class="w">
-			</span><span class="nt">"unit"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-				</span><span class="nt">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"integer"</span><span class="w">
-			</span><span class="p">},</span><span class="w">
-			</span><span class="nt">"rating"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-				</span><span class="nt">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"integer"</span><span class="w">
-			</span><span class="p">},</span><span class="w">
-			</span><span class="nt">"submit_date"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-				</span><span class="nt">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"date"</span><span class="p">,</span><span class="w">
-				</span><span class="nt">"format"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"yyyy-MM-dd"</span><span class="w">
-			</span><span class="p">},</span><span class="w">
-			</span><span class="nt">"school_location"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-				</span><span class="nt">"type"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"geo_point"</span><span class="w">
-			</span><span class="p">}</span><span class="w">
-		</span><span class="p">}</span><span class="w">
-	</span><span class="p">}</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
-
-<p>입력을 다음과 같이 한다.</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>[root@bigdataStudy]# curl -XPUT localhost:9200/classes/class/_mapping?pretty -d @classesRating_mapping.json
-{
-  "acknowledged" : true
-}
-</code></pre>
-</div>
-
-<p><code class="highlighter-rouge">Type</code>의 mapping값이 입력된 것을 확인 할 수 있다.</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>[root@bigdataStudy]# curl -XGET localhost:9200/classes/?pretty
-{
-  "classes" : {
-    "aliases" : { },
-    "mappings" : {
-      "class" : {
-        "properties" : {
-          "major" : {
-            "type" : "string"
-          },
-          "professor" : {
-            "type" : "string"
-          },
-          "rating" : {
-            "type" : "integer"
-          },
-          "school_location" : {
-            "type" : "geo_point"
-          },
-          "semester" : {
-            "type" : "string"
-          },
-          "student_count" : {
-            "type" : "integer"
-          },
-          "submit_date" : {
-            "type" : "date",
-            "format" : "yyyy-MM-dd"
-          },
-          "title" : {
-            "type" : "string"
-          },
-          "unit" : {
-            "type" : "integer"
-          }
-        }
-      }
-    },
-    "settings" : {
-      "index" : {
-        "creation_date" : "1487477362931",
-        "uuid" : "Z3HY5liZToOyUiEgRL9J4g",
-        "number_of_replicas" : "1",
-        "number_of_shards" : "5",
-        "version" : {
-          "created" : "2030399"
-        }
-      }
-    },
-    "warmers" : { }
-  }
-}
-</code></pre>
-</div>
-
-<p><strong>5) <code class="highlighter-rouge">_search</code></strong></p>
-
-<p>RDBMS의 <code class="highlighter-rouge">where</code>조건 같은 느낌도 있다.</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>curl -XGET localhost:9200/basketball/record/_search?q=points:30&amp;pretty
-</code></pre>
-</div>
-<p>위는 record <code class="highlighter-rouge">type</code>에서 points가 30인 <code class="highlighter-rouge">Document</code>를 출력하게 된다.</p>
-
-<p>더 많은 옵션은 <a href="https://www.elastic.co/guide/en/elasticsearch/reference/current/search.html">ElasticSearch API Doc</a>에서 확인 할 수 있다.</p>
-
-<p><br />
-<strong>6) Aggregation</strong></p>
-
-<ul>
-  <li>
-    <p>Metrics Aggregations - sum, min, max, avg을 구할 때 사용한다.</p>
-  </li>
-  <li>
-    <p>Bucket Aggregations - RDBMS의 <code class="highlighter-rouge">Group By</code>와 같은 기능을 제공한다.</p>
-  </li>
-</ul>
-
-<p><strong>사용법</strong></p>
-
-<p><code class="highlighter-rouge">_search</code>옵션과 함께 사용한다.</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code><span class="p">{</span><span class="w">
-	</span><span class="nt">"size"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="mi">0</span><span class="p">,</span><span class="w">
-	</span><span class="nt">"aggs"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-		</span><span class="nt">"avg_score"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-			</span><span class="nt">"avg"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="p">{</span><span class="w">
-				</span><span class="nt">"field"</span><span class="w"> </span><span class="p">:</span><span class="w"> </span><span class="s2">"points"</span><span class="w">
-			</span><span class="p">}</span><span class="w">
-		</span><span class="p">}</span><span class="w">
-	</span><span class="p">}</span><span class="w">
-</span><span class="p">}</span><span class="w">
-</span></code></pre>
-</div>
-
-<p>위와 같이 Metrics Aggregation 설정 json파일을 만든다.</p>
-
-<p>평균을 구하는 aggregation이다.</p>
-
-<ul>
-  <li><code class="highlighter-rouge">aggs</code>은 aggregation을 사용하겠다는 선언이다.</li>
-  <li><code class="highlighter-rouge">avg_score</code>은 alias같은 느낌이다. 검색 결과의 field이름 이다.</li>
-  <li><code class="highlighter-rouge">avg</code>는 Metrics Aggregation에서 평균을 구하는 옵션이다.</li>
-  <li><code class="highlighter-rouge">field</code>는 <code class="highlighter-rouge">avg</code>에 사용되는  <code class="highlighter-rouge">field</code>값이다.</li>
-</ul>
-
-<p>검색 결과는 다음과 같다.</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>[root@bigdataStudy]# curl -XGET localhost:9200/_search?pretty --data-binary @avg_points_aggs.json
-{
-  "took" : 9,
-  "timed_out" : false,
-  "_shards" : {
-    "total" : 15,
-    "successful" : 15,
-    "failed" : 0
-  },
-  "hits" : {
-    "total" : 2,
-    "max_score" : 0.0,
-    "hits" : [ ]
-  },
-  "aggregations" : {
-    "avg_score" : {
-      "value" : 25.0
-    }
-  }
-}
-</code></pre>
-</div>
-
-<p>평균값이 나온 것을 확인 할 수 있다.</p>
-
-<p>Metrics Aggregation에서 <code class="highlighter-rouge">stats</code>옵션을 사용하면 count, min, max, avg, sum을 한번에 출력한다.</p>
-
-<p>Bucket Aggregation예도 한번 보자</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>
-	"size" : 0,
-	"aggs" : {
-		"team_stats" : {
-			"terms" : {
-				"field" : "team"
-			},
-			"aggs" : {
-				"stats_score" : {
-					"stats" : {
-						"field" : "points"
-					}
-				}
-			}
-		}
-	}
-}
-</code></pre>
-</div>
-
-<p>이렇게 aggregation json파일을 만들었다.</p>
-
-<ul>
-  <li><code class="highlighter-rouge">aggs</code>를 사용한다고 선언했다.</li>
-  <li><code class="highlighter-rouge">terms</code>라는 bucket aggregation의 옵션을 사용한다. 이는 <code class="highlighter-rouge">team</code>이라는 필드로 <code class="highlighter-rouge">group by</code>하겠다라는 뜻이다.</li>
-  <li><code class="highlighter-rouge">sub aggs</code>를 선언하고 point로 Metrics정보를 출력한다.</li>
-</ul>
-
-<p>다음과 같이 4개의 Documents를 입력하였다.</p>
-<div class="highlighter-rouge"><pre class="highlight"><code>[root@bigdataStudy]# curl -XGET localhost:9200/_search?pretty
-{
-  "took" : 4,
-  "timed_out" : false,
-  "_shards" : {
-    "total" : 15,
-    "successful" : 15,
-    "failed" : 0
-  },
-  "hits" : {
-    "total" : 4,
-    "max_score" : 1.0,
-    "hits" : [ {
-      "_index" : "basketball",
-      "_type" : "record",
-      "_id" : "2",
-      "_score" : 1.0,
-      "_source" : {
-        "team" : "Chicago",
-        "name" : "Michael Jordan",
-        "points" : 20,
-        "rebounds" : 5,
-        "assists" : 8,
-        "blocks" : 4,
-        "submit_date" : "1996-10-13"
-      }
-    }, {
-      "_index" : "basketball",
-      "_type" : "record",
-      "_id" : "4",
-      "_score" : 1.0,
-      "_source" : {
-        "team" : "LA",
-        "name" : "Kobe Bryant",
-        "points" : 40,
-        "rebounds" : 4,
-        "assists" : 8,
-        "blocks" : 6,
-        "submit_date" : "2014-11-13"
-      }
-    }, {
-      "_index" : "basketball",
-      "_type" : "record",
-      "_id" : "1",
-      "_score" : 1.0,
-      "_source" : {
-        "team" : "Chicago",
-        "name" : "Michael Jordan",
-        "points" : 30,
-        "rebounds" : 3,
-        "assists" : 4,
-        "blocks" : 3,
-        "submit_date" : "1996-10-11"
-      }
-    }, {
-      "_index" : "basketball",
-      "_type" : "record",
-      "_id" : "3",
-      "_score" : 1.0,
-      "_source" : {
-        "team" : "LA",
-        "name" : "Kobe Bryant",
-        "points" : 30,
-        "rebounds" : 2,
-        "assists" : 8,
-        "blocks" : 5,
-        "submit_date" : "2014-10-13"
-      }
-    } ]
-  }
-}
-</code></pre>
-</div>
-
-<p>그리고 위의 aggregation을 사용하여 검색을 해보았다.</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>[root@bigdataStudy]# curl -XGET localhost:9200/_search?pretty --data-binary @stats_by_team.json
-{
-  "took" : 13,
-  "timed_out" : false,
-  "_shards" : {
-    "total" : 15,
-    "successful" : 15,
-    "failed" : 0
-  },
-  "hits" : {
-    "total" : 4,
-    "max_score" : 0.0,
-    "hits" : [ ]
-  },
-  "aggregations" : {
-    "team_stats" : {
-      "doc_count_error_upper_bound" : 0,
-      "sum_other_doc_count" : 0,
-      "buckets" : [ {
-        "key" : "chicago",
-        "doc_count" : 2,
-        "stats_score" : {
-          "count" : 2,
-          "min" : 20.0,
-          "max" : 30.0,
-          "avg" : 25.0,
-          "sum" : 50.0
-        }
-      }, {
-        "key" : "la",
-        "doc_count" : 2,
-        "stats_score" : {
-          "count" : 2,
-          "min" : 30.0,
-          "max" : 40.0,
-          "avg" : 35.0,
-          "sum" : 70.0
-        }
-      } ]
-    }
-  }
-}
-</code></pre>
-</div>
-<p>위와 같이 <code class="highlighter-rouge">chicago</code>팀의 stats와 <code class="highlighter-rouge">la</code>팀의 stats가 출력되는 것을 확인 할 수 있다.</p>
-
-<h3 id="reference">Reference</h3>
-
-<ul>
-  <li><a href="https://www.inflearn.com/course/elk-%EC%8A%A4%ED%83%9D-%EB%8D%B0%EC%9D%B4%ED%84%B0-%EB%B6%84%EC%84%9D/">Inflearn강의</a></li>
-  <li><a href="https://gist.github.com/ricardo-rossi/8265589463915837429d">ricardo-rossi-GitRepo</a></li>
-  <li><a href="https://www.elastic.co/guide/index.html">ElasticSearch Doc</a></li>
-</ul>
 
 
                 </div>
                 <div class="read-all">
-                    <a  href="/2017/02/18/elasticsearchbasic/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
-              <li>
-                <h2>
-                  <a class="post-link" href="/2017/02/13/rdmsvsnosql/">RDBMS vs NOSQL</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2017-02-13
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#BigData" title="Category: BigData" rel="category">BigData</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                </div>
-                <div class="excerpt">
-                    <h4 id="rdbms-nosql">RDBMS? NOSQL?</h4>
-
-<ul>
-  <li>데이터의 읽기 쓰기 등 퍼포먼스에 치중한다면 NOSQL, 트랜잭션과 같은 정합성 위주의 시스템을 사용한다면 RDBMS</li>
-  <li>RDBMS 컬럼 변경 용이하지 않음, NOSQL 컬럼 변경 용이</li>
-  <li>NOSQL의 경우 sorting, join, grouping, range query, index 매우 취약</li>
-  <li>RDBMS 학습 비용 x</li>
-  <li>NOSQL 학습 비용 소요 (운영시 어떤 장애상황이 생길지 예측이 어려움)</li>
-  <li>NOSQL 가장 큰 장점 (Scale-Out, RDBMS보다 상대적으로 빠른 쓰기/읽기)</li>
-</ul>
-
-<p><br /></p>
-
-<p><em>NOSQL 분류</em></p>
-
-<p>[ 키 밸류형 ] redis, memcached, Oracle Coherence</p>
-
-<p>[ 컬럼형   ] Cassandra, HBASE, Cloud Datastore</p>
-
-<p>[ 문서형   ] MongoDB, Couchbase, MarkLogic, PostgreSQL, MySQL, DynamoDB MS-DocumentDB</p>
-
-<p>[ 그래프형  ] Neo4j</p>
-
-<p><br /></p>
-
-<table>
-  <thead>
-    <tr>
-      <th><em>DataStore</em></th>
-      <th><em>설 명</em></th>
-      <th><em>장 점</em></th>
-      <th><em>단 점</em></th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>Cassandra</td>
-      <td>- Facebook에 의해 2008년 아파치 오픈소스로 공개된 분산 데이터 베이스 (자바 언어 기반)<br /> - 컬럼 단위로 관리되어 컬럼형으로 분류<br /> - 대용량의 데이터 트랜잭션에 대해 고성능 처리가 가능(실제 트위터 MYSQL -&gt; Cassandra로 전환)</td>
-      <td>- 대량으로 쓰기가 발생하는 서비스에 좋음<br /> - 확장성이 뛰어남<br /> - Apache Foundation에서 개발중이며커뮤니티 활발<br /> - Scale-Out</td>
-      <td>- 최소 3대 이상 구성(클러스터 환경)<br /> - 복잡한 조건 검색 불가<br /> - 데이터 갱신 및 입력시 Atomic한 처리가 힘듬</td>
-    </tr>
-    <tr>
-      <td>HBase</td>
-      <td>- 대량 데이터를 우수한 성능으로 데이터 일관성을 보장하면서 다뤄야 할 때 주로 사용<br /> - 대량 데이터 분석 및 처리를 위해 사용되는 Hadoop의 산하 프로젝트로 시작된 데이터베이스 (HDFS 및 MapReduce등과 함께 사용하기에 최적화) <br /> - 수십 테러바이트가 넘는 빅데이터에 적합</td>
-      <td>- 하둡 기반에서 동작하고 다양한 하둡 의 도구들과 상호 운영성이 좋음<br /> - 데이터 일관성 보장 우수(상대적)</td>
-      <td>- 5대 미만에서는 사용할 수 없다(대규모 전용)<br /> - 성능이 좋진 않다 (상대적)</td>
-    </tr>
-    <tr>
-      <td>MongoDB</td>
-      <td>- MongoDB는 10gen 사에서 개발된 높은 성능과 확장성을 가지고 있는 데이터베이스<br /> - NoSQL 데이터베이스에서는 문서형 데이터베이스로 분류(C언어 기반)<br /> - 데이터를 입력할때 데이터 구조 정보를 포함하여 BSON(JSON을 바이너리화한것)형식으로 저장하고, key value로 사용<br /> - NON-SCHEMA<br /> -비정형 데이터, 파일 데이터등의 스키마프리(Scheme free)모델에서 적합<br /> - SQL 과 비슷한 방식의 쿼리 사용</td>
-      <td>- 스키마 없이 사용 가능 <br /> - SQL 과 비슷한 방식의 쿼리 사용<br /> - 몽고는 쓰기할때 메모리에 먼저 Write 후에 1분 단위로 Flushing하는 Write back 방식을 사용한기 때문에 write성능이 좋음<br /> - Read시에는 파일의 Index를 메모리에 로딩해   놓고 찾는다(memory mapped file) <br /> - 빠름<br /> - 다양한 기능 제공<br /></td>
-      <td>- JOIN이나 트랜잭션 처리가 불가능<br /> - 디스크에 쓰기가 비동기식으로 이루어진다. 때문에 경우에 따라 데이터가 유실될 가능성도 있다.</td>
-    </tr>
-  </tbody>
-</table>
-
-<h4 id="cassandra--hbase-">[ Cassandra &amp; HBase ]</h4>
-
-<ul>
-  <li>카산드라 클러스터 설정 및 구성이 HBase 클러스터 구성보다 훨씬 쉽다.</li>
-  <li>카산드라가 일반적으로 write시 5배 이상의 더 나은 성능, read시 4배 이상의 성능을 보인다.</li>
-</ul>
-
-<h4 id="cassandra--mongodb-">[ Cassandra &amp; MongoDB ]</h4>
-
-<ul>
-  <li>Cassandra 노드가 추가될수록 MonogoDB 보다 훨씬 나은 선형적인 성능 향상을 보인다.</li>
-  <li>다중 Index가 필요한 구조라면 MongoDB를 선택하고, 데이터 항목 변경이 많고 unique access가 많은 경우라면 Cassandra가 적합</li>
-  <li><a href="http://db-engines.com/en/system/Cassandra;MongoDB">http://db-engines.com/en/system/Cassandra;MongoDB</a></li>
-</ul>
-
-<h4 id="section">성능비교</h4>
-
-<ul>
-  <li><a href="https://academy.datastax.com/planet-cassandra/nosql-performance-benchmarks">https://academy.datastax.com/planet-cassandra/nosql-performance-benchmarks</a></li>
-  <li><a href="https://www.datastax.com/nosql-databases/benchmarks-cassandra-vs-mongodb-vs-hbase">https://www.datastax.com/nosql-databases/benchmarks-cassandra-vs-mongodb-vs-hbase</a></li>
-</ul>
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2017/02/13/rdmsvsnosql/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
-              <li>
-                <h2>
-                  <a class="post-link" href="/2017/01/09/mysqlprocedureinsert/">Stored Procedure으로 Insert</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2017-01-09
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#MYSQL" title="Category: MYSQL" rel="category">MYSQL</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                </div>
-                <div class="excerpt">
-                    <h1 id="mysql-stored-procedure-insert">MySQL Stored Procedure으로 Insert</h1>
-
-<p>쿼리테스트를 위한 테스트 데이터 1000만건을 insert을 해야한다. 이런 미션을 해결하기 위해 procedure를 사용했다.</p>
-
-<h2 id="section">1. 저장 프로시저란?</h2>
-
-<p>여러 SQL문을 하나의 SQL문 처럼 정리하여 <code class="highlighter-rouge">CALL procedure명</code>라는 명령어로 실행할 수 있게 만든 것을 저장프로시저(Stored Procedure)라고 한다.</p>
-
-<p>저장프로시저는 MySQL버전 5.0이상에서 사용할 수 있다.</p>
-
-<h2 id="no-using-transaction">2. 첫번째 시도! (no using TRANSACTION)</h2>
-
-<div class="language-sql highlighter-rouge"><pre class="highlight"><code><span class="k">DELIMITER</span> <span class="err">$$</span>
-<span class="k">DROP</span> <span class="k">PROCEDURE</span> <span class="n">IF</span> <span class="k">EXISTS</span> <span class="n">FILL_RATE_TEST_DATA</span><span class="err">$$</span>
-<span class="k">CREATE</span> <span class="k">PROCEDURE</span> <span class="n">myTEST</span><span class="p">()</span>
-<span class="k">BEGIN</span>
-	<span class="k">DECLARE</span> <span class="n">i</span> <span class="n">INT</span> <span class="k">DEFAULT</span> <span class="mi">1</span><span class="p">;</span>
-	<span class="k">DECLARE</span> <span class="n">j</span> <span class="n">INT</span> <span class="k">DEFAULT</span> <span class="mi">1</span><span class="p">;</span>
-	<span class="k">DECLARE</span> <span class="n">log_date</span> <span class="n">VARCHAR</span><span class="p">(</span><span class="mi">255</span><span class="p">);</span>	
-		
-	<span class="n">WHILE</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="mi">30</span> <span class="k">DO</span>
-		<span class="k">SET</span> <span class="n">log_date</span> <span class="o">=</span> <span class="n">DATE_FORMAT</span><span class="p">(</span><span class="n">DATE_SUB</span><span class="p">(</span><span class="n">NOW</span><span class="p">(),</span> <span class="n">INTERVAL</span> <span class="n">i</span> <span class="k">DAY</span><span class="p">),</span> <span class="s1">'%Y%m%d'</span><span class="p">);</span>
-		<span class="n">WHILE</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="mi">30000</span> <span class="k">DO</span>
-			<span class="k">INSERT</span> <span class="k">INTO</span> <span class="err">테이블</span> <span class="p">(</span><span class="n">LOG_DATE</span><span class="p">,</span> <span class="n">ID</span><span class="p">,</span> <span class="n">REQ_CNT</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="n">log_date</span><span class="p">,</span> <span class="s1">'0x2011'</span><span class="p">,</span> <span class="mi">3000000</span><span class="p">);</span>
-			<span class="k">SET</span> <span class="n">j</span> <span class="o">=</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-		<span class="k">END</span> <span class="n">WHILE</span><span class="p">;</span>
-		<span class="k">SET</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-	<span class="k">END</span> <span class="n">WHILE</span><span class="p">;</span>
-<span class="k">END</span><span class="err">$$</span>
-<span class="k">DELIMITER</span> <span class="err">$$</span>
-
-<span class="k">CALL</span> <span class="n">myTEST</span><span class="p">()</span>
-</code></pre>
-</div>
-
-<blockquote>
-  <p><code class="highlighter-rouge">DELIMITER</code>는 저장프로시저에서 구분문자를 <code class="highlighter-rouge">세미콜론(;)</code>이 아닌 다른 문자로 변경해준다. 위의 예에서는 <code class="highlighter-rouge">$$</code>을 사용했다.</p>
-</blockquote>
-
-<p>90만건을 insert를 하는 데 <code class="highlighter-rouge">236s</code>을 기다려야한다.</p>
-
-<h2 id="using-transaction">3. 두번째 시도(using TRANSACTION)</h2>
-
-<p>다음으로 시도한 방버은 쿼리실행을 <code class="highlighter-rouge">TRANSCATION</code>안에 넣는 것이다.</p>
-
-<div class="language-sql highlighter-rouge"><pre class="highlight"><code><span class="k">DELIMITER</span> <span class="err">$$</span>
-<span class="k">DROP</span> <span class="k">PROCEDURE</span> <span class="n">IF</span> <span class="k">EXISTS</span> <span class="n">FILL_RATE_TEST_DATA</span><span class="err">$$</span>
-<span class="k">CREATE</span> <span class="k">PROCEDURE</span> <span class="n">myTEST</span><span class="p">()</span>
-<span class="k">BEGIN</span>
-	<span class="k">DECLARE</span> <span class="n">i</span> <span class="n">INT</span> <span class="k">DEFAULT</span> <span class="mi">1</span><span class="p">;</span>
-	<span class="k">DECLARE</span> <span class="n">j</span> <span class="n">INT</span> <span class="k">DEFAULT</span> <span class="mi">1</span><span class="p">;</span>
-	<span class="k">DECLARE</span> <span class="n">log_date</span> <span class="n">VARCHAR</span><span class="p">(</span><span class="mi">255</span><span class="p">);</span>	
-	<span class="k">START</span> <span class="n">TRANSACTION</span><span class="p">;</span>	
-	<span class="n">WHILE</span> <span class="n">i</span> <span class="o">&lt;=</span> <span class="mi">30</span> <span class="k">DO</span>
-		<span class="k">SET</span> <span class="n">log_date</span> <span class="o">=</span> <span class="n">DATE_FORMAT</span><span class="p">(</span><span class="n">DATE_SUB</span><span class="p">(</span><span class="n">NOW</span><span class="p">(),</span> <span class="n">INTERVAL</span> <span class="n">i</span> <span class="k">DAY</span><span class="p">),</span> <span class="s1">'%Y%m%d'</span><span class="p">);</span>
-		<span class="n">WHILE</span> <span class="n">j</span> <span class="o">&lt;=</span> <span class="mi">30000</span> <span class="k">DO</span>
-			<span class="k">INSERT</span> <span class="k">INTO</span> <span class="err">테이블</span> <span class="p">(</span><span class="n">LOG_DATE</span><span class="p">,</span> <span class="n">ID</span><span class="p">,</span> <span class="n">REQ_CNT</span><span class="p">)</span> <span class="k">VALUES</span> <span class="p">(</span><span class="n">log_date</span><span class="p">,</span> <span class="s1">'0x2011'</span><span class="p">,</span> <span class="mi">3000000</span><span class="p">);</span>
-			<span class="k">SET</span> <span class="n">j</span> <span class="o">=</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span><span class="p">;</span>
-		<span class="k">END</span> <span class="n">WHILE</span><span class="p">;</span>
-		<span class="k">SET</span> <span class="n">j</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
-	<span class="k">END</span> <span class="n">WHILE</span><span class="p">;</span>
-	<span class="k">COMMIT</span><span class="p">;</span>
-<span class="k">END</span><span class="err">$$</span>
-<span class="k">DELIMITER</span> <span class="err">$$</span>
-
-<span class="k">CALL</span> <span class="n">myTEST</span><span class="p">()</span>
-</code></pre>
-</div>
-
-<p><code class="highlighter-rouge">START TRANSACTION</code>과 <code class="highlighter-rouge">COMMIT;</code>사이에 쿼리문을 넣어주면 된다.</p>
-
-<p>실행속도는 <code class="highlighter-rouge">68s</code> 거의 4배 빨라진 것을 알 수 있다.</p>
-
-<h2 id="section-1">3. 더 나아가기</h2>
-
-<p>Procedure에서 cursor와 trigger 등을 응용 사용하는 법이 있다.</p>
-
-<p>다음 사이트를 참조하면 된다.</p>
-
-<ul>
-  <li><a href="http://recoveryman.tistory.com/186">저장 프로시저 활용하기</a></li>
-  <li><a href="http://yookeun.github.io/database/2015/04/10/mysql-procedure/">프로시저/커서사용</a></li>
-  <li><a href="http://bizadmin.tistory.com/entry/MySQL-Fetch-Cursor-%EB%AC%B8-%EC%82%AC%EC%9A%A9%EB%B0%A9%EB%B2%95">프로시저/커서사용2</a></li>
-  <li><a href="https://msdn.microsoft.com/ko-kr/library/ms175976.aspx">프로시저/예외처리</a></li>
-  <li><a href="http://www.mysqltutorial.org/mysql-error-handling-in-stored-procedures/">프로시저/erro처리</a></li>
-</ul>
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2017/01/09/mysqlprocedureinsert/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                    <a  href="/2017/03/27/mavenbuildplugin/"><i class="fa fa-newspaper-o"></i>Read All</a>
                 </div>
                 <hr>
               </li>
@@ -1671,10 +1011,10 @@ curl http://localhost:9200
             <a href="/index.html" class="previous"><i class="fa fa-angle-double-left"></i></a>
             <a href="/" class="previous"><i class="fa fa-angle-left"></i></a>
           
-          <span class="page_number ">2/10</span>
+          <span class="page_number ">2/11</span>
           
             <a href="/page3" class="next"><i class="fa fa-angle-right"></i></a>
-            <a href="/page10" class="next"><i class="fa fa-angle-double-right"></i></a>
+            <a href="/page11" class="next"><i class="fa fa-angle-double-right"></i></a>
           
         </div>
     </div>
@@ -1712,7 +1052,7 @@ curl http://localhost:9200
                             <span class="name">
                                 python
                             </span>
-                            <span class="badge">2</span>
+                            <span class="badge">3</span>
                         </a>
                     </li>
                     
@@ -1739,7 +1079,7 @@ curl http://localhost:9200
                             <span class="name">
                                 Java
                             </span>
-                            <span class="badge">8</span>
+                            <span class="badge">9</span>
                         </a>
                     </li>
                     
@@ -1757,7 +1097,7 @@ curl http://localhost:9200
                             <span class="name">
                                 Unix/Linux
                             </span>
-                            <span class="badge">2</span>
+                            <span class="badge">3</span>
                         </a>
                     </li>
                     
@@ -1775,7 +1115,7 @@ curl http://localhost:9200
                             <span class="name">
                                 MYSQL
                             </span>
-                            <span class="badge">3</span>
+                            <span class="badge">4</span>
                         </a>
                     </li>
                     
@@ -1802,7 +1142,7 @@ curl http://localhost:9200
                             <span class="name">
                                 Spark
                             </span>
-                            <span class="badge">1</span>
+                            <span class="badge">3</span>
                         </a>
                     </li>
                     
@@ -1810,6 +1150,15 @@ curl http://localhost:9200
                         <a href="/category/#Cassandra" class="categories-list-item" cate="Cassandra">
                             <span class="name">
                                 Cassandra
+                            </span>
+                            <span class="badge">1</span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/category/#Scala" class="categories-list-item" cate="Scala">
+                            <span class="name">
+                                Scala
                             </span>
                             <span class="badge">1</span>
                         </a>
@@ -1824,25 +1173,25 @@ curl http://localhost:9200
                 </div>
                 <ul class="content-ul" recent>
                     
+                        <li><a href="/2017/10/24/sparkstreamingandkafka/">SparStreaming & kafka(Exactly-once)</a></li>
+                    
+                        <li><a href="/2017/09/27/spark_misapprehension/">Spark에 대한 오해</a></li>
+                    
+                        <li><a href="/2017/08/06/howtousesbt/">sbt 기본 사용법</a></li>
+                    
+                        <li><a href="/2017/08/02/pythonTricks/">Python Tricks</a></li>
+                    
+                        <li><a href="/2017/08/01/MySql-Setting/">MySQL 기본세팅법</a></li>
+                    
+                        <li><a href="/2017/06/26/linuxcommand/">리눅스 명령어정리</a></li>
+                    
+                        <li><a href="/2017/05/09/javarxe/">java 유용한 정규표현식</a></li>
+                    
                         <li><a href="/2017/05/04/logback/">LogBack</a></li>
                     
                         <li><a href="/2017/04/20/resourcecleanup/">Resource CleanUp</a></li>
                     
                         <li><a href="/2017/04/08/garbagecollectionpauses/">Garbage collection pauses</a></li>
-                    
-                        <li><a href="/2017/04/02/runtojarbackground/">jar 백그라운드로 실행하기</a></li>
-                    
-                        <li><a href="/2017/03/27/mavenbuildplugin/">Maven Build Plugin & 옵션</a></li>
-                    
-                        <li><a href="/2017/03/26/properties/">properties 설정 및 사용</a></li>
-                    
-                        <li><a href="/2017/03/01/stringbuildervsstringbuffer/">StringBuilder vs StringBuffer</a></li>
-                    
-                        <li><a href="/2017/02/26/basicrdd/">기본 RDD연산들(트랜스포메이션, 액션)</a></li>
-                    
-                        <li><a href="/2017/02/19/logstash/">Logstash 기초</a></li>
-                    
-                        <li><a href="/2017/02/18/elasticsearchbasic/">ElasticSearch 기초</a></li>
                     
                 </ul>
             </div>

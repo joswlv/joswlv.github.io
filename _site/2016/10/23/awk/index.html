@@ -98,6 +98,8 @@
                 
                     
                 
+                    
+                
             </ul>
         </nav>
     </div>
@@ -403,12 +405,55 @@ awk <span class="s1">'BEGIN {FS="\t"; OFS ="-"} {print $1 ,  $2} END {print "총
 </div>
 <p>이렇게 적으면 된다.</p>
 
+<h3 id="section-3">예&gt;</h3>
+
+<p><code class="highlighter-rouge">awk '/west/' datafile</code> : west 라는 글이 있는 줄 출력</p>
+
+<p><code class="highlighter-rouge">awk '/^north/' datafile</code> : north로 시작하는 줄 출력</p>
+
+<p><code class="highlighter-rouge">awk '/^(no | so)/' datafile</code> : no 또는 so 로 시작하는 줄 출력</p>
+
+<p><code class="highlighter-rouge">awk '{ print $3, $2 }' datafile</code> : datafile 리스트의 세 번째 와 두 번째 필드를 스페이스로 띄어서 출력</p>
+
+<p><code class="highlighter-rouge">awk '{ print $3 $2 }' datafile</code> : datafile 리스트의 세 번째 와 두 번째 필드를 그냥 붙여서 출력</p>
+
+<p><code class="highlighter-rouge">awk '{ print "Number of fields : " NF} ' datafile</code> : datafile의 각 줄마다의 필드수를 리턴한다.</p>
+
+<p><code class="highlighter-rouge">awk '$5 ~ /\.[7-9]+/' datafile</code> : 다섯 번째 필드가 마침표 다음엣 7과 9사이 숫자가 하나 이상 나오는 레코드 출력</p>
+
+<p><code class="highlighter-rouge">awk '$2 !~ /E/ { print $1, $2 }' datafile</code> : 두 번째 필드에 E 패턴이 없는 레코드의 첫 번째와 두 번째 필드 출력</p>
+
+<p><code class="highlighter-rouge">awk '$3 ~ /^Joel/{ print $3 " is a nice guy."} ' datafile</code> : 세 번째 필드가 Joel로 시작하면 “ is a nice guy”와 함께 출력</p>
+
+<p><code class="highlighter-rouge">awk '$8 ~ /[0-9][0-9]$/ { print $8 }' datafile</code> : 여덟 번째 필드가 두 개의 숫자이면 그 필드가 출력</p>
+
+<p><code class="highlighter-rouge">awk '$4 ~ /Chin$/ { print "The price is $" $8 "." }' datafile</code> : 네 번째 필드가 Chine으로 끝나면 “The price is $” 8번 필드 및 마침표가 출력</p>
+
+<p><code class="highlighter-rouge">awk -F: '{ print $1 } ' datafile</code> : -F 옵션은 입력 필드를 ‘:’로 구별.</p>
+
+<p><code class="highlighter-rouge">awk -F"[ :]" '{ print $1, $2 } ' datafile</code> : 입력 필드로 스페이스와 ‘:’를 필드 구별자로 사용</p>
+
+<p><code class="highlighter-rouge">awk -f awk_script.file datafile</code> : -f 옵션은 awk 스크립트 파일 사용할 때 씀.</p>
+
+<p><code class="highlighter-rouge">awk '$7 == 5' datafile</code> : 7번 필드가 5와 같다면 출력</p>
+
+<p><code class="highlighter-rouge">awk '$2 == "CT" { print $1, $2 }' datafile</code> : 2번 필드가 “CT” 문자와 같으면 1, 2 번 필드 출력</p>
+
+<p><code class="highlighter-rouge">awk '$7 &lt; 5 { print $4, $7}' datafile</code> : 7번 필드가 5보다 작다면 4번, 7번 필드 출력</p>
+
+<p><code class="highlighter-rouge">awk '$6 &gt; .9 { print $1, $6}' datafile</code> : 6번 필드가 .9 보다 크다면 1번, 6번 출력</p>
+
+<p><code class="highlighter-rouge">awk '$8 &gt; 10 &amp;&amp; $8 &lt; 17 ' datafile</code></p>
+
+<p><code class="highlighter-rouge">awk '$2 == "NW" || $1 ~ /south/ { print $1, $2 }' datafile</code></p>
+
 <p><br /></p>
 
 <h3 id="reference">Reference</h3>
 <ul>
   <li><a href="http://ra2kstar.tistory.com/153">초보개발자 이야기</a></li>
   <li><a href="http://www.hiscience.com/tech/archives/286">hiscience</a></li>
+  <li><a href="http://slog2.egloos.com/v/3689816">http://slog2.egloos.com/v/3689816</a></li>
 </ul>
 
         </article>

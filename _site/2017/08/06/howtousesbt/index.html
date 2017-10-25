@@ -1,0 +1,483 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta property="og:title" content="Jo Blog">
+    <meta property="og:description" content="Jo Seungwan Blog!~~!">
+    <meta property="og:image" content="https://raw.githubusercontent.com/joswlv/joswlv.github.io/master/bg.jpg">
+    <meta property="og:url" content="https://joswlv.github.io">
+
+    <title>sbt 기본 사용법</title>
+    <meta name="description" content="SBT 기본 사용법1. SBT 프로젝트 디렉토리 구조 및 기본적인 명령어|-src/|--main/|----resources/|       &lt;files to include in main jar here&gt;|----scala/|       &lt;main Scala sourc...">
+
+    <link rel="shortcut icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="icon" href="/favicon.ico?" type="image/x-icon">
+    <link rel="stylesheet" href="/css/fontawesome/css/font-awesome.min.css ">
+    <link rel="stylesheet" href="/css/main.css ">
+    <link rel="canonical" href="http://joswlv.github.io/2017/08/06/howtousesbt/">
+    <link rel="alternate" type="application/rss+xml" title="Joswlv" href="http://joswlv.github.io/feed.xml ">
+
+
+
+<script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-83868242-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+</head>
+
+
+  <body>
+
+    <header id="top">
+    <div class="wrapper">
+        <a href="/" class="brand">Joswlv</a>
+        <small></small>
+        <button id="headerMenu" class="menu"><i class="fa fa-bars"></i></button>
+        <nav id="headerNav">
+            <ul>
+                <li>
+                    
+                    <a href="/">
+                    
+                        <i class="fa fa-home"></i>Home
+                    </a>
+                </li>
+
+                
+                    
+                    <li>
+                        
+                        <a href="/archive/">
+                        
+                            <i class="fa fa-archive"></i>Archives
+                        </a>
+                    </li>
+                    
+                
+                    
+                    <li>
+                        
+                        <a href="/category/">
+                        
+                            <i class="fa fa-th-list"></i>Categories
+                        </a>
+                    </li>
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+                    
+                
+            </ul>
+        </nav>
+    </div>
+</header>
+
+
+        <div class="page clearfix" post>
+    <div class="left">
+        <h1>sbt 기본 사용법</h1>
+        <div class="label">
+
+            <div class="label-card">
+                <i class="fa fa-calendar"></i>2017-08-06
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+                
+            </div>
+
+            <div class="label-card">
+            
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#Scala" title="Category: Scala" rel="category">Scala</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+            </div>
+
+        </div>
+        <hr>
+        <article itemscope itemtype="http://schema.org/BlogPosting">
+        <h1 id="sbt--">SBT 기본 사용법</h1>
+
+<h3 id="sbt------">1. SBT 프로젝트 디렉토리 구조 및 기본적인 명령어</h3>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>|-src/
+|--main/
+|----resources/
+|       &lt;files to include in main jar here&gt;
+|----scala/
+|       &lt;main Scala sources&gt;
+|----java/
+|       &lt;main Java sources&gt;
+|--test/
+|----resources
+|       &lt;files to include in test jar here&gt;
+|----scala/
+|       &lt;test Scala sources&gt;
+|----java/
+       &lt;test Java sources&gt;
+       
+빌드 definition 파일 - 베이스 디렉토리에 있는 build.sbt 파일 
+빌드 support 파일 - 베이스 디렉토리 하위 project라는 디렉토리에 포함한 파일들을 의미한다. 
+빌드 target 디렉토리 - 기본으로 베이스 디렉토리 하위의 target
+       
+</code></pre>
+</div>
+
+<p>maven과 유사하다.</p>
+
+<p>간단한 테스크를 실행하면 아래와 같다.</p>
+
+<div class="language-bash highlighter-rouge"><pre class="highlight"><code>➜  scala-Learning-spark sbt clean package
+<span class="o">[</span>info] Loading global plugins from /Users/nhnent/.sbt/0.13/plugins
+<span class="o">[</span>info] Loading project definition from /Users/nhnent/dev/scala-Learning-spark/project
+<span class="o">[</span>info] Set current project to scala-Learning-spark <span class="o">(</span><span class="k">in </span>build file:/Users/nhnent/dev/scala-Learning-spark/<span class="o">)</span>
+<span class="o">[</span>success] Total <span class="nb">time</span>: 0 s, completed 2017. 8. 7 오후 8:14:27
+<span class="o">[</span>info] Updating <span class="o">{</span>file:/Users/nhnent/dev/scala-Learning-spark/<span class="o">}</span>scala-learning-spark...
+<span class="o">[</span>info] Resolving jline#jline;2.12.1 ...
+<span class="o">[</span>info] Done updating.
+<span class="o">[</span>info] Packaging /Users/nhnent/dev/scala-Learning-spark/target/scala-2.11/scala-learning-spark_2.11-1.0.jar ...
+<span class="o">[</span>info] Done packaging.
+<span class="o">[</span>success] Total <span class="nb">time</span>: 1 s, completed 2017. 8. 7 오후 8:14:28
+</code></pre>
+</div>
+
+<p><strong>기본적인  명령어</strong></p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>clean - 타겟 디렉토리에 생성된 모든 파일을 삭제한다.
+compile - 메인 리소스에 있는 모든 소스를 컴파일 한다.
+test - 컴파일을 하고 모든 테스트케이스를 수행한다.
+package - src/main 하위의 자바와 스칼라의 컴파일된 클래스와 리소스를 패키징한다./java.
+reload  - 빌드 설정을 리로드한다.
+</code></pre>
+</div>
+
+<p>기본적인 사용법은 maven과 매우 유사한 것을 알 수 있다.</p>
+
+<p>빌드 버전은 <code class="highlighter-rouge">project/build.properties</code>에서 설정할 수 있다.</p>
+
+<h3 id="dependencies-">2. Dependencies 추가하기</h3>
+
+<p>maven의 <code class="highlighter-rouge">pom.xml</code>파일처럼 sbt에서는 build.sbt에 명세한다.</p>
+
+<p>intellij에서 sbt프로젝트를 생성하면 다음과 같이 적혀있다.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>name := "scala-Learning-spark"
+
+version := "1.0"
+
+scalaVersion := "2.11.8"
+</code></pre>
+</div>
+
+<p>규칙은 다음과 같다.</p>
+
+<ul>
+  <li>좌측부분은 키이다.</li>
+  <li>오퍼레이터 는 <code class="highlighter-rouge">:=</code>이다.</li>
+  <li>우측부분은 바디라고 불린다.</li>
+</ul>
+
+<p>maven처럼 dependencies를 설정할려면 다음과 같이 추가 해주면 된다.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>libraryDependencies ++= Seq(
+  groupID % artifactID % revision,
+  groupID % otherID % otherRevision
+)
+</code></pre>
+</div>
+
+<p>예를 들면 다음과 같다.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>libraryDependencies ++= Seq(
+  "org.apache.spark" %% "spark-core" % "1.6.0" % "provided",
+  "org.apache.spark" %% "spark-sql" % "1.6.0" % "provided",
+  "org.apache.spark" %% "spark-hive" % "1.6.0" % "provided"
+)
+</code></pre>
+</div>
+
+<p>기본적으로 Dependency 소스저장소는 <code class="highlighter-rouge">Maven2 repository</code>를 사용한다. 하지만 사내망안에 있는 reopsitory가 필요할 때가 있다. 이럴 때 maven에서는 <code class="highlighter-rouge">&lt;repositories&gt;</code>태그를 추가해서 해결 했지만 sbt는 다음과 같이 한다.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>resolvers += name at location
+
+#ex&gt; resolvers += "Sonatype OSS Snapshots" at "https://oss.sonatype.org/content/repositories/snapshots"
+</code></pre>
+</div>
+
+<h3 id="assembly-plugin">3. assembly plugin사용법</h3>
+
+<p>maven에서 dependency libraries를 함께 packaging을 할 수 있었다. sbt에서도 똑같이 할 수 있는데 방법은 다음과 같다.</p>
+
+<p>build.sbt에 다음 내용을 추가한면된다.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>#jar이름 설정
+assemblyJarName in assembly :=  artifact.value.name + "-" + version.value + "." + artifact.value.extension
+
+###예시###
+assemblyMergeStrategy in assembly := {
+  case PathList("javax", "servlet", xs @ _*)         =&gt; MergeStrategy.first
+  case PathList(ps @ _*) if ps.last endsWith ".html" =&gt; MergeStrategy.first
+  case "application.conf"                            =&gt; MergeStrategy.concat
+  case "unwanted.txt"                                =&gt; MergeStrategy.discard
+  case x =&gt;
+    val oldStrategy = (assemblyMergeStrategy in assembly).value
+    oldStrategy(x)
+}
+###예시 end###
+
+assemblyMergeStrategy in assembly := {
+  case PathList("com","payco",xs @ _*) =&gt; MergeStrategy.last
+  case _ =&gt; MergeStrategy.discard
+}
+</code></pre>
+</div>
+
+<p>이렇게 설정한뒤에 다음 명령어를 사용하면 원하는 데로 packaging을 할 수 있다.</p>
+
+<div class="highlighter-rouge"><pre class="highlight"><code>sbt clean assembly
+</code></pre>
+</div>
+
+<h3 id="section">4. 기본적인 오퍼레이션 설명</h3>
+
+<ul>
+  <li>
+    <p><strong><code class="highlighter-rouge">:=</code></strong>
+you can assign a value to a setting and a computation to a task. For a setting, the value will be computed once at project load time. For a task, the computation will be re-run each time the task is executed.</p>
+  </li>
+  <li>
+    <p><strong><code class="highlighter-rouge">+=</code></strong>
+will append a single element to the sequence.</p>
+  </li>
+  <li>
+    <p><strong><code class="highlighter-rouge">++=</code></strong>
+will concatenate another sequence.</p>
+  </li>
+</ul>
+
+<p>예를들어 기본적으로 컴파일 폴더는 src/main/scala가 되는데, Compile의 Seq[File] 값을 가지는 sourceDirectories라는 키를 통해 컴파일 단계에서 source라는 디렉토리를 컴파일에 포함시키고 싶다면 아래와 같이 하면된다.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">sourceDirectories</span> <span class="n">in</span> <span class="nc">Compile</span> <span class="o">+=</span> <span class="k">new</span> <span class="nc">File</span><span class="o">(</span><span class="s">"source"</span><span class="o">)</span>
+</code></pre>
+</div>
+
+<p>아니면  sbt 패키지에 포함되어 있는 file() 함수로 더 쉽게 할 수도 있다.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">sourceDirectories</span> <span class="n">in</span> <span class="nc">Compile</span> <span class="o">+=</span> <span class="n">file</span><span class="o">(</span><span class="s">"source"</span><span class="o">)</span>
+</code></pre>
+</div>
+
+<p>(file() just creates a new File.)</p>
+
+<p>++= 메소드를 사용하면 여러 디렉토리를 한번에 추가 하는 것도 가능하다.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">sourceDirectories</span> <span class="n">in</span> <span class="nc">Compile</span> <span class="o">++=</span> <span class="nc">Seq</span><span class="o">(</span><span class="n">file</span><span class="o">(</span><span class="s">"sources1"</span><span class="o">),</span> <span class="n">file</span><span class="o">(</span><span class="s">"sources2"</span><span class="o">))</span>
+</code></pre>
+</div>
+
+<p>default source directory를 완전 수정하고 싶다면 <code class="highlighter-rouge">:=</code> 메소드를 사용하자.</p>
+
+<div class="language-scala highlighter-rouge"><pre class="highlight"><code><span class="n">sourceDirectories</span> <span class="n">in</span> <span class="nc">Compile</span> <span class="o">:=</span> <span class="nc">Seq</span><span class="o">(</span><span class="n">file</span><span class="o">(</span><span class="s">"sources1"</span><span class="o">),</span> <span class="n">file</span><span class="o">(</span><span class="s">"sources2"</span><span class="o">)</span>
+</code></pre>
+</div>
+
+        </article>
+        <hr>
+
+        
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+            
+            
+        
+        
+
+        <div class="post-recent">
+    <div class="pre">
+        
+        <p><strong>prev</strong> <a href="/2017/08/02/pythonTricks/">Python Tricks</a></p>
+        
+    </div>
+    <div class="nex">
+
+        
+        <p><strong>next</strong> <a href="/2017/09/27/spark_misapprehension/">Spark에 대한 오해</a></p>
+        
+    </div>
+</div>
+
+
+        <h2 id="comments">Comments</h2>
+        
+
+
+<div id="disqus_thread"></div>
+<script>
+    /**
+     * RECOMMENDED CONFIGURATION VARIABLES: EDIT AND UNCOMMENT THE SECTION BELOW TO INSERT DYNAMIC VALUES FROM YOUR PLATFORM OR CMS.
+     * LEARN WHY DEFINING THESE VARIABLES IS IMPORTANT: https://disqus.com/admin/universalcode/#configuration-variables
+     */
+
+    var disqus_config = function() {
+        this.page.url = 'http://joswlv.github.io/2017/08/06/howtousesbt/'; // Replace PAGE_URL with your page's canonical URL variable
+        this.page.identifier = 'http://joswlv.github.io/2017/08/06/howtousesbt/'; // Replace PAGE_IDENTIFIER with your page's unique identifier variable
+    };
+
+    (function() { // DON'T EDIT BELOW THIS LINE
+        var d = document,
+            s = d.createElement('script');
+
+        s.src = '//joswlv.disqus.com/embed.js';
+
+        s.setAttribute('data-timestamp', +new Date());
+        (d.head || d.body).appendChild(s);
+    })();
+</script>
+<noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript" rel="nofollow">comments powered by Disqus.</a></noscript>
+
+
+
+
+    </div>
+    <button class="anchor"><i class="fa fa-anchor"></i></button>
+    <div class="right">
+        <div class="wrap">
+
+            <!-- Content -->
+            <div class="side content">
+                <div>
+                    Content
+                </div>
+                <ul id="content-side" class="content-ul">
+                    <li><a href="#similar_posts">Similar Posts</a></li>
+                    <li><a href="#comments">Comments</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+/**
+ * target _blank
+ */
+(function() {
+    var aTags = document.querySelectorAll('article a:not([id])')
+    for (var i = 0; i < aTags.length; i++) {
+        aTags[i].setAttribute('target', '_blank')
+    }
+}());
+</script>
+<script src="/js/pageContent.js " charset="utf-8"></script>
+
+
+    <footer class="site-footer">
+
+
+    <div class="wrapper">
+
+        <p class="description">
+            
+        </p>
+        <p class="contact">
+            Contact me at: 
+            <a href="https://github.com/joswlv" title="GitHub"><i class="fa fa-github" aria-hidden="true"></i></a>  
+            <a href="mailto:wh7923@gmail.com" title="email"><i class="fa fa-envelope-o" aria-hidden="true"></i></a>     
+            <a href="https://www.facebook.com/wsj7923" title="Facebook"><i class="fa fa-facebook-official" aria-hidden="true"></i></a>    
+        </p>
+        <p>
+        </p>
+        <p class="power">
+            <span>
+                Site powered by <a href="https://jekyllrb.com/">Jekyll</a> & <a href="https://pages.github.com/">Github Pages</a>.
+            </span>
+        </p>
+    </div>
+</footer>
+<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+    <div class="back-to-top">
+    <a href="#top" class="scroll">
+        <i class="fa fa-arrow-up" aria-hidden="true"></i>
+    </a>
+</div>
+
+    <script src=" /js/main.js " charset="utf-8"></script>
+    <script src=" /js/scroll.min.js " charset="utf-8"></script>
+  </body>
+
+</html>

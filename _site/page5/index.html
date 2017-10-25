@@ -98,6 +98,8 @@
                 
                     
                 
+                    
+                
             </ul>
         </nav>
     </div>
@@ -113,104 +115,11 @@
             
               <li>
                 <h2>
-                  <a class="post-link" href="/2016/11/02/imagepixelget/">이미지 픽셀다루기</a>
+                  <a class="post-link" href="/2016/11/20/realtimeweb/">Real-time web tec List</a>
                 </h2>
                 <div class="label">
                     <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-11-02
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#js" title="Category: js" rel="category">js</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                </div>
-                <div class="excerpt">
-                    <h1 id="section">이미지 픽셀값 뽑기</h1>
-
-<p>이미지를 로드 -&gt; Canvas에 그리기 -&gt; imgdata뽑기 -&gt; 가지고 놀기!!</p>
-
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">canvas</span><span class="p">;</span>
-<span class="kd">var</span> <span class="nx">ctx</span><span class="p">;</span>
-<span class="kd">var</span> <span class="nx">imgsrc</span><span class="p">;</span>
-<span class="kd">function</span> <span class="nx">loadFile</span><span class="p">(</span><span class="nx">event</span><span class="p">)</span> <span class="p">{</span>
-    <span class="kd">var</span> <span class="nx">output</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'output'</span><span class="p">);</span>
-    <span class="nx">output</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">URL</span><span class="p">.</span><span class="nx">createObjectURL</span><span class="p">(</span><span class="nx">event</span><span class="p">.</span><span class="nx">target</span><span class="p">.</span><span class="nx">files</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
-    <span class="nx">imgsrc</span><span class="o">=</span><span class="nx">output</span><span class="p">.</span><span class="nx">src</span><span class="p">;</span>
-    <span class="nx">$</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-        <span class="c1">// drawing active image</span>
-        <span class="kd">var</span> <span class="nx">image</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Image</span><span class="p">();</span>
-        <span class="c1">// creating canvas object</span>
-        <span class="nx">image</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-            <span class="nx">ctx</span><span class="p">.</span><span class="nx">drawImage</span><span class="p">(</span><span class="nx">image</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="nx">image</span><span class="p">.</span><span class="nx">width</span><span class="p">,</span> <span class="nx">image</span><span class="p">.</span><span class="nx">height</span><span class="p">);</span> <span class="c1">// draw the image on the canvas</span>
-        <span class="p">};</span>
-        <span class="nx">image</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">imgsrc</span><span class="p">;</span>
-        <span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s1">'panel'</span><span class="p">);</span>
-        <span class="nx">ctx</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s1">'2d'</span><span class="p">);</span>
-        <span class="nx">$</span><span class="p">(</span><span class="s1">'#panel'</span><span class="p">).</span><span class="nx">mousemove</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// mouse move handler</span>
-            <span class="kd">var</span> <span class="nx">canvasOffset</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">canvas</span><span class="p">).</span><span class="nx">offset</span><span class="p">();</span>
-            <span class="kd">var</span> <span class="nx">canvasX</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">pageX</span> <span class="o">-</span> <span class="nx">canvasOffset</span><span class="p">.</span><span class="nx">left</span><span class="p">);</span>
-            <span class="kd">var</span> <span class="nx">canvasY</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">pageY</span> <span class="o">-</span> <span class="nx">canvasOffset</span><span class="p">.</span><span class="nx">top</span><span class="p">);</span>
-            <span class="kd">var</span> <span class="nx">imageData</span> <span class="o">=</span> <span class="nx">ctx</span><span class="p">.</span><span class="nx">getImageData</span><span class="p">(</span><span class="nx">canvasX</span><span class="p">,</span> <span class="nx">canvasY</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
-            <span class="kd">var</span> <span class="nx">pixel</span> <span class="o">=</span> <span class="nx">imageData</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
-            <span class="kd">var</span> <span class="nx">pixelColor</span> <span class="o">=</span> <span class="s2">"rgba("</span> <span class="o">+</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">", "</span> <span class="o">+</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s2">", "</span> <span class="o">+</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s2">", "</span> <span class="o">+</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">3</span><span class="p">]</span> <span class="o">+</span> <span class="s2">")"</span><span class="p">;</span>
-            <span class="nx">$</span><span class="p">(</span><span class="s1">'#preview'</span><span class="p">).</span><span class="nx">css</span><span class="p">(</span><span class="s1">'backgroundColor'</span><span class="p">,</span> <span class="nx">pixelColor</span><span class="p">);</span>
-        <span class="p">});</span>
-        <span class="nx">$</span><span class="p">(</span><span class="s1">'#panel'</span><span class="p">).</span><span class="nx">click</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">e</span><span class="p">)</span> <span class="p">{</span> <span class="c1">// mouse click handler</span>
-            <span class="kd">var</span> <span class="nx">canvasOffset</span> <span class="o">=</span> <span class="nx">$</span><span class="p">(</span><span class="nx">canvas</span><span class="p">).</span><span class="nx">offset</span><span class="p">();</span>
-            <span class="kd">var</span> <span class="nx">canvasX</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">pageX</span> <span class="o">-</span> <span class="nx">canvasOffset</span><span class="p">.</span><span class="nx">left</span><span class="p">);</span>
-            <span class="kd">var</span> <span class="nx">canvasY</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">floor</span><span class="p">(</span><span class="nx">e</span><span class="p">.</span><span class="nx">pageY</span> <span class="o">-</span> <span class="nx">canvasOffset</span><span class="p">.</span><span class="nx">top</span><span class="p">);</span>
-            <span class="kd">var</span> <span class="nx">imageData</span> <span class="o">=</span> <span class="nx">ctx</span><span class="p">.</span><span class="nx">getImageData</span><span class="p">(</span><span class="nx">canvasX</span><span class="p">,</span> <span class="nx">canvasY</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">);</span>
-            <span class="kd">var</span> <span class="nx">pixel</span> <span class="o">=</span> <span class="nx">imageData</span><span class="p">.</span><span class="nx">data</span><span class="p">;</span>
-            <span class="nx">$</span><span class="p">(</span><span class="s1">'#rVal'</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">pixel</span><span class="p">[</span><span class="mi">0</span><span class="p">]);</span>
-            <span class="nx">$</span><span class="p">(</span><span class="s1">'#gVal'</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">pixel</span><span class="p">[</span><span class="mi">1</span><span class="p">]);</span>
-            <span class="nx">$</span><span class="p">(</span><span class="s1">'#bVal'</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">pixel</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
-            <span class="nx">$</span><span class="p">(</span><span class="s1">'#rgbVal'</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">pixel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">','</span> <span class="o">+</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s1">','</span> <span class="o">+</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">2</span><span class="p">]);</span>
-            <span class="nx">$</span><span class="p">(</span><span class="s1">'#rgbaVal'</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="nx">pixel</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s1">','</span> <span class="o">+</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="s1">','</span> <span class="o">+</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="s1">','</span> <span class="o">+</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">3</span><span class="p">]);</span>
-            <span class="kd">var</span> <span class="nx">dColor</span> <span class="o">=</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="mi">256</span> <span class="o">*</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mi">65536</span> <span class="o">*</span> <span class="nx">pixel</span><span class="p">[</span><span class="mi">0</span><span class="p">];</span>
-            <span class="nx">$</span><span class="p">(</span><span class="s1">'#hexVal'</span><span class="p">).</span><span class="nx">val</span><span class="p">(</span><span class="s1">'#'</span> <span class="o">+</span> <span class="nx">dColor</span><span class="p">.</span><span class="nx">toString</span><span class="p">(</span><span class="mi">16</span><span class="p">));</span>
-        <span class="p">});</span>
-    <span class="p">});</span>
-<span class="p">}</span>
-</code></pre>
-</div>
-
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2016/11/02/imagepixelget/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
-              <li>
-                <h2>
-                  <a class="post-link" href="/2016/10/29/directorylisting/">Apache Directory listing 제거</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-10-29
+                        <i class="fa fa-calendar"></i>2016-11-20
                     </div>
                     <div class="label-card">
                         
@@ -240,47 +149,78 @@
 
                 </div>
                 <div class="excerpt">
-                    <p>Apache설치한경로에서  httpd.conf를 수정한다.</p>
+                    <h1 id="real-time-web-tec-list">Real-time web Tec List</h1>
 
-<blockquote>
-  <p>/etc/httpd/conf/httpd.conf	(RPM 설치)</p>
+<p>You can find a comprehensive and updated list of real-time solutions that can be considered alternatives to pusher in this Real-Time Web Technologies Guide.</p>
 
-  <p>/usr/local/apach/conf/httpd.conf	(tar 설치)</p>
-</blockquote>
+<h3 id="hosted">Hosted</h3>
 
-<p><strong>Options Indexes FollowSymLinks Includes</strong></p>
+<ul>
+  <li>Ably: https://www.ably.io   <strong>(완전 편리함!!)</strong></li>
+  <li>Fanout: http://fanout.io/</li>
+  <li>Firebase https://www.firebase.com</li>
+  <li>Gamooga: http://www.gamooga.com/</li>
+  <li>Google App Engine with Channels API: http://code.google.com/appengine…</li>
+  <li>Google Drive Real Time: https://developers.google.com/dr…</li>
+  <li>Hydna: https://www.hydna.com/</li>
+  <li>ScaleDrone https://www.scaledrone.com</li>
+  <li>Baasil https://baasil.io</li>
+  <li>PubNub: http://pubnub.com</li>
+  <li>Reappt: Data-Efficient Realtime Messaging</li>
+  <li>Simperium: Simperium</li>
+  <li>Tambur: https://www.tambur.io/</li>
+  <li>WebSync on-demand: http://www.frozenmountain.com/we…</li>
+  <li>Xtremepush: Xtremepush - Mobile Marketing Automation Software</li>
+</ul>
 
-<p>또는</p>
+<h3 id="self-hosted">Self Hosted</h3>
 
-<p><strong>Options All Indexes FollowSymLinks MultiViews</strong></p>
+<ul>
+  <li>http://github.com/Atmosphere : http://async-io.org/</li>
+  <li>http://faye.jcoglan.com/</li>
+  <li>http://firehose.io/</li>
+  <li>Jetty: http://blogs.webtide.com/gregw/e…</li>
+  <li>Kaazing: http://kaazing.com/</li>
+  <li>Lightstreamer: http://lightstreamer.com</li>
+  <li>Diffusion - http://www.pushtechnology.com</li>
+  <li>http://pusheo.com</li>
+  <li>http://code.google.com/p/pywebso…</li>
+  <li>Ruby EventMachine WebSocket server: https://github.com/igrigorik/em-…</li>
+  <li>SignalR (.NET) https://github.com/SignalR/SignalR</li>
+  <li>Slanger. Open source reimplementation of Pusher. Compatible with Pusher libraries: https://github.com/stevegraham/s…</li>
+  <li>http://socky.org/</li>
+  <li>http://socket.io/</li>
+  <li>http://sockjs.org/</li>
+  <li>http://socketcluster.io/</li>
+  <li>Thunderpush: https://github.com/thunderpush/t…</li>
+  <li>https://www.meteor.com/</li>
+</ul>
 
-<p>위 두문구중에서 하나는 있을 것이다.</p>
+<p>Pushpin</p>
+<ul>
+  <li>MigratoryData: http://migratorydata.com</li>
+</ul>
 
-<p>거기서 <code class="highlighter-rouge">Indexes</code>구문을 제거하고 아래와 같이 수정하고 저장한다.</p>
+<h3 id="reference">Reference</h3>
 
-<p><strong>Options FollowSymLinks Includes</strong></p>
-
-<p>또는</p>
-
-<p><strong>Options All FollowSymLinks MultiViews</strong></p>
-
-<p>그리고 apache를 재시작하면 끝~!!</p>
-
+<ul>
+  <li><a href="https://www.quora.com/What-are-alternatives-to-pusher-com">Quora</a></li>
+</ul>
 
                 </div>
                 <div class="read-all">
-                    <a  href="/2016/10/29/directorylisting/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                    <a  href="/2016/11/20/realtimeweb/"><i class="fa fa-newspaper-o"></i>Read All</a>
                 </div>
                 <hr>
               </li>
             
               <li>
                 <h2>
-                  <a class="post-link" href="/2016/10/24/optional/">Optional</a>
+                  <a class="post-link" href="/2016/11/18/Shortcircuitevaluation/">Short-circuit evaluation</a>
                 </h2>
                 <div class="label">
                     <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-10-24
+                        <i class="fa fa-calendar"></i>2016-11-18
                     </div>
                     <div class="label-card">
                         
@@ -298,7 +238,7 @@
   <i class="fa fa-th-list"></i>
   
     
-        <a href="/category/#Swift" title="Category: Swift" rel="category">Swift</a>
+        <a href="/category/#Java" title="Category: Java" rel="category">Java</a>
     
   
 
@@ -310,197 +250,60 @@
 
                 </div>
                 <div class="excerpt">
-                    <h1 id="nil-">nil 의미</h1>
+                    <h1 id="short-circuit-evaluation">Short-circuit evaluation이란</h1>
 
 <blockquote>
-  <p>nil of Swift : 값이 없다 in 모든 타입 (Reference or Value Type)</p>
+  <p><code class="highlighter-rouge">and</code>, <code class="highlighter-rouge">or</code>논리 연산에서 인자 하나만 보고 결과를 확실히 알 수 있을 때, 뒤에 나오는 인자를 확인하지 않고 바로 답을 내는 방법이다. <code class="highlighter-rouge">&amp;&amp;</code> 연산일 때, 하나라도 false이면 무조건 답이 false이고 <code class="highlighter-rouge">||</code> 연산일 땐, 하나라도 true이면 무조건 답이 true이다.</p>
 </blockquote>
 
-<p>즉, Swift에서는 어떤 타입이든 값이 없는 것을 표현하기 위해 nil을 사용한다.</p>
+<p>지원하는 언어는 <a href="https://en.wikipedia.org/wiki/Short-circuit_evaluation#Support_in_common_programming_languages">여기</a></p>
 
-<p>아래와 같은 경우는 에러가 난다.</p>
+<p>예를 보면 다음과 같다.</p>
 
-<div class="language-swift highlighter-rouge"><pre class="highlight"><code><span class="k">var</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="s">"Seungwan"</span>
-<span class="n">name</span> <span class="o">=</span> <span class="kc">nil</span>		<span class="c1">//컴파일 에러!</span>
+<div class="highlighter-rouge"><pre class="highlight"><code>조건식 1 &amp;&amp; 조건식 2
+조건식 1 이 false 이면, 조건식 2 를 건너뜀
 </code></pre>
 </div>
 
-<h1 id="optional-type">Optional Type</h1>
+<h4 id="section">설명</h4>
 
-<p>값이 있을 수도 있고 없을 수도 있는 변수를 정의할 때에는 타입 어노테이션에 <code class="highlighter-rouge">?</code>을 붙여서 표현한다. 이렇게 정의한 변수를 Optional이라고 한다. Optional에 초깃값을 지정하지 않으면 기본값은 <code class="highlighter-rouge">nil</code>이다.</p>
+<p><code class="highlighter-rouge">&amp;&amp;</code>연산자에서는 두 조건식이 모두 true가 되어야 전체 결과가 true가 되는데, <code class="highlighter-rouge">조건식1</code>이 <code class="highlighter-rouge">false</code>가되면 <code class="highlighter-rouge">조건식2</code>을 보지 않아도 전체가 <code class="highlighter-rouge">false</code>가 되므로 <code class="highlighter-rouge">조건식2</code>를 체크하지 않는다.</p>
 
-<div class="language-swift highlighter-rouge"><pre class="highlight"><code><span class="k">var</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span>
-<span class="nf">print</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>		<span class="c1">//nil</span>
+<h1 id="section-1">적용한 예</h1>
 
-<span class="n">name</span> <span class="o">=</span> <span class="s">"wowowo"</span>
-<span class="nf">print</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>		<span class="c1">//wowowo</span>
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="k">if</span> <span class="o">(</span><span class="n">check1</span> <span class="o">==</span> <span class="err">''</span> <span class="o">&amp;&amp;</span> <span class="n">check2</span> <span class="o">==</span> <span class="kc">null</span><span class="o">){</span>
+	<span class="n">blabla</span>
+<span class="o">}</span>
 </code></pre>
 </div>
 
-<p>Optional로 정한 변수는 아래와 같은 바인딩이 안된다.</p>
+<p>위 경우에서 <code class="highlighter-rouge">''</code>을 먼저 체크하는 것보다 <code class="highlighter-rouge">null</code>인 경우를 먼저 체크하는 것이 안전하다고 한다.</p>
 
-<div class="language-swift highlighter-rouge"><pre class="highlight"><code><span class="k">let</span> <span class="nv">optional</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="s">"this is option"</span>
-<span class="k">let</span> <span class="nv">notoptional</span><span class="p">:</span> <span class="kt">String</span> <span class="o">=</span> <span class="kd">optional</span>		<span class="c1">//error</span>
-</code></pre>
-</div>
-<p><code class="highlighter-rouge">notoptional</code>변수는 Optional이 아닌 <code class="highlighter-rouge">String</code>이기 때문에 항상 값을 가지고 있어야하는데, <code class="highlighter-rouge">optional</code>변수는 실제 코드가 실행되기 전까지는 값이 있는지 없는지 알 수 없기 때문에 Swift에서는 저런식의 바인딩은 안된다.</p>
+<p>수정하면 아래와 같다.</p>
 
-<p>Optional은 개념적으로 <code class="highlighter-rouge">어떤값</code> 또는 <code class="highlighter-rouge">nil</code>을 가지고 있는 변수기 때문에 불완전한 변수라고 생각하면 쉽다.</p>
-
-<h1 id="optional-binding">Optional Binding</h1>
-
-<p>Optional 바인딩은 Optional의 값이 존재하느지를 검사한 뒤, 존재한다면  그 값을 다른 변수에 대입시켜준다. <code class="highlighter-rouge">if let</code> 또는 <code class="highlighter-rouge">if var</code>를 사용해서 한다. Optional변수에 값이 존재하면 if안에서 처리하고 nil이면 그냥 if문을 통과한다.</p>
-
-<p>그리고 하나의 <code class="highlighter-rouge">if</code>문에서 콤마(,)로 구분해서 여러개의 Optional을 바인딩할 수 있다.</p>
-
-<div class="language-swift highlighter-rouge"><pre class="highlight"><code><span class="k">var</span> <span class="nv">name</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="s">"seunwan"</span>
-<span class="k">var</span> <span class="nv">email</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span> <span class="o">=</span> <span class="s">"wh7923@gmail.com"</span>
-
-<span class="k">if</span> <span class="k">let</span> <span class="nv">name</span> <span class="o">=</span> <span class="n">name</span><span class="p">,</span> <span class="n">email</span> <span class="o">=</span> <span class="n">email</span><span class="p">{</span>
-	<span class="c1">// name과 email 값이 존재</span>
-<span class="p">}</span>
-</code></pre>
-</div>
-<p>저게 너무 길어지면 아래와 같이 해도 된다.</p>
-
-<div class="language-swift highlighter-rouge"><pre class="highlight"><code><span class="k">if</span> <span class="k">let</span> <span class="nv">name</span> <span class="o">=</span> <span class="n">name</span><span class="p">,</span>
-	<span class="n">email</span> <span class="o">=</span> <span class="n">email</span><span class="p">{</span>
-	<span class="c1">//name과 email존재</span>
-<span class="p">}</span>
-</code></pre>
-</div>
-<p>조건도 넣을 수 있다.</p>
-
-<div class="language-swift highlighter-rouge"><pre class="highlight"><code><span class="k">var</span> <span class="nv">optionAge</span><span class="p">:</span> <span class="kt">Int</span><span class="p">?</span> <span class="o">=</span> <span class="mi">25</span>
-
-<span class="k">if</span> <span class="k">let</span> <span class="nv">age</span> <span class="o">=</span> <span class="n">optionAge</span><span class="p">,</span> <span class="n">age</span> <span class="o">&gt;=</span> <span class="mi">20</span> <span class="p">{</span>
-	<span class="c1">//age 값이 존재하고, 20이상이다.</span>
-<span class="p">}</span>
-
-<span class="c1">//아래와 같다.</span>
-<span class="k">if</span> <span class="k">let</span> <span class="nv">age</span> <span class="o">=</span> <span class="n">optionAge</span> <span class="p">{</span>
-	<span class="k">if</span> <span class="n">age</span> <span class="o">&gt;=</span> <span class="mi">20</span> <span class="p">{</span>
-		<span class="c1">//age의 값이 존재하고, 20 이상이다.</span>
-	<span class="p">}</span>
-<span class="p">}</span>
-</code></pre>
-</div>
-
-<h1 id="optional-chaining">Optional Chaining</h1>
-
-<p>Swift 코드를 간결하게 만들어주는 요소이다.</p>
-
-<p>Optional로 선언된 어떤 배열이 있다. 이 배열이 ‘빈 배열’인지를 검사할려면 다음과 같다.</p>
-
-<div class="language-swift highlighter-rouge"><pre class="highlight"><code><span class="k">let</span> <span class="nv">array</span><span class="p">:</span> <span class="p">[</span><span class="kt">String</span><span class="p">]?</span> <span class="o">=</span> <span class="p">[]</span>
-<span class="k">var</span> <span class="nv">isEmptyArray</span> <span class="o">=</span> <span class="kc">false</span>
-
-<span class="k">if</span> <span class="k">let</span> <span class="nv">array</span> <span class="o">=</span> <span class="n">array</span> <span class="k">where</span> <span class="n">array</span><span class="o">.</span><span class="n">isEmpty</span> <span class="p">{</span>
-    <span class="n">isEmptyArray</span> <span class="o">=</span> <span class="kc">true</span>
-<span class="p">}</span> <span class="k">else</span> <span class="p">{</span>
-    <span class="n">isEmptyArray</span> <span class="o">=</span> <span class="kc">false</span>
-<span class="p">}</span>
-
-<span class="n">isEmptyArray</span>
-</code></pre>
-</div>
-
-<p>Optional 체이닝을 사용하면 간결하게 표현이 가능하다.</p>
-
-<div class="language-swift highlighter-rouge"><pre class="highlight"><code><span class="k">let</span> <span class="nv">isEmptyArray</span> <span class="o">=</span> <span class="n">array</span><span class="p">?</span><span class="o">.</span><span class="n">isEmpty</span> <span class="o">==</span> <span class="kc">true</span>
-</code></pre>
-</div>
-
-<p><code class="highlighter-rouge">?</code>키워도로 코드를 줄여주는 역할을 한다.</p>
-
-<p>한가지 예를 더 들면 다음과 같다.</p>
-
-<div class="language-swift highlighter-rouge"><pre class="highlight"><code><span class="kd">class</span> <span class="kt">Person</span><span class="p">{</span>
-    <span class="k">var</span> <span class="nv">live</span><span class="p">:</span> <span class="kt">Home</span><span class="p">?</span>
-<span class="p">}</span>
-<span class="kd">class</span> <span class="kt">Home</span><span class="p">{</span>
-    <span class="k">var</span> <span class="nv">adress</span><span class="p">:</span> <span class="kt">Location</span><span class="p">?</span>
-<span class="p">}</span>
-<span class="kd">class</span> <span class="kt">Location</span><span class="p">{</span>
-    <span class="k">var</span> <span class="nv">zipnum</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span>
-<span class="p">}</span>
-
-<span class="k">let</span> <span class="nv">seungwan</span> <span class="o">=</span> <span class="kt">Person</span><span class="p">()</span>
-
-<span class="n">seungwan</span><span class="o">.</span><span class="n">live</span> <span class="o">=</span> <span class="kt">Home</span><span class="p">()</span>
-<span class="n">seungwan</span><span class="o">.</span><span class="n">live</span><span class="p">?</span><span class="o">.</span><span class="n">adress</span> <span class="o">=</span> <span class="kt">Location</span><span class="p">()</span>
-<span class="n">seungwan</span><span class="o">.</span><span class="n">live</span><span class="p">?</span><span class="o">.</span><span class="n">adress</span><span class="p">?</span><span class="o">.</span><span class="n">zipnum</span> <span class="o">=</span> <span class="s">"171717"</span>
-
-<span class="k">if</span> <span class="k">let</span> <span class="nv">home</span> <span class="o">=</span> <span class="n">seungwan</span><span class="o">.</span><span class="n">live</span><span class="p">{</span>
-    <span class="k">if</span> <span class="k">let</span> <span class="nv">zip</span> <span class="o">=</span> <span class="n">home</span><span class="o">.</span><span class="n">adress</span><span class="p">{</span>
-        <span class="k">if</span> <span class="k">let</span> <span class="nv">num</span> <span class="o">=</span> <span class="n">zip</span><span class="o">.</span><span class="n">zipnum</span><span class="p">{</span>
-            <span class="nf">print</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>	<span class="c1">//171717</span>
-        <span class="p">}</span>
-    <span class="p">}</span>
-<span class="p">}</span>
-
-<span class="k">if</span> <span class="k">let</span> <span class="nv">num</span> <span class="o">=</span> <span class="n">seungwan</span><span class="o">.</span><span class="n">live</span><span class="p">?</span><span class="o">.</span><span class="n">adress</span><span class="p">?</span><span class="o">.</span><span class="n">zipnum</span><span class="p">{</span>
-    <span class="nf">print</span><span class="p">(</span><span class="n">num</span><span class="p">)</span>	<span class="c1">//171717</span>
-<span class="p">}</span>
-</code></pre>
-</div>
-<p>코드가 간결해 지는 것을 알 수 있다.</p>
-
-<h1 id="unwrapped-optional">Unwrapped Optional</h1>
-
-<div class="language-swift highlighter-rouge"><pre class="highlight"><code><span class="nf">print</span><span class="p">(</span><span class="n">optionEmail</span><span class="p">)</span>	<span class="c1">// Optional("wh7923@gmail.com")</span>
-<span class="nf">print</span><span class="p">(</span><span class="n">optionEmail</span><span class="o">!</span><span class="p">)</span> <span class="c1">// wh7923@gmail.com</span>
-</code></pre>
-</div>
-
-<p>여기서 주의 할 점은 <code class="highlighter-rouge">!</code>을 사용할 때 Optional값이 <code class="highlighter-rouge">nil</code>인 경우에는 런타임 에러가 발생한다.</p>
-
-<div class="language-swift highlighter-rouge"><pre class="highlight"><code><span class="k">var</span> <span class="nv">optionEmail</span><span class="p">:</span> <span class="kt">String</span><span class="p">?</span>
-<span class="nf">print</span><span class="p">(</span><span class="n">optionEmail</span><span class="o">!</span><span class="p">)</span>	<span class="c1">//런타임 에러!</span>
-</code></pre>
-</div>
-
-<h1 id="implicitly-unwrapped-optional">Implicitly Unwrapped Optional</h1>
-
-<p>Optional을 정의할 때 <code class="highlighter-rouge">?</code> 대신 <code class="highlighter-rouge">!</code>을 사용하면 <code class="highlighter-rouge">ImplicitylyUnwrappedOptional</code>이라는 Optional로 정의 된다.</p>
-
-<div class="language-swift highlighter-rouge"><pre class="highlight"><code><span class="k">var</span> <span class="nv">email</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span> <span class="o">=</span> <span class="s">"wh7923@gmail.com"</span>
-<span class="nf">print</span><span class="p">(</span><span class="n">email</span><span class="p">)</span>	<span class="c1">//wh7923@gmail.com</span>
-</code></pre>
-</div>
-
-<p>이렇게 정의된 Optional은 <code class="highlighter-rouge">nil</code>을 포함할 수 있는 Optional이긴 한데, 접근할 때 Optional 바인딩이나 Optional을 벗기는 과정을 거치지 않고도 바로 값에 접근할 수 있다는 점에서 다르다.</p>
-
-<p>Optional 벗기기와 마찬가지로, 값이 없는데 접근을 시도하면 런타임 에러가 발생한다.</p>
-
-<div class="language-swift highlighter-rouge"><pre class="highlight"><code><span class="k">var</span> <span class="nv">email</span><span class="p">:</span> <span class="kt">String</span><span class="o">!</span>
-<span class="nf">print</span><span class="p">(</span><span class="n">email</span><span class="p">)</span> <span class="c1">//런타임에러!</span>
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="k">if</span> <span class="o">(</span><span class="n">check2</span> <span class="o">==</span> <span class="kc">null</span> <span class="o">&amp;&amp;</span> <span class="n">check1</span> <span class="o">==</span> <span class="err">''</span><span class="o">){</span>
+	<span class="n">blabla</span>
+<span class="o">}</span>
 </code></pre>
 </div>
 
 <p><br /></p>
 
-<h3 id="reference">Reference</h3>
-<ul>
-  <li><a href="https://devxoul.gitbooks.io/ios-with-swift-in-40-hours/content/Chapter-2/optionals.html">40시간만에 Swift로 iOS앱 만들기</a></li>
-  <li><a href="http://ionkr.tistory.com/entry/swift-Optional-in-Swift">그냥저냥</a></li>
-</ul>
-
 
                 </div>
                 <div class="read-all">
-                    <a  href="/2016/10/24/optional/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                    <a  href="/2016/11/18/Shortcircuitevaluation/"><i class="fa fa-newspaper-o"></i>Read All</a>
                 </div>
                 <hr>
               </li>
             
               <li>
                 <h2>
-                  <a class="post-link" href="/2016/10/23/awk/">awk 사용법</a>
+                  <a class="post-link" href="/2016/11/10/JQuery_findnode/">jquery 선택자</a>
                 </h2>
                 <div class="label">
                     <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-10-23
+                        <i class="fa fa-calendar"></i>2016-11-10
                     </div>
                     <div class="label-card">
                         
@@ -518,7 +321,7 @@
   <i class="fa fa-th-list"></i>
   
     
-        <a href="/category/#Unix/Linux" title="Category: Unix/Linux" rel="category">Unix/Linux</a>
+        <a href="/category/#js" title="Category: js" rel="category">js</a>
     
   
 
@@ -530,581 +333,553 @@
 
                 </div>
                 <div class="excerpt">
-                    <h1 id="awk">awk</h1>
-
-<p>awk은 유닉스 기반 운영체제 (Linux, MacOs, Unix) shell programming에서 사용된다. 사용법이 간단하고 데이터 처리속도가 파이썬이나 R과 같은 인터프린터 언어와는 비교가 안될 정도로 빠르다.</p>
-
-<p>C언어의 산술연산자(+,-,*,/,%,++,–,+=,-=,*=,/=,%=)와 조건문(for, while,do/while,if,and if/else)을 그대로 사용하기 때문에 ‘pseudo-C interpretor’라고 말하기도 한다.</p>
-
-<p>awk은 행(column)지향적인 언어다. 즉 행렬로 구성된 데이터의 각 행을 원하는 방식으로 뽑아 손쉽게 데이터 처리를 한다. 그리고 그결과를 standard input 으로 보낸다. 사용법이 매우 간단하고 처리속도가 빠르기 때문에 대용량의 데이터를 다루는 분야에서 매우 유용하게 사용딘다.</p>
-
-<p>사용 법은 다음과 같다.</p>
-
-<p><code class="highlighter-rouge">awk 'pattern {action}' file</code></p>
-
-<p>형식은 아주 간단하다. awk이 실앻되면 file을 앞에서부터 읽기 시작해서 정의된 pattern을 만족시키는 열에 대해서 {}안에 정의된 action을 실행한다.</p>
-
-<h1 id="section">사용 예</h1>
-
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="c"># awk 의 초간단 사용법: awk 'pattern { action }' file</span>
-<span class="c"># awk 는 각 열을 한줄씩 읽어들이면서 pattern 을 만족시키는 {action} 을 실행합니다.</span>
-<span class="c"># awk 은 각 열을 space 를 기준으로 끊어 따로 저장하는데 예를 들면, 읽고 있는 열이</span>
-<span class="c"># 'John apple 3' 인 경우 John 은 $1 이란 변수에, apple 은 $2 란 변수에 집어넣습니다.</span>
- 
-awk <span class="s1">'$1==0 { print $2 }'</span> file  <span class="c"># 읽고 있는 열의 첫번째 값($1)이 0이면 둘째 값($2) 출력</span>
-awk &lt; file <span class="s1">'$1==0 { print $2 }'</span>  <span class="c"># 이것도 위와 같은 결과를 출력합니다</span>
- 
-awk &lt; file <span class="s1">'/^test/ { print $2 }'</span> <span class="c"># regular expression 도 사용 가능합니다. </span>
- 
-<span class="c"># pattern 부분은 옵션입니다. 필요하지 않으면 빈칸으로 두면 됩니다.</span>
-awk &lt; file <span class="s1">'{ print $2, $3 }'</span> 
- 
-<span class="c"># 행을 표시하지 않으면 전체를 출력합니다. $0 은 열 전체를 의미합니다. 즉 둘다 결과는 같습니다. </span>
-awk &lt; file <span class="s1">'{print}'</span> 
-awk &lt; file <span class="s1">'{print $0}'</span>
-</code></pre>
-</div>
-
-<p>이때 pattern은 옵션이다. pattern란에 정규표현식이 들어가도 된다. 또 다른 사용법은 파일로 만든후에 파일을 실행시키는 법이다. 명령어가 길 경우 유용하다.</p>
-
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="c"># awk 의 또다른 사용법: awk -f filename</span>
-awk -f hello.awk
- 
---- hello.awk file ---
-<span class="c">#!/bin/awk -f</span>
-BEGIN <span class="o">{</span> print <span class="s2">"File</span><span class="se">\t</span><span class="s2">Owner"</span> <span class="o">}</span>
-<span class="o">{</span> print <span class="nv">$8</span>, <span class="s2">"</span><span class="se">\t</span><span class="s2">"</span>, <span class="nv">$3</span><span class="o">}</span>
-END <span class="o">{</span> print <span class="s2">" - DONE -"</span> <span class="o">}</span>
-</code></pre>
-</div>
-
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="c"># awk 은 space 와 tab 을 기준으로 행을 구분합니다. 하지만 -F 써서 이를 바꿀 수 있습니다.</span>
-<span class="c"># awk 은 $1, $2.. 등을 field 라고 부르는데 그래서 옵션이 -F 즉 field separator 입니다. </span>
-<span class="c"># 참고할 점은 일단 seperator 를 바꾸면 space 와 tab 은 무시합니다.</span>
- 
-awk &lt; /etc/passwd -F: <span class="s1">'{ print $5 }'</span> <span class="c"># ':' 를 기준으로 끊어 다섯번째 값을 출력합니다</span>
- 
-<span class="c"># awk 을 이용한 연산</span>
-<span class="nb">echo </span>8 4 | awk <span class="s1">'{ print ($1-32)*(5/9) }'</span>
-<span class="gp">&gt; </span>-13.3333  <span class="c"># awk 는 숫자를 실수로 다룹니다 (즉, 소수점까지 계산합니다)</span>
- 
-<span class="c"># awk 의 다양한 처리방식</span>
-<span class="nb">echo </span>5 4 | awk <span class="s1">'{ print $1 $2 }'</span> <span class="c"># $1$2 이렇게 붙여도 결과는 같습니다</span>
-<span class="gp">&gt; </span>54
-<span class="nb">echo </span>5 4 | awk <span class="s1">'{ print $1,$2 }'</span>
-<span class="gp">&gt; </span>5 4
-<span class="nb">echo </span>5 4 | awk <span class="s1">'{ print $1+$2 }'</span>
-<span class="gp">&gt; </span>9
-<span class="nb">echo </span>a z | awk <span class="s1">'{ print $1+$2 }'</span> <span class="c"># 문자를 산술 연산자로 더하면?</span>
-<span class="gp">&gt; </span>0
-
-</code></pre>
-</div>
-
-<p>awk에서 변수를 사용해 보다 정교한 프로그램을 작성할 수 있다. 우선 awk가 자동으로 생성하는 시스템 변수부터 시작하면 가장 흔하게 쓰는 시스템 변수는 위의 예에서 본 <code class="highlighter-rouge">$1</code>, <code class="highlighter-rouge">$2</code>등 이다. 각 열을 읽으면서 <code class="highlighter-rouge">$1</code>,<code class="highlighter-rouge">$2</code>등에 첫번째 행, 두번째 행에 해당하는 값을 자동으로 집어 넣는다.</p>
-
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="c"># 각 열의 평균값을 구해봅시다. NF 는 Number of field 의 약자로 읽어들이는</span>
-<span class="c"># 행의 갯수를 담는 고정 변수입니다. </span>
-<span class="c"># 매열마다 따로 계산해야 하므로 사용자 변수 total=0 으로 초기화 시킵니다.</span>
-<span class="c"># ; 를 이용하여 여러 명령어를 순차적으로 나열할 수 있습니다. </span>
-
-awk <span class="s1">'{ total=0; for (i=1; i&lt;=NF; i++) total += $i; print total/NF; }'</span>
-
-<span class="c"># 'BEGIN {} pattern {action} END {}' 구문을 이용하여 </span>
-<span class="c"># 처음과 끝에서만 작동하는 명령어를 삽입할 수 있습니다.</span>
-awk <span class="s1">'{ tot += $1; n += 1; }  END { print tot/n; }'</span>
-
-<span class="c"># awk built-in variables(대표적인 awk 고정 명령어들) </span>
-NF: Number of fields <span class="k">in </span>the current record <span class="o">(</span>현재 읽고 있는 열의 행의 갯수<span class="o">)</span> 
-NR: Number of record processed since the beginning of current awk execution
-<span class="o">(</span>지금까지 읽어들인 열의 갯수<span class="o">)</span> 
-OFS: Output field separator <span class="o">(</span>출력하는 행 구분자<span class="o">)</span>. Default value <span class="o">=</span> <span class="s2">" "</span> 
-ORS: Output record separator <span class="o">(</span>출력하는 열 구분자<span class="o">)</span>. Default value <span class="o">=</span> <span class="s2">"</span><span class="se">\n</span><span class="s2">"</span>
-</code></pre>
-</div>
-
-<p>printf라는 함수를 보자. 지금까지는 awk의 기본 출력함수인 print만 보았다. 하지만 awk은 C의 printf함수도 지원한다. 이 함수를 이용하면 awk으로 처리한 데이터를 보다 정교하고 다양하게 출력할 수 있다.</p>
-
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="c"># 첫번째 행만 제거하고 나머지는 모두 출력합니다.</span>
-awk <span class="s1">'{ for (i=2; i&lt;=NF; i++) printf "%s ", $i; printf "\n"; }'</span>
- 
-<span class="c"># 주의사항: print vs. printf</span>
-print 함수는 출력후 자동으로 그리고 내부적으로 <span class="s1">'\n'</span> 을 붙입니다. 즉 따로 <span class="s1">'\n'</span> 을 출력하지 않아도 next line 으로 넘어갑니다. 하지만 <span class="nb">printf </span>는 반드시 <span class="s1">'\n'</span> 을 따로 출력해야 합니다. 바꿔말하면 <span class="s1">'\n'</span> 을 출력하지 않으면 전체를 모두 이어서 하나의 열로 만들 수 있습니다.
-</code></pre>
-</div>
-
-<p>추가적으로 awk의 내장형 함수들이 존재한다.</p>
-
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code>length<span class="o">(</span>string<span class="o">)</span>: 문자열의 문자수를 리턴합니다. 괄호를 비우면 현재 열의 전체 문자수를 리턴.	 
-int<span class="o">(</span>number<span class="o">)</span>: 숫자의 정수부분만 떼어 리턴합니다.
-split<span class="o">(</span>string, array, separator<span class="o">)</span>: 문자열을 separator 를 기준으로 분할하여 array 에 넣습니다.
-그리고 array 의 index 를 리턴합니다. array[1].. 이렇게 사용하면 됩니다.	 
-sprintf<span class="o">(</span>format, arguments<span class="o">)</span> 포맷에 맞추어 변수들이 값을 출력합니다.
-substr<span class="o">(</span>string, position, length<span class="o">)</span> 문자열의 특정 위치에서 특정 길이만큼 뽑아 리턴합니다.
-</code></pre>
-</div>
-
-<p>이것들 중에서 split 함수의 예를 보면 다음과 같다.</p>
-
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="c"># 만약 아래와 같은 데이터가 있다고 합시다</span>
-chr8:28481001-28483000     NA   0   2   3   0
-chr6:158956601-158957200   NA   0   2   2   2
-chr20:42185201-42188600    NA   0   0   0   3
-chr7:107542001-107543800   NA   0   0   2   0
-chr14:24525801-24529600    NA   0   3   0   2
-chr6:130689201-130690000   NA   2   0   0   2
-
-<span class="c"># 첫번째 field 를 쪼개서 DNA 의 길이를 계산하여 아래와 같이 출력하려고 합니다</span>
-chr8  2000  0 2 3 0
-chr6  600   0 2 2 2
-chr20 3400  0 0 0 3
-chr7  1800  0 0 2 0
-chr14 3800  0 3 0 2
-chr6  800   2 0 0 2
-
-<span class="c"># 간단히 설명하면,</span>
-<span class="c"># 1. 먼저 1$ 를 : 와 - 를 기준으로 쪼개서 a 라는 array 에 넣습니다: split($1,a,":|-")</span>
-<span class="c"># 2. 그리고 염색체와 DNA 길이를 프린트 합니다: printf "%s %s",a[1],a[3]-a[2]+1</span>
-<span class="c"># 3. $1,$2 제외한 후 나머지를 프린트 합니다: $1=$2="";print</span>
-<span class="c"># 4. 모든 action 을 ; 을 통해 연결합니다 (이는 각각의 action 을 순차적으로 연산하도록 합니다)</span>
-
-awk <span class="s1">'{split($1,a,":|-");printf "%s %s",a[1],a[3]-a[2]+1;$1=$2="";print}'</span>
-
-<span class="c"># '|' 은 OR 연산자 입니다. ':' 와 '-' 둘중에 하나를 만나면 쪼개도록 합니다.</span>
-<span class="c"># 중간에 printf 를 사용한 이유는 print 와는 다르게 '\n' 가 포함되어 있지 않아 뒤의 값들을 </span>
-<span class="c"># 이어서 출력하도록 합니다. 마지막에 사용된 print 는 '\n' 이 포함되어 있으므로 </span>
-<span class="c"># 자연스럽게 다음 줄로 내려가게 합니다.</span>
-</code></pre>
-</div>
-
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code><span class="c">#특정파일을 탭 또는 공백으로 구분되어 있는데, 2번째 부분만 출력하고 싶다.</span>
-
-awk <span class="s1">'{print $2}'</span> file
-cat file | awk <span class="s1">'{print $2}'</span>
-
-<span class="c">#특정파일이 ','로 구분되어 있는데 2번째 칼럼만 출력하고 싶다.</span>
-
-awk -F <span class="s2">","</span> <span class="s1">'{print $2}'</span> file
-
-<span class="c">#파일의 특정 칼럼에 특정값이 있는 갯수를 알고 싶다.</span>
-
-awk <span class="s1">'BEGIN{sum=0}{if ($2=="TEXT"){sum+=1}} END{print sum}'</span> file
-</code></pre>
-</div>
-
-<div class="language-shell highlighter-rouge"><pre class="highlight"><code>awk <span class="s2">"{print FILENAME}"</span> test.txt 
-<span class="o">=</span> test.txt 파일의 레코드 개수만큼 파일이름을 출력한다. 
-
-awk <span class="s2">"{print NR}"</span> test.txt
-<span class="o">=</span> test.txt 파일의 레코드 번호를 출력한다. 
-
-awk <span class="s1">'BEGIN {FS="\t"} {print $1 ,  $2}'</span> test.txt
-<span class="o">=</span> test.txt 파일의 필드 구분자를 <span class="s2">"</span><span class="se">\t</span><span class="s2">"</span> 으로 지정하고, 1번째와 2번째 필드를 프린트 한다. 
-
-awk <span class="s1">'BEGIN {FS="\t"; OFS ="-"} {print $1 ,  $2} END {print "총 레코드의 수 : " NR}'</span> test.txt
-<span class="o">=</span> test.txt 파일의 필드 구분자를 <span class="s2">"</span><span class="se">\t</span><span class="s2">"</span> 로 지정하고, 1번째와 2번째 필드를 프린트 하되, 필드 구분자를 <span class="s2">"-"</span>
-로 바꾸어 출력하고, 모든 레코드가 끝난 뒤, 총 레코드의 수를 출력한다. 
-</code></pre>
-</div>
-
-<h1 id="section-1">정리</h1>
-
-<blockquote>
-  <p>awk [-f 프로그램파일] [-F 필드구분자] [“패턴{액션}”] [처리할 파일명]</p>
-
-  <p>옵션:</p>
-  <blockquote>
-    <p>-f: 프로그램파일(패턴을 저장한파일)</p>
-
-    <p>-F: 필드 구분자</p>
-
-    <p>“패턴{액션}”</p>
-  </blockquote>
-</blockquote>
-
-<h4 id="awk--">awk 시스템 변수</h4>
-
-<table>
-  <thead>
-    <tr>
-      <th>변수명</th>
-      <th>내용</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>FILENAME</td>
-      <td>현재 처리중인 파일명</td>
-    </tr>
-    <tr>
-      <td>FS</td>
-      <td>필드 구분자로 디폴트는 공백</td>
-    </tr>
-    <tr>
-      <td>RS</td>
-      <td>레코드 구분자로 그폴트는 새로운 라인</td>
-    </tr>
-    <tr>
-      <td>NF</td>
-      <td>현재 레코드의 필드 개수</td>
-    </tr>
-    <tr>
-      <td>NR</td>
-      <td>현재 레크드의 번호</td>
-    </tr>
-    <tr>
-      <td>OFS</td>
-      <td>출력할 때 사용하는 FS</td>
-    </tr>
-    <tr>
-      <td>ORS</td>
-      <td>출력할 때 사용하는 RS</td>
-    </tr>
-    <tr>
-      <td>$0</td>
-      <td>입력 레코드의 전체</td>
-    </tr>
-    <tr>
-      <td>$n</td>
-      <td>입력 레코드의 n번째 필드</td>
-    </tr>
-  </tbody>
-</table>
-
-<h4 id="section-2">자주 사용하는 예</h4>
-
-<div class="language-bash highlighter-rouge"><pre class="highlight"><code><span class="o">[</span>irteam@exexex ~]<span class="nv">$ </span>cat t_06.txt
-863328267  2589984801  /log/applog/2017/03/06
-1356084140  4068252420  /log/logsss/2017/03/06
-6829747498  20489242494  /log/dmp_log/2017/03/06
-18849  56547  /log/logs/2017/03/06
-2867572830  8602718490  /log/join/2017/03/06
-1224  3672  /log/dsapplog/2017/03/06
-</code></pre>
-</div>
-
-<p>이런 내용에서 첫번째 column 의 합을 구하고 싶을 때</p>
-
-<div class="highlighter-rouge"><pre class="highlight"><code>awk '{sum += $1} END {print "sum = ",sum}'
-</code></pre>
-</div>
-<p>이렇게 적으면 된다.</p>
-
-<p><br /></p>
-
-<h3 id="reference">Reference</h3>
-<ul>
-  <li><a href="http://ra2kstar.tistory.com/153">초보개발자 이야기</a></li>
-  <li><a href="http://www.hiscience.com/tech/archives/286">hiscience</a></li>
-</ul>
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2016/10/23/awk/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
-              <li>
-                <h2>
-                  <a class="post-link" href="/2016/10/23/spc_rsync/">scp 와 rsync - 원격파일정송방법</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-10-23
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#Unix/Linux" title="Category: Unix/Linux" rel="category">Unix/Linux</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                </div>
-                <div class="excerpt">
-                    <p>원격으로 파일을 전송하기 위해사용 되는 명령어!</p>
-
-<p>scp와 rsync의 차이점은 symbolic link를 처리하는데 차이가 있다.</p>
-
-<blockquote>
-  <p>scp는 전송하려 하는 파일중에 symbolic link 가 있으면 링크된 원본파일이 전송된다. 즉 symlink가 유지 되지 않는다.!!</p>
-</blockquote>
-
-<h1 id="section">사용법</h1>
-
-<h2 id="scp">scp</h2>
-
-<p><strong>scp -[옵션][보낼파일][받는서버 계정 아이디]@[받는서버 URL]:[받을 위치 절대 경로]</strong></p>
-
-<h3 id="section-1">예)</h3>
-
-<p>scp -pr ./send joswlv@20.20.20.20:./receive</p>
-
-<blockquote>
-  <p>옵션:</p>
-
-  <p>-r = recusive 하위 폴더 포함 모두 복사</p>
-
-  <p>-p = preserve 권한 및 속성 유지</p>
-
-  <p>-C = compression 압축</p>
-</blockquote>
-
-<h2 id="rsync">rsync</h2>
-
-<h2 id="rsync-1">rsync</h2>
-
-<p><strong>rsync -[옵션][보낼파일][받을위치]</strong></p>
-
-<p>받을위치는 [서버계정 아이디]@[파일URL]:[받을 경로]로 사용가능</p>
-
-<h3 id="section-2">예)</h3>
-
-<p>rsync -avzP ./send joswlv@20.20.20.20:./receive</p>
-
-<blockquote>
-  <p>옵션:</p>
-
-  <p>-v = 진행상황을 상세히 보여줌</p>
-
-  <p>-r = 지정한 디렉토리의 하위 디렉토리까지 재귀적으로 실행</p>
-
-  <p>-p = 버전속성 보존</p>
-
-  <p>-z = 데이터압축 전송</p>
-
-  <p>-u = 추가된 파일만 전송</p>
-
-  <p>-b = 낡은 파일은 ~가 붙음</p>
-
-  <p>-u = 새로운 파일을 덮어쓰지 않음</p>
-
-  <p>-e = ssh(rsh) 전송암호화</p>
-</blockquote>
-
-
-                </div>
-                <div class="read-all">
-                    <a  href="/2016/10/23/spc_rsync/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
-              <li>
-                <h2>
-                  <a class="post-link" href="/2016/10/14/sqoop/">Sqoop</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-10-14
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-
-                    <div class="label-card">
-                    
-
-
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#Hadoop" title="Category: Hadoop" rel="category">Hadoop</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                </div>
-                <div class="excerpt">
-                    <h1 id="sqoop">Sqoop이란</h1>
-
-<p>스쿱은 관계형 데이터베이스와 하둡 사이에서 데이터 이관을 지원하는 툴이다. 스쿱을 이용하면 관계형 데이터베이스의 데이터를 HDFS, 하이브, H베이스, Accumulo에 임포트하거나 반대로 익스포트할 수 있다. 스쿱은 클라우데라에서 개발했으며, 현재 아파치 오픈소스 프로젝트로 공개되었다. <strong><a href="http://sqoop.apache.org">Sqoop</a></strong></p>
-
-<h1 id="sqoop-1">Sqoop아키텍처</h1>
-
-<p>스쿱은 관계형 데이터베이스를 읽고 쓸 수 있는 커넥터라는 개념을 사용한다. 커넥터는 각 데이터베이스별로 구현돼 있으며, JDBC 드라이버를 이용해 데이터베이스 접속 및 질의 실행을 요청한다.</p>
-
-<h1 id="section">데이터 임포트 동작 방식</h1>
+                    <h1 id="jquery-">JQuery 노드찾기</h1>
 
 <ol>
-  <li>클라이언트가 스쿱에 임포트를 요청한다. 이때 클라이언트는 데이터베이스 접속 정보, 임포트 대상 테이블, 임프토 질의, 실행할 맵 태스크 개수 등을 설정한다.</li>
-  <li>스쿱은 데이터베이스에서 해당 테이블의 메타데이터를 조회해 ORM(Object Relational Mapping)클래스에는 익스포트 대상 테이블의 칼럼을 자바 변수로 매핑하고, 맵리듀스 잡 실행에 필요한 직렬화 메서드가 생성된다.</li>
-  <li>스쿱은 ORM 클래스가 정상적으로 생성되면 맵리듀스 잡 실행을 요청한다. 그리고 스쿱은 맵 테스크의 출력 결과를 임포트에 사용하기 때문에 리듀스 태스크는 실행하지 않는다.</li>
-  <li>맵 태스크는 데이터베이스에 JDBC로 접속한 후 SELECT질의를 실행한다.</li>
-  <li>맵태스크는 질의문을 실행한 결과를 HDFS에 저장한다. 전체 맵 태스크가 종료되면 스쿱은 클라이언트에게 작업이 정상적으로 종료됐다고 알려준다.</li>
+  <li>노드 찾기</li>
 </ol>
 
-<h1 id="section-1">데이터 익스포트 동작방식</h1>
+<ul>
+  <li>
+    <p>태그 이름으로 노드 찾기 :  $(“태그이름”),   $(“선택자”)</p>
+  </li>
+  <li>
+    <p>클래스 이름으로 노드 찾기 : $(“.클래스이름”)</p>
+  </li>
+  <li>
+    <p>ID로 노드 찾기 : $(“선택자”)</p>
+  </li>
+  <li>
+    <p>속성으로 노드 찾기 : $(“[속성이름=값]”)</p>
+  </li>
+  <li>
+    <p>찾은 요소 개수 구하기 :  .size()    ,     .length</p>
+  </li>
+  <li>
+    <p>찾은 요소 n번째 접근하기 : .eq(index)    ,    .each(function(index){});</p>
+  </li>
+  <li>
+    <p>찾은 요소에서 특정요소만을 걸러내기 : .filter(“선택자”)</p>
+  </li>
+  <li>
+    <p>찾은 요소에서 특정 자식요소만 찾기 :  .find(“선택자”)</p>
+  </li>
+</ul>
 
 <ol>
-  <li>클라이언트는 스쿱에 익스포트를 요청한다.</li>
-  <li>스쿱은 데이터베이스에서 메타데이터를 조회한 후 맵리듀스 잡에서 사용할 ORM클래스를 생성한다.</li>
-  <li>스쿱은 데이터베이스의 중간 테이블의 데이터를 모두 삭제한 후 맵리듀스 잡을 실행한다.</li>
-  <li>맵 태스크는 HDFS에서 데이터를 조회한 후 INSERT 질의문을 만들어 중간 테이블에 데이터를 입력한다. 이때 질의문은 레코드당 한 번씩 실행하는 것이 아니라 천개 단위로 배치로 실행한다. 참고로 중간 테이블 사용여부와 배치단위는 sqoop.export.records.per.statement 옵션으로 수정할 수 있다.</li>
-  <li>스쿱은 맵리듀스 잡이 정상적으로 종료되면 중간 테이블의 결과를 최종 테이블에 입력한다.</li>
+  <li>자식 노드 찾기</li>
 </ol>
 
-<h1 id="section-2">데이터 임포트</h1>
+<ul>
+  <li>
+    <p>전체 자식 노드 찾기</p>
 
-<table>
-  <thead>
-    <tr>
-      <th>옵션</th>
-      <th>내용</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>–usename</td>
-      <td>데이터베이스 접속 계정</td>
-    </tr>
-    <tr>
-      <td>–password</td>
-      <td>데이터베이스 접속 암호</td>
-    </tr>
-    <tr>
-      <td>–connect</td>
-      <td>JDBC 접속 URL</td>
-    </tr>
-    <tr>
-      <td>–table</td>
-      <td>임포트 대상 테이블</td>
-    </tr>
-    <tr>
-      <td>–columns</td>
-      <td>특정 칼럼만 임포트할 경우 칼럼명을 설정. 이 옵션을 설정하지 않을 경우 전체 칼럼을 임포트</td>
-    </tr>
-    <tr>
-      <td>–target-dir</td>
-      <td>임포트 결과를 저장할 HDFS 디렉터리. 별도로 설정하지 않을 경우 “/user/계졍명/테이블명”에 데이터가 저장됨</td>
-    </tr>
-    <tr>
-      <td>–query</td>
-      <td>특정 테이블을 설정하지 않고 질의문 실행 결과를 임포트. 단 이 옵션을 사용할 경우 $CONDITIONS를 반드시 WHERE절에 사용해야 함. $CONDITIONS는 스쿱이 자동으로 생성하는 WHERE 조건을 나타내는 키워드임</td>
-    </tr>
-    <tr>
-      <td>-m,–num-mappers</td>
-      <td>실행할 맵 태스크 개수, 데이터베이스에 부하를 줄 수 있으므로 적절한 태스크 개수를 설정해야함.</td>
-    </tr>
-    <tr>
-      <td>–where</td>
-      <td>임포트할 때 사용할 WHERE절</td>
-    </tr>
-    <tr>
-      <td>-z, –comppress</td>
-      <td>임포트 결과를 압축</td>
-    </tr>
-    <tr>
-      <td>–compression-codec</td>
-      <td>하둡 압축 코덱, 기본값으로 Gzip을 사용함</td>
-    </tr>
-    <tr>
-      <td>–as-textfile</td>
-      <td>임포트 결과를 텍스트 파일로 저장. 스쿱은 텍스트 파일을 기본값으로 사용함</td>
-    </tr>
-    <tr>
-      <td>–as-sequencefile</td>
-      <td>임포트 결과를 시퀀스파일로 저장</td>
-    </tr>
-    <tr>
-      <td>–null-string<널갑문자열></널갑문자열></td>
-      <td>문자열 칼럼에서 널 값 대신 사용할 문자열</td>
-    </tr>
-    <tr>
-      <td>–null-non-string<널값 문자열=""></널값></td>
-      <td>문자열이 아닌 칼럼에서 널 값 대신 사용할 문자열</td>
-    </tr>
-    <tr>
-      <td>–direct</td>
-      <td>고속 커넥터를 이용할 경우 사용</td>
-    </tr>
-  </tbody>
-</table>
+ 	- 텍스트 노드 포함 전체 자식 노드 찾기 :  $(“선택자”).contents()
 
-<h1 id="mysql--">MySQL로 데이터 익스포트</h1>
+ 	- 텍스트 노드 제외한 전체 자식 노드 찾기 : $(“선택자”).children(“선택자”)
+  </li>
+  <li>
+    <p>n번째 자식 노드 접근</p>
 
-<table>
-  <thead>
-    <tr>
-      <th>옵션</th>
-      <th>내용</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <td>–export-dir</td>
-      <td>익스포트 대상 HDFS 디렉터리</td>
-    </tr>
-    <tr>
-      <td>-m, –num-mappers</td>
-      <td>실행할 맵 태스크 개수, 데이터베이스에 부하를 줄 수 있으므로 적절한 태스크 개수를 설정해야함</td>
-    </tr>
-    <tr>
-      <td>–table</td>
-      <td>데이터베이스 최종 대상 테이블</td>
-    </tr>
-    <tr>
-      <td>–staging-table</td>
-      <td>데이터베이스 중간 데이터 저장용 테이블</td>
-    </tr>
-    <tr>
-      <td>–clear-staging-table</td>
-      <td>중간 데이터용 데이블 데이터 삭제 여부</td>
-    </tr>
-    <tr>
-      <td>-null-string<널값 문자열=""></널값></td>
-      <td>문자열 칼럼에서 널 값 대신 사용할 문자열</td>
-    </tr>
-    <tr>
-      <td>–null-non-string<널값문자열></널값문자열></td>
-      <td>문자열이 아닌 칼럼에서 널 값 대신 사용할 문자열</td>
-    </tr>
-    <tr>
-      <td>–direct</td>
-      <td>고속커넥터를 이용할 경우 사용</td>
-    </tr>
-  </tbody>
-</table>
+ 	- $(“선택자”).children().eq(N)
 
-<p><br /></p>
+ 	- $(“선택자”).children(“:eq(N)”)
+  </li>
+  <li>
+    <p>첫번째 자식 노드 접근</p>
+
+ 	- $(“선택자”).children().first()
+
+ 	- $(“선택자”).children(“:first”)
+
+    <div class="highlighter-rouge"><pre class="highlight"><code>	- $("선택자").children().eq(0)
+</code></pre>
+    </div>
+
+ 	- $(“선택자”).children(“:eq(0)”)
+  </li>
+  <li>
+    <p>마지막 자식 노드 접근</p>
+
+ 	- $(“선택자”).children().last()
+
+ 	- $(“선택자”).children(“:last”)
+  </li>
+</ul>
+
+<ol>
+  <li>부모 노드 찾기</li>
+</ol>
+
+<ul>
+  <li>
+    <p>바로 위의 부모 : $(“선택자”).parent()</p>
+  </li>
+  <li>
+    <p>모든 부모 찾기</p>
+
+ 	- $(“선택자”).parents()  모든 부모
+  </li>
+  <li>
+    <p>모든 부모 중 선택자에 해당하는 부모 찾기</p>
+
+ 	- $(“선택자”).parents(“선택자”)
+  </li>
+</ul>
+
+<ol>
+  <li>형제 노드 찾기</li>
+</ol>
+
+<ul>
+  <li>
+    <p>이전 형제 노드 찾기</p>
+
+ 	- $(“선택자”).prev()
+
+ 	- $(“선택자”).prevAll(“선택자”);
+  </li>
+  <li>
+    <p>다음 형제 노드 찾기</p>
+
+ 	- $(“선택자”).next()
+
+ 	- $(“선택자”).nextAll(“선택자”);
+  </li>
+</ul>
+
+<ol>
+  <li>노드 생성,추가,이동,삭제</li>
+</ol>
+
+<ul>
+  <li>
+    <p>생성</p>
+
+ 	- $(“노드”)
+
+ 	- $(“선택자”).html(“<노드>...")
+</노드>
+ 	- $(“노드”).clone()
+  </li>
+  <li>
+    <p>추가</p>
+
+    <ul>
+      <li>
+        <p>$기준노드.append($추가노드)</p>
+      </li>
+      <li>
+        <p>$추가노드.appendTo($기준노드)</p>
+      </li>
+      <li>
+        <p>$기준노드.prepend($추가노드)</p>
+      </li>
+      <li>
+        <p>$추가노드.prependTo($기준노드)</p>
+
+        <ul>
+          <li>$추가노드.insertBefore($기준노드)</li>
+        </ul>
+      </li>
+      <li>
+        <p>$기준노드.before($추가노드)</p>
+      </li>
+      <li>
+        <p>$추가노드.insertAfter($기준노드)</p>
+      </li>
+      <li>
+        <p>$기준노드.after($추가노드)</p>
+      </li>
+    </ul>
+  </li>
+  <li>
+    <p>삭제</p>
+
+    <p>– $(“선택자”).remove()</p>
+  </li>
+  <li>
+    <p>이동</p>
+
+    <ul>
+      <li>
+        <p>$기준노드.append($이동노드)</p>
+      </li>
+      <li>
+        <p>$이동노드.appendTo($기준노드)</p>
+      </li>
+      <li>
+        <p>$이동노드.insertBefore($기준노드)</p>
+      </li>
+      <li>
+        <p>$기준노드.before($이동노드)</p>
+
+        <ul>
+          <li>$이동노드.insertAfter($기준노드)</li>
+        </ul>
+      </li>
+      <li>
+        <p>$기준노드.after($이동노드)</p>
+      </li>
+    </ul>
+  </li>
+</ul>
+
+<ol>
+  <li>텍스트 노드 다루기</li>
+</ol>
+
+<ul>
+  <li>
+    <p>텍스트 노드 생성 : $(“텍스트”)</p>
+  </li>
+  <li>
+    <p>텍스트 노드 추가 : $기준노드.append(“텍스트”)</p>
+  </li>
+  <li>
+    <p>텍스트 노드 변경 : $기준노드.text(“새로운 텍스트”)</p>
+  </li>
+</ul>
+
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/11/10/JQuery_findnode/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
+                  <a class="post-link" href="/2016/11/07/jqueryselector/">jquery :last 선택자</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-11-07
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#js" title="Category: js" rel="category">js</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;table</span> <span class="na">id =</span><span class="err"> </span><span class="s">"table1"</span><span class="nt">&gt;</span> ---<span class="nt">&lt;/table&gt;</span>
+<span class="nt">&lt;table</span> <span class="na">id =</span><span class="err"> </span><span class="s">"table2"</span><span class="nt">&gt;</span> ---<span class="nt">&lt;/table&gt;</span>
+<span class="nt">&lt;table</span> <span class="na">id =</span><span class="err"> </span><span class="s">"table3"</span><span class="nt">&gt;</span> ---<span class="nt">&lt;/table&gt;</span>
+<span class="nt">&lt;table</span> <span class="na">id =</span><span class="err"> </span><span class="s">"table4"</span><span class="nt">&gt;</span> 
+	<span class="nt">&lt;tr&gt;</span>---<span class="nt">&lt;/tr&gt;</span>
+	<span class="nt">&lt;tr&gt;</span>
+		<span class="nt">&lt;td&gt;</span>asd<span class="nt">&lt;td&gt;</span>
+		<span class="nt">&lt;td&gt;&lt;input</span> <span class="na">class=</span><span class="s">"inputs"</span><span class="nt">&gt;&lt;/td&gt;</span>
+	<span class="nt">&lt;/tr&gt;</span>
+<span class="nt">&lt;/table&gt;</span>
+</code></pre>
+</div>
+
+<p>위와 같은 환경이 있고 <code class="highlighter-rouge">#table4</code>는 파일을 추가 할때마다 <code class="highlighter-rouge">tr</code>이 추가되는 상황이라고 하자!</p>
+
+<p>(추가 될때는 모든 속성이 같다.)</p>
+
+<h4 id="inputs-">이때 가장 마지막에 생성된 <code class="highlighter-rouge">#inputs</code>에 접근할려면…</h4>
+
+<p><code class="highlighter-rouge">$('#table4 tr:last .inputs').val();</code></p>
+
+<p>이런 식으로 <code class="highlighter-rouge">:last</code>선택자를 사용하면 된다.</p>
 
 <h3 id="reference">Reference</h3>
+
 <ul>
-  <li><a href="http://www.yes24.com/24/Goods/26903681?Acode=101">시작하세요! 하둡 프로그래밍 : 빅데이터 분석을 위한 하둡 기초부터 YARN까지</a></li>
+  <li><a href="http://api.jquery.com/last-selector/">jqueryDoc</a></li>
 </ul>
 
                 </div>
                 <div class="read-all">
-                    <a  href="/2016/10/14/sqoop/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                    <a  href="/2016/11/07/jqueryselector/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
+                  <a class="post-link" href="/2016/11/04/regexp/">정규표현식</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-11-04
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#js" title="Category: js" rel="category">js</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="section">들어가기 전에</h1>
+
+<p>정규식은 문자열에서 문자 조합에 일치 시키기 위해 사용되는 패턴이다.</p>
+
+<p>자바스크립트에서, 정규식은 객체이다.</p>
+
+<p>이 패턴들은 <code class="highlighter-rouge">RegExp</code>의 <code class="highlighter-rouge">exec</code>메소드와 <code class="highlighter-rouge">test</code>  메소드 그리고 <code class="highlighter-rouge">String</code>의 <code class="highlighter-rouge">match</code>메소드, <code class="highlighter-rouge">replace</code>메소드, <code class="highlighter-rouge">search</code>메소드, <code class="highlighter-rouge">split</code>메소드와 함께 쓰인다.</p>
+
+<h1 id="section-1">정규식 만들기</h1>
+
+<p>정규식은 두가지 방법으로 만들 수 있다.</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">re</span> <span class="o">=</span> <span class="sr">/abc+d/</span><span class="p">;</span>
+</code></pre>
+</div>
+
+<p>정규식 리터럴은 스크립트가 로드될때 정규식의 컴파일이 작동한다. 정규식이 계속 사용될 때는 위와 같은 형식으로 사용하는 것이 좋다.</p>
+
+<p>또다른 방법은 <code class="highlighter-rouge">RegExp</code>객체의 생성자 함수를 호출하는 것이다.</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">re</span> <span class="o">=</span> <span class="k">new</span> <span class="nb">RegExp</span><span class="p">(</span><span class="s2">"abc+d"</span><span class="p">);</span>
+</code></pre>
+</div>
+
+<p>생성자 함수를 사용하면 정규식의 런타임 컴파일을 제공한다.</p>
+
+<h1 id="section-2">정규식 패턴 작성하기</h1>
+
+<h2 id="section-3">단순한 패턴 사용하기</h2>
+
+<p>단순한 패턴은 찾고자하는 문자들로 구성된다. 예를 들어 /abc/라는 패턴은 문자열에서 정확히 ‘abc’라는 문자들이 모두 함께 순서대로 나타나야지 일치한다.</p>
+
+<h2 id="section-4">특수 문자를 사용하기</h2>
+
+<p>단순 패턴보다 더 복잡한 경우 특수문자를 사용하여 패턴을 만든다.</p>
+
+<h2 id="section-5">정규식 사용하기</h2>
+
+<p><strong>JavaScript에서 정규식에서 쓰이는 메소드</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Method</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>exec</td>
+      <td>일치하는 문자열을 찾는 RegExp메소드이다. 정보를 가지고 있는 배열을 반환한다.</td>
+    </tr>
+    <tr>
+      <td>test</td>
+      <td>일치하는 문자열을 검사하는 RegExp 메소드이다. true나 false를 반환한다.</td>
+    </tr>
+    <tr>
+      <td>match</td>
+      <td>일치하는 문자열을 찾는 String메소드이다. 정보를 가지고 있는 배열을 반환하거나 일치하지 않는 부분을 null로 반환한다.</td>
+    </tr>
+    <tr>
+      <td>search</td>
+      <td>일치하는 문자열을 검사하는 String메소드이다. 일치하는 인덱스를 반환하거나 검색에 실패할 시 -1을 반환한다.</td>
+    </tr>
+    <tr>
+      <td>replace</td>
+      <td>일치하는 문자열을 찾는 String메소드이다. 일치하는 문자열을 replacement로 대체한다.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3 id="reference">Reference</h3>
+
+<ul>
+  <li><a href="https://developer.mozilla.org/ko/docs/Web/JavaScript/Guide/%EC%A0%95%EA%B7%9C%EC%8B%9D">MDN</a></li>
+</ul>
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/11/04/regexp/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
+                  <a class="post-link" href="/2016/11/03/CORS/">CORS</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-11-03
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#web" title="Category: web" rel="category">web</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="http---cors">HTTP 접근 제어 (CORS)</h1>
+
+<h2 id="cross-origin-resource-sharingcors">Cross Origin Resource Sharing(CORS)</h2>
+
+<p>HTTP요청은 기본적으로 Cross-Site-HTTP Requests가 가능하다.</p>
+
+<p>다시말하면, <code class="highlighter-rouge">&lt;img&gt;</code>, <code class="highlighter-rouge">&lt;link&gt;</code>, <code class="highlighter-rouge">&lt;script&gt;</code>태그로 다른 도메인의 리소스를 가져오는 것이 가능하다.</p>
+
+<p>그런데!</p>
+
+<p>스크립트에서 생성된 Cross-Site HTTP Requests는 <a href="https://developer.mozilla.org/ko/docs/Web/Security/Same-origin_policy">Same Origin Policy</a>를 적용 받기 때문에 Cross-Site HTTP Requests가 불가능하다.</p>
+
+<p>ajax가 많이 사용되면서 스크립트에서 생성되는 <code class="highlighter-rouge">XMLHttpRequest</code>에 대해서도 Cross-Site HTTP Requests가 가능해야 한다는 요구가 많이 나왔고 W3C에서 CORS라는 이름의 권고안이 나왔다.</p>
+
+<h2 id="cors--">CORS 요청의 종류</h2>
+
+<ul>
+  <li>Simple</li>
+  <li>Preflight</li>
+  <li>Credential</li>
+  <li>Non-Credential</li>
+</ul>
+
+<p>브라우저가 요청 내용을 분석하여 4가지 방식 중 해당하는 방식으로 서버에 요청을 날린다.</p>
+
+<h2 id="section">실무에서..</h2>
+
+<p>얼마전 이미지의 다른 도메인에서 불러와서 켄버스에 그려 이미지의 픽셀값을 가져오는 일이 있었다.</p>
+
+<p><img src="http://joswlv.github.io/images/cors_erro.png" alt="" /></p>
+
+<p>이런 에러가 발생하였다.</p>
+
+<p>처음에는 이미지 CORS 속성을 <code class="highlighter-rouge">anonymous</code>로 지정을 했다.</p>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nx">img</span><span class="p">.</span><span class="nx">crossOrigin</span> <span class="o">=</span> <span class="s2">"anonymous"</span><span class="p">;</span>
+</code></pre>
+</div>
+
+<p>그래도 계속되었다.</p>
+
+<p>이미지가 저장되어 있는 서버에서 이미지를 보내줄 때 헤더에 crossOrigin내용을 첨부해서 보내주면 되지만, 현실적으로 불가능해 클라이언트 측에서 처리하기로 했고 아래와 같이 이미지를 DOM스토리지에 저장하고 DOM스토리지에서 이미지를 불러오는 방식으로 문제를 해결 했다.</p>
+
+<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;IfModule</span> <span class="na">mod_setenvif</span><span class="err">.</span><span class="na">c</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;IfModule</span> <span class="na">mod_headers</span><span class="err">.</span><span class="na">c</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;FilesMatch</span> <span class="err">"\.(</span><span class="na">cur</span><span class="err">|</span><span class="na">gif</span><span class="err">|</span><span class="na">ico</span><span class="err">|</span><span class="na">jpe</span><span class="err">?</span><span class="na">g</span><span class="err">|</span><span class="na">png</span><span class="err">|</span><span class="na">svgz</span><span class="err">?|</span><span class="na">webp</span><span class="err">)$"</span><span class="nt">&gt;</span>
+            SetEnvIf Origin ":" IS_CORS
+            Header set Access-Control-Allow-Origin "*" env=IS_CORS
+        <span class="nt">&lt;/FilesMatch&gt;</span>
+    <span class="nt">&lt;/IfModule&gt;</span>
+<span class="nt">&lt;/IfModule&gt;</span>
+</code></pre>
+</div>
+
+<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">var</span> <span class="nx">img</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Image</span><span class="p">,</span>
+    <span class="nx">canvas</span> <span class="o">=</span> <span class="nb">document</span><span class="p">.</span><span class="nx">createElement</span><span class="p">(</span><span class="s2">"canvas"</span><span class="p">),</span>
+    <span class="nx">ctx</span> <span class="o">=</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">getContext</span><span class="p">(</span><span class="s2">"2d"</span><span class="p">),</span>
+    <span class="nx">src</span> <span class="o">=</span> <span class="s2">"http://example.com/image"</span><span class="p">;</span> <span class="c1">// insert image url here</span>
+
+<span class="nx">img</span><span class="p">.</span><span class="nx">crossOrigin</span> <span class="o">=</span> <span class="s2">"Anonymous"</span><span class="p">;</span>
+
+<span class="nx">img</span><span class="p">.</span><span class="nx">onload</span> <span class="o">=</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+    <span class="nx">canvas</span><span class="p">.</span><span class="nx">width</span> <span class="o">=</span> <span class="nx">img</span><span class="p">.</span><span class="nx">width</span><span class="p">;</span>
+    <span class="nx">canvas</span><span class="p">.</span><span class="nx">height</span> <span class="o">=</span> <span class="nx">img</span><span class="p">.</span><span class="nx">height</span><span class="p">;</span>
+    <span class="nx">ctx</span><span class="p">.</span><span class="nx">drawImage</span><span class="p">(</span> <span class="nx">img</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span> <span class="p">);</span>
+    <span class="nx">localStorage</span><span class="p">.</span><span class="nx">setItem</span><span class="p">(</span> <span class="s2">"savedImageData"</span><span class="p">,</span> <span class="nx">canvas</span><span class="p">.</span><span class="nx">toDataURL</span><span class="p">(</span><span class="s2">"image/png"</span><span class="p">)</span> <span class="p">);</span>
+<span class="p">}</span>
+<span class="nx">img</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">src</span><span class="p">;</span>
+<span class="c1">// make sure the load event fires for cached images too</span>
+<span class="k">if</span> <span class="p">(</span> <span class="nx">img</span><span class="p">.</span><span class="nx">complete</span> <span class="o">||</span> <span class="nx">img</span><span class="p">.</span><span class="nx">complete</span> <span class="o">===</span> <span class="kc">undefined</span> <span class="p">)</span> <span class="p">{</span>
+    <span class="nx">img</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="s2">"data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw=="</span><span class="p">;</span>
+    <span class="nx">img</span><span class="p">.</span><span class="nx">src</span> <span class="o">=</span> <span class="nx">src</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre>
+</div>
+
+<p><strong>Browser compatibility</strong></p>
+
+<table>
+  <thead>
+    <tr>
+      <th>Chrom</th>
+      <th>Firefox</th>
+      <th>IE</th>
+      <th>Opera</th>
+      <th>Safari</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>13</td>
+      <td>8</td>
+      <td>No support</td>
+      <td>No support</td>
+      <td>?</td>
+    </tr>
+  </tbody>
+</table>
+
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/11/03/CORS/"><i class="fa fa-newspaper-o"></i>Read All</a>
                 </div>
                 <hr>
               </li>
@@ -1119,10 +894,10 @@ awk <span class="s1">'BEGIN {FS="\t"; OFS ="-"} {print $1 ,  $2} END {print "총
             <a href="/index.html" class="previous"><i class="fa fa-angle-double-left"></i></a>
             <a href="/page4" class="previous"><i class="fa fa-angle-left"></i></a>
           
-          <span class="page_number ">5/10</span>
+          <span class="page_number ">5/11</span>
           
             <a href="/page6" class="next"><i class="fa fa-angle-right"></i></a>
-            <a href="/page10" class="next"><i class="fa fa-angle-double-right"></i></a>
+            <a href="/page11" class="next"><i class="fa fa-angle-double-right"></i></a>
           
         </div>
     </div>
@@ -1160,7 +935,7 @@ awk <span class="s1">'BEGIN {FS="\t"; OFS ="-"} {print $1 ,  $2} END {print "총
                             <span class="name">
                                 python
                             </span>
-                            <span class="badge">2</span>
+                            <span class="badge">3</span>
                         </a>
                     </li>
                     
@@ -1187,7 +962,7 @@ awk <span class="s1">'BEGIN {FS="\t"; OFS ="-"} {print $1 ,  $2} END {print "총
                             <span class="name">
                                 Java
                             </span>
-                            <span class="badge">8</span>
+                            <span class="badge">9</span>
                         </a>
                     </li>
                     
@@ -1205,7 +980,7 @@ awk <span class="s1">'BEGIN {FS="\t"; OFS ="-"} {print $1 ,  $2} END {print "총
                             <span class="name">
                                 Unix/Linux
                             </span>
-                            <span class="badge">2</span>
+                            <span class="badge">3</span>
                         </a>
                     </li>
                     
@@ -1223,7 +998,7 @@ awk <span class="s1">'BEGIN {FS="\t"; OFS ="-"} {print $1 ,  $2} END {print "총
                             <span class="name">
                                 MYSQL
                             </span>
-                            <span class="badge">3</span>
+                            <span class="badge">4</span>
                         </a>
                     </li>
                     
@@ -1250,7 +1025,7 @@ awk <span class="s1">'BEGIN {FS="\t"; OFS ="-"} {print $1 ,  $2} END {print "총
                             <span class="name">
                                 Spark
                             </span>
-                            <span class="badge">1</span>
+                            <span class="badge">3</span>
                         </a>
                     </li>
                     
@@ -1258,6 +1033,15 @@ awk <span class="s1">'BEGIN {FS="\t"; OFS ="-"} {print $1 ,  $2} END {print "총
                         <a href="/category/#Cassandra" class="categories-list-item" cate="Cassandra">
                             <span class="name">
                                 Cassandra
+                            </span>
+                            <span class="badge">1</span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/category/#Scala" class="categories-list-item" cate="Scala">
+                            <span class="name">
+                                Scala
                             </span>
                             <span class="badge">1</span>
                         </a>
@@ -1272,25 +1056,25 @@ awk <span class="s1">'BEGIN {FS="\t"; OFS ="-"} {print $1 ,  $2} END {print "총
                 </div>
                 <ul class="content-ul" recent>
                     
+                        <li><a href="/2017/10/24/sparkstreamingandkafka/">SparStreaming & kafka(Exactly-once)</a></li>
+                    
+                        <li><a href="/2017/09/27/spark_misapprehension/">Spark에 대한 오해</a></li>
+                    
+                        <li><a href="/2017/08/06/howtousesbt/">sbt 기본 사용법</a></li>
+                    
+                        <li><a href="/2017/08/02/pythonTricks/">Python Tricks</a></li>
+                    
+                        <li><a href="/2017/08/01/MySql-Setting/">MySQL 기본세팅법</a></li>
+                    
+                        <li><a href="/2017/06/26/linuxcommand/">리눅스 명령어정리</a></li>
+                    
+                        <li><a href="/2017/05/09/javarxe/">java 유용한 정규표현식</a></li>
+                    
                         <li><a href="/2017/05/04/logback/">LogBack</a></li>
                     
                         <li><a href="/2017/04/20/resourcecleanup/">Resource CleanUp</a></li>
                     
                         <li><a href="/2017/04/08/garbagecollectionpauses/">Garbage collection pauses</a></li>
-                    
-                        <li><a href="/2017/04/02/runtojarbackground/">jar 백그라운드로 실행하기</a></li>
-                    
-                        <li><a href="/2017/03/27/mavenbuildplugin/">Maven Build Plugin & 옵션</a></li>
-                    
-                        <li><a href="/2017/03/26/properties/">properties 설정 및 사용</a></li>
-                    
-                        <li><a href="/2017/03/01/stringbuildervsstringbuffer/">StringBuilder vs StringBuffer</a></li>
-                    
-                        <li><a href="/2017/02/26/basicrdd/">기본 RDD연산들(트랜스포메이션, 액션)</a></li>
-                    
-                        <li><a href="/2017/02/19/logstash/">Logstash 기초</a></li>
-                    
-                        <li><a href="/2017/02/18/elasticsearchbasic/">ElasticSearch 기초</a></li>
                     
                 </ul>
             </div>

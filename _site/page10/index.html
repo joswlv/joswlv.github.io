@@ -98,6 +98,8 @@
                 
                     
                 
+                    
+                
             </ul>
         </nav>
     </div>
@@ -113,11 +115,11 @@
             
               <li>
                 <h2>
-                  <a class="post-link" href="/2016/07/08/Angularjs_promise_and_q/">AngularJS_Promise객체 와 $q서비스</a>
+                  <a class="post-link" href="/2016/09/12/MVC/">MVC 이해하기</a>
                 </h2>
                 <div class="label">
                     <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-07-08
+                        <i class="fa fa-calendar"></i>2016-09-12
                     </div>
                     <div class="label-card">
                         
@@ -135,7 +137,7 @@
   <i class="fa fa-th-list"></i>
   
     
-        <a href="/category/#js" title="Category: js" rel="category">js</a>
+        <a href="/category/#web" title="Category: web" rel="category">web</a>
     
   
 
@@ -147,135 +149,77 @@
 
                 </div>
                 <div class="excerpt">
-                    <h2 id="promise">Promise객체</h2>
-<p>promise 객체는 약속을 표현하는 자바스크립트 객체이다.</p>
+                    <h1 id="mvc-">1. MVC 아키텍처</h1>
 
-<p>AngularJS에서 <code class="highlighter-rouge">$http</code>,<code class="highlighter-rouge">$tiemoute</code>,<code class="highlighter-rouge">$resource</code>,<code class="highlighter-rouge">$route</code>등 여러 서비스에서 promise객체를 반환한다.</p>
+<p><img src="http://joswlv.github.io/images/mvc.png" alt="" /></p>
 
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">fetchData</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="nx">cb</span><span class="p">){</span>
-  <span class="nx">getDataFromServer</span><span class="p">(</span><span class="nx">id</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">result</span><span class="p">){</span>
-    <span class="k">if</span><span class="p">(</span><span class="nx">err</span><span class="p">){</span>
-      <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="kc">null</span><span class="p">);</span>
-    <span class="p">}</span><span class="k">else</span><span class="p">{</span>
-      <span class="nx">transformData</span><span class="p">(</span><span class="nx">result</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">transformedResult</span><span class="p">){</span>
-        <span class="k">if</span><span class="p">(</span><span class="nx">err</span><span class="p">){</span>
-          <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="kc">null</span><span class="p">);</span>
-        <span class="p">}</span><span class="k">else</span><span class="p">{</span>
-          <span class="nx">saveToIndexDB</span><span class="p">(</span><span class="nx">result</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">savedData</span><span class="p">){</span>
-            <span class="nx">cb</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">savedData</span><span class="p">);</span>
-          <span class="p">});</span>
-        <span class="p">}</span>
-      <span class="p">});</span>
-    <span class="p">}</span>
-  <span class="p">});</span>
-<span class="p">}</span>
-</code></pre>
-</div>
-<p>위 코드는 콜백지옥이다. promise객체를 사용하면 다음과 같다.</p>
+<h3 id="controller-">컨트롤러(controller)컴포넌트의 역할</h3>
 
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="kd">function</span> <span class="nx">fetchData</span><span class="p">(</span><span class="nx">id</span><span class="p">){</span>
-  <span class="k">return</span> <span class="nx">getDataFromServer</span><span class="p">(</span><span class="nx">id</span><span class="p">)</span>
-          <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">transformData</span><span class="p">)</span>
-          <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="nx">saveToIndexDB</span><span class="p">);</span>
-<span class="p">}</span>
-</code></pre>
-</div>
-<p>then으로 묶어 주면 된다. 코드가 예뻐졌다. 그리고 <code class="highlighter-rouge">error</code>처리도 쉬워진다.</p>
+<p>클라이언트의 요청을 받았을 때 그 요청에 대해 실제 업무를 수행하는 모델 컴포넌트를 호출하는 일을 한다. 또 클라이언트가 보낸 데이터가 있다면, 모델을 호출할 때 전달하기 쉽게 데이터를 적절히 가공하는 일을 한다. 모델이 업무를 수행을 완료하면, 그 결과를 가지고 화면을 생성하도록 뷰에게 전달한다.</p>
 
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nx">fetchData</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
-  <span class="p">.</span><span class="nx">then</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">result</span><span class="p">){</span>
+<p>즉 클라이언트 요청에 대해 모델과 뷰를 결정하여 전달하는 일을 한다.</p>
 
-  <span class="p">},</span> <span class="kd">function</span><span class="p">(</span><span class="nx">error</span><span class="p">){</span>
-    <span class="c1">// exceptions in transformData, or saveToIndexDB</span>
-    <span class="c1">// will result in this error callback being called.</span>
-  <span class="p">});</span>
-</code></pre>
-</div>
+<h3 id="model-">모델(model)컴포넌트의 역할</h3>
 
-<h2 id="deferred">Deferred객체</h2>
-<p>약속을 정의했으면 누군가는 약속을 지키거나 거절해야 한다. 이러한 일을 하는 것이 <code class="highlighter-rouge">deferred</code>객체이다. <code class="highlighter-rouge">deferred</code>객체는 약속을 만들고 만든 약속의 상태를 변경한다.</p>
+<p>데이터 저장소와 연동하여 사용자가 입력한 데이터나 사용자에게 출력할 데이터를 다루는 일을 한다. 특히 여러개의 데이터 변경 작업(추가, 변경, 삭제)을 하나의 작업으로 묵는 트랜잭션을 다루는 일도 한다.</p>
 
-<p>AngluarJS는 <code class="highlighter-rouge">$q.deferred()</code>를 이용하여 <code class="highlighter-rouge">deferred</code>객체를 생성할 수 있다. (<code class="highlighter-rouge">deferred</code>객체 생성은 곧 <code class="highlighter-rouge">Promise</code>객체 생성이기도 하다.)</p>
+<h3 id="view--">뷰(view) 컴포넌트의 역할</h3>
 
-<p><code class="highlighter-rouge">deferred</code>객체는 <code class="highlighter-rouge">resolve</code>,<code class="highlighter-rouge">reject</code>,<code class="highlighter-rouge">notify</code>를 통하여 약속으 지키거나 거절/취소하여 진행 상태를 알려준다.</p>
+<p>모델이 처리한 데이터나 그 작업 결과를 가지고 사용자에게 출력할 화면을 만드는 일을 한다. 이렇게 생성된 화면은 웹브라우저가 출력한다.</p>
 
-<p><code class="highlighter-rouge">deferred</code>객체는 주로 별도의 서비스를 만들고 해당 서비스에서 생성하여 해당 객체의 약속을 반환하는 식으로 많이 사용된다.</p>
+<p>즉 뷰 컴포넌트는 HTML과 CSS, JavaScript를 사용하여 웹 브라우저가 출력할 UI를 만든다.</p>
 
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">'demo-app'</span><span class="p">,</span> <span class="p">[])</span>
-  <span class="p">.</span><span class="nx">factory</span><span class="p">(</span><span class="s1">'userService'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$http</span><span class="p">,</span> <span class="nx">$log</span><span class="p">,</span> <span class="nx">$q</span><span class="p">)</span> <span class="p">{</span>
-    <span class="k">return</span> <span class="p">{</span>
-     <span class="na">getUser</span><span class="p">:</span> <span class="kd">function</span><span class="p">(</span><span class="nx">userId</span><span class="p">)</span> <span class="p">{</span>
-       <span class="c1">//deferred 객체를 생성한다.</span>
-       <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">$q</span><span class="p">.</span><span class="nx">defer</span><span class="p">();</span>
-       <span class="nx">$http</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'/api/users/'</span> <span class="o">+</span> <span class="nx">userID</span><span class="p">)</span>
-         <span class="p">.</span><span class="nx">success</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
-            <span class="c1">//요청이 성공하면 약속을 지키고 별도 데이터를 전달한다.</span>
-            <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">({</span>
-               <span class="na">name</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">name</span><span class="p">,</span>
-               <span class="na">address</span><span class="p">:</span> <span class="nx">data</span><span class="p">.</span><span class="nx">address</span><span class="p">});</span>
-         <span class="p">}).</span><span class="nx">error</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">msg</span><span class="p">,</span> <span class="nx">code</span><span class="p">)</span> <span class="p">{</span>
-            <span class="c1">//요청이 실패하면 약속을 취소하고 메시지를 전달한다.</span>
-            <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span><span class="p">(</span><span class="nx">msg</span><span class="p">);</span>
-            <span class="nx">$log</span><span class="p">.</span><span class="nx">error</span><span class="p">(</span><span class="nx">msg</span><span class="p">,</span> <span class="nx">code</span><span class="p">);</span>
-         <span class="p">});</span>
-       <span class="c1">//해당 deferred 객체의 약속을 반환한다.</span>
-       <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
-     <span class="p">}</span>
-    <span class="p">}</span>
-	<span class="p">});</span>
-</code></pre>
-</div>
+<h1 id="mcv-">2. MCV의 이점</h1>
 
-<h2 id="promise-qall">여러 Promise 묶어주기($q.all)</h2>
-<p>$q 서비스는 미래에 지켜지거나 지켜지지 않을 여러 약속을 하나의 약속으로 처리할 수 있는 API도 제공한다.</p>
+<h3 id="section">높은 재사용성, 넓은 융통성</h3>
 
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nx">factory</span><span class="p">(</span><span class="s1">'asyncService'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">$http</span><span class="p">,</span> <span class="nx">$q</span><span class="p">)</span> <span class="p">{</span>
-  <span class="k">return</span> <span class="p">{</span>
-    <span class="na">loadDataFromTwoReq</span><span class="p">:</span> <span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
-      <span class="kd">var</span> <span class="nx">deferred</span> <span class="o">=</span> <span class="nx">$q</span><span class="p">.</span><span class="nx">defer</span><span class="p">(),</span>
-          <span class="nx">httpPromise1</span> <span class="o">=</span> <span class="nx">$http</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'/api/req1'</span><span class="p">),</span>
-          <span class="nx">httpPromise2</span> <span class="o">=</span> <span class="nx">$http</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'/api/req2'</span><span class="p">);</span>
+<ul>
+  <li><code class="highlighter-rouge">look and feel</code>을 쉽게 교채할 수 있다.</li>
+  <li><code class="highlighter-rouge">on source multi use</code>를 쉽게 구현할 수 있다.</li>
+  <li>코드를 재사용할 수 있다.</li>
+</ul>
 
-      <span class="c1">//두 약속을 $q.all 메서드를 이용해 새로운 약속을 만든다.</span>
-      <span class="nx">$q</span><span class="p">.</span><span class="nx">all</span><span class="p">(</span><span class="nx">httpPromise1</span><span class="p">,</span> <span class="nx">httpPromise2</span><span class="p">)</span>
-        <span class="p">.</span><span class="nx">then</span><span class="p">(</span>
-          <span class="kd">function</span><span class="p">(</span><span class="nx">results</span><span class="p">)</span> <span class="p">{</span>
-            <span class="c1">//두 약속이 모두 지켜지면 asyncService서비스가 반한하는 약속을 지키고 두 약속이 전달하는 결과를 묶은 배열로 전달한다.</span>
-            <span class="nx">deferred</span><span class="p">.</span><span class="nx">resolve</span><span class="p">(</span><span class="nx">results</span><span class="p">)</span>
-          <span class="p">},</span>
-          <span class="kd">function</span><span class="p">(</span><span class="nx">errors</span><span class="p">)</span> <span class="p">{</span>
-            <span class="nx">deferred</span><span class="p">.</span><span class="nx">reject</span><span class="p">(</span><span class="nx">errors</span><span class="p">);</span>
-          <span class="p">},</span>
-          <span class="kd">function</span><span class="p">(</span><span class="nx">updates</span><span class="p">)</span> <span class="p">{</span>
-          <span class="nx">deferred</span><span class="p">.</span><span class="nx">update</span><span class="p">(</span><span class="nx">updates</span><span class="p">);</span>
-        <span class="p">});</span>
-      <span class="k">return</span> <span class="nx">deferred</span><span class="p">.</span><span class="nx">promise</span><span class="p">;</span>
-    <span class="p">}</span>
-  <span class="p">};</span>
-<span class="p">});</span>
-</code></pre>
-</div>
+<h3 id="section-1">빠른 개발, 저렴한 비용</h3>
 
-<p>위 코드는 일반적인 콜백 방식으로 작성하게 되면 첫 번째 요청의 성공 콜백에서 다른 요청을 하고 그 요청의 성공 콜백에서 두 요청에 대한 성공 처리를 하는 코드를 작성하게 된다.</p>
+<ul>
+  <li>다른 프로젝트에서도 모델 컴포넌트를 재사용할 수 있기 때문에 개발 속도가 빨라진다.</li>
+  <li>소스 코드를 역할에 따라 여러 컴포넌트로 쪼개게 되면, 그 컴포넌트의 나니도에 따라 좀 더 낮은 수준의 개발자를 투입하여 개발 및 유지보수 비용 감소</li>
+</ul>
 
-<p>하지만!! $q 서비스는 $q.all 메서드를 이용해 약속을 바환하는 여러 비동기적인 일이 병렬적으로 행해지고 있다.
-약속을 하나로 묶어 성공/실패 처리를 할 수 있게 해준다.</p>
+<h1 id="mvc--">3. MVC 구동 원리</h1>
 
+<p>아래 그림은 클라이언트 요청에서 화면 출력까지 과정을 나타낸다.</p>
+
+<p><img src="http://joswlv.github.io/images/mvca.png" alt="" /></p>
+
+<ol>
+  <li>웹 브라우저가 웹어플리케이션을 실행을 요청하면, 웹서버가 그 요청을 받아서 서블릿 컨테이너에게 넘겨준다. 서블릿 컨테이너는 URL을 확인하여 그 요청을 처리할 서브릿을 찾아 실행한다.</li>
+  <li>서블릿은 실제 업무를 처리하는 모델 자바 객체의 메서드를 호출한다. 만약 웹 브라우저가 보낸 데이터를 저장하거나 변경해야 한다면 그 데이터를 가공하여 VO(Value Object)를 생성하고, 모델 객체의 메서드를 호출할 때 인자값을 넘긴다.</li>
+  <li>모델 객체는 JDBC를 사용하여 매개변수로 넘어온 VO를 데이터베이스에 저장하거나, 데이터베이스로부터 질의 결과를 가져와 VO로 만들어 반환한다. 이렇게 VO는 객체와 객체 사이에 데이터를 전달하는 용도로 사용하기 때문에 <code class="highlighter-rouge">데이터 전송객체(DTO : Data Transfer Object)</code>라고 한다.</li>
+  <li>서블릿은 모델 객체로부터 반환받은 값을 JSP에 전달한다.</li>
+  <li>JSP는 서블릿으로부터 전달받은 VO를 참조하여 웹브라우저가 출력할 결과 화면을 만들고 웹브라우저에 출력함으로써 요청 처리를 완료한다.</li>
+  <li>웹브라우저는 서버로부터 받은 응답 내용을 화면에 출력한다.</li>
+</ol>
+
+<h3 id="reference">Reference</h3>
+<ul>
+  <li><a href="http://www.yes24.com/24/Goods/13159413?Acode=101">열혈강의 자바 웹 개발 워크북</a></li>
+</ul>
 
                 </div>
                 <div class="read-all">
-                    <a  href="/2016/07/08/Angularjs_promise_and_q/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                    <a  href="/2016/09/12/MVC/"><i class="fa fa-newspaper-o"></i>Read All</a>
                 </div>
                 <hr>
               </li>
             
               <li>
                 <h2>
-                  <a class="post-link" href="/2016/07/07/Angularjs_how_to_ues_filter_and_watch/">AngularJS_How to use filter & $watch</a>
+                  <a class="post-link" href="/2016/09/10/servlet_and_JDBC/">HttpServlet와 JDBC, Refresh,Filter</a>
                 </h2>
                 <div class="label">
                     <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-07-07
+                        <i class="fa fa-calendar"></i>2016-09-10
                     </div>
                     <div class="label-card">
                         
@@ -293,7 +237,7 @@
   <i class="fa fa-th-list"></i>
   
     
-        <a href="/category/#js" title="Category: js" rel="category">js</a>
+        <a href="/category/#web" title="Category: web" rel="category">web</a>
     
   
 
@@ -305,168 +249,702 @@
 
                 </div>
                 <div class="excerpt">
-                    <p><code class="highlighter-rouge">ng-Repeat</code>는 기본적으로 필터기능을 지원한다. completed, active, all 세개 버튼을 만들어서 각각을 클릭할때 필터링 로직이 작동하도록 만들어 보자.</p>
+                    <h1 id="jdbc">1. JDBC종류</h1>
+<p>DBMS 밴더는 자신들의 DBMS에 접속할 수 있는 API를 만들어 배포한다. 즉 DMBS를 사용하기 위해서는 밴더가 제공하는 API에 맞게 개발해야한다. 문제는 밴더들 별로, API가 달라 개발비용 및 유지보수에 많은 비용이 들어간다.</p>
 
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"btn-group"</span> <span class="na">role=</span><span class="s">"group"</span> <span class="na">aria-label=</span><span class="s">"..."</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"button"</span> <span class="na">ng-click=</span><span class="s">"status='completed'"</span><span class="nt">&gt;</span>Completed<span class="nt">&lt;/button&gt;</span>
-  <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"button"</span> <span class="na">ng-click=</span><span class="s">"status='active'"</span><span class="nt">&gt;</span>Active<span class="nt">&lt;/button&gt;</span>
-  <span class="nt">&lt;button</span> <span class="na">type=</span><span class="s">"button"</span> <span class="na">ng-click=</span><span class="s">"status=''"</span><span class="nt">&gt;</span>All<span class="nt">&lt;/button&gt;</span>
-<span class="nt">&lt;/div&gt;</span>
+<p>그래서 마이크로소프트에서 밴더에 종속 받지 않고 DBMS에 접근 가능한 ODBC를 만들어 배포했다. 대부분의 DBMS API는 ODBC에 포함되어 있다. 이 라이브어리를 <code class="highlighter-rouge">ODBC 드라이버</code>라고 명칭한다.</p>
+
+<h2 id="jdbc-type-1">1) JDBC Type 1</h2>
+
+<p><img src="http://joswlv.github.io/images/jdbctype1.png" alt="" /></p>
+
+<p>주요특징은 다음과 같다.</p>
+
+<ul>
+  <li>ODBC 드라이버를 사용하여 DBMS에 접속</li>
+  <li>JRE에 포함되어 있다</li>
+  <li>속도가 유형중에서 가장 느리다.</li>
+  <li>Excel이나 Access파일에 접속할 때 유용하다.</li>
+</ul>
+
+<h2 id="jdbc-type-2">2) JDBC Type 2</h2>
+
+<p><img src="http://joswlv.github.io/images/jdbctype2.png" alt="" /></p>
+
+<p>주요특징은 다음과 같다.</p>
+
+<ul>
+  <li>DBMS밴더 API 사용</li>
+  <li>별도 JDBC 드라이버를 내려받아야함</li>
+  <li>DBMS 클라이언트의 설치 필요</li>
+</ul>
+
+<h2 id="jdbc-type-3">3) JDBC Type 3</h2>
+
+<p><img src="http://joswlv.github.io/images/jdbctype3.png" alt="" /></p>
+
+<p>주요특징은 다음과 같다.</p>
+
+<ul>
+  <li>미들웨어 서버를 경유하여 DBMS에 접속</li>
+  <li>미들웨어에서 제공하는 JDBC 드라이버 사용</li>
+  <li>ODBC나 밴더 API처럼 C나 C++로 만든 API를 호출하지 않기 때문에 Pure Java라 한다.</li>
+</ul>
+
+<h2 id="jdbc-type-4">4) JDBC Type 4</h2>
+
+<p><img src="http://joswlv.github.io/images/jdbctype4.png" alt="" /></p>
+
+<p>주요특징은 다음과 같다.</p>
+
+<ul>
+  <li>DBMS 프로토콜을 사용하여 직접 통신(ODBC드라이버가 필요없다.)</li>
+  <li>별도로 JDBC 드라이버 내려받아야한다.</li>
+  <li>Pure Java</li>
+  <li>주로 사용되는 드라이버이다.</li>
+</ul>
+
+<h1 id="jdbc-">2. JDBC와 서블릿</h1>
+
+<h2 id="javasql">1) java.sql</h2>
+
+<h3 id="section">1-1) 드라이버등록</h3>
+<p>JDBC프로그래밍의 첫번째 작업은 <code class="highlighter-rouge">DriverManager</code>를 이용하여 java.sql.Driver 인터페이스 구현체를 등록하는 것이다. 방법은 두가지가 있다.</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">DriverManager</span><span class="o">.</span><span class="na">registerDriver</span><span class="o">(</span><span class="k">new</span> <span class="n">com</span><span class="o">.</span><span class="na">mysql</span><span class="o">.</span><span class="na">jdbc</span><span class="o">.</span><span class="na">Driver</span><span class="o">());</span> <span class="c1">//DriverManager를 직접이용</span>
+
+<span class="n">Class</span><span class="o">.</span><span class="na">forName</span><span class="o">(</span><span class="k">this</span><span class="o">.</span><span class="na">getInitParameter</span><span class="o">(</span><span class="s">"QName"</span><span class="o">));</span> <span class="c1">//클래스로딩 </span>
+
+<span class="c1">//QName을 서블릿 초기화 매개변수의 값으 가져와서 작성하는 방법도 있다.</span>
+
+<span class="k">this</span><span class="o">.</span><span class="na">getInitParameter</span><span class="o">(</span><span class="cm">/*매개변수 이름 */</span><span class="o">);</span>
 </code></pre>
 </div>
 
-<p>어떤 버튼을 클릭했는지 상태를 저장하는 스코프변수 <code class="highlighter-rouge">$scope.status</code>에 저장한다.</p>
+<h3 id="section-1">1-2) 데이터베이스 연결</h3>
 
-<p>필터에 따라 동적으로 <code class="highlighter-rouge">ng-repeat</code>가 동작해야 한다.</p>
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;ul</span> <span class="na">ng-repeat=</span><span class="s">"todo in todos | filter:statusFilter"</span>
-</code></pre>
-</div>
-<p>버튼을 누를 때 마다 <code class="highlighter-rouge">statusFilter</code>값이 변할 것이다.</p>
+<p>다음과 같이 <code class="highlighter-rouge">DriverManager</code>의 <code class="highlighter-rouge">getConnection()</code>을 호출하여 MySQL 서버에 연결할 수 있다.</p>
 
-<h3 id="watch">$watch</h3>
-<p>이것은 스코프 변수의 변경을 감지하고 그때마다 사용자가 설정한 함수를 실행한다. (주의! 많이 사용하면 메모리 자원을 많이 먹는다.)</p>
-
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="c1">// 필터버튼을 클릭하고 status 값이 변경되면 $watch()에 등록한 함수가 동작한다.</span>
-<span class="nx">$scope</span><span class="p">.</span><span class="nx">$watch</span><span class="p">(</span><span class="s1">'status'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">()</span> <span class="p">{</span>
-  <span class="k">if</span> <span class="p">(</span><span class="nx">$scope</span><span class="p">.</span><span class="nx">status</span> <span class="o">===</span> <span class="s1">'completed'</span><span class="p">)</span> <span class="p">{</span>        <span class="c1">// Completed 클릭시</span>
-    <span class="nx">$scope</span><span class="p">.</span><span class="nx">statusFilter</span> <span class="o">=</span> <span class="p">{</span><span class="na">completed</span><span class="p">:</span> <span class="kc">true</span><span class="p">};</span>  <span class="c1">// 필터를 설정한다.</span>
-  <span class="p">}</span> <span class="k">else</span> <span class="k">if</span> <span class="p">(</span><span class="nx">$scope</span><span class="p">.</span><span class="nx">status</span> <span class="o">===</span> <span class="s1">'active'</span><span class="p">)</span> <span class="p">{</span>    <span class="c1">// Active 클릭시</span>
-    <span class="nx">$scope</span><span class="p">.</span><span class="nx">statusFilter</span> <span class="o">=</span> <span class="p">{</span><span class="na">completed</span><span class="p">:</span> <span class="kc">false</span><span class="p">};</span> <span class="c1">// 필터를 설정한다.</span>
-  <span class="p">}</span> <span class="k">else</span> <span class="p">{</span>                                    <span class="c1">// All 클릭시</span>
-    <span class="nx">$scope</span><span class="p">.</span><span class="nx">statusFilter</span> <span class="o">=</span> <span class="p">{};</span>                 <span class="c1">// 필터를 해제한다.</span>
-  <span class="p">}</span>
-<span class="p">})</span>
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">conn</span> <span class="o">=</span> <span class="n">DriverManager</span><span class="o">.</span><span class="na">getConnection</span><span class="o">(</span>
+					<span class="s">"jdbc:mysql://localhost/studydb"</span><span class="o">,</span> <span class="c1">//JDBC URL</span>
+					<span class="s">"study"</span><span class="o">,</span>	<span class="c1">// DBMS 사용자 아이디</span>
+					<span class="s">"study"</span><span class="o">);</span>	<span class="c1">// DBMS 사용자 암호</span>
 </code></pre>
 </div>
 
-                </div>
-                <div class="read-all">
-                    <a  href="/2016/07/07/Angularjs_how_to_ues_filter_and_watch/"><i class="fa fa-newspaper-o"></i>Read All</a>
-                </div>
-                <hr>
-              </li>
-            
-              <li>
-                <h2>
-                  <a class="post-link" href="/2016/07/07/Angularjs_Directive/">AngularJS_Directive</a>
-                </h2>
-                <div class="label">
-                    <div class="label-card">
-                        <i class="fa fa-calendar"></i>2016-07-07
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
-                    <div class="label-card">
-                        
-                    </div>
+<h3 id="sql---">1-3) SQL 실행 및 준비</h3>
 
-                    <div class="label-card">
-                    
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="n">stmt</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="na">createStatement</span><span class="o">();</span> <span class="c1">//java.sql.Statement 인터페이스</span>
 
+<span class="n">stmt</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="na">prepareStatement</span><span class="o">(</span>       <span class="c1">//java.sql.PrepareStatement 인터페이스</span>
+					<span class="s">"INSERT INTO MEMBERS(EMAIL,PWD,MNAME,CRE_DATE,MOD_DATE)"</span>
+					<span class="o">+</span> <span class="s">" VALUES (?,?,?,NOW(),NOW())"</span><span class="o">);</span>
+			<span class="n">stmt</span><span class="o">.</span><span class="na">setString</span><span class="o">(</span><span class="mi">1</span><span class="o">,</span> <span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"email"</span><span class="o">));</span>
+			<span class="n">stmt</span><span class="o">.</span><span class="na">setString</span><span class="o">(</span><span class="mi">2</span><span class="o">,</span> <span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"password"</span><span class="o">));</span>
+			<span class="n">stmt</span><span class="o">.</span><span class="na">setString</span><span class="o">(</span><span class="mi">3</span><span class="o">,</span> <span class="n">request</span><span class="o">.</span><span class="na">getParameter</span><span class="o">(</span><span class="s">"name"</span><span class="o">));</span>
 
-<!-- <span class="point">•</span> -->
-<span class="categories">
-  <i class="fa fa-th-list"></i>
-  
-    
-        <a href="/category/#js" title="Category: js" rel="category">js</a>
-    
-  
-
-  <!-- <span class="point">•</span> -->
-</span>
-
-
-                    </div>
-
-                </div>
-                <div class="excerpt">
-                    <p>Directive는 템플릿 구조를 모듈화하는 기능이라고 생각하면 쉽다.
-간단한 예제를 통해서 Directive 맛만 보자.</p>
-
-<div class="language-html highlighter-rouge"><pre class="highlight"><code><span class="nt">&lt;ul</span> <span class="na">ng-repeat=</span><span class="s">"todo in todos | filter:statusFilter"</span> <span class="na">class=</span><span class="s">"list-unstyled"</span><span class="nt">&gt;</span>
-  <span class="nt">&lt;li</span> <span class="na">class=</span><span class="s">"todo-item"</span><span class="nt">&gt;</span>
-
-    <span class="c">&lt;!-- 1. 이 부분이 하나의 todo 를 출력하는 부분이다. --&gt;</span>
-    <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"input-group"</span><span class="nt">&gt;</span>
-      <span class="nt">&lt;span</span> <span class="na">class=</span><span class="s">"input-group-addon"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"checkbox"</span> <span class="na">aria-label=</span><span class="s">"..."</span> <span class="na">ng-model=</span><span class="s">"todo.completed"</span><span class="nt">&gt;</span>
-      <span class="nt">&lt;/span&gt;</span>
-      <span class="nt">&lt;input</span> <span class="na">type=</span><span class="s">"text"</span> <span class="na">class=</span><span class="s">"form-control"</span> <span class="na">aria-label=</span><span class="s">"..."</span> <span class="na">ng-model=</span><span class="s">"todo.title"</span><span class="nt">&gt;</span>
-      <span class="nt">&lt;div</span> <span class="na">class=</span><span class="s">"input-group-btn"</span><span class="nt">&gt;</span>
-        <span class="nt">&lt;button</span> <span class="na">class=</span><span class="s">"btn btn-danger"</span> <span class="na">ng-click=</span><span class="s">"remove(todo.id)"</span><span class="nt">&gt;</span>Remove<span class="nt">&lt;/button&gt;</span>
-      <span class="nt">&lt;/div&gt;</span>
-    <span class="nt">&lt;/div&gt;</span>
-
-    <span class="c">&lt;!-- 2. 위 코드를 아래 한 줄로 바꿔보자!!! Directive를 사용해서 --&gt;</span>
-    <span class="nt">&lt;todo-item</span> <span class="na">todo=</span><span class="s">"todo"</span> <span class="na">remove=</span><span class="s">"remove(todo.id)"</span><span class="nt">&gt;&lt;/todo-item&gt;</span>
-  <span class="nt">&lt;/li&gt;</span>
-<span class="nt">&lt;/ul&gt;</span>
 </code></pre>
 </div>
 
-<p><code class="highlighter-rouge">&lt;todo-item&gt;</code> directive를 만들겠다.</p>
-
-<div class="language-javascript highlighter-rouge"><pre class="highlight"><code><span class="nx">angular</span><span class="p">.</span><span class="nx">module</span><span class="p">(</span><span class="s1">'todomvc'</span><span class="p">)</span>
-    <span class="p">.</span><span class="nx">directive</span><span class="p">(</span><span class="s1">'todoItem'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(){</span>
-      <span class="k">return</span> <span class="p">{</span>
-        <span class="na">restrict</span><span class="p">:</span> <span class="s1">'E'</span><span class="p">,</span>
-        <span class="na">scope</span><span class="p">:</span> <span class="p">{</span>        <span class="c1">// 디렉티브 스코프 설정</span>
-          <span class="na">todo</span><span class="p">:</span> <span class="s1">'='</span><span class="p">,</span>    <span class="c1">// 양방향 바인딩</span>
-          <span class="na">remove</span><span class="p">:</span> <span class="s1">'&amp;'</span>   <span class="c1">// 참고 바인딩. 함수 설정시 사용함</span>
-        <span class="p">},</span>
-        <span class="na">template</span><span class="p">:</span>
-        <span class="s1">'&lt;div class="input-group"&gt;'</span> <span class="o">+</span>
-          <span class="s1">'&lt;span class="input-group-addon"&gt;'</span> <span class="o">+</span>
-            <span class="s1">'&lt;input type="checkbox" aria-label="..." ng-model="todo.completed" ng-click="update(todo)"&gt;'</span> <span class="o">+</span>
-          <span class="s1">'&lt;/span&gt;'</span> <span class="o">+</span>
-          <span class="s1">'&lt;input type="text" class="form-control" aria-label="..."'</span> <span class="o">+</span>
-            <span class="s1">'ng-model="todo.title" ng-blur="update(todo)"&gt;'</span> <span class="o">+</span>
-          <span class="s1">'&lt;div class="input-group-btn"&gt;'</span> <span class="o">+</span>
-            <span class="s1">'&lt;button class="btn btn-danger" ng-click="remove(todo)"&gt;Remove&lt;/button&gt;'</span> <span class="o">+</span>
-          <span class="s1">'&lt;/div&gt;'</span> <span class="o">+</span>
-        <span class="s1">'&lt;/div&gt;'</span>
-      <span class="p">}</span>
-    <span class="p">})</span>
-</code></pre>
-</div>
-<p>Directive를 정의 할때 <code class="highlighter-rouge">$scope</code>객체에 사용할 스코프 변수를 설정할 수 있다. <code class="highlighter-rouge">todo</code>는 데이터인데 출력과 수정을 해야하므로 양방향 바인딩 <code class="highlighter-rouge">=</code>을 사용했다. <code class="highlighter-rouge">remove</code>는 이벤트 핸들러 함수이므로 ckarhdyd <code class="highlighter-rouge">&amp;</code>으로 사용했다.</p>
-
-<h2 id="restrict-">restrict 종류</h2>
+<h4 id="javasqlstatement--">java.sql.Statement 인터페이스의 구현체</h4>
 
 <table>
   <thead>
     <tr>
-      <th>value</th>
+      <th>메서드</th>
       <th>설명</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <td><code class="highlighter-rouge">E</code></td>
-      <td>Element name</td>
+      <td>executeQuery()</td>
+      <td>결과가 만들어지는 SQL문을 실행할때 사용, 보통 SELECT문을 실행</td>
     </tr>
     <tr>
-      <td><code class="highlighter-rouge">A</code></td>
-      <td>Attrivute</td>
+      <td>executeUpdate()</td>
+      <td>DML과 DDL관련 SQL문을 실행할때 사용</td>
     </tr>
     <tr>
-      <td><code class="highlighter-rouge">C</code></td>
-      <td>Class</td>
+      <td>execute()</td>
+      <td>SELECT, DML, DDL 명령문 모두에 사용가능</td>
     </tr>
     <tr>
-      <td><code class="highlighter-rouge">M</code></td>
-      <td>Comment(주석)</td>
+      <td>executeBatch()</td>
+      <td>addBatch()로 등록한 여러개의 SQL문을 한꺼번에 실행할때 사용</td>
     </tr>
   </tbody>
 </table>
 
-<p>Default 값은 <code class="highlighter-rouge">EA</code>이다.</p>
+<p><code class="highlighter-rouge">PreparedStatement</code>는 반복적인 질의를 하거나, 입력 매개변수가 많은 경우에 유용하다. 특히 이미지와 같은 바이너리 데이터를 저장하거나 변경할 경우는 <code class="highlighter-rouge">PreparedStatement</code>만 가능하다.</p>
+
+<p>위의 예제에서 SQL문에서 <code class="highlighter-rouge">?</code>문자로 표시된 것을 입력 매개변수라고 한다. 입력 항목의 값은 SQL문을 실행하기 전에 <code class="highlighter-rouge">setXXX()</code>메서드를 호출하여 설정해야한다.</p>
+
+<table>
+  <thead>
+    <tr>
+      <th>비교항목</th>
+      <th>Statement</th>
+      <th>PreparedStatement</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>실행속도</td>
+      <td>질의 할때마다 SQL문을 컴파일한다.</td>
+      <td>SQL문을 미리 준비하여 컴파일 해둔다. 입력 매개변수 값만 추가하여 서버에 전송한다. 특히 여러번 반복하여 질의하는 경우, 실행속도가 바름</td>
+    </tr>
+    <tr>
+      <td>바이너리데이터전송</td>
+      <td>불가능</td>
+      <td>가능</td>
+    </tr>
+    <tr>
+      <td>프로그래밍 편의성</td>
+      <td>SQL문 안에 입력 매개변수 값이 포함되어 있어서 SQL문이 복잡하고 매개변수가 여러개인 경우 코드 관리가 힘들다.</td>
+      <td>SQL문과 입력 매개변수가 분리되어 있어 코드작성이 편리하다.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 id="javasqlresultset--">java.sql.ResultSet 인터페이스의 구현체</h4>
+
+<table>
+  <thead>
+    <tr>
+      <th>메서드</th>
+      <th>설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>first()</td>
+      <td>서버에서 첫번째 레코드를 가져온다.</td>
+    </tr>
+    <tr>
+      <td>last()</td>
+      <td>서버에서 마지막번째 레코드를 가져온다.</td>
+    </tr>
+    <tr>
+      <td>previous()</td>
+      <td>서버에서 이전 레코드를 가져온다.</td>
+    </tr>
+    <tr>
+      <td>next()</td>
+      <td>서버에서 다음 레코드를 가져온다.</td>
+    </tr>
+    <tr>
+      <td>getXXX()</td>
+      <td>레코드에서 특정 컬럼의 값을 꺼낸다. XXX는 칼럼의 타입이다.</td>
+    </tr>
+    <tr>
+      <td>updateXXX()</td>
+      <td>레코드에서 특정 칼럼의 값을 변경한다.</td>
+    </tr>
+    <tr>
+      <td>deleteRow()</td>
+      <td>현재 레코드를 지운다.</td>
+    </tr>
+  </tbody>
+</table>
+
 
                 </div>
                 <div class="read-all">
-                    <a  href="/2016/07/07/Angularjs_Directive/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                    <a  href="/2016/09/10/servlet_and_JDBC/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
+                  <a class="post-link" href="/2016/09/10/Servlet_programming/">Servlet_programming</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-09-10
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#web" title="Category: web" rel="category">web</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h1 id="cgi-">1.CGI프로그램과 서블릿</h1>
+
+<h2 id="cgi">1)CGI란?</h2>
+<p><img src="http://joswlv.github.io/images/cgi.png" alt="" /></p>
+
+<p>위의 그림은 웹어플리케이션의 실행과정이다. 웹브라우저가 웹서버에게 요청을하고, 서버는 클라이언트가 요청한 프로그램을 찾아서 실행한다. 그리고 해당 프로그램은 작업을 수행한 후 그 결과를 웹서버에게 돌려준다. 그러면 웹서버는 그 결과를 HTTP 형식에 맞추어 웹브라우저에게 보낸다.</p>
+
+<p>이대 웹서버와 프로그램 사이에 데이터를 주고받는 규칙을 <code class="highlighter-rouge">CGI(Common Gateway Interface)</code>라고 한다. 그래서 CGI규칙에 따라서 웹서버와 데이터를 주고 받도록 작성된 프로그램을 <code class="highlighter-rouge">CGI프로그램</code>이라한다.</p>
+
+<p>CGI프로그램은 C나 C++, java와 같은 컴파일 언어와 스크립언어로 작성할 수 있다.</p>
+
+<h2 id="section">2)서블릿</h2>
+
+<p>자바로 만든 CGI프로그램을 <code class="highlighter-rouge">서블릿(Servlet)</code>이라고 한다. 자바 서블릿이 다른 CGI 프로그램과 다른 점은, 웹 서버와 직접 데이터를 주고 받지 않으며, 전문 프로그램에 의해 관리된다는 점이다.</p>
+
+<h3 id="section-1">2-1)서블릿 컨테이너</h3>
+
+<p><img src="http://joswlv.github.io/images/servlet.png" alt="" /></p>
+
+<p>서블릿의 생성과 실행, 소멸 등 생명주기를 관리하는 프로그램을 <code class="highlighter-rouge">서블릿 컨테이너(Servlet Container)</code>라고 한다. 서블릿 컨테이너가 서블릿을 대신하여 CGI규칙에 따라 웹서버와 데이터를 주고 받는다. 더 이상 CGI규칙에 대해 알 필요가 없지만, 서블릿 컨테이너와 서블릿 사이의 규칙을 알아야한다.</p>
+
+<h1 id="javaxservletservlet-">2. javax.servlet.Servlet 인터페이스</h1>
+
+<h2 id="section-2">1)서블릿 인터페이스</h2>
+<p>서블릿 클래스는 반드시 javax.servlet.Servlet 인터페이스를 구현해야한다. 서블릿 컨테이너가 서블릿에 대해 호출할 메서드를 정의한 것이 Servlet인터페이스 이다.</p>
+
+<blockquote>
+  <p>서블릿 생명주기와 관련된 메소드</p>
+
+  <ul>
+    <li>init()</li>
+    <li>service()</li>
+    <li>destroy()</li>
+  </ul>
+</blockquote>
+
+<ul>
+  <li>getServletInfo()</li>
+  <li>getServletConfig()</li>
+</ul>
+
+<p>여기서 <code class="highlighter-rouge">service()</code>는 클라이언트가 요청할 때 마다 호출되는 메서드이다. 즉 실질적으로 서비스 작업을 수행하는 메서드 이다. 이 메서드에 서블릿이 해야 할 일을 작성하면된다.</p>
+
+<p><code class="highlighter-rouge">web.xml</code>파일을 <code class="highlighter-rouge">배치기술서(Deployment Descriptor)</code> 또는 <code class="highlighter-rouge">DD파일</code>이라고 한다. 여기에 웹어플리케이션의 배치 정보를 담고 있다. DD파일에 등록되지 않은 서블릿은 서블릿 컨테이너가 찾을 수 없다. URL과 서블릿도 매핑한다.</p>
+
+<blockquote>
+  <p>*참고 페키지명+클래스명 = Fully qualified name = QName 이라한다.</p>
+</blockquote>
+
+<h2 id="section-3">2) 서블릿 구동 절차</h2>
+
+<ol>
+  <li>클라이언트의 요청이 들어오면 서블릿 컨테이너는 서블릿을 찾는다.</li>
+  <li>서블릿 클래스를 로딩하고 인스턴스를 준비한 후 생성자를 호출한다. 그리고 서블릿 초기화 메서드인 init()를 호출합니다.</li>
+  <li>클라이언트 요청을 처리하는 service() 메서드를 호출한다.</li>
+  <li>service() 메서드에서 만든 결과를 HTTP 프로토콜에 맞추어 클라이언트에 응답하는 것으로 요청처리를 완료합니다.</li>
+  <li>서블릿 컨테이너를 종료하거나, 웹애플리케이션을 종료를 한다면,</li>
+  <li>서블릿 컨테이너는 종료되기 전에 서블릿이 마무리 작업을 수행할 수 있도록 생성된 모든 서블릿에 대해 destroy()메서드를 호출한다.</li>
+</ol>
+
+<h2 id="welcom-files">3) Welcom Files</h2>
+
+<p><code class="highlighter-rouge">웰컴 파일(Welcome Files)</code>이란, 디렉토리의 기본 웹페이지를 의미한다. 웰컴파일의 이름은 <code class="highlighter-rouge">web.xml</code>의 <code class="highlighter-rouge">&lt;welcome-file-list&gt;</code> 태그를 사용하여 설정할 수 있다. 이 태그의 하위 태그로 <code class="highlighter-rouge">&lt;welcome-file&gt;</code>이 있는데, 여기에 파일이름을 적으면 된다. 여러 개의 웰컴파일을 등록하게 되면, 디렉토리에서 웰컴 파일을 찾을 때 위에서부터 아래로 순차적으로 조회한다.</p>
+
+<h1 id="genericservlet">3. GenericServlet</h1>
+
+<p><code class="highlighter-rouge">GenericServlet</code>은 추상 클래스로 서블릿 클래스가 필요로 하는 <code class="highlighter-rouge">init()</code>, <code class="highlighter-rouge">destroy()</code>, <code class="highlighter-rouge">getServletConfig()</code>, <code class="highlighter-rouge">getServletInfo()</code>를 미리 구현하여 상속한다. 즉 <code class="highlighter-rouge">service()</code>메소드만 구현하면 된다.</p>
+
+<h2 id="servletrequest--">1) ServletRequest의 주요 메소드</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>메소드</th>
+      <th>설명</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>getRemoteAddr()</td>
+      <td>서비스를 요청한 클라이언트의 Ip주소를 반환</td>
+    </tr>
+    <tr>
+      <td>getScheme()</td>
+      <td>클라이언트가 요청한 URI형식 Scheme을 반환 즉 url에서 ‘:’문자전에 오는 값을 반환</td>
+    </tr>
+    <tr>
+      <td>getProtocol()</td>
+      <td>요청한 프로토콜의 이름과 버전을 반환</td>
+    </tr>
+    <tr>
+      <td>getParameterNames()</td>
+      <td>요청정보에서 매개변수 이름만 추출하여 반환</td>
+    </tr>
+    <tr>
+      <td>getParameterValues()</td>
+      <td>요청정보에서 매개변수 값만 추출하여 반환</td>
+    </tr>
+    <tr>
+      <td>getParameterMap()</td>
+      <td>요청 정보에서 매개변수들을 Map객체에 담아서 반환</td>
+    </tr>
+    <tr>
+      <td>setCharacteerEncoding()</td>
+      <td>POST요청의 매개변수에 대한 문자 집합을 설정 (기본은 <code class="highlighter-rouge">ISO-8859-1</code>)</td>
+    </tr>
+  </tbody>
+</table>
+
+<h2 id="servletresponse-">2) servletResponse 메소드</h2>
+<ul>
+  <li>setContentType() : 출력할 데이터의 인코딩 형식과 문자 집합을 설정</li>
+  <li>setCharacterEncoding() : 출력할 데이터의 문자 집합을 설정</li>
+</ul>
+
+<p>ex) `res.setContentType(“text/plain;chartest=UTF-8”);</p>
+
+<blockquote>
+  <p><code class="highlighter-rouge">setContentType()</code>의 인자 형식이 올바르지 않으면 웹브라우저는 서버에서 받은 결과를 화면에 출력하는 대신 파일저장 대화창을 띄운다.</p>
+</blockquote>
+
+<h1 id="webservlet------">4. @WebServlet 애노테이션을 이용한 서블릿 배치 정보 설정</h1>
+
+<p><code class="highlighter-rouge">Servlet 3.0</code> 사양부터는 애노테이션으로 서블릿 배치 정보를 설정할 수 있다. <code class="highlighter-rouge">web.xml</code>대신 애노테이션을 이용해 배치 정보를 작성해보자</p>
+
+<div class="language-java highlighter-rouge"><pre class="highlight"><code><span class="nd">@WebServlet</span><span class="o">(</span>
+  <span class="n">urlPatterns</span><span class="o">={</span><span class="s">"/member/update"</span><span class="o">},</span>
+  <span class="n">initParams</span><span class="o">={</span>
+	  <span class="nd">@WebInitParam</span><span class="o">(</span><span class="n">name</span><span class="o">=</span><span class="s">"driver"</span><span class="o">,</span><span class="n">value</span><span class="o">=</span><span class="s">"com.mysql.jdbc.Driver"</span><span class="o">),</span>
+	  <span class="nd">@WebInitParam</span><span class="o">(</span><span class="n">name</span><span class="o">=</span><span class="s">"url"</span><span class="o">,</span><span class="n">value</span><span class="o">=</span><span class="s">"jdbc:mysql://localhost/studydb"</span><span class="o">),</span>
+	  <span class="nd">@WebInitParam</span><span class="o">(</span><span class="n">name</span><span class="o">=</span><span class="s">"username"</span><span class="o">,</span><span class="n">value</span><span class="o">=</span><span class="s">"study"</span><span class="o">),</span>
+	  <span class="nd">@WebInitParam</span><span class="o">(</span><span class="n">name</span><span class="o">=</span><span class="s">"password"</span><span class="o">,</span><span class="n">value</span><span class="o">=</span><span class="s">"study"</span><span class="o">)</span>
+  <span class="o">}</span>
+<span class="o">)</span>
+<span class="kd">public</span> <span class="kd">class</span> <span class="nc">CalculatorServlet</span> <span class="kd">extends</span> <span class="n">GenericServlet</span> <span class="o">{</span>
+	<span class="nd">@Override</span>
+	<span class="kd">public</span> <span class="kt">void</span> <span class="nf">service</span><span class="o">(</span><span class="n">ServletRequest</span> <span class="n">req</span><span class="o">,</span> <span class="n">ServletResponse</span> <span class="n">res</span><span class="o">)</span> <span class="kd">throws</span> <span class="n">ServletException</span><span class="o">,</span> 
+		<span class="o">....</span>
+	<span class="o">}</span>
+</code></pre>
+</div>
+
+<h3 id="reference">Reference</h3>
+<ul>
+  <li><a href="http://www.yes24.com/24/Goods/13159413?Acode=101">열혈강의 자바 웹 개발 워크북</a></li>
+</ul>
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/09/10/Servlet_programming/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
+                  <a class="post-link" href="/2016/09/09/%E1%84%8B%E1%85%B0%E1%86%B8%E1%84%8B%E1%85%A5%E1%84%91%E1%85%B3%E1%86%AF%E1%84%85%E1%85%B5%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%89%E1%85%A7%E1%86%AB%E1%84%8B%E1%85%B4_%E1%84%8B%E1%85%B5%E1%84%92%E1%85%A2/">웹어플리케이션의 이해</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-09-09
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#web" title="Category: web" rel="category">web</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h2 id="section">1-1 웹 프로그래밍의 개요</h2>
+<p>웹 프로그래밍은 기본적으로 <code class="highlighter-rouge">Client/Server</code>방식으로 다음과 같은 형태를 갖게 된다.</p>
+
+<p><img src="http://joswlv.github.io/images/cs_structure.jpg" alt="" />
+[client/server 구조]</p>
+
+<h2 id="section-1">1-2 웹프로그래밍과 웹 어플리케이션</h2>
+
+<p>웹 어플리케이션이란 웹을 기반으로 실행되는 프로그램을 의미 한다. 따라서 웹 프로그래밍과 웹어플리케이션의 관계는 <code class="highlighter-rouge">웹 프로그래밍을 통한 웹 어플리케이션의 구현</code>이라고 할 수 있다. 웹어플리케이션의 구조는 다음과 같다.</p>
+
+<p><img src="http://joswlv.github.io/images/webapplication_structure.jpg" alt="" /></p>
+
+<p>처리순서는</p>
+
+<ol>
+  <li>웹 브라우저가 웹 서버에 어떠한 페이지를 요청하게 되면</li>
+  <li>해당 웹 서버는 웹 브라우저의 요청을 받아서 요청된 페이지의 로직 및 데이터베이스와의 연동을 위해 어플리케이션 서버에 이들의 처리를 요청한다.</li>
+  <li>이때 웹 어플리케이션 서버는 데이터베이스와의 연동이 필요하면 데이터베이스와 데이터의 처리를 수행한다.</li>
+  <li>로직 및 데이터베이스 작업 처리 결과를 웹서버에 돌려보낸다.</li>
+  <li>웹서버는 결과를 다시 웹브라우저에 응답한다.</li>
+</ol>
+
+<h3 id="reference">Reference</h3>
+<ul>
+  <li><a href="http://knkky.tistory.com/28">남깐느</a></li>
+  <li><a href="http://www.yes24.com/24/Goods/13159413?Acode=101">열혈강의 자바 웹 개발 워크북</a></li>
+</ul>
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/09/09/%E1%84%8B%E1%85%B0%E1%86%B8%E1%84%8B%E1%85%A5%E1%84%91%E1%85%B3%E1%86%AF%E1%84%85%E1%85%B5%E1%84%8F%E1%85%A6%E1%84%8B%E1%85%B5%E1%84%89%E1%85%A7%E1%86%AB%E1%84%8B%E1%85%B4_%E1%84%8B%E1%85%B5%E1%84%92%E1%85%A2/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
+                  <a class="post-link" href="/2016/09/08/Sorting-post/">Sorting</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-09-08
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#python" title="Category: python" rel="category">python</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h2 id="mergesort">MergeSort</h2>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="nf">mergeSort</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">&lt;=</span><span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">x</span>
+    <span class="n">m</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span>
+    <span class="n">L</span> <span class="o">=</span> <span class="n">mergeSort</span><span class="p">(</span><span class="n">x</span><span class="p">[:</span><span class="n">m</span><span class="p">])</span>
+    <span class="n">R</span> <span class="o">=</span> <span class="n">mergeSort</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="n">m</span><span class="p">:])</span>
+    <span class="n">result</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">i</span><span class="o">=</span><span class="mi">0</span>
+    <span class="n">j</span><span class="o">=</span><span class="mi">0</span>
+    <span class="k">while</span> <span class="n">i</span><span class="o">&lt;</span><span class="nb">len</span><span class="p">(</span><span class="n">L</span><span class="p">)</span> <span class="ow">and</span> <span class="n">j</span><span class="o">&lt;</span><span class="nb">len</span><span class="p">(</span><span class="n">R</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">L</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&lt;</span><span class="n">R</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">L</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+            <span class="n">i</span><span class="o">+=</span><span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">result</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">R</span><span class="p">[</span><span class="n">j</span><span class="p">])</span>
+            <span class="n">j</span><span class="o">+=</span><span class="mi">1</span>
+    <span class="n">result</span> <span class="o">+=</span><span class="n">L</span><span class="p">[</span><span class="n">i</span><span class="p">:]</span>
+    <span class="n">result</span> <span class="o">+=</span><span class="n">R</span><span class="p">[</span><span class="n">j</span><span class="p">:]</span>
+    <span class="k">return</span> <span class="n">result</span>
+</code></pre>
+</div>
+
+<h2 id="quicksort">QuickSort</h2>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="nf">quickSort</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">&lt;=</span><span class="mi">1</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">x</span>
+    <span class="n">pivot</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span><span class="p">]</span>
+    <span class="n">less</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">more</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">equal</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">x</span><span class="p">:</span>
+        <span class="k">if</span> <span class="n">a</span><span class="o">&lt;</span><span class="n">pivot</span><span class="p">:</span>
+            <span class="n">less</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">a</span><span class="o">&gt;</span><span class="n">pivot</span><span class="p">:</span>
+            <span class="n">more</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+        <span class="k">else</span> <span class="p">:</span>
+            <span class="n">equal</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">quickSort</span><span class="p">(</span><span class="n">less</span><span class="p">)</span><span class="o">+</span><span class="n">equal</span><span class="o">+</span><span class="n">quickSort</span><span class="p">(</span><span class="n">more</span><span class="p">)</span>
+</code></pre>
+</div>
+
+<h2 id="bubblesort">BubbleSort</h2>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="nf">bubbleSort</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="n">length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">length</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">length</span><span class="o">-</span><span class="n">i</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">&gt;</span><span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">]:</span>
+                <span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">x</span>
+</code></pre>
+</div>
+
+<h2 id="selectionsort">SelectionSort</h2>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="nf">selectionSort</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="n">length</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">length</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="k">for</span> <span class="n">j</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">,</span><span class="n">length</span><span class="p">):</span>
+            <span class="k">if</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="o">&gt;</span><span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">]:</span>
+                <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">=</span><span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">],</span><span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+    <span class="k">return</span> <span class="n">x</span>
+</code></pre>
+</div>
+
+<h2 id="insertsort">InsertSort</h2>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="nf">insertSort</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span><span class="nb">len</span><span class="p">(</span><span class="n">x</span><span class="p">)):</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="n">i</span><span class="o">-</span><span class="mi">1</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+        <span class="k">while</span> <span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">]</span><span class="o">&gt;</span><span class="n">key</span> <span class="ow">and</span> <span class="n">j</span><span class="o">&gt;=</span><span class="mi">0</span><span class="p">:</span>
+            <span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="p">]</span>
+            <span class="n">j</span><span class="o">=</span><span class="n">j</span><span class="o">-</span><span class="mi">1</span>
+        <span class="n">x</span><span class="p">[</span><span class="n">j</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">=</span><span class="n">key</span>
+    <span class="k">return</span> <span class="n">x</span>
+</code></pre>
+</div>
+
+<h2 id="binarysearch">BinarySearch</h2>
+<div class="language-python highlighter-rouge"><pre class="highlight"><code><span class="k">def</span> <span class="nf">binarySearch</span><span class="p">(</span><span class="n">arr</span><span class="p">,</span> <span class="n">val</span><span class="p">):</span>
+    <span class="n">arr</span> <span class="o">=</span> <span class="n">quickSort</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span>
+    <span class="n">low</span> <span class="o">=</span><span class="mi">0</span>
+    <span class="n">high</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">arr</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span>
+    <span class="k">while</span><span class="p">(</span><span class="n">low</span><span class="o">&lt;=</span><span class="n">high</span><span class="p">):</span>
+        <span class="n">mid</span><span class="o">=</span> <span class="p">(</span><span class="n">low</span><span class="o">+</span><span class="n">high</span><span class="p">)</span><span class="o">//</span><span class="mi">2</span>
+        <span class="k">if</span> <span class="n">arr</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span><span class="o">&gt;</span><span class="n">val</span><span class="p">:</span>
+            <span class="n">high</span> <span class="o">=</span> <span class="n">mid</span><span class="o">-</span><span class="mi">1</span>
+        <span class="k">elif</span> <span class="n">arr</span><span class="p">[</span><span class="n">mid</span><span class="p">]</span><span class="o">&lt;</span><span class="n">val</span><span class="p">:</span>
+            <span class="n">low</span> <span class="o">=</span> <span class="n">mid</span><span class="o">+</span><span class="mi">1</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">True</span>
+    <span class="k">return</span> <span class="bp">False</span>
+</code></pre>
+</div>
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/09/08/Sorting-post/"><i class="fa fa-newspaper-o"></i>Read All</a>
+                </div>
+                <hr>
+              </li>
+            
+              <li>
+                <h2>
+                  <a class="post-link" href="/2016/08/28/run_to_same_server/">Apache2웹서버와 Node.js어플리케이션을 함께 사용하기!</a>
+                </h2>
+                <div class="label">
+                    <div class="label-card">
+                        <i class="fa fa-calendar"></i>2016-08-28
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+                    <div class="label-card">
+                        
+                    </div>
+
+                    <div class="label-card">
+                    
+
+
+<!-- <span class="point">•</span> -->
+<span class="categories">
+  <i class="fa fa-th-list"></i>
+  
+    
+        <a href="/category/#web" title="Category: web" rel="category">web</a>
+    
+  
+
+  <!-- <span class="point">•</span> -->
+</span>
+
+
+                    </div>
+
+                </div>
+                <div class="excerpt">
+                    <h3 id="section">순서</h3>
+<ol>
+  <li>내부적으로 다른 포트에 nodejs기반의 서버를 실행한다.</li>
+  <li>apache의 VirtualHosts 설정에서 ProxyPass를 설정한다.</li>
+  <li>특정 url로 접근식 1번으로 갈 수 있게 설정한다.</li>
+</ol>
+
+<h3 id="section-1">과정</h3>
+<ol>
+  <li>mod_proxy, mod_proxy_http가 필요하다. (ubuntu apache서버는 기본적으로 설치되어있음. <code class="highlighter-rouge">/etc/apache2/mods-available</code>안에 있음 <code class="highlighter-rouge">a2enmod proxy</code>,<code class="highlighter-rouge">a2enmod proxy_http</code>로 설정함</li>
+  <li>가상호스트를 설정함 ./sites-available 내부에 기존파일 또는 신규파일을 추가한다.</li>
+</ol>
+
+<div class="language-powershell highlighter-rouge"><pre class="highlight"><code>&lt;VirtualHost <span class="k">*</span>:80&gt;
+	DocumentRoot /var/www/example.com/public_html
+	ServerName  www.example.com
+
+	<span class="c1"># Index file and Document Root (where the public files are located)</span>
+	DirectoryIndex index.html index.php
+
+	<span class="c1"># Log file locations</span>
+	LogLevel warn
+	ErrorLog  /var/www/amazeapp.com/log/error.log
+	CustomLog /var/www/amazeapp.com/log/access.log combined
+
+
+	<span class="c1"># 아래가 핵심이다.</span>
+
+	ProxyRequests off
+
+	&lt;Proxy <span class="k">*</span>&gt;
+	    Order deny,allow    <span class="c1"># 이부분의 경우, 콤마(,) 사이에 공백 없어야 함!</span>
+	    Allow <span class="k">from </span>all
+	&lt;/Proxy&gt;
+
+	&lt;Location /&gt; <span class="c1"># 내부적으로 접속 노드를 늘리고 싶다면 여기에 추가.</span>
+	    ProxyPass http://localhost:3000/
+	    ProxyPassReverse http://localhost:3000/
+	&lt;/Location&gt;
+
+&lt;/VirtualHost&gt;
+</code></pre>
+</div>
+
+<ol>
+  <li>아파치 재시작</li>
+</ol>
+
+<p>끝~</p>
+
+<h3 id="reference">Reference</h3>
+<p><a href="https://github.com/sindresorhus/guides/blob/master/run-node-server-alongside-apache.md">https://github.com/sindresorhus/guides/blob/master/run-node-server-alongside-apache.md</a></p>
+
+                </div>
+                <div class="read-all">
+                    <a  href="/2016/08/28/run_to_same_server/"><i class="fa fa-newspaper-o"></i>Read All</a>
                 </div>
                 <hr>
               </li>
@@ -481,10 +959,10 @@
             <a href="/index.html" class="previous"><i class="fa fa-angle-double-left"></i></a>
             <a href="/page9" class="previous"><i class="fa fa-angle-left"></i></a>
           
-          <span class="page_number ">10/10</span>
+          <span class="page_number ">10/11</span>
           
-            <span class="next disable"><i class="fa fa-angle-right"></i></span>
-            <span class="next disable"><i class="fa fa-angle-double-right"></i></span>
+            <a href="/page11" class="next"><i class="fa fa-angle-right"></i></a>
+            <a href="/page11" class="next"><i class="fa fa-angle-double-right"></i></a>
           
         </div>
     </div>
@@ -522,7 +1000,7 @@
                             <span class="name">
                                 python
                             </span>
-                            <span class="badge">2</span>
+                            <span class="badge">3</span>
                         </a>
                     </li>
                     
@@ -549,7 +1027,7 @@
                             <span class="name">
                                 Java
                             </span>
-                            <span class="badge">8</span>
+                            <span class="badge">9</span>
                         </a>
                     </li>
                     
@@ -567,7 +1045,7 @@
                             <span class="name">
                                 Unix/Linux
                             </span>
-                            <span class="badge">2</span>
+                            <span class="badge">3</span>
                         </a>
                     </li>
                     
@@ -585,7 +1063,7 @@
                             <span class="name">
                                 MYSQL
                             </span>
-                            <span class="badge">3</span>
+                            <span class="badge">4</span>
                         </a>
                     </li>
                     
@@ -612,7 +1090,7 @@
                             <span class="name">
                                 Spark
                             </span>
-                            <span class="badge">1</span>
+                            <span class="badge">3</span>
                         </a>
                     </li>
                     
@@ -620,6 +1098,15 @@
                         <a href="/category/#Cassandra" class="categories-list-item" cate="Cassandra">
                             <span class="name">
                                 Cassandra
+                            </span>
+                            <span class="badge">1</span>
+                        </a>
+                    </li>
+                    
+                    <li>
+                        <a href="/category/#Scala" class="categories-list-item" cate="Scala">
+                            <span class="name">
+                                Scala
                             </span>
                             <span class="badge">1</span>
                         </a>
@@ -634,25 +1121,25 @@
                 </div>
                 <ul class="content-ul" recent>
                     
+                        <li><a href="/2017/10/24/sparkstreamingandkafka/">SparStreaming & kafka(Exactly-once)</a></li>
+                    
+                        <li><a href="/2017/09/27/spark_misapprehension/">Spark에 대한 오해</a></li>
+                    
+                        <li><a href="/2017/08/06/howtousesbt/">sbt 기본 사용법</a></li>
+                    
+                        <li><a href="/2017/08/02/pythonTricks/">Python Tricks</a></li>
+                    
+                        <li><a href="/2017/08/01/MySql-Setting/">MySQL 기본세팅법</a></li>
+                    
+                        <li><a href="/2017/06/26/linuxcommand/">리눅스 명령어정리</a></li>
+                    
+                        <li><a href="/2017/05/09/javarxe/">java 유용한 정규표현식</a></li>
+                    
                         <li><a href="/2017/05/04/logback/">LogBack</a></li>
                     
                         <li><a href="/2017/04/20/resourcecleanup/">Resource CleanUp</a></li>
                     
                         <li><a href="/2017/04/08/garbagecollectionpauses/">Garbage collection pauses</a></li>
-                    
-                        <li><a href="/2017/04/02/runtojarbackground/">jar 백그라운드로 실행하기</a></li>
-                    
-                        <li><a href="/2017/03/27/mavenbuildplugin/">Maven Build Plugin & 옵션</a></li>
-                    
-                        <li><a href="/2017/03/26/properties/">properties 설정 및 사용</a></li>
-                    
-                        <li><a href="/2017/03/01/stringbuildervsstringbuffer/">StringBuilder vs StringBuffer</a></li>
-                    
-                        <li><a href="/2017/02/26/basicrdd/">기본 RDD연산들(트랜스포메이션, 액션)</a></li>
-                    
-                        <li><a href="/2017/02/19/logstash/">Logstash 기초</a></li>
-                    
-                        <li><a href="/2017/02/18/elasticsearchbasic/">ElasticSearch 기초</a></li>
                     
                 </ul>
             </div>
