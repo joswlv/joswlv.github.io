@@ -104,3 +104,7 @@ class KeyBasePartitioner(partitions: Int) extends Partitioner {
 	}
 }
 ```
+
+### Refrence
+
+- [http://technology.finra.org/code/using-spark-transformations-for-mpreduce-jobs.html](http://technology.finra.org/code/using-spark-transformations-for-mpreduce-jobs.html)
