@@ -17,10 +17,10 @@ categories: Spring
 
 # 3. 이야기 시작
 
-> 로그인 관련 MySql Table정보
-> 
->
-```mysql
+> **로그인 관련 MySql Table정보**
+
+
+```sql
 create table user ( 
 	username varchar(20), 
 	password varchar(500), 
@@ -30,16 +30,14 @@ create table user (
 	isCredentialsNonExpired boolean, 
 	isEnabled boolean 
 );
-```
->
-```mysql
+
 create table authority (
     username varchar(20),
     authority_name varchar(20)
 );
 ```
 
-#### `UserDetails`를 implements한 클래스를 만든다.
+#### 1. `UserDetails`를 implements한 클래스를 만든다.
 
 ```java
 @Getter
@@ -56,7 +54,7 @@ public class CustomUserModel implements UserDetails {
 }
 ```
 
-#### ServiceLayer에서 `UserDetailsService`를 implements한 클래스를 만든다.
+#### 2. ServiceLayer에서 `UserDetailsService`를 implements한 클래스를 만든다.
 
 ```java
 @Service
@@ -85,7 +83,8 @@ public class UserManageService implements UserDetailsService {
 
 > 참고 Mybatis를 사용할 경우 ResultMap으로 `Collection<GrantedAuthority>` return 받을때!!
 >
->
+
+
 ```xml
 <resultMap id="authorityMap" type="org.springframework.security.core.authority.SimpleGrantedAuthority">
 	<constructor>
@@ -94,9 +93,9 @@ public class UserManageService implements UserDetailsService {
 </resultMap>
 ```
 
-#### SecurityConfig 파일은 만든다.
+#### 3. SecurityConfig 파일은 만든다.
 
-**REST방법을 사용하는 경우 다음과 같이 사용한다. 아이디/패스워드를 json을 받아서 처리하니.. formLogin으로 처리해도 되는데, 따로 json처리를 해줘야한다.**
+> **REST방법을 사용하는 경우 다음과 같이 사용한다. 아이디/패스워드를 json을 받아서 처리하니.. formLogin으로 처리해도 되는데, 따로 json처리를 해줘야한다.**
 
 ```java
 @Configuration

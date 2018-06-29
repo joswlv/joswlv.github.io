@@ -36,11 +36,9 @@ $ echo 0 > /sys/class/block/sda/queue/rotational
 $ echo 8 > /sys/class/block/sda/queue/read_ahead_kb
 ```
 
-```bash
-설정 값 설명) disk i/o scheduler - noop 으로 설정
+> 설정 값 설명) disk i/o scheduler - noop 으로 설정
 sysFS 회전 플래그 - false(0) 으로 설정
 readahead 블록 장치 값을 8kb 로 설정
-```
 
 ### 1-2 SSD Trim 기능 활성화
 
