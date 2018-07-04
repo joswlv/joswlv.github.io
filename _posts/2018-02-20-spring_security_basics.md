@@ -1,11 +1,12 @@
 ---
 layout: post
-title: Spring Scurity 사용기
+title: Spring Security 사용기
 date: 2018-02-20 13:10
 categories: Spring
 ---
 
-# 1. 왜 Spring Scurity를 사용했나?
+
+# 1. 왜 Spring Security 사용했나?
 
 - 사내 sso연동을 위한 절차가 복잡해서
 - 로그인/로그아웃/권한체크 등을 쉽게 구현하기 위해
@@ -81,7 +82,7 @@ public class UserManageService implements UserDetailsService {
 }
 ```
 
-> 참고 Mybatis를 사용할 경우 ResultMap으로 `Collection<GrantedAuthority>` return 받을때!!
+> 참고 Mybatis를 사용할 경우 ResultMap으로 `Collection<GrantedAuthority>` return 받음!!
 >
 
 
@@ -95,7 +96,7 @@ public class UserManageService implements UserDetailsService {
 
 #### 3. SecurityConfig 파일은 만든다.
 
-> **REST방법을 사용하는 경우 다음과 같이 사용한다. 아이디/패스워드를 json을 받아서 처리하니.. formLogin으로 처리해도 되는데, 따로 json처리를 해줘야한다.**
+> **REST방법을 사용하는 경우 다음과 같이 사용한다. 아이디/패스워드를 json을 받아서 처리하니.. formLogin으로 처리해도 되지만, 따로 json처리를 해줘야하는 귀찮음이 있다.**
 
 ```java
 @Configuration
