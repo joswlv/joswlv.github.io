@@ -39,3 +39,8 @@ maven repo에서 다운로드를 못 하고 있는 것이다.
 2. Java버전을 최신 버전으로 유지한다. (최소 java `1.8.0_60-b27`보다 높은 버전을 사용해야한다.)
 
 두가지 방법중 어느 것을 택해도 문제는 해결된다.
+
+## 참고
+
+- [https://github.com/technomancy/leiningen/issues/2364](https://github.com/technomancy/leiningen/issues/2364)
+- [https://github.com/jenkinsci/ghprb-plugin/issues/638](https://github.com/jenkinsci/ghprb-plugin/issues/638)
