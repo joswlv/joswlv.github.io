@@ -59,4 +59,34 @@ Object Driver {
 
 * spark는 transform 처리 시 외부에서 생성된 instance를 serialize하여 executor로 보내고 executor에서는 deserialize하여 다시 instance를 만들어 이를 사용한다
 * 해당 transform이 수행될 때마다 executor는 매 번 deserialize를 수행하며 이 때 매 번 새로운 instance가 생성된다
-    * 일반적인 spark job의 경우 별 문제가 되지 않지만 streaming의 경우
+    * 일반적인 spark job의 경우 별 문제가 되지 않지만 streaming의 경우 짧은 주기로 처리가 되므로 life cycle을 길게 가져가야 하는 connection 등의 instance 관리에 문제가 된다
+* java의 경우 function class에 static으로 connection같은 필드를 지정하면 executor 프로세스가 재시작되지 않는 이상 재사용이 가능하지만 scala에는 static 키워드가 없다
+    * 대신 companion object를 이용하여 static과 비슷한 처리를 할 수 있다
+
+``` scala
+object Functions {
+    private var hbaseConnection: Connection = null
+
+    def getHbaseConnection(props:Properties) = {
+        if (hbaseConnection == null) {
+            val hbaseConf = HBaseConfiguration.create()
+            props.entrySet().asScala.foreach(entry => {
+            val key = entry.getKey.toString
+            if (key.startsWith("hbase")) {
+              hbaseConf.set(key, entry.getValue.toString)
+            }
+          })
+          hbaseConnection = ConnectionFactory.createConnection(hbaseConf)
+      }
+      hbaseConnection
+    }
+}
+
+class Functions(props: Properties) extends Serializable {
+    ...
+    def getItem(log: Log) = {
+        val table = Functions.hbaseConnection(props).getTable("itemdb")
+        ...
+    }
+}
+```
