@@ -49,7 +49,7 @@ JavaPairReceiverInputDStream<String, String> kafkaStream =
      [ZK quorum], [consumer group id], [per-topic number of Kafka partitions to consume]);
 ```
 
-### 2) Kafka Dricet API
+### 2) Kafka Dircet API
 
 가장 큰 특징은 Receiver를 사용하지 않는다. 그래서 다음과 같은 특성이 있다.
 
