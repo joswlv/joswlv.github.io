@@ -1,11 +1,11 @@
 ---
 layout: post
-title: Java Default Method에 정리
+title: Java Default Method 정리
 date: 2018-10-25 15:10
 categories: Java
 ---
 
-# Java Default Method에 정리
+# Java Default Method 정리
 
 ## Default Method란?
 
