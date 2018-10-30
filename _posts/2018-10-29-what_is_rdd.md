@@ -1,7 +1,7 @@
 ---
 layout: post
-title: Spark에서 Resource파일 읽을때
-date: 2018-08-29 15:10
+title: RDD가 좋은 이유
+date: 2018-10-29 15:10
 categories: Spark
 ---
 
