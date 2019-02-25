@@ -7,7 +7,7 @@ categories: Cassandra
 
 # Spark To Cassandra Insert 작업 개편기
 
-## <이야기를 시작하기 전에 대량 Insert작업의 문제점>
+## \<이야기를 시작하기 전에 대량 Insert작업의 문제점\>
 
 Datastax에서 제공하는 `spark-cassandra-connector_2.11`을 사용하여 2억 Row이상이 되는 파일을 읽어 Cassandra에 Insert하는 작업이 있다. 이 작업은 Daily로 진행 된다. 
 
@@ -23,9 +23,13 @@ Datastax에서 제공하는 `spark-cassandra-connector_2.11`을 사용하여 2�
 
 즉 C*를 사용하는 Data-API서버의 Response Time을 개선하고 싶은 것이다. 
 
-아래는 Data-API서버에 Response Time이 100ms가 넘는 비율을 나타낸 그래프이다. 7시 Bulk Insert작업이 동작하는 시간이다. 일명 불기둥을 제거하는 것이 이번 프로젝트에 목표다.
+아래는 Data-API서버에 Response Time이 100ms가 넘는 비율을 나타낸 그래프이다. 
 
-![]({{ site.url }}/images/-5e099e60-63c7-47ee-89b0-7979e100961cUntitled)
+7시 Bulk Insert작업이 동작하는 시간이다.
+ 
+일명 불기둥(7시 bulk insert작업동안 C\*의 Read성능이 떨어져 API Response Time이 100m가 넘는 것)을 제거하는 것이 이번 프로젝트에 목표다.
+
+![]({{ site.url }}/images/-5e099e60-63c7-47ee-89b0-7979e100961cUntitled.png)
 
 ---
 
@@ -171,7 +175,7 @@ public class SSTableExportProcessor implements Serializable {
 
 그래서 원인을 찾아보았다.
 
-![]({{ site.url }}/images/-88df1e14-dbfc-4a71-93a7-d4feef6e5ab0Untitled)
+![]({{ site.url }}/images/-88df1e14-dbfc-4a71-93a7-d4feef6e5ab0Untitled.png)
 
 위 그래프는 C*를 Datasource로 사용하는 API서버에서 ResponseTime이 100ms가 넘는 비율을 나타낸다. 
 
@@ -197,11 +201,11 @@ Bulk Inert한 테이블의 Compaction Strategy는 `LeveledCompactionStrategy`이
 
 즉 1만개가 넘는 SSTableFile 갯수를 Repartitions을 하여 10개로 만들어서 테스트를 하니 API에 100ms넘는 비율이 확연하게 줄어든 것을 알 수 있다.
 
-![]({{ site.url }}/images/-29848812-e6fa-4a84-9108-c575fa682e9eUntitled)
+![]({{ site.url }}/images/-29848812-e6fa-4a84-9108-c575fa682e9eUntitled.png)
 
 그리고 7시 불기둥도 사라졌다.
 
-![]({{ site.url }}/images/-af4aaa46-b16d-4138-b52b-db5f06377f58Untitled)
+![]({{ site.url }}/images/-af4aaa46-b16d-4138-b52b-db5f06377f58Untitled.png)
 
 # 정리
 
@@ -220,6 +224,8 @@ C* doc에서 권장하는 Heap Size는 8GB였다. 그래서 장비의 memory에 
 
 특히 compaction이 발생할때...
 
+그리고 SSTable File용량보다는 File갯수가 성능에 더 큰 영향을 준다. 즉 SSTableFile갯수가 적을 수록 성능에 더 유리하다.
+
 아래는 C*에서 사용하는 Memory구조이다.
 
-![]({{ site.url }}/images/-766b280d-1d34-463d-94c8-26fab37a3107Untitled)
+![]({{ site.url }}/images/-766b280d-1d34-463d-94c8-26fab37a3107Untitled.png)
