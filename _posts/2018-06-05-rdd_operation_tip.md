@@ -18,9 +18,9 @@ categories: Spark
 3. subtract (reduce)
 4. save to cassandra
 
-클러스터의 memory를 많이 사용할 수 있고 spark버전이 2.0이상이면 문제 없이(?) 쓸데없이 많은 리소스를 사용하면서 잘 동작하겠지만 나에게 주어진 환경은 spark1.6버전 (`spark 2.0이하 버전에서는 container 메모리가 일정 수준을 넘어가면 yarn에서 강제로 죽여버린다.` [참고](https://gsamaras.wordpress.com/code/memoryoverhead-issue-in-spark/)) 한정된 리소스였다. 
+클러스터의 memory를 많이 사용할 수 있고 spark버전이 2.0이상이면 문제 없이(?) 많은 리소스를 사용하면서 잘 동작하겠지만 나에게 주어진 환경은 spark1.6버전 (`spark 2.0이하 버전에서는 container 메모리가 일정 수준을 넘어가면 yarn에서 강제로 죽여버린다.` [참고](https://gsamaras.wordpress.com/code/memoryoverhead-issue-in-spark/)) 한정된 리소스였다. 
 
-그래서 위 코드 plan으로 코드를 작성하면 subtract연산을 할때 쓸데없이 많은 데이터가 메모리 위에 존재하게 되고 다음과 같은 에러를 보게 된다. 
+그래서 위 코드 plan으로 코드를 작성하면 subtract연산을 할때 많은 데이터가 메모리 위에 존재하게 되고 다음과 같은 에러를 보게 된다. 
 
 ![]({{ site.url }}/images/spark_yarn_mem_overhad.png)
 
