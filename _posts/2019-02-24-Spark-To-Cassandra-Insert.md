@@ -130,14 +130,19 @@ public class SSTableExportProcessor implements Serializable {
 		String tableName = clientStatement.getTableName();
     
 		//ssTable Directory Path에 마지막은 keyspace/tableName으로 해야함.
-		String tempSSTableDirectoryPath = "/tmp/" + "spark-cass-" + UUID.randomUUID().toString() + "/" + keyspaceName + "/" + tableName;
+		String tempSSTableDirectoryPath = "/tmp/" + "spark-cass-" + UUID.randomUUID().toString() 
+							+ "/" + keyspaceName + "/" + tableName;
 		File tempSSTableDirectory = new File(tempSSTableDirectoryPath);
 		boolean makeDirCheck = tempSSTableDirectory.mkdirs();
     
 		if (makeDirCheck) {
 			//SSTable File 생성작업
-			CQLSSTableWriter writer = CQLSSTableWriter.builder().inDirectory(tempSSTableDirectory).forTable(clientStatement.getTableSchemaStatement())
-					.using(clientStatement.getInsertStatement(TTL)).build();
+			CQLSSTableWriter writer = 
+				CQLSSTableWriter.builder()
+					.inDirectory(tempSSTableDirectory)
+					.forTable(clientStatement.getTableSchemaStatement())
+					.using(clientStatement.getInsertStatement(TTL))
+					.build();
     
 			while (it.hasNext()) {
 				CustomTargetingFitModel row = it.next();
@@ -149,9 +154,12 @@ public class SSTableExportProcessor implements Serializable {
 			writer.close();
     
 			//SSTable File cassandar로 load
-			CqlBulkRecordWriter.ExternalClient externalClient = new CqlBulkRecordWriter.ExternalClient(clientStatement.getExternalClientConf());
+			CqlBulkRecordWriter.ExternalClient externalClient = 
+			new CqlBulkRecordWriter.ExternalClient(clientStatement.getExternalClientConf());
 			try {
-				new SSTableLoader(tempSSTableDirectory, externalClient, new OutputHandler.LogOutput()).stream().get();
+				new SSTableLoader(tempSSTableDirectory, 
+					externalClient, 
+					new OutputHandler.LogOutput()).stream().get();
 			} catch (InterruptedException | ExecutionException e) {
 				e.printStackTrace();
 			}
