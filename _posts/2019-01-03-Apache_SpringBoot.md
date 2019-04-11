@@ -2,7 +2,7 @@
 layout: post
 title: Apache-SpringBoot 연동
 date: 2019-01-03 15:10
-categories: Etc
+categories: Spring
 ---
 
 # Apache - SpringBoot(내장톰캣) 연동
