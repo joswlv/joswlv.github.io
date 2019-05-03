@@ -41,7 +41,7 @@ spark application에서  `Files.newBufferedReader(Paths.get(fileName))` 으로 �
 val executorLocalFilePath = SparkFiles.get(fileName);
     
 //아래 코드는 NotFoundFileException을 발생시킨다.
-Files.newBufferedReader(Paths.get(executorLocalFilePath))
+Source.fromFile(executorLocalFilePath)
 ```    
 
 `--files`옵션으로 배포된 file을 읽을때는 Path에 fileName만 주면 상대경로로 file을 찾아준다. 
@@ -50,7 +50,7 @@ Files.newBufferedReader(Paths.get(executorLocalFilePath))
 
 ```scala
 //files로 배포되고 소스에서 사용할려면 fileName만 주면 된다.
-Files.newBufferedReader(fileName)
+Source.fromFile(fileName)
 ```
 
 (이것 때문에 많은 시간을 보냈다.ㅠㅠ)
@@ -74,5 +74,5 @@ Files.newBufferedReader(fileName)
 
 ```scala
 //files로 배포되고 소스에서 사용할려면 aliasName을 넣어줘야한다.
-Files.newBufferedReader(aliasName)
+Source.fromFile(aliasName)
 ```
