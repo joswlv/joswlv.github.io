@@ -1,7 +1,7 @@
 ---
 layout: post
-title: Spark To Cassandra Insert 작업 개편기
-date: 2019-02-24 15:10
+title: Spark To Cassandra Insert 작업 개편기(수정)
+date: 2019-08-26 15:10
 categories: Cassandra
 ---
 
@@ -237,3 +237,54 @@ C* doc에서 권장하는 Heap Size는 8GB였다. 그래서 장비의 memory에 
 아래는 C*에서 사용하는 Memory구조이다.
 
 ![]({{ site.url }}/images/-766b280d-1d34-463d-94c8-26fab37a3107Untitled.png)
+
+
+## <추가> Spark Lib제작 (2019.08.26)
+
+위 내용을 Spark Lib으로 제작하여 배포하였다.
+
+- [Spark2CassandraBulkLoad](https://github.com/joswlv/Spark2CassandraBulkLoad) (해당 레포에 많은 관심과 기여 부탁드립니다.)
+- [spark-packages](https://spark-packages.org/package/joswlv/Spark2CassandraBulkLoad)에도 upload하였습니다. 많은 관심 부탁드립니다.
+
+#### SBT
+
+```scala
+libraryDependencies += "com.joswlv.spark.cassandra.bulk" %% "Spark2CassandraBulkLoad" % "1.0.1"
+```
+
+#### Maven
+```xml
+<dependency>
+	<groupId>com.joswlv.spark.cassandra.bulk</groupId>
+	<artifactId>Spark2CassandraBulkLoad</artifactId>
+	<version>1.0.1</version>
+</dependency>
+```
+
+### gradle
+
+```groovy
+compile 'com.joswlv.spark.cassandra.bulk:Spark2CassandraBulkLoad:1.0.1'
+```
+
+## Usage
+
+### Bulk Loading into Cassandra
+
+```scala
+// Import the following to have access to the `bulkLoadToCass()` function for RDDs or DataFrames.
+import com.joswlv.spark.cassandra.bulk.rdd._
+import com.joswlv.spark.cassandra.bulk.sql._
+
+// Specify the `keyspaceName` and the `tableName` to write.
+rdd.bulkLoadToCass(
+  keyspaceName = "keyspaceName",
+  tableName = "tableName"
+)
+
+// Specify the `keyspaceName` and the `tableName` to write.
+df.bulkLoadToCass(
+  keyspaceName = "keyspaceName",
+  tableName = "tableName"
+)
+```
