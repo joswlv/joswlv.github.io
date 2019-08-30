@@ -1,7 +1,7 @@
 ---
 layout: post
 title: Spark To Cassandra Insert 작업 개편기(수정)
-date: 2019-08-26 15:10
+date: 2019-02-24 15:10
 categories: Cassandra
 ---
 
