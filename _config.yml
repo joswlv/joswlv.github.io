@@ -14,23 +14,17 @@ url: "http://joswlv.github.io" # the base hostname & protocol for your site
 permalink: /:year/:month/:day/:title/
 
 # other links
-# twitter_username: gaohaoyang126
 facebook_username: wsj7923
 github_username:  joswlv
 email: wh7923@gmail.com
-# weibo_username: 3115521wh
-# zhihu_username:
-# linkedIn_username:
-# dribbble_username:
+linkedIn_username: joseungwan
 
 description_footer:
 
 # comments
-# two ways to comment, only choose one, and use your own short name
-duoshuo_shortname: #hygblog
-disqus_shortname: joswlv
+github_comment : ok
 
-google_analytics_id: UA-83868242-1 # google 分析追踪id
+google_analytics_id: UA-83868242-1
 
 # Build settings
 markdown: kramdown

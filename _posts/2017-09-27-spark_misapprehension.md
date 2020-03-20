@@ -11,7 +11,7 @@ categories: Spark
 
 - Spark는 in-memory technology이다?
 - Spark는 hadoop MR보다 100배 빠르다?
-- Spark는 이분야에서 데이터 프로세싱을 완전히 새로운 접근을 소개했다?
+- Spark는 데이터 프로세싱 분야에서 완전히 새로운 접근을 소개했다?
 
 
 ### 1. Spark는 in-memory technology가 아니다.
