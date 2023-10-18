@@ -7,7 +7,7 @@
 
 # Site settings
 title: Joswlv
-brief-intro: <iframe src="https://coupa.ng/cemR9Y" width="100%" height="36" frameborder="0" scrolling="no" referrerpolicy="unsafe-url"></iframe>
+# brief-intro:
 baseurl: "" # the subpath of your site, e.g. /blog
 url: "http://joswlv.github.io" # the base hostname & protocol for your site
 
